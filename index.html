@@ -66,12 +66,7 @@
       display: block;
     }
     .card a:hover { color: #f5c842; }
-    .card .path {
-      color: #6b7280;
-      font-size: 12px;
-      margin-top: 6px;
-      font-family: 'Consolas', monospace;
-    }
+    /* 移除 .path 样式，但保留定义以防万一 */
     .footer {
       margin-top: 48px;
       padding-top: 18px;
@@ -93,50 +88,42 @@
   Maintained by <a href="https://github.com/LuckyLoser91" style="color:#f5c842; text-decoration:none;">LuckyLoser91</a>
 </div>
 
-<!-- 分析结果区域 -->
+<!-- 分析结果区域：无路径 -->
 <div class="section">
   <h2>📊 数据分析与可视化</h2>
   <div class="grid">
     <div class="card">
       <a href="./analysis/leaderboards/wta_gs_champions.html">🏆 WTA 大满贯冠军排行榜</a>
-      <div class="path">analysis/leaderboards/wta_gs_champions.html</div>
     </div>
     <div class="card">
       <a href="./analysis/leaderboards/atp_gs_champions.html">🏆 ATP 大满贯冠军排行榜</a>
-      <div class="path">analysis/leaderboards/atp_gs_champions.html</div>
     </div>
-    <!-- 未来可继续添加更多卡片 -->
   </div>
 </div>
 
-<!-- 原始数据区域 -->
+<!-- 原始数据区域：链接到 GitHub 仓库 -->
 <div class="section">
   <h2>📁 原始数据文件</h2>
   <div class="grid">
     <div class="card">
-      <a href="./tennis_wta/">📂 WTA 数据目录</a>
-      <div class="path">tennis_wta/</div>
+      <a href="https://github.com/LuckyLoser91/TennisCourtLog/tree/main/tennis_wta" target="_blank">📂 WTA 数据目录</a>
     </div>
     <div class="card">
-      <a href="./tennis_atp/">📂 ATP 数据目录</a>
-      <div class="path">tennis_atp/</div>
+      <a href="https://github.com/LuckyLoser91/TennisCourtLog/tree/main/tennis_atp" target="_blank">📂 ATP 数据目录</a>
     </div>
     <div class="card">
-      <a href="./tennis_wta/wta_players.csv">👩‍🎤 WTA 球员档案</a>
-      <div class="path">tennis_wta/wta_players.csv</div>
+      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_wta/wta_players.csv" target="_blank">👩‍🎤 WTA 球员档案</a>
     </div>
     <div class="card">
-      <a href="./tennis_atp/atp_players.csv">👨‍🎤 ATP 球员档案</a>
-      <div class="path">tennis_atp/atp_players.csv</div>
+      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_atp/atp_players.csv" target="_blank">👨‍🎤 ATP 球员档案</a>
     </div>
     <div class="card">
-      <a href="./tennis_wta/wta_matches_2026.csv">📅 最新 WTA 比赛 (2026)</a>
-      <div class="path">tennis_wta/wta_matches_2026.csv</div>
+      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_wta/wta_matches_2026.csv" target="_blank">📅 最新 WTA 比赛 (2026)</a>
     </div>
   </div>
 </div>
 
-<!-- 关于项目 -->
+<!-- 关于本项目（底部） -->
 <div class="section">
   <h2>📖 关于本项目</h2>
   <div style="background:#1f2937; border-radius:8px; padding:18px 22px; border:1px solid #374151;">
@@ -151,6 +138,7 @@
   </div>
 </div>
 
+<!-- 页脚 -->
 <div class="footer">
   🕒 最后更新：2026年4月 &nbsp;·&nbsp; 
   <a href="https://github.com/LuckyLoser91/TennisCourtLog">View on GitHub</a>
