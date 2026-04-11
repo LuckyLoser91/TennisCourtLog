@@ -61,11 +61,13 @@ round, best_of, winner_name, loser_name, score, winner_rank, loser_rank, winner_
 # 数据更新与维护
 
 1. 季度性更新，每个大满贯过后会进行一次数据更新
-   * 从uk的网站下载实时数据，并利用transfer_uk_data.py对源数据进行预处理，提取13列信息。
-   * 由于uk的网站上的数据的winner_name, loser_name没有全名，所以利用map_name.py对预处理的数据进行name mapping，这里需要用到xxx_player_active_rank.csv，xxx_players.csv, xxx_manual_mapping.csv这三个文件。这里可能有些没有映射成功的需要手动映射处理
+   * 调用transfer_uk_data.py脚本，更新最新年份的比赛数据
 2. 年更
-   * 利用xxx_players_active_rank.csv年度更新历史球员信息文件
-   * 更新xxx_players_active_rank.csv
+   * 调用update_data.py脚本，更新大满贯数据和球员库数据
+
+# 📝 数据分析
+
+1. 大满贯冠军Leaderboard数据统计
 
 # ToDo
 
