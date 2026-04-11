@@ -8,9 +8,8 @@ TennisCourtLog/
 ├── scripts
 │   ├── config.py  # 项目路径配置模块
 │   ├── file_descriptions.json
-│   ├── map_name.py  # 缩写姓名还原全名
 │   ├── transfer_tennisabstract_data.py  # Tennis Abstract 数据获取
-│   ├── transfer_uk_data.py  # 从 tennis-data.co.uk 数据转换
+│   ├── transfer_uk_data.py  # 从 tennis-data.co.uk 数据进行统一化数据转换包括name映射
 │   ├── update_data.py  # 主更新脚本：更新球员库和 GS 汇总
 │   └── update_readme_tree.py  # 自动更新 README 目录树
 ├── tennis_atp
@@ -70,7 +69,7 @@ round, best_of, winner_name, loser_name, score, winner_rank, loser_rank, winner_
 
 # ToDo
 
-1. 制作一个所有大满贯的数据集
+1. 做一些有意思的数据分析脚本
 
 
 
