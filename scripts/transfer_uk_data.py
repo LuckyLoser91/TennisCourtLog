@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 import re
+from pathlib import Path
+from config import PROJECT_ROOT, DATA_PATHS
 
 def make_round_mapper(id_column='WTA'):
     def mapper(row, round_counts):
@@ -146,9 +148,10 @@ def transfer_wta(uk_data_dir='../data/tennis_betting/tennis_atp', years=range(20
         new_df.to_csv(os.path.join(out_data_dir, f'wta_matches_{year}.csv'), index=False)
 
 if __name__ == '__main__':
+    
     # 简单的从uk网站获取的数据进行数据提取
-    transfer_atp(uk_data_dir='../data/tennis_betting/tennis_atp', years=range(2026, 2027), out_data_dir='./tennis_atp')
-    transfer_wta(uk_data_dir='../data/tennis_betting/tennis_atp', years=range(2026, 2027), out_data_dir='./tennis_atp')
+    transfer_atp(uk_data_dir='../data/tennis_betting/tennis_atp', years=range(2026, 2027), out_data_dir=DATA_PATHS['atp']['matches_dir'])
+    transfer_wta(uk_data_dir='../data/tennis_betting/tennis_atp', years=range(2026, 2027), out_data_dir=DATA_PATHS['wta']['matches_dir'])
 
         
 

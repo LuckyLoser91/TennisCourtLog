@@ -1,5 +1,42 @@
 # 关于数据集
 
+## 📂 目录结构
+
+<!-- DIR_STRUCTURE_START -->
+```
+TennisCourtLog/
+├── scripts
+│   ├── config.py  # 项目路径配置模块
+│   ├── file_descriptions.json
+│   ├── map_name.py  # 缩写姓名还原全名
+│   ├── transfer_tennisabstract_data.py  # Tennis Abstract 数据获取
+│   ├── transfer_uk_data.py  # 从 tennis-data.co.uk 数据转换
+│   ├── update_data.py  # 主更新脚本：更新球员库和 GS 汇总
+│   └── update_readme_tree.py  # 自动更新 README 目录树
+├── tennis_atp
+│   ├── atp_gs_matches.csv  # ATP 大满贯汇总
+│   ├── atp_manual_mapping.csv  # ATP 手动姓名缩写映射表
+│   ├── atp_matches_1968.csv  # ATP 历年比赛记录
+│   ├── ...
+│   ├── atp_matches_2026.csv  # ATP 历年比赛记录
+│   ├── atp_players.csv  # ATP 历史球员档案
+│   └── atp_players_active_rank.csv  # ATP 现役排名
+├── tennis_wta
+│   ├── wta_gs_matches.csv  # WTA 大满贯汇总
+│   ├── wta_manual_mapping.csv  # WTA 手动姓名缩写映射表
+│   ├── wta_matches_1968.csv  # WTA 历年比赛记录
+│   ├── ...
+│   ├── wta_matches_2026.csv  # WTA 历年比赛记录
+│   ├── wta_players.csv  # WTA 历史球员档案
+│   └── wta_players_active_rank.csv  # WTA 现役排名
+├── LICENSE  # 项目许可证 (CC BY-NC-SA 4.0)
+└── README.md  # 项目说明文档
+```
+<!-- DIR_STRUCTURE_END -->
+
+
+## 📌 数据集内容
+
 主要维护两个数据子集tennis_wta和tennis_atp, 包括wta_matches_year.csv，atp_matches_year.csv文件
 
 Datasource：tennisabstract: https://github.com/JeffSackmann/tennis_wta; uk: http://tennis-data.co.uk/
