@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-GS Champions · GS Win Rate Top 100</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111827;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 36px 44px 60px;
+      min-width: 1200px;
+    }
+    h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .sub {
+      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sub span { color: #f5c842; }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .tour-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-selector label { color: #9ca3af; font-size: 12px; }
+    .tour-selector select {
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .tour-selector select:hover { border-color: #f5c842; }
+    .active-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .active-toggle label {
+      color: #9ca3af;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .active-toggle input {
+      accent-color: #f5c842;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    table { border-collapse: collapse; width: 100%; }
+    thead tr { border-bottom: 1px solid #374151; }
+    thead th {
+      color: #6b7280; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 6px 9px; text-align: center; white-space: nowrap;
+    }
+    thead th.left { text-align: left; padding-left: 8px; }
+    thead .gr th {
+      color: #4b5563; font-size: 9px; border-bottom: none; padding-bottom: 2px;
+    }
+    .dl { border-left: 1px solid #374151; }
+    tbody tr { border-bottom: 1px solid #1f2937; }
+    tbody tr:hover { background: #1f2937; }
+    tbody td { padding: 6px 6px; font-size: 12px; }
+    tfoot td {
+      padding-top: 20px; color: #4b5563;
+      font-size: 10px; letter-spacing: 0.04em;
+    }
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+    th.sortable:hover {
+      color: #f5c842;
+    }
+    .sort-indicator {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      color: #f5c842;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins > 5)</h1>
+<div class="sub">
+  <div>
+    <span id="champion-count">0 players</span> &nbsp;|&nbsp;
+    Grand Slam matches only &nbsp;|&nbsp;
+    Walkovers excluded &nbsp;|&nbsp;
+    <span style="color:#9ca3af;">Click headers to sort</span>
+  </div>
+  <div class="controls">
+    <div class="active-toggle">
+      <input type="checkbox" id="activeOnlyCheckbox">
+      <label for="activeOnlyCheckbox">🎾 ACTIVE ONLY (won GS match in last 2 years)</label>
+    </div>
+    <div class="tour-selector" style="display:none;">
+      <label for="tourSelect">TOUR:</label>
+      <select id="tourSelect">
+        <option value="atp" selected>ATP</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr class="gr">
+      <th colspan="3"></th>
+      <th colspan="4" style="text-align:center;color:#9ca3af;">BEST RESULT (BY SLAM)</th>
+      <th colspan="2"></th>
+      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
+    </tr>
+    <tr>
+      <th>#</th>
+      <th class="left sortable" data-col="player">PLAYER</th>
+      <th class="sortable" data-col="best">BEST</th>
+      <th class="sortable" data-col="AO">AO</th>
+      <th class="sortable" data-col="RG">RG</th>
+      <th class="sortable" data-col="WIM">WIM</th>
+      <th class="sortable" data-col="USO">USO</th>
+      <th class="sortable" data-col="W">W</th>
+      <th class="sortable" data-col="L">L</th>
+      <th class="dl sortable" data-col="agg">AGG</th>
+      <th class="sortable" data-col="hard">H</th>
+      <th class="sortable" data-col="clay">C</th>
+      <th class="sortable" data-col="grass">G</th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+  <tfoot>
+    <tr><td colspan="13" id="table-footer"></td></tr>
+  </tfoot>
+</table>
+
+<script>
+  const dataMap = {
+    "atp": [[1, "Alexander Zverev", "F", 2, "F", "F", "R16", "F", 118, 40, 74.7, 75, 79, 64, 2026], [2, "Tony Roche", "F", 2, "SF", "SF", "F", "F", 68, 24, 73.9, null, 71, 74, 1979], [3, "Roy Emerson", "QF", 4, "QF", "QF", "QF", "QF", 32, 12, 72.7, null, 78, 71, 1971], [4, "Earl Butch Buchholz", "QF", 4, "QF", "R64", "QF", "QF", 13, 5, 72.2, null, 50, 75, 1969], [5, "Ben Shelton", "SF", 3, "SF", "R16", "QF", "SF", 36, 14, 72.0, 75, 57, 73, 2026], [6, "Tom Okker", "F", 2, "SF", "SF", "SF", "F", 73, 29, 71.6, 0, 71, 74, 1980], [7, "Jo-Wilfried Tsonga", "F", 2, "F", "SF", "SF", "QF", 121, 48, 71.6, 73, 68, 73, 2019], [8, "Eddie Dibbs", "SF", 3, "\u2014", "SF", "R64", "QF", 45, 18, 71.4, 70, 75, 40, 1981], [9, "Milos Raonic", "F", 2, "SF", "QF", "F", "R16", 92, 37, 71.3, 70, 70, 74, 2023], [10, "David Nalbandian", "F", 2, "SF", "SF", "F", "SF", 86, 36, 70.5, 70, 71, 70, 2012], [11, "Tomas Berdych", "F", 2, "SF", "SF", "F", "SF", 146, 61, 70.5, 72, 62, 74, 2019], [12, "Manuel Santana", "R16", 5, "\u2014", "R16", "R32", "R16", 14, 6, 70.0, null, 67, 73, 1970], [13, "David Ferrer", "F", 2, "SF", "F", "QF", "SF", 145, 63, 69.7, 70, 73, 65, 2017], [14, "Alex Metreveli", "F", 2, "SF", "SF", "F", "QF", 53, 23, 69.7, null, 57, 75, 1976], [15, "Andrey Rublev", "QF", 4, "QF", "QF", "QF", "QF", 75, 33, 69.4, 71, 67, 67, 2026], [16, "Kei Nishikori", "F", 2, "QF", "QF", "QF", "F", 104, 46, 69.3, 71, 69, 65, 2025], [17, "Cliff Richey", "SF", 3, "\u2014", "SF", "QF", "SF", 44, 20, 68.8, 0, 65, 73, 1977], [18, "Clark Graebner", "SF", 3, "\u2014", "R16", "SF", "SF", 33, 15, 68.8, null, 50, 70, 1974], [19, "Miloslav Mecir", "F", 2, "F", "SF", "SF", "F", 50, 23, 68.5, 77, 57, 64, 1990], [20, "Matteo Berrettini", "F", 2, "SF", "QF", "F", "SF", 50, 23, 68.5, 68, 67, 70, 2025], [21, "Harold Solomon", "F", 2, "\u2014", "F", "R128", "SF", 58, 27, 68.2, 68, 75, 14, 1984], [22, "Todd Martin", "F", 2, "F", "R16", "SF", "F", 102, 48, 68.0, 70, 50, 73, 2004], [23, "Aaron Krickstein", "SF", 3, "SF", "R16", "R16", "SF", 73, 35, 67.6, 73, 59, 65, 1995], [24, "Karen Khachanov", "SF", 3, "SF", "QF", "QF", "SF", 73, 35, 67.6, 62, 73, 73, 2026], [25, "Brian Gottfried", "F", 2, "R16", "F", "SF", "QF", 85, 41, 67.5, 70, 71, 62, 1984], [26, "Dennis Ralston", "SF", 3, "SF", "R32", "QF", "QF", 29, 14, 67.4, null, 50, 69, 1977], [27, "Mario Ancic", "SF", 3, "R16", "QF", "SF", "R64", 43, 21, 67.2, 60, 69, 74, 2009], [28, "Guillermo Coria", "F", 2, "R16", "F", "R16", "QF", 40, 20, 66.7, 68, 71, 50, 2006], [29, "Stefanos Tsitsipas", "F", 2, "F", "F", "R16", "R32", 68, 34, 66.7, 65, 75, 53, 2026], [30, "Richard Gonzalez", "SF", 3, "R16", "SF", "R16", "QF", 24, 12, 66.7, null, 83, 63, 1972], [31, "Tim Henman", "SF", 3, "R16", "SF", "SF", "SF", 98, 49, 66.7, 63, 57, 75, 2007], [32, "Jose Higueras", "SF", 3, "\u2014", "SF", "R64", "R16", 36, 18, 66.7, 50, 69, 50, 1985], [33, "Alex De Minaur", "QF", 4, "QF", "QF", "R16", "QF", 65, 33, 66.3, 71, 47, 68, 2026], [34, "Marcelo Rios", "F", 2, "F", "QF", "R16", "QF", 51, 26, 66.2, 69, 65, 50, 2002], [35, "Raul Ramirez", "SF", 3, "\u2014", "SF", "SF", "QF", 60, 31, 65.9, 55, 71, 63, 1982], [36, "Jay Berger", "QF", 4, "R32", "QF", "R64", "QF", 23, 12, 65.7, 68, 64, 50, 1991], [37, "Gael Monfils", "SF", 3, "QF", "SF", "R16", "SF", 130, 68, 65.7, 65, 70, 59, 2025], [38, "Frank Froehling", "SF", 3, "\u2014", "SF", "R128", "QF", 13, 7, 65.0, null, 80, 50, 1973], [39, "Casper Ruud", "F", 2, "R16", "F", "R64", "F", 52, 28, 65.0, 62, 75, 38, 2026], [40, "Nikola Pilic", "F", 2, "R16", "F", "R16", "QF", 39, 21, 65.0, null, 65, 65, 1978], [41, "Wayne Ferreira", "SF", 3, "SF", "R16", "QF", "QF", 104, 56, 65.0, 67, 58, 66, 2004], [42, "Fernando Gonzalez", "F", 2, "F", "SF", "QF", "QF", 74, 40, 64.9, 64, 67, 64, 2011], [43, "Andrei Medvedev", "F", 2, "QF", "F", "R16", "QF", 63, 34, 64.9, 63, 74, 50, 2001], [44, "Tommy Robredo", "QF", 4, "QF", "QF", "R16", "QF", 107, 58, 64.8, 65, 73, 50, 2017], [45, "Kent Carlsson", "R16", 5, "\u2014", "R16", "\u2014", "R128", 11, 6, 64.7, 0, 69, null, 1988], [46, "Sebastien Grosjean", "SF", 3, "SF", "SF", "SF", "R32", 78, 43, 64.5, 61, 63, 71, 2008], [47, "Mark Philippoussis", "F", 2, "R16", "R16", "F", "F", 69, 38, 64.5, 62, 56, 73, 2006], [48, "Joakim Nystrom", "QF", 4, "R16", "QF", "R32", "QF", 47, 26, 64.4, 68, 65, 61, 1988], [49, "Tim Mayotte", "SF", 3, "SF", "R64", "SF", "QF", 65, 36, 64.4, 53, 29, 73, 1991], [50, "Tommy Paul", "SF", 3, "SF", "QF", "QF", "R16", 47, 26, 64.4, 65, 56, 71, 2026], [51, "Fred Stolle", "QF", 4, "QF", "QF", "R16", "QF", 27, 15, 64.3, null, 60, 66, 1977], [52, "Lorenzo Musetti", "SF", 3, "QF", "SF", "SF", "QF", 36, 20, 64.3, 62, 72, 58, 2026], [53, "Kevin Curren", "F", 2, "F", "R64", "F", "R16", 50, 28, 64.1, 55, 50, 69, 1992], [54, "Tommy Haas", "SF", 3, "SF", "QF", "SF", "QF", 105, 59, 64.0, 66, 62, 62, 2015], [55, "Henri Leconte", "F", 2, "R16", "F", "SF", "QF", 78, 44, 63.9, 61, 64, 66, 1994], [56, "Taylor Fritz", "F", 2, "QF", "R16", "SF", "F", 67, 38, 63.8, 66, 53, 67, 2026], [57, "Jakub Mensik", "R32", 6, "R32", "R64", "R32", "R32", 14, 8, 63.6, 69, 50, 50, 2026], [58, "Eliot Teltscher", "QF", 4, "QF", "R16", "R32", "QF", 38, 22, 63.3, 69, 62, 50, 1986], [59, "Francois Jauffret", "SF", 3, "\u2014", "SF", "R16", "R16", 36, 21, 63.2, null, 67, 45, 1977], [60, "Grigor Dimitrov", "SF", 3, "SF", "QF", "SF", "SF", 101, 59, 63.1, 64, 61, 62, 2025], [61, "Gene Mayer", "QF", 4, "\u2014", "R16", "QF", "QF", 34, 20, 63.0, 70, 50, 63, 1984], [62, "Holger Rune", "QF", 4, "R16", "QF", "QF", "R32", 29, 17, 63.0, 50, 76, 64, 2025], [63, "Nick Kyrgios", "F", 2, "QF", "R32", "F", "QF", 54, 32, 62.8, 60, 50, 71, 2022], [64, "Joachim Johansson", "SF", 3, "R16", "R128", "R16", "SF", 15, 9, 62.5, 62, 0, 71, 2005], [65, "Hans Gildemeister", "QF", 4, "\u2014", "QF", "R64", "R64", 25, 15, 62.5, 0, 67, 33, 1986], [66, "Jonas Svensson", "SF", 3, "QF", "SF", "R32", "R16", 50, 30, 62.5, 63, 67, 56, 1994], [67, "Robin Soderling", "F", 2, "R16", "F", "QF", "QF", 51, 31, 62.2, 56, 70, 61, 2011], [68, "Alex Corretja", "F", 2, "R32", "F", "R64", "QF", 61, 37, 62.2, 53, 73, 33, 2004], [69, "Nikolay Davydenko", "SF", 3, "QF", "SF", "R16", "SF", 82, 50, 62.1, 65, 67, 39, 2014], [70, "Wojtek Fibak", "QF", 4, "R16", "QF", "QF", "QF", 55, 34, 61.8, 47, 68, 60, 1986], [71, "Cedric Pioline", "F", 2, "R16", "SF", "F", "F", 76, 47, 61.8, 59, 61, 67, 2001], [72, "Jack Draper", "SF", 3, "R16", "R16", "R64", "SF", 21, 13, 61.8, 71, 50, 43, 2025], [73, "Sandy Mayer", "SF", 3, "R32", "R32", "SF", "R16", 42, 26, 61.8, 50, 50, 65, 1984], [74, "Marty Riessen", "QF", 4, "QF", "R16", "R16", "QF", 48, 30, 61.5, 50, 62, 62, 1979], [75, "Fernando Verdasco", "SF", 3, "SF", "R16", "QF", "QF", 113, 71, 61.4, 62, 65, 57, 2020], [76, "Roberto Bautista Agut", "SF", 3, "QF", "R16", "SF", "R16", 78, 49, 61.4, 58, 60, 69, 2024], [77, "Kevin Anderson", "F", 2, "R16", "R16", "F", "F", 76, 48, 61.3, 59, 63, 64, 2021], [78, "Richard Gasquet", "SF", 3, "R16", "QF", "SF", "SF", 117, 75, 60.9, 60, 58, 65, 2025], [79, "Diego Schwartzman", "SF", 3, "R16", "SF", "R32", "QF", 59, 38, 60.8, 59, 70, 47, 2023], [80, "Nicolas Escude", "SF", 3, "SF", "R16", "QF", "QF", 37, 24, 60.7, 68, 44, 64, 2004], [81, "Martin Jaite", "QF", 4, "R32", "QF", "R64", "R32", 29, 19, 60.4, 50, 68, 50, 1992], [82, "Denis Shapovalov", "SF", 3, "QF", "R32", "SF", "QF", 48, 32, 60.0, 64, 50, 58, 2026], [83, "Jonas Bjorkman", "SF", 3, "QF", "R16", "SF", "SF", 87, 58, 60.0, 63, 42, 65, 2007], [84, "John Isner", "SF", 3, "R16", "R16", "SF", "QF", 87, 58, 60.0, 61, 61, 56, 2023], [85, "Lew Hoad", "R16", 5, "\u2014", "R16", "R32", "\u2014", 6, 4, 60.0, null, 75, 50, 1970], [86, "Frances Tiafoe", "SF", 3, "QF", "QF", "R16", "SF", 58, 39, 59.8, 64, 44, 62, 2026], [87, "Mikhail Youzhny", "SF", 3, "QF", "QF", "QF", "SF", 101, 68, 59.8, 59, 56, 64, 2017], [88, "Zeljko Franulovic", "F", 2, "\u2014", "F", "R32", "R32", 37, 25, 59.7, null, 63, 46, 1978], [89, "Felix Auger Aliassime", "SF", 3, "QF", "R16", "QF", "SF", 40, 27, 59.7, 64, 50, 54, 2025], [90, "Dick Stockton", "SF", 3, "R16", "SF", "SF", "QF", 46, 31, 59.7, 50, 74, 55, 1982], [91, "Gilles Simon", "QF", 4, "QF", "R16", "QF", "R16", 90, 61, 59.6, 61, 57, 59, 2022], [92, "Mark Cox", "QF", 4, "QF", "R32", "R16", "R32", 38, 26, 59.4, 33, 55, 62, 1980], [93, "Mal Anderson", "F", 2, "F", "\u2014", "R32", "R32", 13, 9, 59.1, null, null, 59, 1976], [94, "Bob Lutz", "SF", 3, "SF", "R16", "R32", "R16", 36, 25, 59.0, 67, 50, 61, 1982], [95, "David Goffin", "QF", 4, "QF", "QF", "QF", "R16", 69, 48, 59.0, 57, 59, 62, 2025], [96, "Jose Luis Clerc", "SF", 3, "R32", "SF", "R16", "R16", 33, 23, 58.9, 53, 65, 53, 1985], [97, "James Blake", "QF", 4, "QF", "R32", "R32", "QF", 60, 42, 58.8, 68, 40, 42, 2013], [98, "Magnus Norman", "F", 2, "SF", "F", "R32", "R16", 34, 24, 58.6, 59, 60, 56, 2001], [99, "David Wheaton", "SF", 3, "QF", "R32", "SF", "QF", 51, 36, 58.6, 60, 43, 65, 1998], [100, "Tom Gorman", "SF", 3, "R32", "SF", "SF", "SF", 45, 32, 58.4, 60, 50, 61, 1979]]
+  };
+  const maxYears = {"atp": 2026};
+
+  const footerText = `        BEST = Career best GS result &nbsp;·&nbsp;
+        AO/RG/WIM/USO = Best result at each major &nbsp;·&nbsp;
+        W = Winner · F = Final · SF = Semi-final · QF = Quarter-final · R16/R32/R64/R128 &nbsp;·&nbsp; <br>
+        AGG = aggregate GS win rate &nbsp;·&nbsp;
+        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
+        Win rate: ≥70% <span style="color:#e8a838">■</span> ≥80% <span style="color:#2dd4b0">■</span>`;
+
+  // ---------- 颜色函数 ----------
+  function aggBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(7,123,89)';
+    if (pct >= 80) return 'rgb(42,159,121)';
+    if (pct >= 75) return 'rgb(227,152,45)';
+    if (pct >= 70) return 'rgb(247,213,118)';
+    return 'transparent';
+  }
+  function aggColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+  function surfBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(39,157,119)';
+    if (pct >= 80) return 'rgb(67,186,144)';
+    if (pct >= 75) return 'rgb(235,174,72)';
+    if (pct >= 70) return 'rgb(249,218,124)';
+    return 'transparent';
+  }
+  function surfColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 75) return '#111111';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+
+  function fmt(val) {
+    return (val === null || val === undefined) ? '—' : val + '%';
+  }
+
+  // ---------- 排序状态 ----------
+  let sortState = [{ col: 'agg', order: 'desc' }];
+  let userSorted = false;
+  let currentTour = 'atp';
+  let activeOnly = false;
+
+  const colIndex = {
+    'player': 1,
+    'best': 3,
+    'AO': 4,
+    'RG': 5,
+    'WIM': 6,
+    'USO': 7,
+    'W': 8,
+    'L': 9,
+    'agg': 10,
+    'hard': 11,
+    'clay': 12,
+    'grass': 13,
+  };
+
+  const roundRank = {
+    'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999
+  };
+
+  function getRoundValue(val) {
+    if (val === null || val === undefined) return 999;
+    return roundRank[val] || 999;
+  }
+
+  function compareValues(a, b, col, order) {
+    let valA, valB;
+    if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {
+      const idx = colIndex[col];
+      valA = getRoundValue(a[idx]);
+      valB = getRoundValue(b[idx]);
+    } else if (col === 'best') {
+      valA = a[colIndex[col]];
+      valB = b[colIndex[col]];
+    } else {
+      valA = a[colIndex[col]];
+      valB = b[colIndex[col]];
+    }
+    
+    const isNullA = valA === null || valA === undefined;
+    const isNullB = valB === null || valB === undefined;
+    if (isNullA && isNullB) return 0;
+    if (isNullA) return 1;
+    if (isNullB) return -1;
+    
+    if (col === 'player') {
+      valA = String(valA).toLowerCase();
+      valB = String(valB).toLowerCase();
+    } else {
+      valA = Number(valA);
+      valB = Number(valB);
+    }
+    
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  }
+
+  function sortRows(rows) {
+    if (!sortState.length) return rows;
+    return [...rows].sort((a, b) => {
+      for (let rule of sortState) {
+        const cmp = compareValues(a, b, rule.col, rule.order);
+        if (cmp !== 0) return cmp;
+      }
+      return 0;
+    });
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('.sortable').forEach(th => {
+      const ind = th.querySelector('.sort-indicator');
+      if (ind) ind.remove();
+    });
+    if (!userSorted) return;
+    if (sortState.length > 0) {
+      const primary = sortState[0];
+      const th = document.querySelector(`th[data-col="${primary.col}"]`);
+      if (th) {
+        const arrow = primary.order === 'asc' ? '▲' : '▼';
+        const span = document.createElement('span');
+        span.className = 'sort-indicator';
+        span.textContent = ' ' + arrow;
+        th.appendChild(span);
+      }
+    }
+  }
+
+  function isActive(row) {
+    const maxYear = maxYears[currentTour];
+    const lastWinYear = row[14];
+    return (maxYear - lastWinYear) < 2;
+  }
+
+  function renderTable() {
+    let rows = dataMap[currentTour] || [];
+    if (activeOnly) {
+      rows = rows.filter(row => isActive(row));
+    }
+    const sorted = sortRows(rows);
+    
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
+    
+    countSpan.textContent = sorted.length + ' players';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    sorted.forEach((row, idx) => {
+      const [origRank, player, bestDisp, bestRank, ao, rg, wim, uso, W, L, agg, hard, clay, grass] = row;
+      const aggBgColor = aggBg(agg);
+      const aggTextColor = aggColor(agg);
+      const hardBgColor = surfBg(hard);
+      const hardTextColor = surfColor(hard);
+      const clayBgColor = surfBg(clay);
+      const clayTextColor = surfColor(clay);
+      const grassBgColor = surfBg(grass);
+      const grassTextColor = surfColor(grass);
+
+      html += `<tr>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${bestDisp}</td>
+        <td style="text-align:center;color:#e5e5e5;">${ao}</td>
+        <td style="text-align:center;color:#e5e5e5;">${rg}</td>
+        <td style="text-align:center;color:#e5e5e5;">${wim}</td>
+        <td style="text-align:center;color:#e5e5e5;">${uso}</td>
+        <td style="text-align:center;color:#e5e5e5;">${W}</td>
+        <td style="text-align:center;color:#6b7280;">${L}</td>
+        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(agg)}</td>
+        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(hard)}</td>
+        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(clay)}</td>
+        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(grass)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
+    updateSortIndicators();
+  }
+
+  function handleSortClick(e) {
+    const th = e.currentTarget;
+    const col = th.getAttribute('data-col');
+    if (!col) return;
+    userSorted = true;
+    const existingIdx = sortState.findIndex(s => s.col === col);
+    let newOrder = 'desc';
+    if (existingIdx !== -1) {
+      newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
+    }
+    if (existingIdx !== -1) {
+      const [existing] = sortState.splice(existingIdx, 1);
+      existing.order = newOrder;
+      sortState.unshift(existing);
+    } else {
+      sortState.unshift({ col, order: newOrder });
+    }
+    renderTable();
+  }
+
+  function resetToDefault() {
+    sortState = [{ col: 'agg', order: 'desc' }];
+    userSorted = false;
+  }
+
+  document.querySelectorAll('.sortable').forEach(th => {
+    th.addEventListener('click', handleSortClick);
+  });
+
+  const selectEl = document.getElementById('tourSelect');
+  if (selectEl) {
+    selectEl.addEventListener('change', e => {
+      currentTour = e.target.value;
+      resetToDefault();
+      renderTable();
+    });
+  }
+
+  const activeCheck = document.getElementById('activeOnlyCheckbox');
+  activeCheck.addEventListener('change', e => {
+    activeOnly = e.target.checked;
+    renderTable();
+  });
+
+  renderTable();
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-GS Champions · GS Win Rate Top 100</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111827;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 36px 44px 60px;
+      min-width: 1200px;
+    }
+    h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .sub {
+      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sub span { color: #f5c842; }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .tour-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-selector label { color: #9ca3af; font-size: 12px; }
+    .tour-selector select {
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .tour-selector select:hover { border-color: #f5c842; }
+    .active-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .active-toggle label {
+      color: #9ca3af;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .active-toggle input {
+      accent-color: #f5c842;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    table { border-collapse: collapse; width: 100%; }
+    thead tr { border-bottom: 1px solid #374151; }
+    thead th {
+      color: #6b7280; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 6px 9px; text-align: center; white-space: nowrap;
+    }
+    thead th.left { text-align: left; padding-left: 8px; }
+    thead .gr th {
+      color: #4b5563; font-size: 9px; border-bottom: none; padding-bottom: 2px;
+    }
+    .dl { border-left: 1px solid #374151; }
+    tbody tr { border-bottom: 1px solid #1f2937; }
+    tbody tr:hover { background: #1f2937; }
+    tbody td { padding: 6px 6px; font-size: 12px; }
+    tfoot td {
+      padding-top: 20px; color: #4b5563;
+      font-size: 10px; letter-spacing: 0.04em;
+    }
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+    th.sortable:hover {
+      color: #f5c842;
+    }
+    .sort-indicator {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      color: #f5c842;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins > 5)</h1>
+<div class="sub">
+  <div>
+    <span id="champion-count">0 players</span> &nbsp;|&nbsp;
+    Grand Slam matches only &nbsp;|&nbsp;
+    Walkovers excluded &nbsp;|&nbsp;
+    <span style="color:#9ca3af;">Click headers to sort</span>
+  </div>
+  <div class="controls">
+    <div class="active-toggle">
+      <input type="checkbox" id="activeOnlyCheckbox">
+      <label for="activeOnlyCheckbox">🎾 ACTIVE ONLY (won GS match in last 2 years)</label>
+    </div>
+    <div class="tour-selector" style="display:none;">
+      <label for="tourSelect">TOUR:</label>
+      <select id="tourSelect">
+        <option value="wta" selected>WTA</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr class="gr">
+      <th colspan="3"></th>
+      <th colspan="4" style="text-align:center;color:#9ca3af;">BEST RESULT (BY SLAM)</th>
+      <th colspan="2"></th>
+      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
+    </tr>
+    <tr>
+      <th>#</th>
+      <th class="left sortable" data-col="player">PLAYER</th>
+      <th class="sortable" data-col="best">BEST</th>
+      <th class="sortable" data-col="AO">AO</th>
+      <th class="sortable" data-col="RG">RG</th>
+      <th class="sortable" data-col="WIM">WIM</th>
+      <th class="sortable" data-col="USO">USO</th>
+      <th class="sortable" data-col="W">W</th>
+      <th class="sortable" data-col="L">L</th>
+      <th class="dl sortable" data-col="agg">AGG</th>
+      <th class="sortable" data-col="hard">H</th>
+      <th class="sortable" data-col="clay">C</th>
+      <th class="sortable" data-col="grass">G</th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+  <tfoot>
+    <tr><td colspan="13" id="table-footer"></td></tr>
+  </tfoot>
+</table>
+
+<script>
+  const dataMap = {
+    "wta": [[1, "Mary Joe Fernandez", "F", 2, "F", "F", "SF", "SF", 141, 47, 75.0, 76, 76, 72, 1999], [2, "Andrea Jaeger", "F", 2, "SF", "F", "F", "SF", 51, 18, 73.9, 71, 73, 77, 1985], [3, "Mirra Andreeva", "SF", 3, "R16", "SF", "QF", "R32", 31, 12, 72.1, 68, 79, 70, 2026], [4, "Elena Dementieva", "F", 2, "SF", "F", "SF", "F", 119, 46, 72.1, 72, 73, 71, 2010], [5, "Manuela Maleeva Fragniere", "SF", 3, "QF", "QF", "QF", "SF", 103, 40, 72.0, 77, 71, 63, 1994], [6, "Agnieszka Radwanska", "F", 2, "SF", "QF", "F", "R16", 125, 49, 71.8, 70, 68, 77, 2018], [7, "Helga Masthoff", "F", 2, "QF", "F", "QF", "SF", 39, 16, 70.9, null, 75, 65, 1978], [8, "Elina Svitolina", "SF", 3, "SF", "QF", "SF", "SF", 113, 48, 70.2, 70, 73, 67, 2026], [9, "Helena Sukova", "F", 2, "F", "SF", "QF", "F", 143, 61, 70.1, 73, 62, 70, 1997], [10, "Natasha Chmyreva", "SF", 3, "SF", "R64", "R16", "QF", 14, 6, 70.0, null, 57, 77, 1976], [11, "Zina Garrison", "F", 2, "SF", "QF", "F", "SF", 128, 55, 69.9, 72, 56, 73, 1995], [12, "Pam Shriver", "F", 2, "SF", "R32", "SF", "F", 118, 52, 69.4, 67, 50, 72, 1996], [13, "Anke Huber", "F", 2, "F", "SF", "R16", "QF", 96, 43, 69.1, 69, 70, 68, 2001], [14, "Julie Heldman", "SF", 3, "SF", "SF", "QF", "SF", 47, 21, 69.1, null, 68, 70, 1975], [15, "Jessica Pegula", "F", 2, "SF", "QF", "QF", "F", 62, 28, 68.9, 73, 65, 57, 2026], [16, "Nicole Vaidisova", "SF", 3, "SF", "SF", "QF", "R16", 44, 20, 68.8, 68, 67, 72, 2008], [17, "Olga Morozova", "F", 2, "QF", "F", "F", "QF", 52, 24, 68.4, null, 64, 71, 1976], [18, "Elise Mertens", "SF", 3, "SF", "R16", "R16", "QF", 77, 36, 68.1, 70, 67, 65, 2026], [19, "Rosie Casals", "F", 2, "QF", "QF", "SF", "F", 89, 42, 67.9, 53, 59, 72, 1985], [20, "Bonnie Gadusek", "QF", 4, "R32", "R16", "R64", "QF", 23, 11, 67.6, 73, 62, 50, 1986], [21, "Qinwen Zheng", "F", 2, "F", "QF", "R32", "QF", 31, 15, 67.4, 73, 71, 33, 2025], [22, "Natalia Zvereva", "F", 2, "QF", "F", "SF", "QF", 105, 52, 66.9, 65, 70, 67, 2000], [23, "Wendy Turnbull", "F", 2, "F", "F", "QF", "F", 99, 49, 66.9, 70, 73, 64, 1989], [24, "Nadia Petrova", "SF", 3, "QF", "SF", "QF", "QF", 109, 54, 66.9, 66, 65, 70, 2012], [25, "Amanda Anisimova", "F", 2, "QF", "SF", "F", "F", 48, 24, 66.7, 64, 67, 73, 2026], [26, "Judy Tegart", "F", 2, "QF", "R16", "F", "QF", 34, 17, 66.7, null, 50, 68, 1977], [27, "Kathy Jordan", "F", 2, "F", "QF", "SF", "R16", 58, 29, 66.7, 65, 62, 70, 1986], [28, "Jelena Jankovic", "F", 2, "SF", "SF", "R16", "F", 113, 57, 66.5, 68, 69, 60, 2017], [29, "Katerina Maleeva", "QF", 4, "QF", "QF", "QF", "QF", 75, 38, 66.4, 69, 67, 62, 1994], [30, "Dinara Safina", "F", 2, "F", "F", "SF", "SF", 65, 33, 66.3, 65, 71, 63, 2010], [31, "Karolina Muchova", "F", 2, "SF", "F", "QF", "SF", 51, 26, 66.2, 70, 65, 57, 2026], [32, "Claudia Kohde Kilsch", "SF", 3, "SF", "SF", "QF", "QF", 88, 46, 65.7, 66, 62, 68, 1992], [33, "Greer Stevens", "QF", 4, "QF", "\u2014", "QF", "R16", 23, 12, 65.7, 50, 50, 72, 1980], [34, "Nathalie Tauziat", "F", 2, "R16", "QF", "F", "QF", 101, 53, 65.6, 62, 62, 71, 2001], [35, "Anna Kournikova", "SF", 3, "QF", "R16", "SF", "R16", 40, 21, 65.6, 65, 64, 69, 2003], [36, "Ons Jabeur", "F", 2, "QF", "QF", "F", "F", 61, 32, 65.6, 62, 67, 70, 2025], [37, "Francoise Durr", "SF", 3, "R16", "SF", "SF", "QF", 59, 31, 65.6, 0, 66, 67, 1978], [38, "Vera Zvonareva", "F", 2, "SF", "QF", "F", "F", 91, 48, 65.5, 64, 67, 67, 2021], [39, "Emma Navarro", "SF", 3, "QF", "R16", "QF", "SF", 24, 13, 64.9, 65, 57, 70, 2025], [40, "Karolina Pliskova", "F", 2, "SF", "SF", "F", "F", 90, 49, 64.7, 71, 52, 60, 2026], [41, "Carling Bassett Seguso", "SF", 3, "QF", "QF", "R16", "SF", 40, 22, 64.5, 65, 68, 61, 1988], [42, "Belinda Bencic", "SF", 3, "R16", "R32", "SF", "SF", 67, 37, 64.4, 66, 50, 68, 2026], [43, "Carla Suarez Navarro", "QF", 4, "QF", "QF", "R16", "QF", 86, 48, 64.2, 64, 68, 59, 2020], [44, "Paula Badosa", "SF", 3, "SF", "QF", "R16", "QF", 41, 23, 64.1, 60, 72, 62, 2026], [45, "Lesley Turner", "SF", 3, "QF", "SF", "QF", "R32", 25, 14, 64.1, null, 75, 59, 1978], [46, "Sylvia Hanika", "F", 2, "QF", "F", "R16", "QF", 75, 43, 63.6, 69, 65, 56, 1990], [47, "Barbara Potter", "SF", 3, "QF", "R128", "QF", "SF", 49, 28, 63.6, 62, 0, 66, 1988], [48, "Maria Bueno", "SF", 3, "\u2014", "QF", "QF", "SF", 14, 8, 63.6, null, 43, 73, 1977], [49, "Mary Sawyer", "SF", 3, "SF", "\u2014", "\u2014", "\u2014", 7, 4, 63.6, null, null, 64, 1979], [50, "Dominika Cibulkova", "F", 2, "F", "SF", "QF", "QF", 80, 46, 63.5, 62, 64, 67, 2018], [51, "Kate Makarova", "SF", 3, "SF", "R16", "QF", "SF", 80, 46, 63.5, 68, 52, 61, 2018], [52, "Amanda Coetzer", "SF", 3, "SF", "SF", "R16", "QF", 96, 56, 63.2, 67, 61, 55, 2004], [53, "Patty Schnyder", "SF", 3, "SF", "QF", "R16", "QF", 101, 60, 62.7, 68, 64, 40, 2010], [54, "Karen Krantzcke", "SF", 3, "SF", "SF", "QF", "QF", 35, 21, 62.5, null, 60, 63, 1977], [55, "Eugenie Bouchard", "F", 2, "SF", "SF", "F", "R16", 43, 26, 62.3, 65, 59, 61, 2020], [56, "Winnie Shaw", "SF", 3, "SF", "R16", "QF", "R16", 28, 17, 62.2, null, 50, 63, 1976], [57, "Bettina Bunge", "SF", 3, "R16", "R16", "SF", "R16", 48, 30, 61.5, 62, 62, 61, 1987], [58, "Sabine Lisicki", "F", 2, "R16", "R32", "F", "R16", 55, 35, 61.1, 54, 47, 75, 2016], [59, "Kathy May", "QF", 4, "\u2014", "QF", "R16", "QF", 28, 18, 60.9, 70, 63, 53, 1980], [60, "Daria Kasatkina", "SF", 3, "R16", "SF", "QF", "R16", 62, 40, 60.8, 52, 71, 64, 2025], [61, "Helen Gourlay", "F", 2, "F", "F", "R16", "QF", 51, 33, 60.7, null, 61, 61, 1978], [62, "Irina Spirlea", "SF", 3, "QF", "R16", "R16", "SF", 43, 28, 60.6, 61, 62, 59, 1999], [63, "Dianne Fromholtz", "F", 2, "F", "SF", "QF", "SF", 72, 47, 60.5, 45, 70, 61, 1988], [64, "Daniela Hantuchova", "SF", 3, "SF", "R16", "QF", "QF", 93, 61, 60.4, 62, 59, 59, 2015], [65, "Elena Likhovtseva", "SF", 3, "QF", "SF", "QF", "R16", 84, 56, 60.0, 60, 57, 62, 2007], [66, "Olga Danilovic", "R16", 5, "R16", "R16", "R64", "R128", 15, 10, 60.0, 60, 67, 33, 2026], [67, "Victoria Mboko", "R16", 5, "R16", "R32", "R64", "R128", 6, 4, 60.0, 60, 67, 50, 2026], [68, "Maria Kirilenko", "QF", 4, "QF", "QF", "QF", "R16", 64, 43, 59.8, 64, 59, 50, 2014], [69, "Chanda Rubin", "SF", 3, "SF", "QF", "R16", "R16", 71, 48, 59.7, 60, 69, 45, 2004], [70, "Sandrine Testud", "QF", 4, "QF", "R16", "R16", "QF", 68, 46, 59.6, 65, 52, 56, 2002], [71, "Jennifer Brady", "F", 2, "F", "R32", "R64", "SF", 25, 17, 59.5, 68, 44, 40, 2023], [72, "Anastasia Pavlyuchenkova", "F", 2, "QF", "F", "QF", "QF", 97, 67, 59.1, 59, 63, 54, 2025], [73, "Magdalena Maleeva", "QF", 4, "R16", "R16", "R16", "QF", 78, 54, 59.1, 59, 57, 62, 2005], [74, "Catarina Lindqvist Ryan", "SF", 3, "SF", "R16", "SF", "R16", 52, 36, 59.1, 60, 44, 65, 1992], [75, "Raffaella Reggi Concato", "QF", 4, "R16", "QF", "R16", "R16", 39, 27, 59.1, 61, 59, 56, 1990], [76, "Ivanna Madruga", "QF", 4, "\u2014", "QF", "R64", "QF", 23, 16, 59.0, 67, 60, 25, 1986], [77, "Leila Meskhi", "QF", 4, "R16", "R16", "R64", "QF", 33, 23, 58.9, 62, 67, 17, 1994], [78, "Judith Wiesner", "QF", 4, "R16", "R16", "QF", "QF", 56, 39, 58.9, 61, 45, 65, 1997], [79, "Linky Boshoff", "QF", 4, "\u2014", "QF", "QF", "R16", 17, 12, 58.6, null, 50, 67, 1977], [80, "Lindsay Morse", "R16", 5, "R16", "\u2014", "R32", "R32", 7, 5, 58.3, 67, null, 50, 1981], [81, "Anna Chakvetadze", "SF", 3, "QF", "QF", "R16", "SF", 39, 28, 58.2, 61, 57, 53, 2011], [82, "Betty Stove", "F", 2, "R16", "R16", "F", "SF", 50, 36, 58.1, 38, 56, 62, 1982], [83, "Naoko Sawamatsu", "QF", 4, "QF", "R16", "R16", "R32", 47, 34, 58.0, 57, 53, 64, 1998], [84, "Danielle Collins", "F", 2, "F", "QF", "R16", "R16", 44, 32, 57.9, 60, 56, 56, 2025], [85, "Shahar Peer", "QF", 4, "QF", "R16", "R16", "QF", 49, 36, 57.6, 61, 57, 50, 2014], [86, "Anne Smith", "QF", 4, "QF", "R16", "QF", "QF", 39, 29, 57.4, 59, 58, 56, 1991], [87, "Johanna Konta", "SF", 3, "SF", "SF", "SF", "QF", 39, 29, 57.4, 62, 42, 58, 2020], [88, "Peaches Bartkowicz", "QF", 4, "\u2014", "R32", "R32", "QF", 12, 9, 57.1, null, 33, 61, 1970], [89, "Lesley Hunt", "SF", 3, "SF", "R16", "R16", "QF", 44, 33, 57.1, 80, 42, 60, 1978], [90, "Ai Sugiyama", "QF", 4, "QF", "R16", "QF", "R16", 84, 63, 57.1, 57, 55, 60, 2009], [91, "Iva Jovic", "QF", 4, "QF", "R64", "R128", "R64", 8, 6, 57.1, 64, 50, 0, 2026], [92, "Marise Kruger", "QF", 4, "\u2014", "R32", "QF", "R16", 12, 9, 57.1, 0, 43, 69, 1979], [93, "Maria Sakkari", "SF", 3, "R16", "SF", "R32", "SF", 53, 40, 57.0, 58, 55, 55, 2026], [94, "Sabine Appelmans", "QF", 4, "QF", "R16", "R16", "R16", 58, 44, 56.9, 59, 48, 60, 2001], [95, "Kazuko Sawamatsu", "SF", 3, "SF", "QF", "R32", "QF", 29, 22, 56.9, null, 58, 56, 1975], [96, "Janet Newberry", "SF", 3, "QF", "SF", "R32", "R16", 29, 22, 56.9, 0, 68, 52, 1979], [97, "Fabiola Zuluaga", "SF", 3, "SF", "R16", "R64", "R32", 25, 19, 56.8, 58, 62, 25, 2005], [98, "Brenda Schultz Mccarthy", "QF", 4, "R16", "R16", "QF", "QF", 55, 42, 56.7, 53, 56, 63, 1998], [99, "Magui Serna", "QF", 4, "R32", "R16", "QF", "R16", 43, 33, 56.6, 53, 60, 60, 2004], [100, "Jelena Dokic", "SF", 3, "QF", "QF", "SF", "R16", 43, 33, 56.6, 52, 50, 68, 2012]]
+  };
+  const maxYears = {"wta": 2026};
+
+  const footerText = `        BEST = Career best GS result &nbsp;·&nbsp;
+        AO/RG/WIM/USO = Best result at each major &nbsp;·&nbsp;
+        W = Winner · F = Final · SF = Semi-final · QF = Quarter-final · R16/R32/R64/R128 &nbsp;·&nbsp; <br>
+        AGG = aggregate GS win rate &nbsp;·&nbsp;
+        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
+        Win rate: ≥70% <span style="color:#e8a838">■</span> ≥80% <span style="color:#2dd4b0">■</span>`;
+
+  // ---------- 颜色函数 ----------
+  function aggBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(7,123,89)';
+    if (pct >= 80) return 'rgb(42,159,121)';
+    if (pct >= 75) return 'rgb(227,152,45)';
+    if (pct >= 70) return 'rgb(247,213,118)';
+    return 'transparent';
+  }
+  function aggColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+  function surfBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(39,157,119)';
+    if (pct >= 80) return 'rgb(67,186,144)';
+    if (pct >= 75) return 'rgb(235,174,72)';
+    if (pct >= 70) return 'rgb(249,218,124)';
+    return 'transparent';
+  }
+  function surfColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 75) return '#111111';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+
+  function fmt(val) {
+    return (val === null || val === undefined) ? '—' : val + '%';
+  }
+
+  // ---------- 排序状态 ----------
+  let sortState = [{ col: 'agg', order: 'desc' }];
+  let userSorted = false;
+  let currentTour = 'wta';
+  let activeOnly = false;
+
+  const colIndex = {
+    'player': 1,
+    'best': 3,
+    'AO': 4,
+    'RG': 5,
+    'WIM': 6,
+    'USO': 7,
+    'W': 8,
+    'L': 9,
+    'agg': 10,
+    'hard': 11,
+    'clay': 12,
+    'grass': 13,
+  };
+
+  const roundRank = {
+    'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999
+  };
+
+  function getRoundValue(val) {
+    if (val === null || val === undefined) return 999;
+    return roundRank[val] || 999;
+  }
+
+  function compareValues(a, b, col, order) {
+    let valA, valB;
+    if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {
+      const idx = colIndex[col];
+      valA = getRoundValue(a[idx]);
+      valB = getRoundValue(b[idx]);
+    } else if (col === 'best') {
+      valA = a[colIndex[col]];
+      valB = b[colIndex[col]];
+    } else {
+      valA = a[colIndex[col]];
+      valB = b[colIndex[col]];
+    }
+    
+    const isNullA = valA === null || valA === undefined;
+    const isNullB = valB === null || valB === undefined;
+    if (isNullA && isNullB) return 0;
+    if (isNullA) return 1;
+    if (isNullB) return -1;
+    
+    if (col === 'player') {
+      valA = String(valA).toLowerCase();
+      valB = String(valB).toLowerCase();
+    } else {
+      valA = Number(valA);
+      valB = Number(valB);
+    }
+    
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  }
+
+  function sortRows(rows) {
+    if (!sortState.length) return rows;
+    return [...rows].sort((a, b) => {
+      for (let rule of sortState) {
+        const cmp = compareValues(a, b, rule.col, rule.order);
+        if (cmp !== 0) return cmp;
+      }
+      return 0;
+    });
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('.sortable').forEach(th => {
+      const ind = th.querySelector('.sort-indicator');
+      if (ind) ind.remove();
+    });
+    if (!userSorted) return;
+    if (sortState.length > 0) {
+      const primary = sortState[0];
+      const th = document.querySelector(`th[data-col="${primary.col}"]`);
+      if (th) {
+        const arrow = primary.order === 'asc' ? '▲' : '▼';
+        const span = document.createElement('span');
+        span.className = 'sort-indicator';
+        span.textContent = ' ' + arrow;
+        th.appendChild(span);
+      }
+    }
+  }
+
+  function isActive(row) {
+    const maxYear = maxYears[currentTour];
+    const lastWinYear = row[14];
+    return (maxYear - lastWinYear) < 2;
+  }
+
+  function renderTable() {
+    let rows = dataMap[currentTour] || [];
+    if (activeOnly) {
+      rows = rows.filter(row => isActive(row));
+    }
+    const sorted = sortRows(rows);
+    
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
+    
+    countSpan.textContent = sorted.length + ' players';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    sorted.forEach((row, idx) => {
+      const [origRank, player, bestDisp, bestRank, ao, rg, wim, uso, W, L, agg, hard, clay, grass] = row;
+      const aggBgColor = aggBg(agg);
+      const aggTextColor = aggColor(agg);
+      const hardBgColor = surfBg(hard);
+      const hardTextColor = surfColor(hard);
+      const clayBgColor = surfBg(clay);
+      const clayTextColor = surfColor(clay);
+      const grassBgColor = surfBg(grass);
+      const grassTextColor = surfColor(grass);
+
+      html += `<tr>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${bestDisp}</td>
+        <td style="text-align:center;color:#e5e5e5;">${ao}</td>
+        <td style="text-align:center;color:#e5e5e5;">${rg}</td>
+        <td style="text-align:center;color:#e5e5e5;">${wim}</td>
+        <td style="text-align:center;color:#e5e5e5;">${uso}</td>
+        <td style="text-align:center;color:#e5e5e5;">${W}</td>
+        <td style="text-align:center;color:#6b7280;">${L}</td>
+        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(agg)}</td>
+        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(hard)}</td>
+        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(clay)}</td>
+        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(grass)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
+    updateSortIndicators();
+  }
+
+  function handleSortClick(e) {
+    const th = e.currentTarget;
+    const col = th.getAttribute('data-col');
+    if (!col) return;
+    userSorted = true;
+    const existingIdx = sortState.findIndex(s => s.col === col);
+    let newOrder = 'desc';
+    if (existingIdx !== -1) {
+      newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
+    }
+    if (existingIdx !== -1) {
+      const [existing] = sortState.splice(existingIdx, 1);
+      existing.order = newOrder;
+      sortState.unshift(existing);
+    } else {
+      sortState.unshift({ col, order: newOrder });
+    }
+    renderTable();
+  }
+
+  function resetToDefault() {
+    sortState = [{ col: 'agg', order: 'desc' }];
+    userSorted = false;
+  }
+
+  document.querySelectorAll('.sortable').forEach(th => {
+    th.addEventListener('click', handleSortClick);
+  });
+
+  const selectEl = document.getElementById('tourSelect');
+  if (selectEl) {
+    selectEl.addEventListener('change', e => {
+      currentTour = e.target.value;
+      resetToDefault();
+      renderTable();
+    });
+  }
+
+  const activeCheck = document.getElementById('activeOnlyCheckbox');
+  activeCheck.addEventListener('change', e => {
+    activeOnly = e.target.checked;
+    renderTable();
+  });
+
+  renderTable();
+</script>
+</body>
+</html>
