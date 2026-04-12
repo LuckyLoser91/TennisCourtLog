@@ -174,22 +174,34 @@ def titles_fc(n):
 # ══════════════════════════════════════════════════════════════
 # 6. 生成 HTML
 # ══════════════════════════════════════════════════════════════
-def build_html(tour,rows, output_path):
-    def fmt(v):
-        return "—" if v is None else f"{v}%"
+def build_gs_leaderboard(rows_dict, output_path):
+    """
+    生成大满贯冠军排行榜 HTML 页面。
+
+    Args:
+        rows_dict: dict, 例如 {'wta': wta_rows, 'atp': atp_rows}
+        output_path: str, 输出 HTML 文件路径
+    """
+    tours = list(rows_dict.keys())
+
+    # ---------- 辅助函数（直接使用外部定义的 titles_bg, titles_fc, agg_bg, surf_bg）----------
+    def fmt(val):
+        return "—" if val is None else f"{val}%"
 
     def td_r(val, bg_tuple):
-        bg, fc = bg_tuple if isinstance(bg_tuple, tuple) else (bg_tuple, on_col(bg_tuple))
+        bg, fc = bg_tuple if isinstance(bg_tuple, tuple) else (bg_tuple, "#111111")
         st = f"background:{bg};color:{fc};" if bg != "transparent" else "color:#6b7280;"
         return f'<td style="text-align:center;{st}">{fmt(val)}</td>'
 
-    def tr_html(e):
-        s  = e["stats"]
-        ab = agg_bg(s["agg"])
-        hb = surf_bg(s["win_h"])
-        cb = surf_bg(s["win_c"])
-        gb = surf_bg(s["win_g"])
-        return f"""<tr>
+    def generate_rows_html(rows):
+        parts = []
+        for e in rows:
+            s = e["stats"]
+            ab = agg_bg(s["agg"])
+            hb = surf_bg(s["win_h"])
+            cb = surf_bg(s["win_c"])
+            gb = surf_bg(s["win_g"])
+            parts.append(f"""<tr>
           <td style="color:#6b7280;text-align:center;font-size:11px;">{e['rank']}</td>
           <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">{e['player']}</td>
           <td style="text-align:center;color:#f5c842;font-weight:bold;">{e['first_year']}</td>
@@ -201,12 +213,17 @@ def build_html(tour,rows, output_path):
           {td_r(s['win_h'], hb)}
           {td_r(s['win_c'], cb)}
           {td_r(s['win_g'], gb)}
-        </tr>"""
+        </tr>""")
+        return "\n".join(parts)
 
-    rows_html = "\n".join(tr_html(e) for e in rows)
-    gender = 'Women' if tour == 'wta' else 'Men'
+    # 单页模式
+    if len(tours) == 1:
+        tour = tours[0]
+        rows = rows_dict[tour]
+        gender = "Women" if tour == "wta" else "Men"
+        rows_html = generate_rows_html(rows)
 
-    html = f"""<!DOCTYPE html>
+        html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -299,6 +316,252 @@ def build_html(tour,rows, output_path):
 </body>
 </html>"""
 
+    else:
+        # 交互式页面
+        import json
+
+        def rows_to_js(rows):
+            arr = []
+            for e in rows:
+                s = e["stats"]
+                arr.append([
+                    e['rank'],
+                    e['player'],
+                    e['first_year'],
+                    s['titles'],
+                    s['titles_str'],
+                    s['W'],
+                    s['L'],
+                    s['agg'] if s['agg'] is not None else None,
+                    s['win_h'] if s['win_h'] is not None else None,
+                    s['win_c'] if s['win_c'] is not None else None,
+                    s['win_g'] if s['win_g'] is not None else None
+                ])
+            return json.dumps(arr)
+
+        js_data = {tour: rows_to_js(rows_dict[tour]) for tour in tours}
+        options = "\n".join(
+            f'<option value="{tour}" {"selected" if i==0 else ""}>{tour.upper()}</option>'
+            for i, tour in enumerate(tours)
+        )
+
+        html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Slam Champions · {" · ".join(t.upper() for t in tours)}</title>
+  <style>
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{
+      background: #111827;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 36px 44px 60px;
+      min-width: 960px;
+    }}
+    h1 {{ color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }}
+    .sub {{
+      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }}
+    .sub span {{ color: #f5c842; }}
+    .tour-selector {{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }}
+    .tour-selector label {{ color: #9ca3af; font-size: 12px; }}
+    .tour-selector select {{
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }}
+    .tour-selector select:hover {{ border-color: #f5c842; }}
+    table {{ border-collapse: collapse; width: 100%; }}
+    thead tr {{ border-bottom: 1px solid #374151; }}
+    thead th {{
+      color: #6b7280; font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 8px 9px; text-align: center; white-space: nowrap;
+    }}
+    thead th.left {{ text-align: left; padding-left: 8px; }}
+    thead .gr th {{
+      color: #4b5563; font-size: 10px; border-bottom: none; padding-bottom: 2px;
+    }}
+    .dl {{ border-left: 1px solid #374151; }}
+    tbody tr {{ border-bottom: 1px solid #1f2937; }}
+    tbody tr:hover {{ background: #1f2937; }}
+    tbody td {{ padding: 6px 8px; font-size: 12.5px; }}
+    tfoot td {{
+      padding-top: 20px; color: #4b5563;
+      font-size: 10px; letter-spacing: 0.04em;
+    }}
+  </style>
+</head>
+<body>
+
+<h1>Grand Slam Singles · Champions Leaderboard</h1>
+<div class="sub">
+  <div>
+    <span id="champion-count">0 champions</span> &nbsp;|&nbsp;
+    Grand Slam matches only &nbsp;|&nbsp;
+    Walkovers excluded &nbsp;|&nbsp;
+    Sorted by titles ↓ then first title year ↑
+  </div>
+  <div class="tour-selector">
+    <label for="tourSelect">TOUR:</label>
+    <select id="tourSelect">
+      {options}
+    </select>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr class="gr">
+      <th colspan="8"></th>
+      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
+    </tr>
+    <tr>
+      <th>#</th>
+      <th class="left">PLAYER</th>
+      <th>1ST TITLE</th>
+      <th>TITLES</th>
+      <th class="left">BREAKDOWN</th>
+      <th>W</th>
+      <th>L</th>
+      <th class="dl">AGG</th>
+      <th>H</th>
+      <th>C</th>
+      <th>G</th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+  <tfoot>
+    <tr><td colspan="12" id="table-footer"></td></tr>
+  </tfoot>
+</table>
+
+<script>
+  const dataMap = {{
+    {", ".join(f'"{tour}": {js_data[tour]}' for tour in tours)}
+  }};
+
+  const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
+        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp <br>
+        AGG = aggregate GS win rate &nbsp;·&nbsp;
+        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
+        Titles: ≥2 <span style="color:#4a9eff">■</span>
+        ≥5 <span style="color:#e8a838">■</span>
+        ≥10 <span style="color:#f5c842">■</span> &nbsp;·&nbsp;
+        Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
+        ≥80%/85% <span style="color:#2dd4b0">■</span>`;
+
+  // 颜色函数（与 Python 端逻辑完全一致）
+  function titlesBg(titles) {{
+    if (titles >= 10) return '#f5c842';
+    if (titles >= 5) return '#e8a838';
+    if (titles >= 2) return '#4a9eff';
+    return 'transparent';
+  }}
+  function titlesFc(titles) {{
+    return titles >= 2 ? '#111111' : '#e5e5e5';
+  }}
+  function aggBg(pct) {{
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(7,123,89)';
+    if (pct >= 80) return 'rgb(42,159,121)';
+    if (pct >= 75) return 'rgb(227,152,45)';
+    if (pct >= 70) return 'rgb(247,213,118)';
+    return 'transparent';
+  }}
+  function aggColor(pct) {{
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }}
+  function surfBg(pct) {{
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(39,157,119)';
+    if (pct >= 80) return 'rgb(67,186,144)';
+    if (pct >= 75) return 'rgb(235,174,72)';
+    if (pct >= 70) return 'rgb(249,218,124)';
+    return 'transparent';
+  }}
+  function surfColor(pct) {{
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 75) return '#111111';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }}
+
+  function fmt(val) {{
+    return (val === null || val === undefined) ? '—' : val + '%';
+  }}
+
+  function renderTable(tour) {{
+    const rows = dataMap[tour] || [];
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
+    
+    countSpan.textContent = rows.length + ' champions';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    rows.forEach(row => {{
+      const [rank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+      const titlesNum = parseInt(titles);
+      const titleBg = titlesBg(titlesNum);
+      const titleColor = titlesFc(titlesNum);
+
+      const aggBgColor = aggBg(agg);
+      const aggTextColor = aggColor(agg);
+      const hardBgColor = surfBg(hard);
+      const hardTextColor = surfColor(hard);
+      const clayBgColor = surfBg(clay);
+      const clayTextColor = surfColor(clay);
+      const grassBgColor = surfBg(grass);
+      const grassTextColor = surfColor(grass);
+
+      html += `<tr>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${{rank}}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${{firstYear}}</td>
+        <td style="text-align:center;background:${{titleBg}};color:${{titleColor}};font-weight:bold;">${{titles}}</td>
+        <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${{titlesStr}}</td>
+        <td style="text-align:center;color:#e5e5e5;">${{W}}</td>
+        <td style="text-align:center;color:#6b7280;">${{L}}</td>
+        <td style="text-align:center;background:${{aggBgColor}};color:${{aggTextColor}};">${{fmt(agg)}}</td>
+        <td style="text-align:center;background:${{hardBgColor}};color:${{hardTextColor}};">${{fmt(hard)}}</td>
+        <td style="text-align:center;background:${{clayBgColor}};color:${{clayTextColor}};">${{fmt(clay)}}</td>
+        <td style="text-align:center;background:${{grassBgColor}};color:${{grassTextColor}};">${{fmt(grass)}}</td>
+      </tr>`;
+    }});
+    tbody.innerHTML = html;
+  }}
+
+  const selectEl = document.getElementById('tourSelect');
+  selectEl.addEventListener('change', e => renderTable(e.target.value));
+  renderTable(selectEl.value);
+</script>
+</body>
+</html>"""
+
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"✅ 已保存: {output_path}")
@@ -338,9 +601,10 @@ def main(tour='wta'):
     if len(rows) > 20:
         print(f"  ... 共 {len(rows)} 位冠军")
 
-    out = os.path.join(OUTPUT_DIR, f"{tour}_gs_champions.html")
-    build_html(tour, rows, out)
-    print(f"\n用浏览器打开查看: {out}")
+    # out = os.path.join(OUTPUT_DIR, f"{tour}_gs_champions.html")
+    # build_html(tour, rows, out)
+    # print(f"\n用浏览器打开查看: {out}")
+    return rows
 
     # # ── 截图为 PNG
     # try:
@@ -353,4 +617,13 @@ def main(tour='wta'):
 
 
 if __name__ == "__main__":
-    main(tour='atp')
+    rows_atp = main(tour='atp')
+    rows_wta = main(tour='wta')
+    build_gs_leaderboard({'wta': rows_wta, 'atp': rows_atp}, output_path='./analysis/leaderboards/tour_gs_champions.html')
+    # only build wta
+    build_gs_leaderboard({'wta': rows_wta}, output_path='./analysis/leaderboards/wta_gs_champions.html')
+    # only build atp
+    build_gs_leaderboard({'atp': rows_atp}, output_path='./analysis/leaderboards/atp_gs_champions.html')
+    # out = os.path.join(OUTPUT_DIR, f"{tour}_gs_champions.html")
+    # build_html(tour, rows, out)
+    # print(f"\n用浏览器打开查看: {out}")
