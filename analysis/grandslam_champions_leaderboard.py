@@ -61,8 +61,11 @@ def get_slam_key(tournament_name):
 # 4. 计算单个球员战绩
 # ══════════════════════════════════════════════════════════════
 def calc_stats(gs, player):
-    wins   = gs[gs["winner_name"] == player].copy()
-    losses = gs[gs["loser_name"] == player].copy()
+    # 计算score不是W/O的比赛的wins和losses
+    wins = gs[(gs["winner_name"] == player) & (gs["score"] != "W/O")].copy()
+    losses = gs[(gs["loser_name"] == player) & (gs["score"] != "W/O")].copy()
+    # wins   = gs[gs["winner_name"] == player].copy()
+    # losses = gs[gs["loser_name"] == player].copy()
     W, L   = len(wins), len(losses)
     if W + L == 0:
         return None
@@ -176,7 +179,7 @@ def titles_fc(n):
 # ══════════════════════════════════════════════════════════════
 def build_gs_leaderboard(rows_dict, output_path):
     """
-    生成大满贯冠军排行榜 HTML 页面。
+    生成大满贯冠军排行榜 HTML 页面，支持点击表头排序（累加式，新点击列成为主键）。
 
     Args:
         rows_dict: dict, 例如 {'wta': wta_rows, 'atp': atp_rows}
@@ -184,7 +187,7 @@ def build_gs_leaderboard(rows_dict, output_path):
     """
     tours = list(rows_dict.keys())
 
-    # ---------- 辅助函数（直接使用外部定义的 titles_bg, titles_fc, agg_bg, surf_bg）----------
+    # ---------- 辅助函数 ----------
     def fmt(val):
         return "—" if val is None else f"{val}%"
 
@@ -193,159 +196,39 @@ def build_gs_leaderboard(rows_dict, output_path):
         st = f"background:{bg};color:{fc};" if bg != "transparent" else "color:#6b7280;"
         return f'<td style="text-align:center;{st}">{fmt(val)}</td>'
 
-    def generate_rows_html(rows):
-        parts = []
+    # 将数据转换为 JavaScript 友好格式
+    import json
+
+    def rows_to_js(rows):
+        arr = []
         for e in rows:
             s = e["stats"]
-            ab = agg_bg(s["agg"])
-            hb = surf_bg(s["win_h"])
-            cb = surf_bg(s["win_c"])
-            gb = surf_bg(s["win_g"])
-            parts.append(f"""<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">{e['rank']}</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">{e['player']}</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">{e['first_year']}</td>
-          <td style="text-align:center;background:{titles_bg(s['titles'])};color:{titles_fc(s['titles'])};font-weight:bold;">{s['titles']}</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">{s['titles_str']}</td>
-          <td style="text-align:center;color:#e5e5e5;">{s['W']}</td>
-          <td style="text-align:center;color:#6b7280;">{s['L']}</td>
-          {td_r(s['agg'],   ab)}
-          {td_r(s['win_h'], hb)}
-          {td_r(s['win_c'], cb)}
-          {td_r(s['win_g'], gb)}
-        </tr>""")
-        return "\n".join(parts)
+            arr.append([
+                e['rank'],
+                e['player'],
+                e['first_year'],
+                s['titles'],
+                s['titles_str'],
+                s['W'],
+                s['L'],
+                s['agg'] if s['agg'] is not None else None,
+                s['win_h'] if s['win_h'] is not None else None,
+                s['win_c'] if s['win_c'] is not None else None,
+                s['win_g'] if s['win_g'] is not None else None
+            ])
+        return json.dumps(arr)
 
-    # 单页模式
-    if len(tours) == 1:
-        tour = tours[0]
-        rows = rows_dict[tour]
-        gender = "Women" if tour == "wta" else "Men"
-        rows_html = generate_rows_html(rows)
+    js_data = {tour: rows_to_js(rows_dict[tour]) for tour in tours}
+    options = "\n".join(
+        f'<option value="{tour}" {"selected" if i==0 else ""}>{tour.upper()}</option>'
+        for i, tour in enumerate(tours)
+    )
 
-        html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>{tour.upper()} Grand Slam Champions Leaderboard</title>
-<style>
-  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-  body {{
-    background: #111827;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    padding: 36px 44px 60px;
-    min-width: 960px;
-  }}
-  h1 {{ color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }}
-  .sub {{
-    color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
-    text-transform: uppercase; margin-bottom: 28px;
-  }}
-  .sub span {{ color: #f5c842; }}
-  table {{ border-collapse: collapse; width: 100%; }}
-  thead tr {{ border-bottom: 1px solid #374151; }}
-  thead th {{
-    color: #6b7280; font-size: 10.5px; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 5px 8px 9px; text-align: center; white-space: nowrap;
-  }}
-  thead th.left {{ text-align: left; padding-left: 8px; }}
-  thead .gr th {{
-    color: #4b5563; font-size: 10px; border-bottom: none; padding-bottom: 2px;
-  }}
-  .dl {{ border-left: 1px solid #374151; }}
-  tbody tr {{ border-bottom: 1px solid #1f2937; }}
-  tbody tr:hover {{ background: #1f2937; }}
-  tbody td {{ padding: 6px 8px; font-size: 12.5px; }}
-  tfoot td {{
-    padding-top: 20px; color: #4b5563;
-    font-size: 10px; letter-spacing: 0.04em;
-  }}
-</style>
-</head>
-<body>
+    # 如果只有一个巡回赛，隐藏选择器
+    hide_selector = len(tours) == 1
+    selector_style = 'style="display:none;"' if hide_selector else ''
 
-<h1>Grand Slam {gender}'s Singles — Champions Leaderboard</h1>
-<div class="sub">
-  <span>{len(rows)} champions</span> &nbsp;|&nbsp;
-  Grand Slam matches only &nbsp;|&nbsp;
-  Walkovers excluded &nbsp;|&nbsp;
-  Sorted by titles ↓ then first title year ↑
-</div>
-
-<table>
-  <thead>
-    <tr class="gr">
-      <th colspan="8"></th>
-      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
-    </tr>
-    <tr>
-      <th>#</th>
-      <th class="left">PLAYER</th>
-      <th>1ST TITLE</th>
-      <th>TITLES</th>
-      <th class="left">BREAKDOWN</th>
-      <th>W</th>
-      <th>L</th>
-      <th class="dl">AGG</th>
-      <th>H</th>
-      <th>C</th>
-      <th>G</th>
-    </tr>
-  </thead>
-  <tbody>
-    {rows_html}
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="12">
-        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
-        AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
-        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp <br>
-        AGG = aggregate GS win rate &nbsp;·&nbsp;
-        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
-        Titles: ≥2 <span style="color:#4a9eff">■</span>
-        ≥5 <span style="color:#e8a838">■</span>
-        ≥10 <span style="color:#f5c842">■</span> &nbsp;·&nbsp;
-        Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
-        ≥80%/85% <span style="color:#2dd4b0">■</span>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-</body>
-</html>"""
-
-    else:
-        # 交互式页面
-        import json
-
-        def rows_to_js(rows):
-            arr = []
-            for e in rows:
-                s = e["stats"]
-                arr.append([
-                    e['rank'],
-                    e['player'],
-                    e['first_year'],
-                    s['titles'],
-                    s['titles_str'],
-                    s['W'],
-                    s['L'],
-                    s['agg'] if s['agg'] is not None else None,
-                    s['win_h'] if s['win_h'] is not None else None,
-                    s['win_c'] if s['win_c'] is not None else None,
-                    s['win_g'] if s['win_g'] is not None else None
-                ])
-            return json.dumps(arr)
-
-        js_data = {tour: rows_to_js(rows_dict[tour]) for tour in tours}
-        options = "\n".join(
-            f'<option value="{tour}" {"selected" if i==0 else ""}>{tour.upper()}</option>'
-            for i, tour in enumerate(tours)
-        )
-
-        html = f"""<!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -405,6 +288,21 @@ def build_gs_leaderboard(rows_dict, output_path):
       padding-top: 20px; color: #4b5563;
       font-size: 10px; letter-spacing: 0.04em;
     }}
+    /* 可排序表头样式 */
+    th.sortable {{
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }}
+    th.sortable:hover {{
+      color: #f5c842;
+    }}
+    .sort-indicator {{
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      color: #f5c842;
+    }}
   </style>
 </head>
 <body>
@@ -415,9 +313,9 @@ def build_gs_leaderboard(rows_dict, output_path):
     <span id="champion-count">0 champions</span> &nbsp;|&nbsp;
     Grand Slam matches only &nbsp;|&nbsp;
     Walkovers excluded &nbsp;|&nbsp;
-    Sorted by titles ↓ then first title year ↑
+    <span style="color:#9ca3af;">Click headers to sort</span>
   </div>
-  <div class="tour-selector">
+  <div class="tour-selector" {selector_style}>
     <label for="tourSelect">TOUR:</label>
     <select id="tourSelect">
       {options}
@@ -433,16 +331,16 @@ def build_gs_leaderboard(rows_dict, output_path):
     </tr>
     <tr>
       <th>#</th>
-      <th class="left">PLAYER</th>
-      <th>1ST TITLE</th>
-      <th>TITLES</th>
+      <th class="left sortable" data-col="player">PLAYER</th>
+      <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
-      <th>W</th>
-      <th>L</th>
-      <th class="dl">AGG</th>
-      <th>H</th>
-      <th>C</th>
-      <th>G</th>
+      <th class="sortable" data-col="W">W</th>
+      <th class="sortable" data-col="L">L</th>
+      <th class="dl sortable" data-col="agg">AGG</th>
+      <th class="sortable" data-col="hard">H</th>
+      <th class="sortable" data-col="clay">C</th>
+      <th class="sortable" data-col="grass">G</th>
     </tr>
   </thead>
   <tbody id="table-body"></tbody>
@@ -458,7 +356,7 @@ def build_gs_leaderboard(rows_dict, output_path):
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
-        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp <br>
+        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
         AGG = aggregate GS win rate &nbsp;·&nbsp;
         H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
         Titles: ≥2 <span style="color:#4a9eff">■</span>
@@ -467,7 +365,7 @@ def build_gs_leaderboard(rows_dict, output_path):
         Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
         ≥80%/85% <span style="color:#2dd4b0">■</span>`;
 
-  // 颜色函数（与 Python 端逻辑完全一致）
+  // ---------- 颜色函数（与 Python 端一致）----------
   function titlesBg(titles) {{
     if (titles >= 10) return '#f5c842';
     if (titles >= 5) return '#e8a838';
@@ -513,18 +411,105 @@ def build_gs_leaderboard(rows_dict, output_path):
     return (val === null || val === undefined) ? '—' : val + '%';
   }}
 
-  function renderTable(tour) {{
-    const rows = dataMap[tour] || [];
+  // ---------- 排序状态 ----------
+  // 默认排序：titles desc → firstYear asc → W desc（不显示指示器）
+  let sortState = [
+    // {{ col: 'titles', order: 'desc' }},
+    // {{ col: 'firstYear', order: 'asc' }},
+    // {{ col: 'W', order: 'desc' }}
+  ];
+  let userSorted = false;  // 是否经过用户手动排序（决定是否显示指示器）
+
+  // 列到数据索引的映射 (基于 rows_to_js 的顺序)
+  const colIndex = {{
+    'player': 1,      // 字符串
+    'firstYear': 2,   // 数字
+    'titles': 3,      // 数字
+    'W': 5,           // 数字
+    'L': 6,           // 数字
+    'agg': 7,         // 数字或null
+    'hard': 8,
+    'clay': 9,
+    'grass': 10
+  }};
+
+  // 比较函数（处理 null/undefined 放最后）
+  function compareValues(a, b, col, order) {{
+    let valA = a[colIndex[col]];
+    let valB = b[colIndex[col]];
+    
+    const isNullA = valA === null || valA === undefined;
+    const isNullB = valB === null || valB === undefined;
+    if (isNullA && isNullB) return 0;
+    if (isNullA) return 1;
+    if (isNullB) return -1;
+    
+    if (col !== 'player') {{
+      valA = Number(valA);
+      valB = Number(valB);
+    }} else {{
+      valA = String(valA).toLowerCase();
+      valB = String(valB).toLowerCase();
+    }}
+    
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  }}
+
+  function sortRows(rows) {{
+    if (!sortState.length) return rows;
+    
+    return [...rows].sort((a, b) => {{
+      for (let rule of sortState) {{
+        const cmp = compareValues(a, b, rule.col, rule.order);
+        if (cmp !== 0) return cmp;
+      }}
+      return 0;
+    }});
+  }}
+
+  // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
+  function updateSortIndicators() {{
+    // 清除所有指示器
+    document.querySelectorAll('.sortable').forEach(th => {{
+      const ind = th.querySelector('.sort-indicator');
+      if (ind) ind.remove();
+    }});
+    
+    if (!userSorted) return;
+    
+    // 为 sortState 中的主排序键添加指示器（只显示第一个，保持简洁）
+    if (sortState.length > 0) {{
+      const primary = sortState[0];
+      const th = document.querySelector(`th[data-col="${{primary.col}}"]`);
+      if (th) {{
+        const arrow = primary.order === 'asc' ? '▲' : '▼';
+        const span = document.createElement('span');
+        span.className = 'sort-indicator';
+        span.textContent = ' ' + arrow;
+        th.appendChild(span);
+      }}
+    }}
+  }}
+
+  // ---------- 渲染表格 ----------
+  let currentTour = '{tours[0]}';
+
+  function renderTable() {{
+    const rows = dataMap[currentTour] || [];
+    const sorted = sortRows(rows);
+    
     const tbody = document.getElementById('table-body');
     const countSpan = document.getElementById('champion-count');
     const footerTd = document.getElementById('table-footer');
     
-    countSpan.textContent = rows.length + ' champions';
+    countSpan.textContent = sorted.length + ' champions';
     footerTd.innerHTML = footerText;
 
     let html = '';
-    rows.forEach(row => {{
-      const [rank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+    sorted.forEach((row, idx) => {{
+      const [origRank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
       const titlesNum = parseInt(titles);
       const titleBg = titlesBg(titlesNum);
       const titleColor = titlesFc(titlesNum);
@@ -539,7 +524,7 @@ def build_gs_leaderboard(rows_dict, output_path):
       const grassTextColor = surfColor(grass);
 
       html += `<tr>
-        <td style="color:#6b7280;text-align:center;font-size:11px;">${{rank}}</td>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${{idx + 1}}</td>
         <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
         <td style="text-align:center;color:#f5c842;font-weight:bold;">${{firstYear}}</td>
         <td style="text-align:center;background:${{titleBg}};color:${{titleColor}};font-weight:bold;">${{titles}}</td>
@@ -553,11 +538,63 @@ def build_gs_leaderboard(rows_dict, output_path):
       </tr>`;
     }});
     tbody.innerHTML = html;
+    updateSortIndicators();
   }}
 
+  // ---------- 排序事件绑定 ----------
+  function handleSortClick(e) {{
+    const th = e.currentTarget;
+    const col = th.getAttribute('data-col');
+    if (!col) return;
+    
+    userSorted = true;
+    const existingIdx = sortState.findIndex(s => s.col === col);
+    
+    // 确定新列的顺序：默认降序；若已存在则翻转顺序
+    let newOrder = 'desc';
+    if (existingIdx !== -1) {{
+      newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
+    }}
+    
+    if (existingIdx !== -1) {{
+      // 如果该列已在排序条件中，将其移到首位并更新顺序
+      const [existing] = sortState.splice(existingIdx, 1);
+      existing.order = newOrder;
+      sortState.unshift(existing);
+    }} else {{
+      // 新列：插入到开头，原有排序全部后移成为次级条件
+      sortState.unshift({{ col, order: newOrder }});
+    }}
+    
+    renderTable();
+  }}
+
+  // 重置为默认排序（切换巡回赛时调用，不视为用户排序）
+  function resetToDefault() {{
+    sortState = [
+      {{ col: 'titles', order: 'desc' }},
+      {{ col: 'firstYear', order: 'asc' }},
+      {{ col: 'W', order: 'desc' }}
+    ];
+    userSorted = false;
+  }}
+
+  // 初始化事件监听
+  document.querySelectorAll('.sortable').forEach(th => {{
+    th.addEventListener('click', handleSortClick);
+  }});
+
   const selectEl = document.getElementById('tourSelect');
-  selectEl.addEventListener('change', e => renderTable(e.target.value));
-  renderTable(selectEl.value);
+  if (selectEl) {{
+    selectEl.addEventListener('change', e => {{
+      currentTour = e.target.value;
+      resetToDefault();
+      renderTable();
+    }});
+  }}
+
+  // 初始渲染
+  renderTable();
 </script>
 </body>
 </html>"""
@@ -565,7 +602,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"✅ 已保存: {output_path}")
-
 
 # ══════════════════════════════════════════════════════════════
 # 7. 主入口
@@ -587,6 +623,7 @@ def main(tour='wta'):
             rows.append({"player": player, "first_year": first_year, "stats": stats})
 
     # 排序：冠军数降序 → 首冠年份升序 → 总胜场降序
+    
     rows.sort(key=lambda r: (-r["stats"]["titles"], r["first_year"], -r["stats"]["W"]))
     for i, r in enumerate(rows, 1):
         r["rank"] = i

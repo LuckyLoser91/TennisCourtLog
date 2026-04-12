@@ -1,51 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>WTA Grand Slam Champions Leaderboard</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: #111827;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    padding: 36px 44px 60px;
-    min-width: 960px;
-  }
-  h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-  .sub {
-    color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
-    text-transform: uppercase; margin-bottom: 28px;
-  }
-  .sub span { color: #f5c842; }
-  table { border-collapse: collapse; width: 100%; }
-  thead tr { border-bottom: 1px solid #374151; }
-  thead th {
-    color: #6b7280; font-size: 10.5px; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 5px 8px 9px; text-align: center; white-space: nowrap;
-  }
-  thead th.left { text-align: left; padding-left: 8px; }
-  thead .gr th {
-    color: #4b5563; font-size: 10px; border-bottom: none; padding-bottom: 2px;
-  }
-  .dl { border-left: 1px solid #374151; }
-  tbody tr { border-bottom: 1px solid #1f2937; }
-  tbody tr:hover { background: #1f2937; }
-  tbody td { padding: 6px 8px; font-size: 12.5px; }
-  tfoot td {
-    padding-top: 20px; color: #4b5563;
-    font-size: 10px; letter-spacing: 0.04em;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Slam Champions · WTA</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111827;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 36px 44px 60px;
+      min-width: 960px;
+    }
+    h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .sub {
+      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sub span { color: #f5c842; }
+    .tour-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-selector label { color: #9ca3af; font-size: 12px; }
+    .tour-selector select {
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .tour-selector select:hover { border-color: #f5c842; }
+    table { border-collapse: collapse; width: 100%; }
+    thead tr { border-bottom: 1px solid #374151; }
+    thead th {
+      color: #6b7280; font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 8px 9px; text-align: center; white-space: nowrap;
+    }
+    thead th.left { text-align: left; padding-left: 8px; }
+    thead .gr th {
+      color: #4b5563; font-size: 10px; border-bottom: none; padding-bottom: 2px;
+    }
+    .dl { border-left: 1px solid #374151; }
+    tbody tr { border-bottom: 1px solid #1f2937; }
+    tbody tr:hover { background: #1f2937; }
+    tbody td { padding: 6px 8px; font-size: 12.5px; }
+    tfoot td {
+      padding-top: 20px; color: #4b5563;
+      font-size: 10px; letter-spacing: 0.04em;
+    }
+    /* 可排序表头样式 */
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+    th.sortable:hover {
+      color: #f5c842;
+    }
+    .sort-indicator {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      color: #f5c842;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Grand Slam Women's Singles — Champions Leaderboard</h1>
+<h1>Grand Slam Singles · Champions Leaderboard</h1>
 <div class="sub">
-  <span>61 champions</span> &nbsp;|&nbsp;
-  Grand Slam matches only &nbsp;|&nbsp;
-  Walkovers excluded &nbsp;|&nbsp;
-  Sorted by titles ↓ then first title year ↑
+  <div>
+    <span id="champion-count">0 champions</span> &nbsp;|&nbsp;
+    Grand Slam matches only &nbsp;|&nbsp;
+    Walkovers excluded &nbsp;|&nbsp;
+    <span style="color:#9ca3af;">Click headers to sort</span>
+  </div>
+  <div class="tour-selector" style="display:none;">
+    <label for="tourSelect">TOUR:</label>
+    <select id="tourSelect">
+      <option value="wta" selected>WTA</option>
+    </select>
+  </div>
 </div>
 
 <table>
@@ -56,829 +101,270 @@
     </tr>
     <tr>
       <th>#</th>
-      <th class="left">PLAYER</th>
-      <th>1ST TITLE</th>
-      <th>TITLES</th>
+      <th class="left sortable" data-col="player">PLAYER</th>
+      <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
-      <th>W</th>
-      <th>L</th>
-      <th class="dl">AGG</th>
-      <th>H</th>
-      <th>C</th>
-      <th>G</th>
+      <th class="sortable" data-col="W">W</th>
+      <th class="sortable" data-col="L">L</th>
+      <th class="dl sortable" data-col="agg">AGG</th>
+      <th class="sortable" data-col="hard">H</th>
+      <th class="sortable" data-col="clay">C</th>
+      <th class="sortable" data-col="grass">G</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">1</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Serena Williams</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1999</td>
-          <td style="text-align:center;background:#f5c842;color:#111111;font-weight:bold;">23</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×7  RG×3  WIM×7  USO×6</td>
-          <td style="text-align:center;color:#e5e5e5;">367</td>
-          <td style="text-align:center;color:#6b7280;">58</td>
-          <td style="text-align:center;background:rgb(42,159,121);color:#ffffff;">86.4%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-          <td style="text-align:center;background:rgb(102,223,176);color:#111111;">81%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">2</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Steffi Graf</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1987</td>
-          <td style="text-align:center;background:#f5c842;color:#111111;font-weight:bold;">22</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×4  RG×6  WIM×7  USO×5</td>
-          <td style="text-align:center;color:#e5e5e5;">280</td>
-          <td style="text-align:center;color:#6b7280;">32</td>
-          <td style="text-align:center;background:rgb(7,123,89);color:#ffffff;">89.7%</td>
-          <td style="text-align:center;background:rgb(39,157,119);color:#ffffff;">90%</td>
-          <td style="text-align:center;background:rgb(46,164,125);color:#ffffff;">89%</td>
-          <td style="text-align:center;background:rgb(46,164,125);color:#ffffff;">89%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">3</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Chris Evert</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1974</td>
-          <td style="text-align:center;background:#f5c842;color:#111111;font-weight:bold;">18</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2  RG×7  WIM×3  USO×6</td>
-          <td style="text-align:center;color:#e5e5e5;">299</td>
-          <td style="text-align:center;color:#6b7280;">38</td>
-          <td style="text-align:center;background:rgb(17,134,99);color:#ffffff;">88.7%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-          <td style="text-align:center;background:rgb(11,127,93);color:#ffffff;">94%</td>
-          <td style="text-align:center;background:rgb(67,186,144);color:#111111;">86%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">4</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Martina Navratilova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1978</td>
-          <td style="text-align:center;background:#f5c842;color:#111111;font-weight:bold;">18</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×3  RG×2  WIM×9  USO×4</td>
-          <td style="text-align:center;color:#e5e5e5;">306</td>
-          <td style="text-align:center;color:#6b7280;">49</td>
-          <td style="text-align:center;background:rgb(44,162,123);color:#ffffff;">86.2%</td>
-          <td style="text-align:center;background:rgb(67,186,144);color:#111111;">86%</td>
-          <td style="text-align:center;background:rgb(102,223,176);color:#111111;">81%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">5</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Margaret Court</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1969</td>
-          <td style="text-align:center;background:#f5c842;color:#111111;font-weight:bold;">11</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×4  RG×3  WIM×1  USO×3</td>
-          <td style="text-align:center;color:#e5e5e5;">97</td>
-          <td style="text-align:center;color:#6b7280;">10</td>
-          <td style="text-align:center;background:rgb(4,120,87);color:#ffffff;">90.7%</td>
-          <td style="text-align:center;color:#6b7280;">—</td>
-          <td style="text-align:center;background:rgb(25,142,106);color:#ffffff;">92%</td>
-          <td style="text-align:center;background:rgb(39,157,119);color:#ffffff;">90%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">6</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Monica Seles</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1990</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">9</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×4  RG×3  USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">181</td>
-          <td style="text-align:center;color:#6b7280;">31</td>
-          <td style="text-align:center;background:rgb(52,171,131);color:#ffffff;">85.4%</td>
-          <td style="text-align:center;background:rgb(60,179,138);color:#111111;">87%</td>
-          <td style="text-align:center;background:rgb(60,179,138);color:#111111;">87%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">7</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Billie Jean King</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1968</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">8</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  WIM×4  USO×3</td>
-          <td style="text-align:center;color:#e5e5e5;">128</td>
-          <td style="text-align:center;color:#6b7280;">24</td>
-          <td style="text-align:center;background:rgb(65,184,142);color:#111111;">84.2%</td>
-          <td style="text-align:center;background:rgb(249,218,124);color:#111111;">71%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-          <td style="text-align:center;background:rgb(67,186,144);color:#111111;">86%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">8</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Evonne Goolagong</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1971</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">7</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×4  RG×1  WIM×2</td>
-          <td style="text-align:center;color:#e5e5e5;">128</td>
-          <td style="text-align:center;color:#6b7280;">26</td>
-          <td style="text-align:center;background:rgb(77,196,153);color:#111111;">83.1%</td>
-          <td style="text-align:center;background:rgb(110,231,183);color:#111111;">80%</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">84%</td>
-          <td style="text-align:center;background:rgb(88,208,163);color:#111111;">83%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">9</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Venus Williams</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2000</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">7</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×5  USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">272</td>
-          <td style="text-align:center;color:#6b7280;">88</td>
-          <td style="text-align:center;background:rgb(232,167,64);color:#111111;">75.6%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-          <td style="text-align:center;background:rgb(88,208,163);color:#111111;">83%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">10</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Justine Henin</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2003</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">7</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  RG×4  USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">141</td>
-          <td style="text-align:center;color:#6b7280;">28</td>
-          <td style="text-align:center;background:rgb(73,193,150);color:#111111;">83.4%</td>
-          <td style="text-align:center;background:rgb(88,208,163);color:#111111;">83%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">11</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Iga Swiatek</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2020</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">6</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×4  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">108</td>
-          <td style="text-align:center;color:#6b7280;">22</td>
-          <td style="text-align:center;background:rgb(77,196,153);color:#111111;">83.1%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;background:rgb(18,134,99);color:#ffffff;">93%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">12</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Martina Hingis</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1997</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">5</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×3  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">153</td>
-          <td style="text-align:center;color:#6b7280;">32</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">82.7%</td>
-          <td style="text-align:center;background:rgb(67,186,144);color:#111111;">86%</td>
-          <td style="text-align:center;background:rgb(102,223,176);color:#111111;">81%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">13</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Maria Sharapova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2004</td>
-          <td style="text-align:center;background:#e8a838;color:#111111;font-weight:bold;">5</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  RG×2  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">198</td>
-          <td style="text-align:center;color:#6b7280;">53</td>
-          <td style="text-align:center;background:rgb(220,131,20);color:#111111;">78.9%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;background:rgb(88,208,163);color:#111111;">83%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">14</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Hana Mandlikova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1980</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">4</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2  RG×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">142</td>
-          <td style="text-align:center;color:#6b7280;">40</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78.0%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">15</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Arantxa Sanchez Vicario</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1989</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">4</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×3  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">212</td>
-          <td style="text-align:center;color:#6b7280;">54</td>
-          <td style="text-align:center;background:rgb(218,122,9);color:#111111;">79.7%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-          <td style="text-align:center;background:rgb(74,194,151);color:#111111;">85%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">16</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Kim Clijsters</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2005</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">4</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  USO×3</td>
-          <td style="text-align:center;color:#e5e5e5;">133</td>
-          <td style="text-align:center;color:#6b7280;">32</td>
-          <td style="text-align:center;background:rgb(103,224,177);color:#111111;">80.6%</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">84%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">17</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Naomi Osaka</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2018</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">4</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2  USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">72</td>
-          <td style="text-align:center;color:#6b7280;">28</td>
-          <td style="text-align:center;background:rgb(245,207,111);color:#111111;">72.0%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-          <td style="text-align:center;color:#6b7280;">50%</td>
-          <td style="text-align:center;color:#6b7280;">58%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">18</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Aryna Sabalenka</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2023</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">4</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2  USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">107</td>
-          <td style="text-align:center;color:#6b7280;">27</td>
-          <td style="text-align:center;background:rgb(217,120,7);color:#111111;">79.9%</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">84%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">19</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Virginia Wade</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1968</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">3</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">123</td>
-          <td style="text-align:center;color:#6b7280;">49</td>
-          <td style="text-align:center;background:rgb(247,213,118);color:#111111;">71.5%</td>
-          <td style="text-align:center;color:#6b7280;">61%</td>
-          <td style="text-align:center;color:#6b7280;">61%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">20</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Lindsay Davenport</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1998</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">3</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">198</td>
-          <td style="text-align:center;color:#6b7280;">52</td>
-          <td style="text-align:center;background:rgb(219,127,16);color:#111111;">79.2%</td>
-          <td style="text-align:center;background:rgb(110,231,183);color:#111111;">80%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;background:rgb(110,231,183);color:#111111;">80%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">21</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Jennifer Capriati</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2001</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">3</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2  RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">140</td>
-          <td style="text-align:center;color:#6b7280;">40</td>
-          <td style="text-align:center;background:rgb(224,143,35);color:#111111;">77.8%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-          <td style="text-align:center;background:rgb(110,231,183);color:#111111;">80%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">22</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Angelique Kerber</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2016</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">3</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  WIM×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">120</td>
-          <td style="text-align:center;color:#6b7280;">58</td>
-          <td style="text-align:center;color:#6b7280;">67.4%</td>
-          <td style="text-align:center;color:#6b7280;">69%</td>
-          <td style="text-align:center;color:#6b7280;">54%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">23</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Ashleigh Barty</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2019</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">3</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  RG×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">57</td>
-          <td style="text-align:center;color:#6b7280;">24</td>
-          <td style="text-align:center;background:rgb(251,225,132);color:#111111;">70.4%</td>
-          <td style="text-align:center;background:rgb(249,218,124);color:#111111;">71%</td>
-          <td style="text-align:center;color:#6b7280;">62%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">24</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Tracy Austin</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1979</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">61</td>
-          <td style="text-align:center;color:#6b7280;">15</td>
-          <td style="text-align:center;background:rgb(106,227,180);color:#111111;">80.3%</td>
-          <td style="text-align:center;background:rgb(53,171,131);color:#ffffff;">88%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">25</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Mary Pierce</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1995</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">142</td>
-          <td style="text-align:center;color:#6b7280;">50</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74.0%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">26</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Svetlana Kuznetsova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2004</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">154</td>
-          <td style="text-align:center;color:#6b7280;">69</td>
-          <td style="text-align:center;color:#6b7280;">69.1%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;color:#6b7280;">64%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">27</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Amelie Mauresmo</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2006</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">131</td>
-          <td style="text-align:center;color:#6b7280;">44</td>
-          <td style="text-align:center;background:rgb(235,175,73);color:#111111;">74.9%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;color:#6b7280;">62%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">28</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Petra Kvitova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2011</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×2</td>
-          <td style="text-align:center;color:#e5e5e5;">130</td>
-          <td style="text-align:center;color:#6b7280;">60</td>
-          <td style="text-align:center;color:#6b7280;">68.4%</td>
-          <td style="text-align:center;color:#6b7280;">66%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">29</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Na Li</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2011</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">90</td>
-          <td style="text-align:center;color:#6b7280;">31</td>
-          <td style="text-align:center;background:rgb(237,181,79);color:#111111;">74.4%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">30</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Victoria Azarenka</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2012</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×2</td>
-          <td style="text-align:center;color:#e5e5e5;">166</td>
-          <td style="text-align:center;color:#6b7280;">67</td>
-          <td style="text-align:center;background:rgb(248,216,122);color:#111111;">71.2%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-          <td style="text-align:center;color:#6b7280;">62%</td>
-          <td style="text-align:center;color:#6b7280;">69%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">31</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Garbine Muguruza</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2016</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">86</td>
-          <td style="text-align:center;color:#6b7280;">38</td>
-          <td style="text-align:center;color:#6b7280;">69.4%</td>
-          <td style="text-align:center;color:#6b7280;">65%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-          <td style="text-align:center;color:#6b7280;">69%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">32</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Simona Halep</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2018</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">112</td>
-          <td style="text-align:center;color:#6b7280;">44</td>
-          <td style="text-align:center;background:rgb(246,210,114);color:#111111;">71.8%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">33</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Barbora Krejcikova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2021</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">49</td>
-          <td style="text-align:center;color:#6b7280;">21</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70.0%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-          <td style="text-align:center;color:#6b7280;">65%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">34</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Elena Rybakina</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2022</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1  WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">67</td>
-          <td style="text-align:center;color:#6b7280;">24</td>
-          <td style="text-align:center;background:rgb(240,190,90);color:#111111;">73.6%</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70%</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70%</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">84%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">35</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Coco Gauff</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2023</td>
-          <td style="text-align:center;background:#4a9eff;color:#111111;font-weight:bold;">2</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1  USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">78</td>
-          <td style="text-align:center;color:#6b7280;">24</td>
-          <td style="text-align:center;background:rgb(229,157,52);color:#111111;">76.5%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-          <td style="text-align:center;background:rgb(81,201,157);color:#111111;">84%</td>
-          <td style="text-align:center;color:#6b7280;">65%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">36</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Nancy Richey</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1968</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">58</td>
-          <td style="text-align:center;color:#6b7280;">21</td>
-          <td style="text-align:center;background:rgb(240,192,93);color:#111111;">73.4%</td>
-          <td style="text-align:center;color:#6b7280;">0%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">37</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Ann Jones</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1969</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">29</td>
-          <td style="text-align:center;color:#6b7280;">5</td>
-          <td style="text-align:center;background:rgb(53,172,132);color:#ffffff;">85.3%</td>
-          <td style="text-align:center;color:#6b7280;">—</td>
-          <td style="text-align:center;background:rgb(88,208,163);color:#111111;">83%</td>
-          <td style="text-align:center;background:rgb(67,186,144);color:#111111;">86%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">38</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Sue Barker</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1976</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">47</td>
-          <td style="text-align:center;color:#6b7280;">30</td>
-          <td style="text-align:center;color:#6b7280;">61.0%</td>
-          <td style="text-align:center;color:#6b7280;">25%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-          <td style="text-align:center;color:#6b7280;">62%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">39</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Kerry Reid</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1977</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">97</td>
-          <td style="text-align:center;color:#6b7280;">35</td>
-          <td style="text-align:center;background:rgb(240,191,91);color:#111111;">73.5%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;color:#6b7280;">65%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">40</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Mima Jausovec</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1977</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">80</td>
-          <td style="text-align:center;color:#6b7280;">41</td>
-          <td style="text-align:center;color:#6b7280;">66.1%</td>
-          <td style="text-align:center;color:#6b7280;">57%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;color:#6b7280;">61%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">41</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Virginia Ruzici</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1978</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">73</td>
-          <td style="text-align:center;color:#6b7280;">39</td>
-          <td style="text-align:center;color:#6b7280;">65.2%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-          <td style="text-align:center;background:rgb(245,207,111);color:#111111;">72%</td>
-          <td style="text-align:center;color:#6b7280;">54%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">42</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Chris Oneil</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1978</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">8</td>
-          <td style="text-align:center;color:#6b7280;">22</td>
-          <td style="text-align:center;color:#6b7280;">26.7%</td>
-          <td style="text-align:center;color:#6b7280;">0%</td>
-          <td style="text-align:center;color:#6b7280;">0%</td>
-          <td style="text-align:center;color:#6b7280;">36%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">43</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Barbara Jordan</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1979</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">14</td>
-          <td style="text-align:center;color:#6b7280;">20</td>
-          <td style="text-align:center;color:#6b7280;">41.2%</td>
-          <td style="text-align:center;color:#6b7280;">30%</td>
-          <td style="text-align:center;color:#6b7280;">22%</td>
-          <td style="text-align:center;color:#6b7280;">60%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">44</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Gabriela Sabatini</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1990</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">164</td>
-          <td style="text-align:center;color:#6b7280;">42</td>
-          <td style="text-align:center;background:rgb(218,123,11);color:#111111;">79.6%</td>
-          <td style="text-align:center;background:rgb(110,231,183);color:#111111;">80%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">45</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Conchita Martinez</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1994</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">174</td>
-          <td style="text-align:center;color:#6b7280;">63</td>
-          <td style="text-align:center;background:rgb(240,192,93);color:#111111;">73.4%</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70%</td>
-          <td style="text-align:center;background:rgb(224,141,32);color:#111111;">78%</td>
-          <td style="text-align:center;background:rgb(235,174,72);color:#111111;">75%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">46</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Iva Majoli</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1997</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">55</td>
-          <td style="text-align:center;color:#6b7280;">33</td>
-          <td style="text-align:center;color:#6b7280;">62.5%</td>
-          <td style="text-align:center;color:#6b7280;">54%</td>
-          <td style="text-align:center;background:rgb(231,163,58);color:#111111;">76%</td>
-          <td style="text-align:center;color:#6b7280;">50%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">47</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Jana Novotna</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">1998</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">149</td>
-          <td style="text-align:center;color:#6b7280;">49</td>
-          <td style="text-align:center;background:rgb(233,171,68);color:#111111;">75.3%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;background:rgb(220,130,19);color:#111111;">79%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">48</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Anastasia Myskina</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2004</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">54</td>
-          <td style="text-align:center;color:#6b7280;">27</td>
-          <td style="text-align:center;color:#6b7280;">66.7%</td>
-          <td style="text-align:center;color:#6b7280;">66%</td>
-          <td style="text-align:center;color:#6b7280;">61%</td>
-          <td style="text-align:center;background:rgb(245,207,111);color:#111111;">72%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">49</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Ana Ivanovic</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2008</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">108</td>
-          <td style="text-align:center;color:#6b7280;">47</td>
-          <td style="text-align:center;color:#6b7280;">69.7%</td>
-          <td style="text-align:center;color:#6b7280;">66%</td>
-          <td style="text-align:center;background:rgb(227,152,45);color:#111111;">77%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">50</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Francesca Schiavone</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2010</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">105</td>
-          <td style="text-align:center;color:#6b7280;">69</td>
-          <td style="text-align:center;color:#6b7280;">60.3%</td>
-          <td style="text-align:center;color:#6b7280;">57%</td>
-          <td style="text-align:center;background:rgb(253,230,138);color:#111111;">70%</td>
-          <td style="text-align:center;color:#6b7280;">51%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">51</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Samantha Stosur</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2011</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">94</td>
-          <td style="text-align:center;color:#6b7280;">68</td>
-          <td style="text-align:center;color:#6b7280;">58.0%</td>
-          <td style="text-align:center;color:#6b7280;">55%</td>
-          <td style="text-align:center;background:rgb(249,218,124);color:#111111;">71%</td>
-          <td style="text-align:center;color:#6b7280;">41%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">52</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Marion Bartoli</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2013</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">80</td>
-          <td style="text-align:center;color:#6b7280;">46</td>
-          <td style="text-align:center;color:#6b7280;">63.5%</td>
-          <td style="text-align:center;color:#6b7280;">60%</td>
-          <td style="text-align:center;color:#6b7280;">55%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">53</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Flavia Pennetta</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2015</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">80</td>
-          <td style="text-align:center;color:#6b7280;">48</td>
-          <td style="text-align:center;color:#6b7280;">62.5%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-          <td style="text-align:center;color:#6b7280;">58%</td>
-          <td style="text-align:center;color:#6b7280;">58%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">54</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Sloane Stephens</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2017</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">89</td>
-          <td style="text-align:center;color:#6b7280;">51</td>
-          <td style="text-align:center;color:#6b7280;">63.6%</td>
-          <td style="text-align:center;color:#6b7280;">59%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;color:#6b7280;">57%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">55</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Jelena Ostapenko</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2017</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">RG×1</td>
-          <td style="text-align:center;color:#e5e5e5;">60</td>
-          <td style="text-align:center;color:#6b7280;">39</td>
-          <td style="text-align:center;color:#6b7280;">60.6%</td>
-          <td style="text-align:center;color:#6b7280;">57%</td>
-          <td style="text-align:center;color:#6b7280;">61%</td>
-          <td style="text-align:center;color:#6b7280;">67%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">56</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Caroline Wozniacki</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2018</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">129</td>
-          <td style="text-align:center;color:#6b7280;">54</td>
-          <td style="text-align:center;background:rgb(251,224,131);color:#111111;">70.5%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;color:#6b7280;">64%</td>
-          <td style="text-align:center;color:#6b7280;">66%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">57</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Bianca Andreescu</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2019</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">26</td>
-          <td style="text-align:center;color:#6b7280;">16</td>
-          <td style="text-align:center;color:#6b7280;">61.9%</td>
-          <td style="text-align:center;background:rgb(249,218,124);color:#111111;">71%</td>
-          <td style="text-align:center;color:#6b7280;">55%</td>
-          <td style="text-align:center;color:#6b7280;">50%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">58</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Sofia Kenin</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2020</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">42</td>
-          <td style="text-align:center;color:#6b7280;">30</td>
-          <td style="text-align:center;color:#6b7280;">58.3%</td>
-          <td style="text-align:center;color:#6b7280;">53%</td>
-          <td style="text-align:center;background:rgb(242,196,98);color:#111111;">73%</td>
-          <td style="text-align:center;color:#6b7280;">50%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">59</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Emma Raducanu</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2021</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">USO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">26</td>
-          <td style="text-align:center;color:#6b7280;">14</td>
-          <td style="text-align:center;color:#6b7280;">65.0%</td>
-          <td style="text-align:center;color:#6b7280;">65%</td>
-          <td style="text-align:center;color:#6b7280;">50%</td>
-          <td style="text-align:center;color:#6b7280;">69%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">60</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Marketa Vondrousova</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2023</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">WIM×1</td>
-          <td style="text-align:center;color:#e5e5e5;">48</td>
-          <td style="text-align:center;color:#6b7280;">27</td>
-          <td style="text-align:center;color:#6b7280;">64.0%</td>
-          <td style="text-align:center;color:#6b7280;">63%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-          <td style="text-align:center;color:#6b7280;">60%</td>
-        </tr>
-<tr>
-          <td style="color:#6b7280;text-align:center;font-size:11px;">61</td>
-          <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">Madison Keys</td>
-          <td style="text-align:center;color:#f5c842;font-weight:bold;">2025</td>
-          <td style="text-align:center;background:transparent;color:#e5e5e5;font-weight:bold;">1</td>
-          <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">AO×1</td>
-          <td style="text-align:center;color:#e5e5e5;">125</td>
-          <td style="text-align:center;color:#6b7280;">49</td>
-          <td style="text-align:center;background:rgb(246,210,114);color:#111111;">71.8%</td>
-          <td style="text-align:center;background:rgb(238,185,85);color:#111111;">74%</td>
-          <td style="text-align:center;color:#6b7280;">68%</td>
-          <td style="text-align:center;background:rgb(249,218,124);color:#111111;">71%</td>
-        </tr>
-  </tbody>
+  <tbody id="table-body"></tbody>
   <tfoot>
-    <tr>
-      <td colspan="12">
-        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+    <tr><td colspan="12" id="table-footer"></td></tr>
+  </tfoot>
+</table>
+
+<script>
+  const dataMap = {
+    "wta": [[1, "Serena Williams", 1999, 23, "AO\u00d77  RG\u00d73  WIM\u00d77  USO\u00d76", 367, 56, 86.8, 88, 83, 88], [2, "Steffi Graf", 1987, 22, "AO\u00d74  RG\u00d76  WIM\u00d77  USO\u00d75", 278, 32, 89.7, 90, 89, 89], [3, "Chris Evert", 1974, 18, "AO\u00d72  RG\u00d77  WIM\u00d73  USO\u00d76", 299, 37, 89.0, 89, 94, 86], [4, "Martina Navratilova", 1978, 18, "AO\u00d73  RG\u00d72  WIM\u00d79  USO\u00d74", 306, 49, 86.2, 86, 81, 88], [5, "Margaret Court", 1969, 11, "AO\u00d74  RG\u00d73  WIM\u00d71  USO\u00d73", 97, 10, 90.7, null, 92, 90], [6, "Monica Seles", 1990, 9, "AO\u00d74  RG\u00d73  USO\u00d72", 180, 31, 85.3, 87, 87, 77], [7, "Billie Jean King", 1968, 8, "RG\u00d71  WIM\u00d74  USO\u00d73", 127, 24, 84.1, 71, 78, 86], [8, "Evonne Goolagong", 1971, 7, "AO\u00d74  RG\u00d71  WIM\u00d72", 128, 26, 83.1, 80, 84, 83], [9, "Venus Williams", 2000, 7, "WIM\u00d75  USO\u00d72", 271, 87, 75.7, 75, 67, 83], [10, "Justine Henin", 2003, 7, "AO\u00d71  RG\u00d74  USO\u00d72", 141, 28, 83.4, 83, 88, 79], [11, "Iga Swiatek", 2020, 6, "RG\u00d74  WIM\u00d71  USO\u00d71", 108, 22, 83.1, 78, 93, 78], [12, "Martina Hingis", 1997, 5, "AO\u00d73  WIM\u00d71  USO\u00d71", 153, 32, 82.7, 86, 81, 74], [13, "Maria Sharapova", 2004, 5, "AO\u00d71  RG\u00d72  WIM\u00d71  USO\u00d71", 197, 53, 78.8, 78, 82, 77], [14, "Hana Mandlikova", 1980, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 142, 40, 78.0, 79, 78, 77], [15, "Arantxa Sanchez Vicario", 1989, 4, "RG\u00d73  USO\u00d71", 210, 54, 79.5, 79, 85, 73], [16, "Kim Clijsters", 2005, 4, "AO\u00d71  USO\u00d73", 132, 32, 80.5, 84, 77, 76], [17, "Naomi Osaka", 2018, 4, "AO\u00d72  USO\u00d72", 71, 26, 73.2, 80, 53, 58], [18, "Aryna Sabalenka", 2023, 4, "AO\u00d72  USO\u00d72", 106, 27, 79.7, 84, 73, 73], [19, "Virginia Wade", 1968, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 122, 49, 71.3, 59, 61, 77], [20, "Lindsay Davenport", 1998, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 198, 51, 79.5, 80, 74, 82], [21, "Jennifer Capriati", 2001, 3, "AO\u00d72  RG\u00d71", 140, 40, 77.8, 77, 80, 78], [22, "Angelique Kerber", 2016, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 120, 58, 67.4, 69, 54, 73], [23, "Ashleigh Barty", 2019, 3, "AO\u00d71  RG\u00d71  WIM\u00d71", 57, 24, 70.4, 71, 62, 75], [24, "Tracy Austin", 1979, 2, "USO\u00d72", 61, 15, 80.3, 88, 73, 76], [25, "Mary Pierce", 1995, 2, "AO\u00d71  RG\u00d71", 142, 50, 74.0, 75, 76, 68], [26, "Svetlana Kuznetsova", 2004, 2, "RG\u00d71  USO\u00d71", 154, 69, 69.1, 68, 74, 64], [27, "Amelie Mauresmo", 2006, 2, "AO\u00d71  WIM\u00d71", 131, 43, 75.3, 79, 62, 79], [28, "Petra Kvitova", 2011, 2, "WIM\u00d72", 128, 59, 68.4, 66, 68, 73], [29, "Na Li", 2011, 2, "AO\u00d71  RG\u00d71", 90, 31, 74.4, 76, 74, 70], [30, "Victoria Azarenka", 2012, 2, "AO\u00d72", 166, 66, 71.6, 75, 62, 71], [31, "Garbine Muguruza", 2016, 2, "RG\u00d71  WIM\u00d71", 86, 38, 69.4, 65, 76, 69], [32, "Simona Halep", 2018, 2, "RG\u00d71  WIM\u00d71", 112, 44, 71.8, 68, 74, 76], [33, "Barbora Krejcikova", 2021, 2, "RG\u00d71  WIM\u00d71", 49, 21, 70.0, 68, 65, 79], [34, "Elena Rybakina", 2022, 2, "AO\u00d71  WIM\u00d71", 66, 22, 75.0, 71, 73, 84], [35, "Coco Gauff", 2023, 2, "RG\u00d71  USO\u00d71", 78, 24, 76.5, 75, 84, 65], [36, "Nancy Richey", 1968, 1, "RG\u00d71", 58, 20, 74.4, 0, 75, 76], [37, "Ann Jones", 1969, 1, "WIM\u00d71", 29, 5, 85.3, null, 83, 86], [38, "Sue Barker", 1976, 1, "RG\u00d71", 47, 30, 61.0, 25, 67, 62], [39, "Kerry Reid", 1977, 1, "AO\u00d71", 97, 33, 74.6, 78, 68, 76], [40, "Mima Jausovec", 1977, 1, "RG\u00d71", 79, 41, 65.8, 57, 72, 61], [41, "Virginia Ruzici", 1978, 1, "RG\u00d71", 73, 39, 65.2, 67, 72, 54], [42, "Chris Oneil", 1978, 1, "AO\u00d71", 8, 22, 26.7, 0, 0, 36], [43, "Barbara Jordan", 1979, 1, "AO\u00d71", 14, 20, 41.2, 30, 22, 60], [44, "Gabriela Sabatini", 1990, 1, "USO\u00d71", 164, 42, 79.6, 80, 79, 79], [45, "Conchita Martinez", 1994, 1, "WIM\u00d71", 174, 63, 73.4, 70, 78, 75], [46, "Iva Majoli", 1997, 1, "RG\u00d71", 55, 33, 62.5, 54, 76, 50], [47, "Jana Novotna", 1998, 1, "WIM\u00d71", 149, 49, 75.3, 73, 73, 79], [48, "Anastasia Myskina", 2004, 1, "RG\u00d71", 53, 27, 66.2, 65, 61, 72], [49, "Ana Ivanovic", 2008, 1, "RG\u00d71", 107, 47, 69.5, 66, 77, 67], [50, "Francesca Schiavone", 2010, 1, "RG\u00d71", 105, 69, 60.3, 57, 70, 51], [51, "Samantha Stosur", 2011, 1, "USO\u00d71", 94, 68, 58.0, 55, 71, 41], [52, "Marion Bartoli", 2013, 1, "WIM\u00d71", 79, 46, 63.2, 60, 55, 74], [53, "Flavia Pennetta", 2015, 1, "USO\u00d71", 79, 48, 62.2, 67, 58, 57], [54, "Sloane Stephens", 2017, 1, "USO\u00d71", 89, 51, 63.6, 59, 73, 57], [55, "Jelena Ostapenko", 2017, 1, "RG\u00d71", 60, 39, 60.6, 57, 61, 67], [56, "Caroline Wozniacki", 2018, 1, "AO\u00d71", 129, 54, 70.5, 74, 64, 66], [57, "Bianca Andreescu", 2019, 1, "USO\u00d71", 26, 15, 63.4, 71, 60, 50], [58, "Sofia Kenin", 2020, 1, "AO\u00d71", 41, 30, 57.7, 53, 71, 50], [59, "Emma Raducanu", 2021, 1, "USO\u00d71", 26, 14, 65.0, 65, 50, 69], [60, "Marketa Vondrousova", 2023, 1, "WIM\u00d71", 48, 26, 64.9, 65, 68, 60], [61, "Madison Keys", 2025, 1, "AO\u00d71", 125, 49, 71.8, 74, 68, 71]]
+  };
+
+  const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
-        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp <br>
+        WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
         AGG = aggregate GS win rate &nbsp;·&nbsp;
         H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
         Titles: ≥2 <span style="color:#4a9eff">■</span>
         ≥5 <span style="color:#e8a838">■</span>
         ≥10 <span style="color:#f5c842">■</span> &nbsp;·&nbsp;
         Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
-        ≥80%/85% <span style="color:#2dd4b0">■</span>
-      </td>
-    </tr>
-  </tfoot>
-</table>
+        ≥80%/85% <span style="color:#2dd4b0">■</span>`;
+
+  // ---------- 颜色函数（与 Python 端一致）----------
+  function titlesBg(titles) {
+    if (titles >= 10) return '#f5c842';
+    if (titles >= 5) return '#e8a838';
+    if (titles >= 2) return '#4a9eff';
+    return 'transparent';
+  }
+  function titlesFc(titles) {
+    return titles >= 2 ? '#111111' : '#e5e5e5';
+  }
+  function aggBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(7,123,89)';
+    if (pct >= 80) return 'rgb(42,159,121)';
+    if (pct >= 75) return 'rgb(227,152,45)';
+    if (pct >= 70) return 'rgb(247,213,118)';
+    return 'transparent';
+  }
+  function aggColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+  function surfBg(pct) {
+    if (pct === null) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(39,157,119)';
+    if (pct >= 80) return 'rgb(67,186,144)';
+    if (pct >= 75) return 'rgb(235,174,72)';
+    if (pct >= 70) return 'rgb(249,218,124)';
+    return 'transparent';
+  }
+  function surfColor(pct) {
+    if (pct === null) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 75) return '#111111';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+
+  function fmt(val) {
+    return (val === null || val === undefined) ? '—' : val + '%';
+  }
+
+  // ---------- 排序状态 ----------
+  // 默认排序：titles desc → firstYear asc → W desc（不显示指示器）
+  let sortState = [
+    // { col: 'titles', order: 'desc' },
+    // { col: 'firstYear', order: 'asc' },
+    // { col: 'W', order: 'desc' }
+  ];
+  let userSorted = false;  // 是否经过用户手动排序（决定是否显示指示器）
+
+  // 列到数据索引的映射 (基于 rows_to_js 的顺序)
+  const colIndex = {
+    'player': 1,      // 字符串
+    'firstYear': 2,   // 数字
+    'titles': 3,      // 数字
+    'W': 5,           // 数字
+    'L': 6,           // 数字
+    'agg': 7,         // 数字或null
+    'hard': 8,
+    'clay': 9,
+    'grass': 10
+  };
+
+  // 比较函数（处理 null/undefined 放最后）
+  function compareValues(a, b, col, order) {
+    let valA = a[colIndex[col]];
+    let valB = b[colIndex[col]];
+    
+    const isNullA = valA === null || valA === undefined;
+    const isNullB = valB === null || valB === undefined;
+    if (isNullA && isNullB) return 0;
+    if (isNullA) return 1;
+    if (isNullB) return -1;
+    
+    if (col !== 'player') {
+      valA = Number(valA);
+      valB = Number(valB);
+    } else {
+      valA = String(valA).toLowerCase();
+      valB = String(valB).toLowerCase();
+    }
+    
+    if (valA < valB) return order === 'asc' ? -1 : 1;
+    if (valA > valB) return order === 'asc' ? 1 : -1;
+    return 0;
+  }
+
+  function sortRows(rows) {
+    if (!sortState.length) return rows;
+    
+    return [...rows].sort((a, b) => {
+      for (let rule of sortState) {
+        const cmp = compareValues(a, b, rule.col, rule.order);
+        if (cmp !== 0) return cmp;
+      }
+      return 0;
+    });
+  }
+
+  // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
+  function updateSortIndicators() {
+    // 清除所有指示器
+    document.querySelectorAll('.sortable').forEach(th => {
+      const ind = th.querySelector('.sort-indicator');
+      if (ind) ind.remove();
+    });
+    
+    if (!userSorted) return;
+    
+    // 为 sortState 中的主排序键添加指示器（只显示第一个，保持简洁）
+    if (sortState.length > 0) {
+      const primary = sortState[0];
+      const th = document.querySelector(`th[data-col="${primary.col}"]`);
+      if (th) {
+        const arrow = primary.order === 'asc' ? '▲' : '▼';
+        const span = document.createElement('span');
+        span.className = 'sort-indicator';
+        span.textContent = ' ' + arrow;
+        th.appendChild(span);
+      }
+    }
+  }
+
+  // ---------- 渲染表格 ----------
+  let currentTour = 'wta';
+
+  function renderTable() {
+    const rows = dataMap[currentTour] || [];
+    const sorted = sortRows(rows);
+    
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
+    
+    countSpan.textContent = sorted.length + ' champions';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    sorted.forEach((row, idx) => {
+      const [origRank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+      const titlesNum = parseInt(titles);
+      const titleBg = titlesBg(titlesNum);
+      const titleColor = titlesFc(titlesNum);
+
+      const aggBgColor = aggBg(agg);
+      const aggTextColor = aggColor(agg);
+      const hardBgColor = surfBg(hard);
+      const hardTextColor = surfColor(hard);
+      const clayBgColor = surfBg(clay);
+      const clayTextColor = surfColor(clay);
+      const grassBgColor = surfBg(grass);
+      const grassTextColor = surfColor(grass);
+
+      html += `<tr>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${firstYear}</td>
+        <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titles}</td>
+        <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${titlesStr}</td>
+        <td style="text-align:center;color:#e5e5e5;">${W}</td>
+        <td style="text-align:center;color:#6b7280;">${L}</td>
+        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(agg)}</td>
+        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(hard)}</td>
+        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(clay)}</td>
+        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(grass)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
+    updateSortIndicators();
+  }
+
+  // ---------- 排序事件绑定 ----------
+  function handleSortClick(e) {
+    const th = e.currentTarget;
+    const col = th.getAttribute('data-col');
+    if (!col) return;
+    
+    userSorted = true;
+    const existingIdx = sortState.findIndex(s => s.col === col);
+    
+    // 确定新列的顺序：默认降序；若已存在则翻转顺序
+    let newOrder = 'desc';
+    if (existingIdx !== -1) {
+      newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
+    }
+    
+    if (existingIdx !== -1) {
+      // 如果该列已在排序条件中，将其移到首位并更新顺序
+      const [existing] = sortState.splice(existingIdx, 1);
+      existing.order = newOrder;
+      sortState.unshift(existing);
+    } else {
+      // 新列：插入到开头，原有排序全部后移成为次级条件
+      sortState.unshift({ col, order: newOrder });
+    }
+    
+    renderTable();
+  }
+
+  // 重置为默认排序（切换巡回赛时调用，不视为用户排序）
+  function resetToDefault() {
+    sortState = [
+      { col: 'titles', order: 'desc' },
+      { col: 'firstYear', order: 'asc' },
+      { col: 'W', order: 'desc' }
+    ];
+    userSorted = false;
+  }
+
+  // 初始化事件监听
+  document.querySelectorAll('.sortable').forEach(th => {
+    th.addEventListener('click', handleSortClick);
+  });
+
+  const selectEl = document.getElementById('tourSelect');
+  if (selectEl) {
+    selectEl.addEventListener('change', e => {
+      currentTour = e.target.value;
+      resetToDefault();
+      renderTable();
+    });
+  }
+
+  // 初始渲染
+  renderTable();
+</script>
 </body>
 </html>
