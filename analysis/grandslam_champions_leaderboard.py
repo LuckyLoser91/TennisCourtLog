@@ -7,17 +7,17 @@
 依赖：pip install pandas openpyxl
 用法：python grandslam_champions_leaderboard.py
 """
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import os
-import glob
 import pandas as pd
+from datetime import datetime
 from scripts.config import PROJECT_ROOT, DATA_PATHS
 
 
 # ══════════════════════════════════════════════════════════════
 # 配置
 # ══════════════════════════════════════════════════════════════
-OUTPUT_DIR  = PROJECT_ROOT / "./output"
 GS_TIER     = "Grand Slam"
 
 SLAMS = {
@@ -26,6 +26,53 @@ SLAMS = {
     "WIM": ["Wimbledon"],
     "USO": ["US Open"],
 }
+
+# IOC -> ISO2 映射（用于国旗 emoji），覆盖主要网球国家
+IOC_TO_ISO2 = {
+    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
+    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
+    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
+    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
+    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
+    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
+    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
+    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
+    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
+    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
+    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
+    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
+    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
+}
+
+def ioc_to_flag(ioc):
+    """将 IOC 代码转为国旗图片 HTML"""
+    if pd.isna(ioc) or not ioc:
+        return '<span title="Unknown">🏳</span>'
+    iso2 = IOC_TO_ISO2.get(ioc.upper().strip(), "")
+    if not iso2:
+        print(f"⚠️  未知 IOC 代码: {ioc}，使用 🏳")
+        return '<span title="Unknown">🏳</span>'
+    iso2_lower = iso2.lower()
+    return f'<img src="https://flagcdn.com/16x12/{iso2_lower}.png" width="16" height="12" alt="{iso2}" title="{ioc}" style="vertical-align:middle;margin-right:6px;border-radius:1px;">'
+
+
+
+def calc_age(birth_date, event_date):
+    """
+    计算年龄（年），保留一位小数。
+    birth_date: datetime 对象或字符串 YYYY-MM-DD / YYYY/MM/DD
+    event_date: 字符串，格式 YYYY/MM/DD（例如 1999/09/11）
+    """
+    try:
+        if isinstance(birth_date, str):
+            bd = datetime.strptime(birth_date.strip(), "%Y/%m/%d")
+        else:
+            bd = birth_date  # 假设已经是 datetime
+        ed = datetime.strptime(event_date.strip(), "%Y/%m/%d")
+        days = (ed - bd).days
+        return round(days / 365.25, 1)
+    except:
+        return None
 
 
 # ══════════════════════════════════════════════════════════════
@@ -58,8 +105,7 @@ def get_slam_key(tournament_name):
 # ══════════════════════════════════════════════════════════════
 # 4. 计算单个球员战绩
 # ══════════════════════════════════════════════════════════════
-def calc_stats(gs, player, first_year):
-    # 计算score不是W/O的比赛的wins和losses
+def calc_stats(gs, player, first_year, player_info):
     wins = gs[(gs["winner_name"] == player) & (gs["score"] != "W/O")].copy()
     losses = gs[(gs["loser_name"] == player) & (gs["score"] != "W/O")].copy()
     W, L = len(wins), len(losses)
@@ -68,26 +114,24 @@ def calc_stats(gs, player, first_year):
 
     agg = round(W / (W + L) * 100, 1)
 
-    # 场地胜率
     def surf_wr(surface):
         sw = wins[wins["surface"].astype(str).str.lower() == surface.lower()]
         sl = losses[losses["surface"].astype(str).str.lower() == surface.lower()]
-        t  = len(sw) + len(sl)
+        t = len(sw) + len(sl)
         return round(len(sw) / t * 100) if t > 0 else None
 
-    # 各满贯冠军数
-    wins["_slam"]    = wins["tourney_name"].apply(get_slam_key)
-    finals_won       = wins[wins["round"] == 'F']
-    slam_titles      = finals_won["_slam"].value_counts().to_dict()
-    titles_total     = sum(slam_titles.values())
-    ao  = slam_titles.get("AO",  0)
-    rg  = slam_titles.get("RG",  0)
+    wins["_slam"] = wins["tourney_name"].apply(get_slam_key)
+    finals_won = wins[wins["round"] == 'F']
+    slam_titles = finals_won["_slam"].value_counts().to_dict()
+    titles_total = sum(slam_titles.values())
+    ao = slam_titles.get("AO", 0)
+    rg = slam_titles.get("RG", 0)
     wim = slam_titles.get("WIM", 0)
     uso = slam_titles.get("USO", 0)
-    # 冠军分项：只显示非零项
+
     parts = []
-    if ao:  parts.append(f"AO×{ao}")
-    if rg:  parts.append(f"RG×{rg}")
+    if ao: parts.append(f"AO×{ao}")
+    if rg: parts.append(f"RG×{rg}")
     if wim: parts.append(f"WIM×{wim}")
     if uso: parts.append(f"USO×{uso}")
     titles_str = "  ".join(parts) if parts else "—"
@@ -96,47 +140,59 @@ def calc_stats(gs, player, first_year):
     last_year = int(finals_won["year"].max()) if not finals_won.empty else first_year
     span = last_year - first_year + 1
 
+    # 年龄计算：需要比赛日期和出生日期
+    info = player_info.get(player, {})
+    dob = info.get("dob")
+    age_first = None
+    age_last = None
+
+    if dob and not pd.isna(dob):
+        # 首冠比赛日期
+        first_final = finals_won[finals_won["year"] == first_year].iloc[0] if not finals_won[finals_won["year"] == first_year].empty else None
+        if first_final is not None and "tourney_date" in first_final:
+            age_first = calc_age(dob, first_final["tourney_date"])
+
+        # 末冠比赛日期
+        last_final = finals_won[finals_won["year"] == last_year].iloc[-1] if not finals_won[finals_won["year"] == last_year].empty else None
+        if last_final is not None and "tourney_date" in last_final:
+            age_last = calc_age(dob, last_final["tourney_date"])
+
     return {
         "W": W, "L": L,
-        "titles":          titles_total,
-        "titles_str":      titles_str,
-        "agg":             agg,
-        "win_h":           surf_wr("Hard"),
-        "win_c":           surf_wr("Clay"),
-        "win_g":           surf_wr("Grass"),
-        "last_year":       last_year,
-        "span":            span,
+        "titles": titles_total,
+        "titles_str": titles_str,
+        "agg": agg,
+        "win_h": surf_wr("Hard"),
+        "win_c": surf_wr("Clay"),
+        "win_g": surf_wr("Grass"),
+        "last_year": last_year,
+        "span": span,
+        "age_first": age_first,
+        "age_last": age_last,
+        "ioc": info.get("ioc"),
+        "birth_year": info.get("birth_year"),
     }
 
 
 # ══════════════════════════════════════════════════════════════
-# 5. 颜色工具
+# 5. 颜色工具（保持不变）
 # ══════════════════════════════════════════════════════════════
 def rate_to_bg(v, lo=70, hi=90):
-    """
-    双段渐变（深色背景版）：
-      70 ~ 80 : 浅黄  → 深橙黄   （黄色段）
-      80 ~ hi : 浅青绿 → 深青绿   （绿色段）
-      低于 70 : 透明
-    """
     if v is None or v < lo:
         return "transparent", "#6b7280"
-
     if v < 80:
-        # 黄色段：lo→80，浅黄(253,230,138) → 深橙(217,119,6)
-        t  = (v - lo) / (80 - lo)
-        t  = max(0.0, min(1.0, t))
-        r  = int(253 + t * (217 - 253))
-        g  = int(230 + t * (119 - 230))
-        b  = int(138 + t * (6   - 138))
-        fc = "#111111"   # 黄色背景用深色字
+        t = (v - lo) / (80 - lo)
+        t = max(0.0, min(1.0, t))
+        r = int(253 + t * (217 - 253))
+        g = int(230 + t * (119 - 230))
+        b = int(138 + t * (6 - 138))
+        fc = "#111111"
     else:
-        # 绿色段：80→hi，浅青绿(110,231,183) → 深青绿(4,120,87)
-        t  = (v - 80) / (hi - 80)
-        t  = max(0.0, min(1.0, t))
-        r  = int(110 + t * (4   - 110))
-        g  = int(231 + t * (120 - 231))
-        b  = int(183 + t * (87  - 183))
+        t = (v - 80) / (hi - 80)
+        t = max(0.0, min(1.0, t))
+        r = int(110 + t * (4 - 110))
+        g = int(231 + t * (120 - 231))
+        b = int(183 + t * (87 - 183))
         fc = "#111111" if t < 0.5 else "#ffffff"
     return f"rgb({r},{g},{b})", fc
 
@@ -147,9 +203,6 @@ def agg_bg(v):
 def surf_bg(v):
     bg, fc = rate_to_bg(v, lo=70, hi=95)
     return bg, fc
-
-def on_col(bg):
-    return "#111111" if bg != "transparent" else "#cccccc"
 
 def titles_bg(n):
     if n >= 10: return "#f5c842"
@@ -162,39 +215,29 @@ def titles_fc(n):
 
 
 # ══════════════════════════════════════════════════════════════
-# 6. 生成 HTML
+# 6. 生成 HTML（后端拼接完整玩家显示名）
 # ══════════════════════════════════════════════════════════════
 def build_gs_leaderboard(rows_dict, output_path):
-    """
-    生成大满贯冠军排行榜 HTML 页面，支持点击表头排序（累加式，新点击列成为主键）。
-
-    Args:
-        rows_dict: dict, 例如 {'wta': wta_rows, 'atp': atp_rows}
-        output_path: str, 输出 HTML 文件路径
-    """
     tours = list(rows_dict.keys())
 
-    # ---------- 辅助函数 ----------
-    def fmt(val):
-        return "—" if val is None else f"{val}%"
-
-    def td_r(val, bg_tuple):
-        bg, fc = bg_tuple if isinstance(bg_tuple, tuple) else (bg_tuple, "#111111")
-        st = f"background:{bg};color:{fc};" if bg != "transparent" else "color:#6b7280;"
-        return f'<td style="text-align:center;{st}">{fmt(val)}</td>'
-
-    # 将数据转换为 JavaScript 友好格式
     import json
 
     def rows_to_js(rows):
         arr = []
         for e in rows:
             s = e["stats"]
+            flag_emoji = ioc_to_flag(s.get('ioc', ''))
+            birth_year = s.get('birth_year', '')
+            birth_display = f" ({birth_year})" if birth_year else ""
+            # 后端拼接完整显示名：国旗 + 名字 + (出生年份)
+            player_display = f"{flag_emoji}{e['player']}{birth_display}"
             arr.append([
                 e['rank'],
-                e['player'],
+                player_display,                 # 直接包含国旗的完整字符串
                 e['first_year'],
+                s['age_first'] if s['age_first'] is not None else None,
                 s['last_year'],
+                s['age_last'] if s['age_last'] is not None else None,
                 s['span'],
                 s['titles'],
                 s['titles_str'],
@@ -203,7 +246,7 @@ def build_gs_leaderboard(rows_dict, output_path):
                 s['agg'] if s['agg'] is not None else None,
                 s['win_h'] if s['win_h'] is not None else None,
                 s['win_c'] if s['win_c'] is not None else None,
-                s['win_g'] if s['win_g'] is not None else None
+                s['win_g'] if s['win_g'] is not None else None,
             ])
         return json.dumps(arr)
 
@@ -213,7 +256,6 @@ def build_gs_leaderboard(rows_dict, output_path):
         for i, tour in enumerate(tours)
     )
 
-    # 如果只有一个巡回赛，隐藏选择器
     hide_selector = len(tours) == 1
     selector_style = 'style="display:none;"' if hide_selector else ''
 
@@ -227,9 +269,9 @@ def build_gs_leaderboard(rows_dict, output_path):
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background: #111827;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
       padding: 36px 44px 60px;
-      min-width: 1100px;
+      min-width: 1400px;
     }}
     h1 {{ color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }}
     .sub {{
@@ -277,7 +319,6 @@ def build_gs_leaderboard(rows_dict, output_path):
       padding-top: 20px; color: #4b5563;
       font-size: 10px; letter-spacing: 0.04em;
     }}
-    /* 可排序表头样式 */
     th.sortable {{
       cursor: pointer;
       user-select: none;
@@ -292,6 +333,7 @@ def build_gs_leaderboard(rows_dict, output_path):
       font-size: 9px;
       color: #f5c842;
     }}
+    .flag {{ font-size: 1.2em; margin-right: 6px; vertical-align: middle; }}
   </style>
 </head>
 <body>
@@ -315,14 +357,16 @@ def build_gs_leaderboard(rows_dict, output_path):
 <table>
   <thead>
     <tr class="gr">
-      <th colspan="10"></th>
+      <th colspan="11"></th>
       <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
     </tr>
     <tr>
       <th>#</th>
       <th class="left sortable" data-col="player">PLAYER</th>
       <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="ageFirst">AGE 1ST</th>
       <th class="sortable" data-col="lastYear">LAST TITLE</th>
+      <th class="sortable" data-col="ageLast">AGE LAST</th>
       <th class="sortable" data-col="span">SPAN</th>
       <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
@@ -336,7 +380,7 @@ def build_gs_leaderboard(rows_dict, output_path):
   </thead>
   <tbody id="table-body"></tbody>
   <tfoot>
-    <tr><td colspan="13" id="table-footer"></td></tr>
+    <tr><td colspan="15" id="table-footer"></td></tr>
   </tfoot>
 </table>
 
@@ -346,7 +390,9 @@ def build_gs_leaderboard(rows_dict, output_path):
   }};
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        AGE 1ST = age at first title &nbsp;·&nbsp;
         LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+        AGE LAST = age at last title &nbsp;·&nbsp;
         SPAN = last - first + 1 &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
         WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
@@ -358,7 +404,6 @@ def build_gs_leaderboard(rows_dict, output_path):
         Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
         ≥80%/85% <span style="color:#2dd4b0">■</span>`;
 
-  // ---------- 颜色函数（与 Python 端一致）----------
   function titlesBg(titles) {{
     if (titles >= 10) return '#f5c842';
     if (titles >= 5) return '#e8a838';
@@ -403,27 +448,29 @@ def build_gs_leaderboard(rows_dict, output_path):
   function fmt(val) {{
     return (val === null || val === undefined) ? '—' : val + '%';
   }}
+  function fmtAge(age) {{
+    return (age === null || age === undefined) ? '—' : age.toFixed(1);
+  }}
 
-  // ---------- 排序状态 ----------
   let sortState = [];
   let userSorted = false;
 
-  // 列到数据索引的映射 (基于 rows_to_js 的顺序)
   const colIndex = {{
-    'player': 1,      // 字符串
-    'firstYear': 2,   // 数字
-    'lastYear': 3,    // 数字
-    'span': 4,        // 数字
-    'titles': 5,      // 数字
-    'W': 7,           // 数字
-    'L': 8,           // 数字
-    'agg': 9,         // 数字或null
-    'hard': 10,
-    'clay': 11,
-    'grass': 12
+    'player': 1,
+    'firstYear': 2,
+    'ageFirst': 3,
+    'lastYear': 4,
+    'ageLast': 5,
+    'span': 6,
+    'titles': 7,
+    'W': 9,
+    'L': 10,
+    'agg': 11,
+    'hard': 12,
+    'clay': 13,
+    'grass': 14
   }};
 
-  // 比较函数（处理 null/undefined 放最后）
   function compareValues(a, b, col, order) {{
     let valA = a[colIndex[col]];
     let valB = b[colIndex[col]];
@@ -449,7 +496,6 @@ def build_gs_leaderboard(rows_dict, output_path):
 
   function sortRows(rows) {{
     if (!sortState.length) return rows;
-    
     return [...rows].sort((a, b) => {{
       for (let rule of sortState) {{
         const cmp = compareValues(a, b, rule.col, rule.order);
@@ -459,15 +505,12 @@ def build_gs_leaderboard(rows_dict, output_path):
     }});
   }}
 
-  // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
   function updateSortIndicators() {{
     document.querySelectorAll('.sortable').forEach(th => {{
       const ind = th.querySelector('.sort-indicator');
       if (ind) ind.remove();
     }});
-    
     if (!userSorted) return;
-    
     if (sortState.length > 0) {{
       const primary = sortState[0];
       const th = document.querySelector(`th[data-col="${{primary.col}}"]`);
@@ -481,7 +524,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     }}
   }}
 
-  // ---------- 渲染表格 ----------
   let currentTour = '{tours[0]}';
 
   function renderTable() {{
@@ -498,7 +540,7 @@ def build_gs_leaderboard(rows_dict, output_path):
     let html = '';
     sorted.forEach((row, idx) => {{
       const [
-        origRank, player, firstYear, lastYear, span,
+        origRank, playerDisplay, firstYear, ageFirst, lastYear, ageLast, span,
         titles, titlesStr, W, L, agg, hard, clay, grass
       ] = row;
       const titlesNum = parseInt(titles);
@@ -516,9 +558,11 @@ def build_gs_leaderboard(rows_dict, output_path):
 
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${{idx + 1}}</td>
-        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{playerDisplay}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{firstYear}}</td>
+        <td style="text-align:center;color:#e5e5e5;">${{fmtAge(ageFirst)}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{lastYear}}</td>
+        <td style="text-align:center;color:#e5e5e5;">${{fmtAge(ageLast)}}</td>
         <td style="text-align:center;color:#f5c842;font-weight:bold;">${{span}}</td>
         <td style="text-align:center;background:${{titleBg}};color:${{titleColor}};font-weight:bold;">${{titles}}</td>
         <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${{titlesStr}}</td>
@@ -534,7 +578,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     updateSortIndicators();
   }}
 
-  // ---------- 排序事件绑定 ----------
   function handleSortClick(e) {{
     const th = e.currentTarget;
     const col = th.getAttribute('data-col');
@@ -542,12 +585,10 @@ def build_gs_leaderboard(rows_dict, output_path):
     
     userSorted = true;
     const existingIdx = sortState.findIndex(s => s.col === col);
-    
     let newOrder = 'desc';
     if (existingIdx !== -1) {{
       newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
     }}
-    
     if (existingIdx !== -1) {{
       const [existing] = sortState.splice(existingIdx, 1);
       existing.order = newOrder;
@@ -555,11 +596,9 @@ def build_gs_leaderboard(rows_dict, output_path):
     }} else {{
       sortState.unshift({{ col, order: newOrder }});
     }}
-    
     renderTable();
   }}
 
-  // 重置为默认排序（切换巡回赛时调用）
   function resetToDefault() {{
     sortState = [
       {{ col: 'titles', order: 'desc' }},
@@ -569,7 +608,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     userSorted = false;
   }}
 
-  // 初始化事件监听
   document.querySelectorAll('.sortable').forEach(th => {{
     th.addEventListener('click', handleSortClick);
   }});
@@ -583,7 +621,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     }});
   }}
 
-  // 初始渲染
   renderTable();
 </script>
 </body>
@@ -598,18 +635,58 @@ def build_gs_leaderboard(rows_dict, output_path):
 # 7. 主入口
 # ══════════════════════════════════════════════════════════════
 def main(tour='wta'):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
     gs_data_path = DATA_PATHS[tour]['gs_matches']
-    # load grand slam matches
+    players_path = DATA_PATHS[tour]['players']
+
+    # 读取大满贯比赛数据
     gs = pd.read_csv(gs_data_path)
-    champions  = get_champions(gs)
+    champions = get_champions(gs)
     if not champions:
         return
+
+    # 读取球员信息，只提取冠军列表中的球员
+    players_df = pd.read_csv(players_path)
+    # 将 dob 转换为 datetime，支持多种格式，如 YYYY/MM/DD
+    players_df['dob'] = pd.to_datetime(players_df['dob'], errors='coerce')
+    # 筛选出冠军
+    champ_players_df = players_df[players_df['name'].isin(champions.keys())]
+    player_info = {}
+    missing_dob = []
+    missing_ioc = []
+
+    for _, row in champ_players_df.iterrows():
+        name = row['name']
+        dob = row['dob'] if not pd.isna(row['dob']) else None
+        ioc = row['ioc'] if not pd.isna(row['ioc']) else None
+        birth_year = dob.year if dob else None
+        player_info[name] = {'dob': dob, 'ioc': ioc, 'birth_year': birth_year}
+
+    # 检查冠军列表中缺失信息的球员（即在 players 中没找到或字段为空）
+    for player in champions.keys():
+        if player not in player_info:
+            missing_dob.append(player)
+            missing_ioc.append(player)
+        else:
+            info = player_info[player]
+            if not info.get('dob') or pd.isna(info['dob']):
+                missing_dob.append(player)
+            if not info.get('ioc') or pd.isna(info['ioc']):
+                missing_ioc.append(player)
+
+    # 打印缺失信息列表
+    if missing_dob:
+        print(f"\n⚠️  以下 {len(missing_dob)} 位球员缺少出生日期 (dob)，年龄显示为 '—'：")
+        for p in sorted(missing_dob):
+            print(f"   - {p}")
+    if missing_ioc:
+        print(f"\n⚠️  以下 {len(missing_ioc)} 位球员缺少国籍代码 (ioc)，国旗显示为 🏳：")
+        for p in sorted(missing_ioc):
+            print(f"   - {p}")
 
     print("\n📊 计算战绩...")
     rows = []
     for player, first_year in champions.items():
-        stats = calc_stats(gs, player, first_year)
+        stats = calc_stats(gs, player, first_year, player_info)
         if stats:
             rows.append({"player": player, "first_year": first_year, "stats": stats})
 
@@ -619,13 +696,15 @@ def main(tour='wta'):
         r["rank"] = i
 
     # 控制台预览前20
-    print(f"\n  {'#':<4} {'Player':<28} {'1st':<6} {'Last':<6} {'Span':<5} {'GS':<4} {'W':<5} {'L':<4} {'AGG'}")
-    print("  " + "-" * 85)
+    print(f"\n  {'#':<4} {'Player':<28} {'1st':<6} {'Age1':<6} {'Last':<6} {'AgeL':<6} {'Span':<5} {'GS':<4} {'W':<5} {'L':<4} {'AGG'}")
+    print("  " + "-" * 105)
     for r in rows[:10]:
         s = r["stats"]
+        age1 = f"{s['age_first']:.1f}" if s['age_first'] else "—"
+        agel = f"{s['age_last']:.1f}" if s['age_last'] else "—"
         print(f"  {r['rank']:<4} {r['player']:<28} {r['first_year']:<6} "
-              f"{s['last_year']:<6} {s['span']:<5} "
-              f"{s['titles']:<4} {s['W']:<5} {s['L']:<4} {s['agg']}%")
+              f"{age1:<6} {s['last_year']:<6} {agel:<6} "
+              f"{s['span']:<5} {s['titles']:<4} {s['W']:<5} {s['L']:<4} {s['agg']}%")
     if len(rows) > 20:
         print(f"  ... 共 {len(rows)} 位冠军")
 

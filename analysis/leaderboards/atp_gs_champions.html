@@ -8,9 +8,9 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #111827;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
       padding: 36px 44px 60px;
-      min-width: 1100px;
+      min-width: 1400px;
     }
     h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
     .sub {
@@ -58,7 +58,6 @@
       padding-top: 20px; color: #4b5563;
       font-size: 10px; letter-spacing: 0.04em;
     }
-    /* 可排序表头样式 */
     th.sortable {
       cursor: pointer;
       user-select: none;
@@ -73,6 +72,7 @@
       font-size: 9px;
       color: #f5c842;
     }
+    .flag { font-size: 1.2em; margin-right: 6px; vertical-align: middle; }
   </style>
 </head>
 <body>
@@ -96,14 +96,16 @@
 <table>
   <thead>
     <tr class="gr">
-      <th colspan="10"></th>
+      <th colspan="11"></th>
       <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
     </tr>
     <tr>
       <th>#</th>
       <th class="left sortable" data-col="player">PLAYER</th>
       <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="ageFirst">AGE 1ST</th>
       <th class="sortable" data-col="lastYear">LAST TITLE</th>
+      <th class="sortable" data-col="ageLast">AGE LAST</th>
       <th class="sortable" data-col="span">SPAN</th>
       <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
@@ -117,17 +119,19 @@
   </thead>
   <tbody id="table-body"></tbody>
   <tfoot>
-    <tr><td colspan="13" id="table-footer"></td></tr>
+    <tr><td colspan="15" id="table-footer"></td></tr>
   </tfoot>
 </table>
 
 <script>
   const dataMap = {
-    "atp": [[1, "Novak Djokovic", 2008, 2023, 16, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "Rafael Nadal", 2005, 2022, 18, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "Roger Federer", 2003, 2018, 16, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "Pete Sampras", 1990, 2002, 13, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "Bjorn Borg", 1974, 1981, 8, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "Jimmy Connors", 1974, 1983, 10, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "Ivan Lendl", 1984, 1990, 7, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "Andre Agassi", 1992, 2003, 12, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "John Mcenroe", 1979, 1984, 6, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "Mats Wilander", 1982, 1988, 7, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "Carlos Alcaraz", 2022, 2026, 5, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "Stefan Edberg", 1985, 1992, 8, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "Boris Becker", 1985, 1996, 12, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "Rod Laver", 1968, 1969, 2, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "John Newcombe", 1970, 1975, 6, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "Ken Rosewall", 1968, 1972, 5, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "Guillermo Vilas", 1977, 1979, 3, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "Jim Courier", 1991, 1993, 3, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "Jannik Sinner", 2024, 2025, 2, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "Arthur Ashe", 1968, 1975, 8, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "Jan Kodes", 1970, 1973, 4, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "Gustavo Kuerten", 1997, 2001, 5, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "Andy Murray", 2012, 2016, 5, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "Stan Wawrinka", 2014, 2016, 3, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "Stan Smith", 1971, 1972, 2, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "Ilie Nastase", 1972, 1973, 2, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "Johan Kriek", 1981, 1982, 2, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "Sergi Bruguera", 1993, 1994, 2, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "Yevgeny Kafelnikov", 1996, 1999, 4, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "Patrick Rafter", 1997, 1998, 2, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "Marat Safin", 2000, 2005, 6, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "Lleyton Hewitt", 2001, 2002, 2, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "Andres Gimeno", 1972, 1972, 1, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "Manuel Orantes", 1975, 1975, 1, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "Adriano Panatta", 1976, 1976, 1, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "Mark Edmondson", 1976, 1976, 1, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "Roscoe Tanner", 1977, 1977, 1, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "Vitas Gerulaitis", 1977, 1977, 1, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "Brian Teacher", 1980, 1980, 1, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "Yannick Noah", 1983, 1983, 1, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "Pat Cash", 1987, 1987, 1, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "Michael Chang", 1989, 1989, 1, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "Andres Gomez", 1990, 1990, 1, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "Michael Stich", 1991, 1991, 1, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "Thomas Muster", 1995, 1995, 1, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "Richard Krajicek", 1996, 1996, 1, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "Carlos Moya", 1998, 1998, 1, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "Petr Korda", 1998, 1998, 1, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "Goran Ivanisevic", 2001, 2001, 1, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "Thomas Johansson", 2002, 2002, 1, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "Albert Costa", 2002, 2002, 1, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "Andy Roddick", 2003, 2003, 1, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "Juan Carlos Ferrero", 2003, 2003, 1, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "Gaston Gaudio", 2004, 2004, 1, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "Juan Martin Del Potro", 2009, 2009, 1, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "Marin Cilic", 2014, 2014, 1, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "Dominic Thiem", 2020, 2020, 1, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "Daniil Medvedev", 2021, 2021, 1, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
+    "atp": [[1, "<img src=\"https://flagcdn.com/16x12/rs.png\" width=\"16\" height=\"12\" alt=\"RS\" title=\"SRB\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Novak Djokovic (1987)", 2008, 20.6, 2023, 36.3, 16, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Rafael Nadal (1986)", 2005, 19.0, 2022, 36.0, 18, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "<img src=\"https://flagcdn.com/16x12/ch.png\" width=\"16\" height=\"12\" alt=\"CH\" title=\"SUI\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Roger Federer (1981)", 2003, 21.9, 2018, 36.4, 16, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Pete Sampras (1971)", 1990, 19.0, 2002, 31.0, 13, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "<img src=\"https://flagcdn.com/16x12/se.png\" width=\"16\" height=\"12\" alt=\"SE\" title=\"SWE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Bjorn Borg (1956)", 1974, 18.0, 1981, 25.0, 8, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Jimmy Connors (1952)", 1974, 21.8, 1983, 31.0, 10, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Ivan Lendl (1960)", 1984, 24.2, 1990, 29.9, 7, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Andre Agassi (1970)", 1992, 22.1, 2003, 32.7, 12, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">John Mcenroe (1959)", 1979, 20.5, 1984, 25.5, 6, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "<img src=\"https://flagcdn.com/16x12/se.png\" width=\"16\" height=\"12\" alt=\"SE\" title=\"SWE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Mats Wilander (1964)", 1982, 17.8, 1988, 23.4, 7, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Carlos Alcaraz (2003)", 2022, 19.3, 2026, 22.7, 5, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "<img src=\"https://flagcdn.com/16x12/se.png\" width=\"16\" height=\"12\" alt=\"SE\" title=\"SWE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Stefan Edberg (1966)", 1985, 19.8, 1992, 26.6, 8, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "<img src=\"https://flagcdn.com/16x12/de.png\" width=\"16\" height=\"12\" alt=\"DE\" title=\"GER\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Boris Becker (1967)", 1985, 17.6, 1996, 28.1, 12, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Rod Laver (1938)", 1968, 29.9, 1969, 30.5, 2, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">John Newcombe (1944)", 1970, 26.1, 1975, 30.6, 6, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Ken Rosewall (1934)", 1968, 33.6, 1972, 37.1, 5, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "<img src=\"https://flagcdn.com/16x12/ar.png\" width=\"16\" height=\"12\" alt=\"AR\" title=\"ARG\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Guillermo Vilas (1952)", 1977, 24.8, 1979, 27.4, 3, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Jim Courier (1970)", 1991, 20.8, 1993, 22.4, 3, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "<img src=\"https://flagcdn.com/16x12/it.png\" width=\"16\" height=\"12\" alt=\"IT\" title=\"ITA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Jannik Sinner (2001)", 2024, 22.4, 2025, 23.9, 2, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Arthur Ashe (1943)", 1968, 25.1, 1975, 32.0, 8, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "<img src=\"https://flagcdn.com/16x12/cz.png\" width=\"16\" height=\"12\" alt=\"CZ\" title=\"CZE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Jan Kodes (1946)", 1970, 24.2, 1973, 27.3, 4, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "<img src=\"https://flagcdn.com/16x12/br.png\" width=\"16\" height=\"12\" alt=\"BR\" title=\"BRA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Gustavo Kuerten (1976)", 1997, 20.7, 2001, 24.7, 5, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "<img src=\"https://flagcdn.com/16x12/gb.png\" width=\"16\" height=\"12\" alt=\"GB\" title=\"GBR\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Andy Murray (1987)", 2012, 25.3, 2016, 29.1, 5, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "<img src=\"https://flagcdn.com/16x12/ch.png\" width=\"16\" height=\"12\" alt=\"CH\" title=\"SUI\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Stan Wawrinka (1985)", 2014, 28.8, 2016, 31.4, 3, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Stan Smith (1946)", 1971, 24.7, 1972, 25.5, 2, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "<img src=\"https://flagcdn.com/16x12/ro.png\" width=\"16\" height=\"12\" alt=\"RO\" title=\"ROU\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Ilie Nastase (1946)", 1972, 26.1, 1973, 26.8, 2, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Johan Kriek (1958)", 1981, 23.7, 1982, 24.7, 2, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Sergi Bruguera (1971)", 1993, 22.4, 1994, 23.3, 2, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "<img src=\"https://flagcdn.com/16x12/ru.png\" width=\"16\" height=\"12\" alt=\"RU\" title=\"RUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Yevgeny Kafelnikov (1974)", 1996, 22.3, 1999, 24.9, 4, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Patrick Rafter (1972)", 1997, 24.7, 1998, 25.7, 2, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "<img src=\"https://flagcdn.com/16x12/ru.png\" width=\"16\" height=\"12\" alt=\"RU\" title=\"RUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Marat Safin (1980)", 2000, 20.6, 2005, 25.0, 6, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Lleyton Hewitt (1981)", 2001, 20.5, 2002, 21.3, 2, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Andres Gimeno (1937)", 1972, 34.8, 1972, 34.8, 1, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Manuel Orantes (1949)", 1975, 26.6, 1975, 26.6, 1, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "<img src=\"https://flagcdn.com/16x12/it.png\" width=\"16\" height=\"12\" alt=\"IT\" title=\"ITA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Adriano Panatta (1950)", 1976, 25.9, 1976, 25.9, 1, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Mark Edmondson (1954)", 1976, 21.5, 1976, 21.5, 1, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Roscoe Tanner (1951)", 1977, 25.2, 1977, 25.2, 1, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Vitas Gerulaitis (1954)", 1977, 23.4, 1977, 23.4, 1, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Brian Teacher (1954)", 1980, 26.0, 1980, 26.0, 1, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "<img src=\"https://flagcdn.com/16x12/fr.png\" width=\"16\" height=\"12\" alt=\"FR\" title=\"FRA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Yannick Noah (1960)", 1983, 23.0, 1983, 23.0, 1, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "<img src=\"https://flagcdn.com/16x12/au.png\" width=\"16\" height=\"12\" alt=\"AU\" title=\"AUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Pat Cash (1965)", 1987, 22.1, 1987, 22.1, 1, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Michael Chang (1972)", 1989, 17.3, 1989, 17.3, 1, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "<img src=\"https://flagcdn.com/16x12/ec.png\" width=\"16\" height=\"12\" alt=\"EC\" title=\"ECU\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Andres Gomez (1960)", 1990, 30.2, 1990, 30.2, 1, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "<img src=\"https://flagcdn.com/16x12/de.png\" width=\"16\" height=\"12\" alt=\"DE\" title=\"GER\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Michael Stich (1968)", 1991, 22.7, 1991, 22.7, 1, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "<img src=\"https://flagcdn.com/16x12/at.png\" width=\"16\" height=\"12\" alt=\"AT\" title=\"AUT\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Thomas Muster (1967)", 1995, 27.7, 1995, 27.7, 1, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "<img src=\"https://flagcdn.com/16x12/nl.png\" width=\"16\" height=\"12\" alt=\"NL\" title=\"NED\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Richard Krajicek (1971)", 1996, 24.6, 1996, 24.6, 1, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Carlos Moya (1976)", 1998, 21.7, 1998, 21.7, 1, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "<img src=\"https://flagcdn.com/16x12/cz.png\" width=\"16\" height=\"12\" alt=\"CZ\" title=\"CZE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Petr Korda (1968)", 1998, 30.0, 1998, 30.0, 1, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "<img src=\"https://flagcdn.com/16x12/hr.png\" width=\"16\" height=\"12\" alt=\"HR\" title=\"CRO\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Goran Ivanisevic (1971)", 2001, 29.8, 2001, 29.8, 1, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "<img src=\"https://flagcdn.com/16x12/se.png\" width=\"16\" height=\"12\" alt=\"SE\" title=\"SWE\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Thomas Johansson (1975)", 2002, 26.8, 2002, 26.8, 1, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Albert Costa (1975)", 2002, 26.9, 2002, 26.9, 1, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "<img src=\"https://flagcdn.com/16x12/us.png\" width=\"16\" height=\"12\" alt=\"US\" title=\"USA\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Andy Roddick (1982)", 2003, 21.0, 2003, 21.0, 1, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "<img src=\"https://flagcdn.com/16x12/es.png\" width=\"16\" height=\"12\" alt=\"ES\" title=\"ESP\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Juan Carlos Ferrero (1980)", 2003, 23.3, 2003, 23.3, 1, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "<img src=\"https://flagcdn.com/16x12/ar.png\" width=\"16\" height=\"12\" alt=\"AR\" title=\"ARG\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Gaston Gaudio (1978)", 2004, 25.5, 2004, 25.5, 1, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "<img src=\"https://flagcdn.com/16x12/ar.png\" width=\"16\" height=\"12\" alt=\"AR\" title=\"ARG\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Juan Martin Del Potro (1988)", 2009, 20.9, 2009, 20.9, 1, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "<img src=\"https://flagcdn.com/16x12/hr.png\" width=\"16\" height=\"12\" alt=\"HR\" title=\"CRO\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Marin Cilic (1988)", 2014, 25.9, 2014, 25.9, 1, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "<img src=\"https://flagcdn.com/16x12/at.png\" width=\"16\" height=\"12\" alt=\"AT\" title=\"AUT\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Dominic Thiem (1993)", 2020, 27.0, 2020, 27.0, 1, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "<img src=\"https://flagcdn.com/16x12/ru.png\" width=\"16\" height=\"12\" alt=\"RU\" title=\"RUS\" style=\"vertical-align:middle;margin-right:6px;border-radius:1px;\">Daniil Medvedev (1996)", 2021, 25.5, 2021, 25.5, 1, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
   };
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        AGE 1ST = age at first title &nbsp;·&nbsp;
         LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+        AGE LAST = age at last title &nbsp;·&nbsp;
         SPAN = last - first + 1 &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
         WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
@@ -139,7 +143,6 @@
         Win rate: ≥70%/75% <span style="color:#e8a838">■</span>
         ≥80%/85% <span style="color:#2dd4b0">■</span>`;
 
-  // ---------- 颜色函数（与 Python 端一致）----------
   function titlesBg(titles) {
     if (titles >= 10) return '#f5c842';
     if (titles >= 5) return '#e8a838';
@@ -184,27 +187,29 @@
   function fmt(val) {
     return (val === null || val === undefined) ? '—' : val + '%';
   }
+  function fmtAge(age) {
+    return (age === null || age === undefined) ? '—' : age.toFixed(1);
+  }
 
-  // ---------- 排序状态 ----------
   let sortState = [];
   let userSorted = false;
 
-  // 列到数据索引的映射 (基于 rows_to_js 的顺序)
   const colIndex = {
-    'player': 1,      // 字符串
-    'firstYear': 2,   // 数字
-    'lastYear': 3,    // 数字
-    'span': 4,        // 数字
-    'titles': 5,      // 数字
-    'W': 7,           // 数字
-    'L': 8,           // 数字
-    'agg': 9,         // 数字或null
-    'hard': 10,
-    'clay': 11,
-    'grass': 12
+    'player': 1,
+    'firstYear': 2,
+    'ageFirst': 3,
+    'lastYear': 4,
+    'ageLast': 5,
+    'span': 6,
+    'titles': 7,
+    'W': 9,
+    'L': 10,
+    'agg': 11,
+    'hard': 12,
+    'clay': 13,
+    'grass': 14
   };
 
-  // 比较函数（处理 null/undefined 放最后）
   function compareValues(a, b, col, order) {
     let valA = a[colIndex[col]];
     let valB = b[colIndex[col]];
@@ -230,7 +235,6 @@
 
   function sortRows(rows) {
     if (!sortState.length) return rows;
-    
     return [...rows].sort((a, b) => {
       for (let rule of sortState) {
         const cmp = compareValues(a, b, rule.col, rule.order);
@@ -240,15 +244,12 @@
     });
   }
 
-  // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
   function updateSortIndicators() {
     document.querySelectorAll('.sortable').forEach(th => {
       const ind = th.querySelector('.sort-indicator');
       if (ind) ind.remove();
     });
-    
     if (!userSorted) return;
-    
     if (sortState.length > 0) {
       const primary = sortState[0];
       const th = document.querySelector(`th[data-col="${primary.col}"]`);
@@ -262,7 +263,6 @@
     }
   }
 
-  // ---------- 渲染表格 ----------
   let currentTour = 'atp';
 
   function renderTable() {
@@ -279,7 +279,7 @@
     let html = '';
     sorted.forEach((row, idx) => {
       const [
-        origRank, player, firstYear, lastYear, span,
+        origRank, playerDisplay, firstYear, ageFirst, lastYear, ageLast, span,
         titles, titlesStr, W, L, agg, hard, clay, grass
       ] = row;
       const titlesNum = parseInt(titles);
@@ -297,9 +297,11 @@
 
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
-        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${playerDisplay}</td>
         <td style="text-align:center;color:#e5e5e5;">${firstYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${fmtAge(ageFirst)}</td>
         <td style="text-align:center;color:#e5e5e5;">${lastYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${fmtAge(ageLast)}</td>
         <td style="text-align:center;color:#f5c842;font-weight:bold;">${span}</td>
         <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titles}</td>
         <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${titlesStr}</td>
@@ -315,7 +317,6 @@
     updateSortIndicators();
   }
 
-  // ---------- 排序事件绑定 ----------
   function handleSortClick(e) {
     const th = e.currentTarget;
     const col = th.getAttribute('data-col');
@@ -323,12 +324,10 @@
     
     userSorted = true;
     const existingIdx = sortState.findIndex(s => s.col === col);
-    
     let newOrder = 'desc';
     if (existingIdx !== -1) {
       newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
     }
-    
     if (existingIdx !== -1) {
       const [existing] = sortState.splice(existingIdx, 1);
       existing.order = newOrder;
@@ -336,11 +335,9 @@
     } else {
       sortState.unshift({ col, order: newOrder });
     }
-    
     renderTable();
   }
 
-  // 重置为默认排序（切换巡回赛时调用）
   function resetToDefault() {
     sortState = [
       { col: 'titles', order: 'desc' },
@@ -350,7 +347,6 @@
     userSorted = false;
   }
 
-  // 初始化事件监听
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', handleSortClick);
   });
@@ -364,7 +360,6 @@
     });
   }
 
-  // 初始渲染
   renderTable();
 </script>
 </body>

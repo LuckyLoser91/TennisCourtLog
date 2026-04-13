@@ -10,9 +10,46 @@
 用法：python non_gs_champions_leaderboard.py
 """
 
-import os
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pandas as pd
 from scripts.config import PROJECT_ROOT, DATA_PATHS
+
+
+# ══════════════════════════════════════════════════════════════
+# IOC -> ISO2 映射 & 国旗工具
+# ══════════════════════════════════════════════════════════════
+IOC_TO_ISO2 = {
+    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
+    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
+    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
+    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
+    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
+    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
+    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
+    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
+    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
+    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
+    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
+    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
+    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
+}
+
+
+def ioc_to_flag(ioc):
+    """将 IOC 代码转为国旗 <img> 标签（使用 flagcdn.com，跨平台兼容）"""
+    if pd.isna(ioc) or not ioc:
+        return '<span title="Unknown">🏳</span>'
+    iso2 = IOC_TO_ISO2.get(str(ioc).upper().strip(), "")
+    if not iso2:
+        return '<span title="Unknown">🏳</span>'
+    iso2_lower = iso2.lower()
+    return (
+        f'<img src="https://flagcdn.com/16x12/{iso2_lower}.png" '
+        f'width="16" height="12" alt="{iso2}" title="{ioc}" '
+        f'style="vertical-align:middle;margin-right:6px;border-radius:1px;">'
+    )
 
 
 # ══════════════════════════════════════════════════════════════
@@ -208,7 +245,21 @@ def calc_non_champion_stats(gs, player):
 def get_non_champions_leaderboard(tour='wta'):
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     gs_data_path = DATA_PATHS[tour]['gs_matches']
+    players_path = DATA_PATHS[tour]['players']
     gs = pd.read_csv(gs_data_path)
+
+    # 读取球员信息（ioc、出生年份）
+    players_df = pd.read_csv(players_path)
+    players_df['dob'] = pd.to_datetime(players_df['dob'], errors='coerce')
+    player_info = {}
+    for _, row in players_df.iterrows():
+        name = row['name']
+        dob = row['dob'] if not pd.isna(row['dob']) else None
+        ioc = row['ioc'] if not pd.isna(row['ioc']) else None
+        player_info[name] = {
+            'ioc': ioc,
+            'birth_year': dob.year if dob else None,
+        }
 
     # 找出所有大满贯冠军
     finals = gs[gs["round"].astype(str).str.strip() == 'F'].copy()
@@ -233,7 +284,13 @@ def get_non_champions_leaderboard(tour='wta'):
     for player in players_gt5_wins:
         stats = calc_non_champion_stats(gs, player)
         if stats:
-            rows.append({"player": player, "stats": stats})
+            info = player_info.get(player, {})
+            rows.append({
+                "player": player,
+                "stats": stats,
+                "ioc": info.get('ioc'),
+                "birth_year": info.get('birth_year'),
+            })
 
     # 按总胜率降序排序，取前100名
     rows.sort(key=lambda r: -r["stats"]["agg"])
@@ -257,9 +314,13 @@ def build_non_gs_leaderboard(rows_dict, data_years, output_path):
         arr = []
         for e in rows:
             s = e["stats"]
+            flag_html = ioc_to_flag(e.get('ioc', ''))
+            birth_year = e.get('birth_year', '')
+            birth_display = f" ({birth_year})" if birth_year else ""
+            player_display = f"{flag_html}{e['player']}{birth_display}"
             arr.append([
                 e['rank'],
-                e['player'],
+                player_display,
                 s['best_display'],
                 s['best_rank'],
                 s['ao_best'],
@@ -296,7 +357,7 @@ def build_non_gs_leaderboard(rows_dict, data_years, output_path):
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background: #111827;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', Arial, sans-serif;
       padding: 36px 44px 60px;
       min-width: 1200px;
     }}
@@ -380,6 +441,15 @@ def build_non_gs_leaderboard(rows_dict, data_years, output_path):
       margin-left: 4px;
       font-size: 9px;
       color: #f5c842;
+    }}
+    .round-badge {{
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 36px;
+      text-align: center;
     }}
   </style>
 </head>
@@ -603,6 +673,16 @@ def build_non_gs_leaderboard(rows_dict, data_years, output_path):
     let html = '';
     sorted.forEach((row, idx) => {{
       const [origRank, player, bestDisp, bestRank, ao, rg, wim, uso, W, L, agg, hard, clay, grass] = row;
+      const bestColors = {{
+        'F':   ['rgba(251,191,36,0.2)',  '#FCD34D'],
+        'SF':  ['rgba(167,139,250,0.2)', '#A78BFA'],
+        'QF':  ['rgba(52,211,153,0.2)',  '#34D399'],
+        'R16': ['rgba(99,179,237,0.2)',  '#63B3ED'],
+      }};
+      const [bestBg, bestColor] = bestColors[bestDisp] || ['transparent', '#9ca3af'];
+      const bestBadge = bestDisp === '—'
+        ? '<span style="color:#4b5563">—</span>'
+        : `<span class="round-badge" style="background:${{bestBg}};color:${{bestColor}};">${{bestDisp}}</span>`;
       const aggBgColor = aggBg(agg);
       const aggTextColor = aggColor(agg);
       const hardBgColor = surfBg(hard);
@@ -615,7 +695,7 @@ def build_non_gs_leaderboard(rows_dict, data_years, output_path):
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${{idx + 1}}</td>
         <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
-        <td style="text-align:center;color:#f5c842;font-weight:bold;">${{bestDisp}}</td>
+        <td style="text-align:center;">${{bestBadge}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{ao}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{rg}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{wim}}</td>
