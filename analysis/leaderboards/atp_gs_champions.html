@@ -10,7 +10,7 @@
       background: #111827;
       font-family: 'Segoe UI', Arial, sans-serif;
       padding: 36px 44px 60px;
-      min-width: 960px;
+      min-width: 1100px;
     }
     h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
     .sub {
@@ -96,13 +96,15 @@
 <table>
   <thead>
     <tr class="gr">
-      <th colspan="8"></th>
+      <th colspan="10"></th>
       <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
     </tr>
     <tr>
       <th>#</th>
       <th class="left sortable" data-col="player">PLAYER</th>
       <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="lastYear">LAST TITLE</th>
+      <th class="sortable" data-col="span">SPAN</th>
       <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
       <th class="sortable" data-col="W">W</th>
@@ -115,16 +117,18 @@
   </thead>
   <tbody id="table-body"></tbody>
   <tfoot>
-    <tr><td colspan="12" id="table-footer"></td></tr>
+    <tr><td colspan="13" id="table-footer"></td></tr>
   </tfoot>
 </table>
 
 <script>
   const dataMap = {
-    "atp": [[1, "Novak Djokovic", 2008, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "Rafael Nadal", 2005, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "Roger Federer", 2003, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "Pete Sampras", 1990, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "Bjorn Borg", 1974, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "Jimmy Connors", 1974, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "Ivan Lendl", 1984, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "Andre Agassi", 1992, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "John Mcenroe", 1979, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "Mats Wilander", 1982, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "Carlos Alcaraz", 2022, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "Stefan Edberg", 1985, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "Boris Becker", 1985, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "Rod Laver", 1968, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "John Newcombe", 1970, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "Ken Rosewall", 1968, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "Guillermo Vilas", 1977, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "Jim Courier", 1991, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "Jannik Sinner", 2024, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "Arthur Ashe", 1968, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "Jan Kodes", 1970, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "Gustavo Kuerten", 1997, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "Andy Murray", 2012, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "Stan Wawrinka", 2014, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "Stan Smith", 1971, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "Ilie Nastase", 1972, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "Johan Kriek", 1981, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "Sergi Bruguera", 1993, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "Yevgeny Kafelnikov", 1996, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "Patrick Rafter", 1997, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "Marat Safin", 2000, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "Lleyton Hewitt", 2001, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "Andres Gimeno", 1972, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "Manuel Orantes", 1975, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "Adriano Panatta", 1976, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "Mark Edmondson", 1976, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "Roscoe Tanner", 1977, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "Vitas Gerulaitis", 1977, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "Brian Teacher", 1980, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "Yannick Noah", 1983, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "Pat Cash", 1987, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "Michael Chang", 1989, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "Andres Gomez", 1990, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "Michael Stich", 1991, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "Thomas Muster", 1995, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "Richard Krajicek", 1996, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "Carlos Moya", 1998, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "Petr Korda", 1998, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "Goran Ivanisevic", 2001, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "Thomas Johansson", 2002, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "Albert Costa", 2002, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "Andy Roddick", 2003, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "Juan Carlos Ferrero", 2003, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "Gaston Gaudio", 2004, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "Juan Martin Del Potro", 2009, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "Marin Cilic", 2014, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "Dominic Thiem", 2020, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "Daniil Medvedev", 2021, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
+    "atp": [[1, "Novak Djokovic", 2008, 2023, 16, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "Rafael Nadal", 2005, 2022, 18, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "Roger Federer", 2003, 2018, 16, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "Pete Sampras", 1990, 2002, 13, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "Bjorn Borg", 1974, 1981, 8, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "Jimmy Connors", 1974, 1983, 10, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "Ivan Lendl", 1984, 1990, 7, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "Andre Agassi", 1992, 2003, 12, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "John Mcenroe", 1979, 1984, 6, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "Mats Wilander", 1982, 1988, 7, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "Carlos Alcaraz", 2022, 2026, 5, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "Stefan Edberg", 1985, 1992, 8, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "Boris Becker", 1985, 1996, 12, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "Rod Laver", 1968, 1969, 2, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "John Newcombe", 1970, 1975, 6, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "Ken Rosewall", 1968, 1972, 5, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "Guillermo Vilas", 1977, 1979, 3, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "Jim Courier", 1991, 1993, 3, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "Jannik Sinner", 2024, 2025, 2, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "Arthur Ashe", 1968, 1975, 8, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "Jan Kodes", 1970, 1973, 4, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "Gustavo Kuerten", 1997, 2001, 5, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "Andy Murray", 2012, 2016, 5, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "Stan Wawrinka", 2014, 2016, 3, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "Stan Smith", 1971, 1972, 2, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "Ilie Nastase", 1972, 1973, 2, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "Johan Kriek", 1981, 1982, 2, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "Sergi Bruguera", 1993, 1994, 2, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "Yevgeny Kafelnikov", 1996, 1999, 4, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "Patrick Rafter", 1997, 1998, 2, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "Marat Safin", 2000, 2005, 6, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "Lleyton Hewitt", 2001, 2002, 2, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "Andres Gimeno", 1972, 1972, 1, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "Manuel Orantes", 1975, 1975, 1, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "Adriano Panatta", 1976, 1976, 1, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "Mark Edmondson", 1976, 1976, 1, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "Roscoe Tanner", 1977, 1977, 1, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "Vitas Gerulaitis", 1977, 1977, 1, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "Brian Teacher", 1980, 1980, 1, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "Yannick Noah", 1983, 1983, 1, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "Pat Cash", 1987, 1987, 1, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "Michael Chang", 1989, 1989, 1, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "Andres Gomez", 1990, 1990, 1, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "Michael Stich", 1991, 1991, 1, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "Thomas Muster", 1995, 1995, 1, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "Richard Krajicek", 1996, 1996, 1, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "Carlos Moya", 1998, 1998, 1, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "Petr Korda", 1998, 1998, 1, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "Goran Ivanisevic", 2001, 2001, 1, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "Thomas Johansson", 2002, 2002, 1, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "Albert Costa", 2002, 2002, 1, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "Andy Roddick", 2003, 2003, 1, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "Juan Carlos Ferrero", 2003, 2003, 1, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "Gaston Gaudio", 2004, 2004, 1, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "Juan Martin Del Potro", 2009, 2009, 1, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "Marin Cilic", 2014, 2014, 1, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "Dominic Thiem", 2020, 2020, 1, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "Daniil Medvedev", 2021, 2021, 1, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
   };
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+        SPAN = last - first + 1 &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
         WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
         AGG = aggregate GS win rate &nbsp;·&nbsp;
@@ -182,25 +186,22 @@
   }
 
   // ---------- 排序状态 ----------
-  // 默认排序：titles desc → firstYear asc → W desc（不显示指示器）
-  let sortState = [
-    // { col: 'titles', order: 'desc' },
-    // { col: 'firstYear', order: 'asc' },
-    // { col: 'W', order: 'desc' }
-  ];
-  let userSorted = false;  // 是否经过用户手动排序（决定是否显示指示器）
+  let sortState = [];
+  let userSorted = false;
 
   // 列到数据索引的映射 (基于 rows_to_js 的顺序)
   const colIndex = {
     'player': 1,      // 字符串
     'firstYear': 2,   // 数字
-    'titles': 3,      // 数字
-    'W': 5,           // 数字
-    'L': 6,           // 数字
-    'agg': 7,         // 数字或null
-    'hard': 8,
-    'clay': 9,
-    'grass': 10
+    'lastYear': 3,    // 数字
+    'span': 4,        // 数字
+    'titles': 5,      // 数字
+    'W': 7,           // 数字
+    'L': 8,           // 数字
+    'agg': 9,         // 数字或null
+    'hard': 10,
+    'clay': 11,
+    'grass': 12
   };
 
   // 比较函数（处理 null/undefined 放最后）
@@ -241,7 +242,6 @@
 
   // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
   function updateSortIndicators() {
-    // 清除所有指示器
     document.querySelectorAll('.sortable').forEach(th => {
       const ind = th.querySelector('.sort-indicator');
       if (ind) ind.remove();
@@ -249,7 +249,6 @@
     
     if (!userSorted) return;
     
-    // 为 sortState 中的主排序键添加指示器（只显示第一个，保持简洁）
     if (sortState.length > 0) {
       const primary = sortState[0];
       const th = document.querySelector(`th[data-col="${primary.col}"]`);
@@ -279,7 +278,10 @@
 
     let html = '';
     sorted.forEach((row, idx) => {
-      const [origRank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+      const [
+        origRank, player, firstYear, lastYear, span,
+        titles, titlesStr, W, L, agg, hard, clay, grass
+      ] = row;
       const titlesNum = parseInt(titles);
       const titleBg = titlesBg(titlesNum);
       const titleColor = titlesFc(titlesNum);
@@ -296,7 +298,9 @@
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
         <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
-        <td style="text-align:center;color:#f5c842;font-weight:bold;">${firstYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${firstYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${lastYear}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${span}</td>
         <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titles}</td>
         <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${titlesStr}</td>
         <td style="text-align:center;color:#e5e5e5;">${W}</td>
@@ -320,26 +324,23 @@
     userSorted = true;
     const existingIdx = sortState.findIndex(s => s.col === col);
     
-    // 确定新列的顺序：默认降序；若已存在则翻转顺序
     let newOrder = 'desc';
     if (existingIdx !== -1) {
       newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
     }
     
     if (existingIdx !== -1) {
-      // 如果该列已在排序条件中，将其移到首位并更新顺序
       const [existing] = sortState.splice(existingIdx, 1);
       existing.order = newOrder;
       sortState.unshift(existing);
     } else {
-      // 新列：插入到开头，原有排序全部后移成为次级条件
       sortState.unshift({ col, order: newOrder });
     }
     
     renderTable();
   }
 
-  // 重置为默认排序（切换巡回赛时调用，不视为用户排序）
+  // 重置为默认排序（切换巡回赛时调用）
   function resetToDefault() {
     sortState = [
       { col: 'titles', order: 'desc' },

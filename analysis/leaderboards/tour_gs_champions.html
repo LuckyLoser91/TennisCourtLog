@@ -10,7 +10,7 @@
       background: #111827;
       font-family: 'Segoe UI', Arial, sans-serif;
       padding: 36px 44px 60px;
-      min-width: 960px;
+      min-width: 1100px;
     }
     h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
     .sub {
@@ -97,13 +97,15 @@
 <table>
   <thead>
     <tr class="gr">
-      <th colspan="8"></th>
+      <th colspan="10"></th>
       <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
     </tr>
     <tr>
       <th>#</th>
       <th class="left sortable" data-col="player">PLAYER</th>
       <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="lastYear">LAST TITLE</th>
+      <th class="sortable" data-col="span">SPAN</th>
       <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
       <th class="sortable" data-col="W">W</th>
@@ -116,16 +118,18 @@
   </thead>
   <tbody id="table-body"></tbody>
   <tfoot>
-    <tr><td colspan="12" id="table-footer"></td></tr>
+    <tr><td colspan="13" id="table-footer"></td></tr>
   </tfoot>
 </table>
 
 <script>
   const dataMap = {
-    "wta": [[1, "Serena Williams", 1999, 23, "AO\u00d77  RG\u00d73  WIM\u00d77  USO\u00d76", 367, 56, 86.8, 88, 83, 88], [2, "Steffi Graf", 1987, 22, "AO\u00d74  RG\u00d76  WIM\u00d77  USO\u00d75", 278, 32, 89.7, 90, 89, 89], [3, "Chris Evert", 1974, 18, "AO\u00d72  RG\u00d77  WIM\u00d73  USO\u00d76", 299, 37, 89.0, 89, 94, 86], [4, "Martina Navratilova", 1978, 18, "AO\u00d73  RG\u00d72  WIM\u00d79  USO\u00d74", 306, 49, 86.2, 86, 81, 88], [5, "Margaret Court", 1969, 11, "AO\u00d74  RG\u00d73  WIM\u00d71  USO\u00d73", 97, 10, 90.7, null, 92, 90], [6, "Monica Seles", 1990, 9, "AO\u00d74  RG\u00d73  USO\u00d72", 180, 31, 85.3, 87, 87, 77], [7, "Billie Jean King", 1968, 8, "RG\u00d71  WIM\u00d74  USO\u00d73", 127, 24, 84.1, 71, 78, 86], [8, "Evonne Goolagong", 1971, 7, "AO\u00d74  RG\u00d71  WIM\u00d72", 128, 26, 83.1, 80, 84, 83], [9, "Venus Williams", 2000, 7, "WIM\u00d75  USO\u00d72", 271, 87, 75.7, 75, 67, 83], [10, "Justine Henin", 2003, 7, "AO\u00d71  RG\u00d74  USO\u00d72", 141, 28, 83.4, 83, 88, 79], [11, "Iga Swiatek", 2020, 6, "RG\u00d74  WIM\u00d71  USO\u00d71", 108, 22, 83.1, 78, 93, 78], [12, "Martina Hingis", 1997, 5, "AO\u00d73  WIM\u00d71  USO\u00d71", 153, 32, 82.7, 86, 81, 74], [13, "Maria Sharapova", 2004, 5, "AO\u00d71  RG\u00d72  WIM\u00d71  USO\u00d71", 197, 53, 78.8, 78, 82, 77], [14, "Hana Mandlikova", 1980, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 142, 40, 78.0, 79, 78, 77], [15, "Arantxa Sanchez Vicario", 1989, 4, "RG\u00d73  USO\u00d71", 210, 54, 79.5, 79, 85, 73], [16, "Kim Clijsters", 2005, 4, "AO\u00d71  USO\u00d73", 132, 32, 80.5, 84, 77, 76], [17, "Naomi Osaka", 2018, 4, "AO\u00d72  USO\u00d72", 71, 26, 73.2, 80, 53, 58], [18, "Aryna Sabalenka", 2023, 4, "AO\u00d72  USO\u00d72", 106, 27, 79.7, 84, 73, 73], [19, "Virginia Wade", 1968, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 122, 49, 71.3, 59, 61, 77], [20, "Lindsay Davenport", 1998, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 198, 51, 79.5, 80, 74, 82], [21, "Jennifer Capriati", 2001, 3, "AO\u00d72  RG\u00d71", 140, 40, 77.8, 77, 80, 78], [22, "Angelique Kerber", 2016, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 120, 58, 67.4, 69, 54, 73], [23, "Ashleigh Barty", 2019, 3, "AO\u00d71  RG\u00d71  WIM\u00d71", 57, 24, 70.4, 71, 62, 75], [24, "Tracy Austin", 1979, 2, "USO\u00d72", 61, 15, 80.3, 88, 73, 76], [25, "Mary Pierce", 1995, 2, "AO\u00d71  RG\u00d71", 142, 50, 74.0, 75, 76, 68], [26, "Svetlana Kuznetsova", 2004, 2, "RG\u00d71  USO\u00d71", 154, 69, 69.1, 68, 74, 64], [27, "Amelie Mauresmo", 2006, 2, "AO\u00d71  WIM\u00d71", 131, 43, 75.3, 79, 62, 79], [28, "Petra Kvitova", 2011, 2, "WIM\u00d72", 128, 59, 68.4, 66, 68, 73], [29, "Na Li", 2011, 2, "AO\u00d71  RG\u00d71", 90, 31, 74.4, 76, 74, 70], [30, "Victoria Azarenka", 2012, 2, "AO\u00d72", 166, 66, 71.6, 75, 62, 71], [31, "Garbine Muguruza", 2016, 2, "RG\u00d71  WIM\u00d71", 86, 38, 69.4, 65, 76, 69], [32, "Simona Halep", 2018, 2, "RG\u00d71  WIM\u00d71", 112, 44, 71.8, 68, 74, 76], [33, "Barbora Krejcikova", 2021, 2, "RG\u00d71  WIM\u00d71", 49, 21, 70.0, 68, 65, 79], [34, "Elena Rybakina", 2022, 2, "AO\u00d71  WIM\u00d71", 66, 22, 75.0, 71, 73, 84], [35, "Coco Gauff", 2023, 2, "RG\u00d71  USO\u00d71", 78, 24, 76.5, 75, 84, 65], [36, "Nancy Richey", 1968, 1, "RG\u00d71", 58, 20, 74.4, 0, 75, 76], [37, "Ann Jones", 1969, 1, "WIM\u00d71", 29, 5, 85.3, null, 83, 86], [38, "Sue Barker", 1976, 1, "RG\u00d71", 47, 30, 61.0, 25, 67, 62], [39, "Kerry Reid", 1977, 1, "AO\u00d71", 97, 33, 74.6, 78, 68, 76], [40, "Mima Jausovec", 1977, 1, "RG\u00d71", 79, 41, 65.8, 57, 72, 61], [41, "Virginia Ruzici", 1978, 1, "RG\u00d71", 73, 39, 65.2, 67, 72, 54], [42, "Chris Oneil", 1978, 1, "AO\u00d71", 8, 22, 26.7, 0, 0, 36], [43, "Barbara Jordan", 1979, 1, "AO\u00d71", 14, 20, 41.2, 30, 22, 60], [44, "Gabriela Sabatini", 1990, 1, "USO\u00d71", 164, 42, 79.6, 80, 79, 79], [45, "Conchita Martinez", 1994, 1, "WIM\u00d71", 174, 63, 73.4, 70, 78, 75], [46, "Iva Majoli", 1997, 1, "RG\u00d71", 55, 33, 62.5, 54, 76, 50], [47, "Jana Novotna", 1998, 1, "WIM\u00d71", 149, 49, 75.3, 73, 73, 79], [48, "Anastasia Myskina", 2004, 1, "RG\u00d71", 53, 27, 66.2, 65, 61, 72], [49, "Ana Ivanovic", 2008, 1, "RG\u00d71", 107, 47, 69.5, 66, 77, 67], [50, "Francesca Schiavone", 2010, 1, "RG\u00d71", 105, 69, 60.3, 57, 70, 51], [51, "Samantha Stosur", 2011, 1, "USO\u00d71", 94, 68, 58.0, 55, 71, 41], [52, "Marion Bartoli", 2013, 1, "WIM\u00d71", 79, 46, 63.2, 60, 55, 74], [53, "Flavia Pennetta", 2015, 1, "USO\u00d71", 79, 48, 62.2, 67, 58, 57], [54, "Sloane Stephens", 2017, 1, "USO\u00d71", 89, 51, 63.6, 59, 73, 57], [55, "Jelena Ostapenko", 2017, 1, "RG\u00d71", 60, 39, 60.6, 57, 61, 67], [56, "Caroline Wozniacki", 2018, 1, "AO\u00d71", 129, 54, 70.5, 74, 64, 66], [57, "Bianca Andreescu", 2019, 1, "USO\u00d71", 26, 15, 63.4, 71, 60, 50], [58, "Sofia Kenin", 2020, 1, "AO\u00d71", 41, 30, 57.7, 53, 71, 50], [59, "Emma Raducanu", 2021, 1, "USO\u00d71", 26, 14, 65.0, 65, 50, 69], [60, "Marketa Vondrousova", 2023, 1, "WIM\u00d71", 48, 26, 64.9, 65, 68, 60], [61, "Madison Keys", 2025, 1, "AO\u00d71", 125, 49, 71.8, 74, 68, 71]], "atp": [[1, "Novak Djokovic", 2008, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "Rafael Nadal", 2005, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "Roger Federer", 2003, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "Pete Sampras", 1990, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "Bjorn Borg", 1974, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "Jimmy Connors", 1974, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "Ivan Lendl", 1984, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "Andre Agassi", 1992, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "John Mcenroe", 1979, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "Mats Wilander", 1982, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "Carlos Alcaraz", 2022, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "Stefan Edberg", 1985, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "Boris Becker", 1985, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "Rod Laver", 1968, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "John Newcombe", 1970, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "Ken Rosewall", 1968, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "Guillermo Vilas", 1977, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "Jim Courier", 1991, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "Jannik Sinner", 2024, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "Arthur Ashe", 1968, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "Jan Kodes", 1970, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "Gustavo Kuerten", 1997, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "Andy Murray", 2012, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "Stan Wawrinka", 2014, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "Stan Smith", 1971, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "Ilie Nastase", 1972, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "Johan Kriek", 1981, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "Sergi Bruguera", 1993, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "Yevgeny Kafelnikov", 1996, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "Patrick Rafter", 1997, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "Marat Safin", 2000, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "Lleyton Hewitt", 2001, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "Andres Gimeno", 1972, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "Manuel Orantes", 1975, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "Adriano Panatta", 1976, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "Mark Edmondson", 1976, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "Roscoe Tanner", 1977, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "Vitas Gerulaitis", 1977, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "Brian Teacher", 1980, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "Yannick Noah", 1983, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "Pat Cash", 1987, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "Michael Chang", 1989, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "Andres Gomez", 1990, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "Michael Stich", 1991, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "Thomas Muster", 1995, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "Richard Krajicek", 1996, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "Carlos Moya", 1998, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "Petr Korda", 1998, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "Goran Ivanisevic", 2001, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "Thomas Johansson", 2002, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "Albert Costa", 2002, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "Andy Roddick", 2003, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "Juan Carlos Ferrero", 2003, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "Gaston Gaudio", 2004, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "Juan Martin Del Potro", 2009, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "Marin Cilic", 2014, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "Dominic Thiem", 2020, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "Daniil Medvedev", 2021, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
+    "wta": [[1, "Serena Williams", 1999, 2017, 19, 23, "AO\u00d77  RG\u00d73  WIM\u00d77  USO\u00d76", 367, 56, 86.8, 88, 83, 88], [2, "Steffi Graf", 1987, 1999, 13, 22, "AO\u00d74  RG\u00d76  WIM\u00d77  USO\u00d75", 278, 32, 89.7, 90, 89, 89], [3, "Chris Evert", 1974, 1986, 13, 18, "AO\u00d72  RG\u00d77  WIM\u00d73  USO\u00d76", 299, 37, 89.0, 89, 94, 86], [4, "Martina Navratilova", 1978, 1990, 13, 18, "AO\u00d73  RG\u00d72  WIM\u00d79  USO\u00d74", 306, 49, 86.2, 86, 81, 88], [5, "Margaret Court", 1969, 1973, 5, 11, "AO\u00d74  RG\u00d73  WIM\u00d71  USO\u00d73", 97, 10, 90.7, null, 92, 90], [6, "Monica Seles", 1990, 1996, 7, 9, "AO\u00d74  RG\u00d73  USO\u00d72", 180, 31, 85.3, 87, 87, 77], [7, "Billie Jean King", 1968, 1975, 8, 8, "RG\u00d71  WIM\u00d74  USO\u00d73", 127, 24, 84.1, 71, 78, 86], [8, "Evonne Goolagong", 1971, 1980, 10, 7, "AO\u00d74  RG\u00d71  WIM\u00d72", 128, 26, 83.1, 80, 84, 83], [9, "Venus Williams", 2000, 2008, 9, 7, "WIM\u00d75  USO\u00d72", 271, 87, 75.7, 75, 67, 83], [10, "Justine Henin", 2003, 2007, 5, 7, "AO\u00d71  RG\u00d74  USO\u00d72", 141, 28, 83.4, 83, 88, 79], [11, "Iga Swiatek", 2020, 2025, 6, 6, "RG\u00d74  WIM\u00d71  USO\u00d71", 108, 22, 83.1, 78, 93, 78], [12, "Martina Hingis", 1997, 1999, 3, 5, "AO\u00d73  WIM\u00d71  USO\u00d71", 153, 32, 82.7, 86, 81, 74], [13, "Maria Sharapova", 2004, 2014, 11, 5, "AO\u00d71  RG\u00d72  WIM\u00d71  USO\u00d71", 197, 53, 78.8, 78, 82, 77], [14, "Hana Mandlikova", 1980, 1987, 8, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 142, 40, 78.0, 79, 78, 77], [15, "Arantxa Sanchez Vicario", 1989, 1998, 10, 4, "RG\u00d73  USO\u00d71", 210, 54, 79.5, 79, 85, 73], [16, "Kim Clijsters", 2005, 2011, 7, 4, "AO\u00d71  USO\u00d73", 132, 32, 80.5, 84, 77, 76], [17, "Naomi Osaka", 2018, 2021, 4, 4, "AO\u00d72  USO\u00d72", 71, 26, 73.2, 80, 53, 58], [18, "Aryna Sabalenka", 2023, 2025, 3, 4, "AO\u00d72  USO\u00d72", 106, 27, 79.7, 84, 73, 73], [19, "Virginia Wade", 1968, 1977, 10, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 122, 49, 71.3, 59, 61, 77], [20, "Lindsay Davenport", 1998, 2000, 3, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 198, 51, 79.5, 80, 74, 82], [21, "Jennifer Capriati", 2001, 2002, 2, 3, "AO\u00d72  RG\u00d71", 140, 40, 77.8, 77, 80, 78], [22, "Angelique Kerber", 2016, 2018, 3, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 120, 58, 67.4, 69, 54, 73], [23, "Ashleigh Barty", 2019, 2022, 4, 3, "AO\u00d71  RG\u00d71  WIM\u00d71", 57, 24, 70.4, 71, 62, 75], [24, "Tracy Austin", 1979, 1981, 3, 2, "USO\u00d72", 61, 15, 80.3, 88, 73, 76], [25, "Mary Pierce", 1995, 2000, 6, 2, "AO\u00d71  RG\u00d71", 142, 50, 74.0, 75, 76, 68], [26, "Svetlana Kuznetsova", 2004, 2009, 6, 2, "RG\u00d71  USO\u00d71", 154, 69, 69.1, 68, 74, 64], [27, "Amelie Mauresmo", 2006, 2006, 1, 2, "AO\u00d71  WIM\u00d71", 131, 43, 75.3, 79, 62, 79], [28, "Petra Kvitova", 2011, 2014, 4, 2, "WIM\u00d72", 128, 59, 68.4, 66, 68, 73], [29, "Na Li", 2011, 2014, 4, 2, "AO\u00d71  RG\u00d71", 90, 31, 74.4, 76, 74, 70], [30, "Victoria Azarenka", 2012, 2013, 2, 2, "AO\u00d72", 166, 66, 71.6, 75, 62, 71], [31, "Garbine Muguruza", 2016, 2017, 2, 2, "RG\u00d71  WIM\u00d71", 86, 38, 69.4, 65, 76, 69], [32, "Simona Halep", 2018, 2019, 2, 2, "RG\u00d71  WIM\u00d71", 112, 44, 71.8, 68, 74, 76], [33, "Barbora Krejcikova", 2021, 2024, 4, 2, "RG\u00d71  WIM\u00d71", 49, 21, 70.0, 68, 65, 79], [34, "Elena Rybakina", 2022, 2026, 5, 2, "AO\u00d71  WIM\u00d71", 66, 22, 75.0, 71, 73, 84], [35, "Coco Gauff", 2023, 2025, 3, 2, "RG\u00d71  USO\u00d71", 78, 24, 76.5, 75, 84, 65], [36, "Nancy Richey", 1968, 1968, 1, 1, "RG\u00d71", 58, 20, 74.4, 0, 75, 76], [37, "Ann Jones", 1969, 1969, 1, 1, "WIM\u00d71", 29, 5, 85.3, null, 83, 86], [38, "Sue Barker", 1976, 1976, 1, 1, "RG\u00d71", 47, 30, 61.0, 25, 67, 62], [39, "Kerry Reid", 1977, 1977, 1, 1, "AO\u00d71", 97, 33, 74.6, 78, 68, 76], [40, "Mima Jausovec", 1977, 1977, 1, 1, "RG\u00d71", 79, 41, 65.8, 57, 72, 61], [41, "Virginia Ruzici", 1978, 1978, 1, 1, "RG\u00d71", 73, 39, 65.2, 67, 72, 54], [42, "Chris Oneil", 1978, 1978, 1, 1, "AO\u00d71", 8, 22, 26.7, 0, 0, 36], [43, "Barbara Jordan", 1979, 1979, 1, 1, "AO\u00d71", 14, 20, 41.2, 30, 22, 60], [44, "Gabriela Sabatini", 1990, 1990, 1, 1, "USO\u00d71", 164, 42, 79.6, 80, 79, 79], [45, "Conchita Martinez", 1994, 1994, 1, 1, "WIM\u00d71", 174, 63, 73.4, 70, 78, 75], [46, "Iva Majoli", 1997, 1997, 1, 1, "RG\u00d71", 55, 33, 62.5, 54, 76, 50], [47, "Jana Novotna", 1998, 1998, 1, 1, "WIM\u00d71", 149, 49, 75.3, 73, 73, 79], [48, "Anastasia Myskina", 2004, 2004, 1, 1, "RG\u00d71", 53, 27, 66.2, 65, 61, 72], [49, "Ana Ivanovic", 2008, 2008, 1, 1, "RG\u00d71", 107, 47, 69.5, 66, 77, 67], [50, "Francesca Schiavone", 2010, 2010, 1, 1, "RG\u00d71", 105, 69, 60.3, 57, 70, 51], [51, "Samantha Stosur", 2011, 2011, 1, 1, "USO\u00d71", 94, 68, 58.0, 55, 71, 41], [52, "Marion Bartoli", 2013, 2013, 1, 1, "WIM\u00d71", 79, 46, 63.2, 60, 55, 74], [53, "Flavia Pennetta", 2015, 2015, 1, 1, "USO\u00d71", 79, 48, 62.2, 67, 58, 57], [54, "Sloane Stephens", 2017, 2017, 1, 1, "USO\u00d71", 89, 51, 63.6, 59, 73, 57], [55, "Jelena Ostapenko", 2017, 2017, 1, 1, "RG\u00d71", 60, 39, 60.6, 57, 61, 67], [56, "Caroline Wozniacki", 2018, 2018, 1, 1, "AO\u00d71", 129, 54, 70.5, 74, 64, 66], [57, "Bianca Andreescu", 2019, 2019, 1, 1, "USO\u00d71", 26, 15, 63.4, 71, 60, 50], [58, "Sofia Kenin", 2020, 2020, 1, 1, "AO\u00d71", 41, 30, 57.7, 53, 71, 50], [59, "Emma Raducanu", 2021, 2021, 1, 1, "USO\u00d71", 26, 14, 65.0, 65, 50, 69], [60, "Marketa Vondrousova", 2023, 2023, 1, 1, "WIM\u00d71", 48, 26, 64.9, 65, 68, 60], [61, "Madison Keys", 2025, 2025, 1, 1, "AO\u00d71", 125, 49, 71.8, 74, 68, 71]], "atp": [[1, "Novak Djokovic", 2008, 2023, 16, 24, "AO\u00d710  RG\u00d73  WIM\u00d77  USO\u00d74", 402, 56, 87.8, 88, 86, 89], [2, "Rafael Nadal", 2005, 2022, 18, 22, "AO\u00d72  RG\u00d714  WIM\u00d72  USO\u00d74", 314, 44, 87.7, 84, 97, 83], [3, "Roger Federer", 2003, 2018, 16, 20, "AO\u00d76  RG\u00d71  WIM\u00d78  USO\u00d75", 369, 60, 86.0, 87, 81, 88], [4, "Pete Sampras", 1990, 2002, 13, 14, "AO\u00d72  WIM\u00d77  USO\u00d75", 203, 38, 84.2, 87, 65, 90], [5, "Bjorn Borg", 1974, 1981, 8, 11, "RG\u00d76  WIM\u00d75", 141, 16, 89.8, 85, 93, 89], [6, "Jimmy Connors", 1974, 1983, 10, 8, "AO\u00d71  WIM\u00d72  USO\u00d75", 233, 49, 82.6, 86, 80, 82], [7, "Ivan Lendl", 1984, 1990, 7, 8, "AO\u00d72  RG\u00d73  USO\u00d73", 222, 49, 81.9, 85, 82, 77], [8, "Andre Agassi", 1992, 2003, 12, 8, "AO\u00d74  RG\u00d71  WIM\u00d71  USO\u00d72", 224, 53, 80.9, 84, 76, 78], [9, "John Mcenroe", 1979, 1984, 6, 7, "WIM\u00d73  USO\u00d74", 167, 38, 81.5, 84, 72, 84], [10, "Mats Wilander", 1982, 1988, 7, 7, "AO\u00d73  RG\u00d73  USO\u00d71", 144, 37, 79.6, 77, 84, 78], [11, "Carlos Alcaraz", 2022, 2026, 5, 7, "AO\u00d71  RG\u00d72  WIM\u00d72  USO\u00d72", 91, 13, 87.5, 86, 89, 89], [12, "Stefan Edberg", 1985, 1992, 8, 6, "AO\u00d72  WIM\u00d72  USO\u00d72", 178, 47, 79.1, 81, 70, 82], [13, "Boris Becker", 1985, 1996, 12, 6, "AO\u00d72  WIM\u00d73  USO\u00d71", 163, 40, 80.3, 79, 74, 84], [14, "Rod Laver", 1968, 1969, 2, 5, "AO\u00d71  RG\u00d71  WIM\u00d72  USO\u00d71", 60, 10, 85.7, null, 89, 85], [15, "John Newcombe", 1970, 1975, 6, 5, "AO\u00d72  WIM\u00d72  USO\u00d71", 93, 21, 81.6, null, 57, 83], [16, "Ken Rosewall", 1968, 1972, 5, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 92, 19, 82.9, null, 88, 82], [17, "Guillermo Vilas", 1977, 1979, 3, 4, "AO\u00d72  RG\u00d71  USO\u00d71", 138, 45, 75.4, 71, 80, 71], [18, "Jim Courier", 1991, 1993, 3, 4, "AO\u00d72  RG\u00d72", 118, 38, 75.6, 77, 82, 63], [19, "Jannik Sinner", 2024, 2025, 2, 4, "AO\u00d72  WIM\u00d71  USO\u00d71", 92, 21, 81.4, 82, 79, 83], [20, "Arthur Ashe", 1968, 1975, 8, 3, "AO\u00d71  WIM\u00d71  USO\u00d71", 106, 28, 79.1, 75, 74, 81], [21, "Jan Kodes", 1970, 1973, 4, 3, "RG\u00d72  WIM\u00d71", 85, 32, 72.6, 50, 77, 68], [22, "Gustavo Kuerten", 1997, 2001, 5, 3, "RG\u00d73", 65, 30, 68.4, 56, 82, 58], [23, "Andy Murray", 2012, 2016, 5, 3, "WIM\u00d72  USO\u00d71", 200, 57, 77.8, 76, 76, 82], [24, "Stan Wawrinka", 2014, 2016, 3, 3, "AO\u00d71  RG\u00d71  USO\u00d71", 160, 72, 69.0, 72, 71, 56], [25, "Stan Smith", 1971, 1972, 2, 2, "WIM\u00d71  USO\u00d71", 102, 41, 71.3, 50, 69, 75], [26, "Ilie Nastase", 1972, 1973, 2, 2, "RG\u00d71  USO\u00d71", 98, 41, 70.5, 42, 73, 74], [27, "Johan Kriek", 1981, 1982, 2, 2, "AO\u00d72", 81, 34, 70.4, 69, 57, 73], [28, "Sergi Bruguera", 1993, 1994, 2, 2, "RG\u00d72", 55, 31, 64.0, 53, 76, 50], [29, "Yevgeny Kafelnikov", 1996, 1999, 4, 2, "AO\u00d71  RG\u00d71", 99, 36, 73.3, 76, 76, 62], [30, "Patrick Rafter", 1997, 1998, 2, 2, "USO\u00d72", 76, 33, 69.7, 69, 60, 76], [31, "Marat Safin", 2000, 2005, 6, 2, "AO\u00d71  USO\u00d71", 95, 38, 71.4, 76, 70, 62], [32, "Lleyton Hewitt", 2001, 2002, 2, 2, "WIM\u00d71  USO\u00d71", 148, 64, 69.8, 70, 67, 72], [33, "Andres Gimeno", 1972, 1972, 1, 1, "RG\u00d71", 35, 14, 71.4, null, 82, 66], [34, "Manuel Orantes", 1975, 1975, 1, 1, "USO\u00d71", 66, 26, 71.7, 0, 78, 62], [35, "Adriano Panatta", 1976, 1976, 1, 1, "RG\u00d71", 62, 30, 67.4, 62, 72, 61], [36, "Mark Edmondson", 1976, 1976, 1, 1, "AO\u00d71", 44, 38, 53.7, 38, 23, 62], [37, "Roscoe Tanner", 1977, 1977, 1, 1, "AO\u00d71", 90, 33, 73.2, 73, 68, 74], [38, "Vitas Gerulaitis", 1977, 1977, 1, 1, "AO\u00d71", 85, 37, 69.7, 75, 70, 67], [39, "Brian Teacher", 1980, 1980, 1, 1, "AO\u00d71", 45, 33, 57.7, 53, 45, 62], [40, "Yannick Noah", 1983, 1983, 1, 1, "RG\u00d71", 85, 35, 70.8, 72, 77, 50], [41, "Pat Cash", 1987, 1987, 1, 1, "WIM\u00d71", 68, 33, 67.3, 62, 44, 74], [42, "Michael Chang", 1989, 1989, 1, 1, "RG\u00d71", 120, 56, 68.2, 70, 72, 56], [43, "Andres Gomez", 1990, 1990, 1, 1, "RG\u00d71", 61, 31, 66.3, 63, 74, 53], [44, "Michael Stich", 1991, 1991, 1, 1, "WIM\u00d71", 78, 31, 71.6, 67, 73, 76], [45, "Thomas Muster", 1995, 1995, 1, 1, "RG\u00d71", 77, 38, 67.0, 68, 71, 0], [46, "Richard Krajicek", 1996, 1996, 1, 1, "WIM\u00d71", 89, 38, 70.1, 68, 69, 74], [47, "Carlos Moya", 1998, 1998, 1, 1, "RG\u00d71", 78, 46, 62.9, 60, 73, 47], [48, "Petr Korda", 1998, 1998, 1, 1, "AO\u00d71", 60, 38, 61.2, 61, 58, 65], [49, "Goran Ivanisevic", 2001, 2001, 1, 1, "WIM\u00d71", 110, 50, 68.8, 62, 64, 78], [50, "Thomas Johansson", 2002, 2002, 1, 1, "AO\u00d71", 59, 45, 56.7, 62, 27, 61], [51, "Albert Costa", 2002, 2002, 1, 1, "RG\u00d71", 51, 36, 58.6, 49, 73, 29], [52, "Andy Roddick", 2003, 2003, 1, 1, "USO\u00d71", 131, 45, 74.4, 78, 47, 77], [53, "Juan Carlos Ferrero", 2003, 2003, 1, 1, "RG\u00d71", 99, 45, 68.8, 65, 76, 67], [54, "Gaston Gaudio", 2004, 2004, 1, 1, "RG\u00d71", 36, 31, 53.7, 45, 70, 25], [55, "Juan Martin Del Potro", 2009, 2009, 1, 1, "USO\u00d71", 97, 36, 72.9, 75, 71, 70], [56, "Marin Cilic", 2014, 2014, 1, 1, "USO\u00d71", 143, 61, 70.1, 72, 65, 71], [57, "Dominic Thiem", 2020, 2020, 1, 1, "USO\u00d71", 75, 36, 67.6, 69, 74, 42], [58, "Daniil Medvedev", 2021, 2021, 1, 1, "USO\u00d71", 92, 34, 73.0, 78, 53, 72]]
   };
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+        SPAN = last - first + 1 &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
         WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
         AGG = aggregate GS win rate &nbsp;·&nbsp;
@@ -183,25 +187,22 @@
   }
 
   // ---------- 排序状态 ----------
-  // 默认排序：titles desc → firstYear asc → W desc（不显示指示器）
-  let sortState = [
-    // { col: 'titles', order: 'desc' },
-    // { col: 'firstYear', order: 'asc' },
-    // { col: 'W', order: 'desc' }
-  ];
-  let userSorted = false;  // 是否经过用户手动排序（决定是否显示指示器）
+  let sortState = [];
+  let userSorted = false;
 
   // 列到数据索引的映射 (基于 rows_to_js 的顺序)
   const colIndex = {
     'player': 1,      // 字符串
     'firstYear': 2,   // 数字
-    'titles': 3,      // 数字
-    'W': 5,           // 数字
-    'L': 6,           // 数字
-    'agg': 7,         // 数字或null
-    'hard': 8,
-    'clay': 9,
-    'grass': 10
+    'lastYear': 3,    // 数字
+    'span': 4,        // 数字
+    'titles': 5,      // 数字
+    'W': 7,           // 数字
+    'L': 8,           // 数字
+    'agg': 9,         // 数字或null
+    'hard': 10,
+    'clay': 11,
+    'grass': 12
   };
 
   // 比较函数（处理 null/undefined 放最后）
@@ -242,7 +243,6 @@
 
   // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
   function updateSortIndicators() {
-    // 清除所有指示器
     document.querySelectorAll('.sortable').forEach(th => {
       const ind = th.querySelector('.sort-indicator');
       if (ind) ind.remove();
@@ -250,7 +250,6 @@
     
     if (!userSorted) return;
     
-    // 为 sortState 中的主排序键添加指示器（只显示第一个，保持简洁）
     if (sortState.length > 0) {
       const primary = sortState[0];
       const th = document.querySelector(`th[data-col="${primary.col}"]`);
@@ -280,7 +279,10 @@
 
     let html = '';
     sorted.forEach((row, idx) => {
-      const [origRank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+      const [
+        origRank, player, firstYear, lastYear, span,
+        titles, titlesStr, W, L, agg, hard, clay, grass
+      ] = row;
       const titlesNum = parseInt(titles);
       const titleBg = titlesBg(titlesNum);
       const titleColor = titlesFc(titlesNum);
@@ -297,7 +299,9 @@
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
         <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${player}</td>
-        <td style="text-align:center;color:#f5c842;font-weight:bold;">${firstYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${firstYear}</td>
+        <td style="text-align:center;color:#e5e5e5;">${lastYear}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${span}</td>
         <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titles}</td>
         <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${titlesStr}</td>
         <td style="text-align:center;color:#e5e5e5;">${W}</td>
@@ -321,26 +325,23 @@
     userSorted = true;
     const existingIdx = sortState.findIndex(s => s.col === col);
     
-    // 确定新列的顺序：默认降序；若已存在则翻转顺序
     let newOrder = 'desc';
     if (existingIdx !== -1) {
       newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
     }
     
     if (existingIdx !== -1) {
-      // 如果该列已在排序条件中，将其移到首位并更新顺序
       const [existing] = sortState.splice(existingIdx, 1);
       existing.order = newOrder;
       sortState.unshift(existing);
     } else {
-      // 新列：插入到开头，原有排序全部后移成为次级条件
       sortState.unshift({ col, order: newOrder });
     }
     
     renderTable();
   }
 
-  // 重置为默认排序（切换巡回赛时调用，不视为用户排序）
+  // 重置为默认排序（切换巡回赛时调用）
   function resetToDefault() {
     sortState = [
       { col: 'titles', order: 'desc' },

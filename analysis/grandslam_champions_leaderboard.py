@@ -11,7 +11,7 @@
 import os
 import glob
 import pandas as pd
-from scripts.config import PROJECT_ROOT,DATA_PATHS
+from scripts.config import PROJECT_ROOT, DATA_PATHS
 
 
 # ══════════════════════════════════════════════════════════════
@@ -26,8 +26,6 @@ SLAMS = {
     "WIM": ["Wimbledon"],
     "USO": ["US Open"],
 }
-
-
 
 
 # ══════════════════════════════════════════════════════════════
@@ -60,30 +58,15 @@ def get_slam_key(tournament_name):
 # ══════════════════════════════════════════════════════════════
 # 4. 计算单个球员战绩
 # ══════════════════════════════════════════════════════════════
-def calc_stats(gs, player):
+def calc_stats(gs, player, first_year):
     # 计算score不是W/O的比赛的wins和losses
     wins = gs[(gs["winner_name"] == player) & (gs["score"] != "W/O")].copy()
     losses = gs[(gs["loser_name"] == player) & (gs["score"] != "W/O")].copy()
-    # wins   = gs[gs["winner_name"] == player].copy()
-    # losses = gs[gs["loser_name"] == player].copy()
-    W, L   = len(wins), len(losses)
+    W, L = len(wins), len(losses)
     if W + L == 0:
         return None
 
     agg = round(W / (W + L) * 100, 1)
-
-    # # vs Top 8
-    # top8_w = wins[pd.to_numeric(wins["loser_rank"],   errors="coerce") <= 8]
-    # top8_l = losses[pd.to_numeric(losses["winner_rank"], errors="coerce") <= 8]
-    # vs_top8 = f"{len(top8_w)}-{len(top8_l)}"
-
-    # # 检测排名缺失：该球员所有大满贯比赛中有多少场对手排名为空
-    # all_opp_ranks = pd.concat([
-    #     pd.to_numeric(wins["loser_rank"],   errors="coerce"),
-    #     pd.to_numeric(losses["winner_rank"], errors="coerce"),
-    # ])
-    # missing_rank = int(all_opp_ranks.isna().sum())
-    # vs_top8_uncertain = missing_rank > 0
 
     # 场地胜率
     def surf_wr(surface):
@@ -109,16 +92,20 @@ def calc_stats(gs, player):
     if uso: parts.append(f"USO×{uso}")
     titles_str = "  ".join(parts) if parts else "—"
 
+    # 最后夺冠年份 & 跨度
+    last_year = int(finals_won["year"].max()) if not finals_won.empty else first_year
+    span = last_year - first_year + 1
+
     return {
         "W": W, "L": L,
         "titles":          titles_total,
         "titles_str":      titles_str,
-        # "vs_top8":         vs_top8,
-        # "vs_top8_uncertain": vs_top8_uncertain,
         "agg":             agg,
         "win_h":           surf_wr("Hard"),
         "win_c":           surf_wr("Clay"),
         "win_g":           surf_wr("Grass"),
+        "last_year":       last_year,
+        "span":            span,
     }
 
 
@@ -207,6 +194,8 @@ def build_gs_leaderboard(rows_dict, output_path):
                 e['rank'],
                 e['player'],
                 e['first_year'],
+                s['last_year'],
+                s['span'],
                 s['titles'],
                 s['titles_str'],
                 s['W'],
@@ -240,7 +229,7 @@ def build_gs_leaderboard(rows_dict, output_path):
       background: #111827;
       font-family: 'Segoe UI', Arial, sans-serif;
       padding: 36px 44px 60px;
-      min-width: 960px;
+      min-width: 1100px;
     }}
     h1 {{ color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }}
     .sub {{
@@ -326,13 +315,15 @@ def build_gs_leaderboard(rows_dict, output_path):
 <table>
   <thead>
     <tr class="gr">
-      <th colspan="8"></th>
+      <th colspan="10"></th>
       <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
     </tr>
     <tr>
       <th>#</th>
       <th class="left sortable" data-col="player">PLAYER</th>
       <th class="sortable" data-col="firstYear">1ST TITLE</th>
+      <th class="sortable" data-col="lastYear">LAST TITLE</th>
+      <th class="sortable" data-col="span">SPAN</th>
       <th class="sortable" data-col="titles">TITLES</th>
       <th class="left">BREAKDOWN</th>
       <th class="sortable" data-col="W">W</th>
@@ -345,7 +336,7 @@ def build_gs_leaderboard(rows_dict, output_path):
   </thead>
   <tbody id="table-body"></tbody>
   <tfoot>
-    <tr><td colspan="12" id="table-footer"></td></tr>
+    <tr><td colspan="13" id="table-footer"></td></tr>
   </tfoot>
 </table>
 
@@ -355,6 +346,8 @@ def build_gs_leaderboard(rows_dict, output_path):
   }};
 
   const footerText = `        1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+        LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+        SPAN = last - first + 1 &nbsp;·&nbsp;
         AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
         WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
         AGG = aggregate GS win rate &nbsp;·&nbsp;
@@ -412,25 +405,22 @@ def build_gs_leaderboard(rows_dict, output_path):
   }}
 
   // ---------- 排序状态 ----------
-  // 默认排序：titles desc → firstYear asc → W desc（不显示指示器）
-  let sortState = [
-    // {{ col: 'titles', order: 'desc' }},
-    // {{ col: 'firstYear', order: 'asc' }},
-    // {{ col: 'W', order: 'desc' }}
-  ];
-  let userSorted = false;  // 是否经过用户手动排序（决定是否显示指示器）
+  let sortState = [];
+  let userSorted = false;
 
   // 列到数据索引的映射 (基于 rows_to_js 的顺序)
   const colIndex = {{
     'player': 1,      // 字符串
     'firstYear': 2,   // 数字
-    'titles': 3,      // 数字
-    'W': 5,           // 数字
-    'L': 6,           // 数字
-    'agg': 7,         // 数字或null
-    'hard': 8,
-    'clay': 9,
-    'grass': 10
+    'lastYear': 3,    // 数字
+    'span': 4,        // 数字
+    'titles': 5,      // 数字
+    'W': 7,           // 数字
+    'L': 8,           // 数字
+    'agg': 9,         // 数字或null
+    'hard': 10,
+    'clay': 11,
+    'grass': 12
   }};
 
   // 比较函数（处理 null/undefined 放最后）
@@ -471,7 +461,6 @@ def build_gs_leaderboard(rows_dict, output_path):
 
   // 更新表头排序指示器（仅当 userSorted 为 true 时显示）
   function updateSortIndicators() {{
-    // 清除所有指示器
     document.querySelectorAll('.sortable').forEach(th => {{
       const ind = th.querySelector('.sort-indicator');
       if (ind) ind.remove();
@@ -479,7 +468,6 @@ def build_gs_leaderboard(rows_dict, output_path):
     
     if (!userSorted) return;
     
-    // 为 sortState 中的主排序键添加指示器（只显示第一个，保持简洁）
     if (sortState.length > 0) {{
       const primary = sortState[0];
       const th = document.querySelector(`th[data-col="${{primary.col}}"]`);
@@ -509,7 +497,10 @@ def build_gs_leaderboard(rows_dict, output_path):
 
     let html = '';
     sorted.forEach((row, idx) => {{
-      const [origRank, player, firstYear, titles, titlesStr, W, L, agg, hard, clay, grass] = row;
+      const [
+        origRank, player, firstYear, lastYear, span,
+        titles, titlesStr, W, L, agg, hard, clay, grass
+      ] = row;
       const titlesNum = parseInt(titles);
       const titleBg = titlesBg(titlesNum);
       const titleColor = titlesFc(titlesNum);
@@ -526,7 +517,9 @@ def build_gs_leaderboard(rows_dict, output_path):
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${{idx + 1}}</td>
         <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
-        <td style="text-align:center;color:#f5c842;font-weight:bold;">${{firstYear}}</td>
+        <td style="text-align:center;color:#e5e5e5;">${{firstYear}}</td>
+        <td style="text-align:center;color:#e5e5e5;">${{lastYear}}</td>
+        <td style="text-align:center;color:#f5c842;font-weight:bold;">${{span}}</td>
         <td style="text-align:center;background:${{titleBg}};color:${{titleColor}};font-weight:bold;">${{titles}}</td>
         <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${{titlesStr}}</td>
         <td style="text-align:center;color:#e5e5e5;">${{W}}</td>
@@ -550,26 +543,23 @@ def build_gs_leaderboard(rows_dict, output_path):
     userSorted = true;
     const existingIdx = sortState.findIndex(s => s.col === col);
     
-    // 确定新列的顺序：默认降序；若已存在则翻转顺序
     let newOrder = 'desc';
     if (existingIdx !== -1) {{
       newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
     }}
     
     if (existingIdx !== -1) {{
-      // 如果该列已在排序条件中，将其移到首位并更新顺序
       const [existing] = sortState.splice(existingIdx, 1);
       existing.order = newOrder;
       sortState.unshift(existing);
     }} else {{
-      // 新列：插入到开头，原有排序全部后移成为次级条件
       sortState.unshift({{ col, order: newOrder }});
     }}
     
     renderTable();
   }}
 
-  // 重置为默认排序（切换巡回赛时调用，不视为用户排序）
+  // 重置为默认排序（切换巡回赛时调用）
   function resetToDefault() {{
     sortState = [
       {{ col: 'titles', order: 'desc' }},
@@ -603,6 +593,7 @@ def build_gs_leaderboard(rows_dict, output_path):
         f.write(html)
     print(f"✅ 已保存: {output_path}")
 
+
 # ══════════════════════════════════════════════════════════════
 # 7. 主入口
 # ══════════════════════════════════════════════════════════════
@@ -618,39 +609,27 @@ def main(tour='wta'):
     print("\n📊 计算战绩...")
     rows = []
     for player, first_year in champions.items():
-        stats = calc_stats(gs, player)
+        stats = calc_stats(gs, player, first_year)
         if stats:
             rows.append({"player": player, "first_year": first_year, "stats": stats})
 
     # 排序：冠军数降序 → 首冠年份升序 → 总胜场降序
-    
     rows.sort(key=lambda r: (-r["stats"]["titles"], r["first_year"], -r["stats"]["W"]))
     for i, r in enumerate(rows, 1):
         r["rank"] = i
 
     # 控制台预览前20
-    print(f"\n  {'#':<4} {'Player':<28} {'1st':<6} {'GS':<4} {'W':<5} {'L':<4} {'AGG'}")
-    print("  " + "-" * 65)
+    print(f"\n  {'#':<4} {'Player':<28} {'1st':<6} {'Last':<6} {'Span':<5} {'GS':<4} {'W':<5} {'L':<4} {'AGG'}")
+    print("  " + "-" * 85)
     for r in rows[:10]:
         s = r["stats"]
         print(f"  {r['rank']:<4} {r['player']:<28} {r['first_year']:<6} "
+              f"{s['last_year']:<6} {s['span']:<5} "
               f"{s['titles']:<4} {s['W']:<5} {s['L']:<4} {s['agg']}%")
     if len(rows) > 20:
         print(f"  ... 共 {len(rows)} 位冠军")
 
-    # out = os.path.join(OUTPUT_DIR, f"{tour}_gs_champions.html")
-    # build_html(tour, rows, out)
-    # print(f"\n用浏览器打开查看: {out}")
     return rows
-
-    # # ── 截图为 PNG
-    # try:
-    #     from screenshot_html import screenshot
-    #     png_out = out.replace(".html", ".png")
-    #     screenshot(out, png_out, width=1300)
-    # except Exception as e:
-    #     print(f"   截图跳过: {e}")
-    #     print("   如需截图请单独运行 screenshot_html.py")
 
 
 if __name__ == "__main__":
@@ -661,6 +640,3 @@ if __name__ == "__main__":
     build_gs_leaderboard({'wta': rows_wta}, output_path='./analysis/leaderboards/wta_gs_champions.html')
     # only build atp
     build_gs_leaderboard({'atp': rows_atp}, output_path='./analysis/leaderboards/atp_gs_champions.html')
-    # out = os.path.join(OUTPUT_DIR, f"{tour}_gs_champions.html")
-    # build_html(tour, rows, out)
-    # print(f"\n用浏览器打开查看: {out}")
