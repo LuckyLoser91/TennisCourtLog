@@ -402,55 +402,66 @@
   }
 
   function renderTable() {
-    const players = dataMap[currentTour] || [];
-    const sorted = sortRows(players);
-    const tbody = document.getElementById('table-body');
-    const countSpan = document.getElementById('champion-count');
-    const footerTd = document.getElementById('table-footer');
+  const players = dataMap[currentTour] || [];
+  const sorted = sortRows(players);
+  const tbody = document.getElementById('table-body');
+  const countSpan = document.getElementById('champion-count');
+  const footerTd = document.getElementById('table-footer');
 
-    countSpan.textContent = sorted.length + ' champions';
-    footerTd.innerHTML = footerText;
+  countSpan.textContent = sorted.length + ' champions';
+  footerTd.innerHTML = footerText;
 
-    let html = '';
-    sorted.forEach((player, idx) => {
-      // 获取当前年龄对应的数据
-      const playerData = getPlayerDataByAge(player, currentAge);
-      const titlesNum = playerData.titles ?? 0;
-      const titleBg = titlesBg(titlesNum);
-      const titleColor = titlesFc(titlesNum);
-      const aggBgColor = aggBg(playerData.agg);
-      const aggTextColor = aggColor(playerData.agg);
-      const hardBgColor = surfBg(playerData.win_h);
-      const hardTextColor = surfColor(playerData.win_h);
-      const clayBgColor = surfBg(playerData.win_c);
-      const clayTextColor = surfColor(playerData.win_c);
-      const grassBgColor = surfBg(playerData.win_g);
-      const grassTextColor = surfColor(playerData.win_g);
+  let html = '';
+  sorted.forEach((player, idx) => {
+    // 获取当前年龄对应的数据
+    const playerData = getPlayerDataByAge(player, currentAge);
+    const titlesNum = playerData.titles ?? 0;          // 当前年龄的冠军数
+    const careerTitles = player.titles ?? 0;           // 职业生涯总冠军数
 
-      html += `<tr>
-        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
-        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">
-          ${getFlagImg(player.ioc)} ${player.player} (${player.birth_year})
-        </td>
-        <td style="text-align:center;color:#e5e5e5;">${playerData.first_year ?? '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${fmtAge(playerData.age_first)}</td>
-        <td style="text-align:center;color:#e5e5e5;">${playerData.last_year ?? '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${fmtAge(playerData.age_last)}</td>
-        <td style="text-align:center;color:#f5c842;font-weight:bold;">${playerData.span ?? 0}</td>
-        <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titlesNum}</td>
-        <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${playerData.titles_str || '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${playerData.W ?? 0}</td>
-        <td style="text-align:center;color:#6b7280;">${playerData.L ?? 0}</td>
-        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(playerData.agg)}</td>
-        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(playerData.win_h)}</td>
-        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(playerData.win_c)}</td>
-        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(playerData.win_g)}</td>
-      </tr>`;
-    });
-    tbody.innerHTML = html;
-    updateSortIndicators();
+    // 根据是否选择了年龄来决定显示格式
+    let titleDisplay;
+    if (currentAge === null) {
+      // 未选择年龄（Career），只显示总数
+      titleDisplay = careerTitles;
+    } else {
+      // 选择了年龄，显示 当前(总数)
+      titleDisplay = `${titlesNum} / ${careerTitles}`;
+    }
+
+    const titleBg = titlesBg(titlesNum);
+    const titleColor = titlesFc(titlesNum);
+    const aggBgColor = aggBg(playerData.agg);
+    const aggTextColor = aggColor(playerData.agg);
+    const hardBgColor = surfBg(playerData.win_h);
+    const hardTextColor = surfColor(playerData.win_h);
+    const clayBgColor = surfBg(playerData.win_c);
+    const clayTextColor = surfColor(playerData.win_c);
+    const grassBgColor = surfBg(playerData.win_g);
+    const grassTextColor = surfColor(playerData.win_g);
+
+    html += `<tr>
+      <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
+      <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">
+        ${getFlagImg(player.ioc)} ${player.player} (${player.birth_year})
+      </td>
+      <td style="text-align:center;color:#e5e5e5;">${playerData.first_year ?? '—'}</td>
+      <td style="text-align:center;color:#e5e5e5;">${fmtAge(playerData.age_first)}</td>
+      <td style="text-align:center;color:#e5e5e5;">${playerData.last_year ?? '—'}</td>
+      <td style="text-align:center;color:#e5e5e5;">${fmtAge(playerData.age_last)}</td>
+      <td style="text-align:center;color:#f5c842;font-weight:bold;">${playerData.span ?? 0}</td>
+      <td style="text-align:center;background:${titleBg};color:${titleColor};font-weight:bold;">${titleDisplay}</td>
+      <td style="color:#9ca3af;font-size:11px;white-space:nowrap;padding-left:6px;">${playerData.titles_str || '—'}</td>
+      <td style="text-align:center;color:#e5e5e5;">${playerData.W ?? 0}</td>
+      <td style="text-align:center;color:#6b7280;">${playerData.L ?? 0}</td>
+      <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(playerData.agg)}</td>
+      <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(playerData.win_h)}</td>
+      <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(playerData.win_c)}</td>
+      <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(playerData.win_g)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+  updateSortIndicators();
   }
-
   // ==================== 事件绑定 ====================
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', handleSortClick);
