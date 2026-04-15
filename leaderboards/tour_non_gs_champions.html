@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-GS Champions · GS Win Rate Top 100</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111827;
+      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', Arial, sans-serif;
+      padding: 36px 44px 60px;
+      min-width: 1200px;
+    }
+    h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .sub {
+      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
+      text-transform: uppercase; margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sub span { color: #f5c842; }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .tour-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-selector label { color: #9ca3af; font-size: 12px; }
+    .tour-selector select {
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .tour-selector select:hover { border-color: #f5c842; }
+    .active-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .active-toggle label {
+      color: #9ca3af;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .active-toggle input {
+      accent-color: #f5c842;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    table { border-collapse: collapse; width: 100%; }
+    thead tr { border-bottom: 1px solid #374151; }
+    thead th {
+      color: #6b7280; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 6px 9px; text-align: center; white-space: nowrap;
+    }
+    thead th.left { text-align: left; padding-left: 8px; }
+    thead .gr th {
+      color: #4b5563; font-size: 9px; border-bottom: none; padding-bottom: 2px;
+    }
+    .dl { border-left: 1px solid #374151; }
+    tbody tr { border-bottom: 1px solid #1f2937; }
+    tbody tr:hover { background: #1f2937; }
+    tbody td { padding: 6px 6px; font-size: 12px; }
+    tfoot td {
+      padding-top: 20px; color: #4b5563;
+      font-size: 10px; letter-spacing: 0.04em;
+    }
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+    th.sortable:hover {
+      color: #f5c842;
+    }
+    .sort-indicator {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      color: #f5c842;
+    }
+    .round-badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 36px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins > 5)</h1>
+<div class="sub">
+  <div>
+    <span id="champion-count">0 players</span> &nbsp;|&nbsp;
+    Grand Slam matches only &nbsp;|&nbsp;
+    Walkovers excluded &nbsp;|&nbsp;
+    <span style="color:#9ca3af;">Click headers to sort</span>
+  </div>
+  <div class="controls">
+    <div class="active-toggle">
+      <input type="checkbox" id="activeOnlyCheckbox">
+      <label for="activeOnlyCheckbox">🎾 ACTIVE ONLY (won GS match in last 2 years)</label>
+    </div>
+    <div class="tour-selector">
+      <label for="tourSelect">TOUR:</label>
+      <select id="tourSelect">
+        <option value="wta" selected>WTA</option>
+        <option value="atp">ATP</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr class="gr">
+      <th colspan="3"></th>
+      <th colspan="4" style="text-align:center;color:#9ca3af;">BEST RESULT (BY SLAM)</th>
+      <th colspan="2"></th>
+      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
+    </tr>
+    <tr>
+      <th>#</th>
+      <th class="left sortable" data-col="player">PLAYER</th>
+      <th class="sortable" data-col="best">BEST</th>
+      <th class="sortable" data-col="AO">AO</th>
+      <th class="sortable" data-col="RG">RG</th>
+      <th class="sortable" data-col="WIM">WIM</th>
+      <th class="sortable" data-col="USO">USO</th>
+      <th class="sortable" data-col="W">W</th>
+      <th class="sortable" data-col="L">L</th>
+      <th class="dl sortable" data-col="agg">AGG</th>
+      <th class="sortable" data-col="hard">H</th>
+      <th class="sortable" data-col="clay">C</th>
+      <th class="sortable" data-col="grass">G</th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+  <tfoot>
+    <tr><td colspan="13" id="table-footer"></td></tr>
+  </tfoot>
+</table>
+
+<script>
+  // ---------- 国旗映射 ----------
+  const IOC_TO_ISO2 = {
+    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
+    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
+    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
+    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
+    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
+    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
+    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
+    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
+    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
+    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
+    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
+    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
+    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
+  };
+
+  function getFlagImg(ioc) {
+    if (!ioc) return '<span title="Unknown">🏳️</span>';
+    const iso2 = IOC_TO_ISO2[ioc.toUpperCase().trim()];
+    if (!iso2) return '<span title="Unknown">🏳️</span>';
+    const iso2Lower = iso2.toLowerCase();
+    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" 
+                  width="16" height="12" alt="${iso2}" title="${ioc}" 
+                  style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
+  }
+
+  // 全局数据
+  let jsonData = null;          // { meta: { max_years: {atp, wta} }, atp: [], wta: [] }
+  let currentTour = 'wta';
+  let activeOnly = false;
+  let sortColumn = 'agg';       // 当前排序列
+  let sortOrder = 'desc';       // 'asc' or 'desc'
+
+  // 辅助函数：轮次显示与背景色
+  const bestColors = {
+    'F':   ['rgba(251,191,36,0.2)',  '#FCD34D'],
+    'SF':  ['rgba(167,139,250,0.2)', '#A78BFA'],
+    'QF':  ['rgba(52,211,153,0.2)',  '#34D399'],
+    'R16': ['rgba(99,179,237,0.2)',  '#63B3ED'],
+  };
+
+  function formatBestBadge(bestDisp) {
+    if (!bestDisp || bestDisp === '—') {
+      return '<span style="color:#4b5563">—</span>';
+    }
+    const [bg, color] = bestColors[bestDisp] || ['transparent', '#9ca3af'];
+    return `<span class="round-badge" style="background:${bg};color:${color};">${bestDisp}</span>`;
+  }
+
+  // 胜率背景色
+  function aggBg(pct) {
+    if (pct === null || pct === undefined) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(7,123,89)';
+    if (pct >= 80) return 'rgb(42,159,121)';
+    if (pct >= 75) return 'rgb(227,152,45)';
+    if (pct >= 70) return 'rgb(247,213,118)';
+    return 'transparent';
+  }
+  function aggColor(pct) {
+    if (pct === null || pct === undefined) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+  function surfBg(pct) {
+    if (pct === null || pct === undefined) return 'transparent';
+    if (pct >= 90) return 'rgb(4,120,87)';
+    if (pct >= 85) return 'rgb(39,157,119)';
+    if (pct >= 80) return 'rgb(67,186,144)';
+    if (pct >= 75) return 'rgb(235,174,72)';
+    if (pct >= 70) return 'rgb(249,218,124)';
+    return 'transparent';
+  }
+  function surfColor(pct) {
+    if (pct === null || pct === undefined) return '#6b7280';
+    if (pct >= 85) return '#ffffff';
+    if (pct >= 75) return '#111111';
+    if (pct >= 70) return '#111111';
+    return '#6b7280';
+  }
+  function fmt(val) {
+    return (val === null || val === undefined) ? '—' : val + '%';
+  }
+
+  // 活跃筛选
+  function isActive(playerObj, maxYear) {
+    const lastWinYear = playerObj.stats.last_win_year;
+    if (!lastWinYear) return false;
+    return (maxYear - lastWinYear) < 2;
+  }
+
+  // 排序比较
+  function compareValues(a, b, col) {
+    let valA, valB;
+    if (col === 'player') {
+      valA = a.player.toLowerCase();
+      valB = b.player.toLowerCase();
+    } else if (col === 'best') {
+      valA = a.stats.best_display;
+      valB = b.stats.best_display;
+      // 轮次优先级：W < F < SF < QF < R16 ... 使用预定义映射
+      const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
+      valA = rankMap[valA] || 999;
+      valB = rankMap[valB] || 999;
+      return valA - valB;
+    } else if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {
+      const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
+      valA = rankMap[a.stats[`${col.toLowerCase()}_best`]] || 999;
+      valB = rankMap[b.stats[`${col.toLowerCase()}_best`]] || 999;
+      return valA - valB;
+    } else if (col === 'W') {
+      valA = a.stats.W;
+      valB = b.stats.W;
+    } else if (col === 'L') {
+      valA = a.stats.L;
+      valB = b.stats.L;
+    } else if (col === 'agg') {
+      valA = a.stats.agg;
+      valB = b.stats.agg;
+    } else if (col === 'hard') {
+      valA = a.stats.win_h;
+      valB = b.stats.win_h;
+    } else if (col === 'clay') {
+      valA = a.stats.win_c;
+      valB = b.stats.win_c;
+    } else if (col === 'grass') {
+      valA = a.stats.win_g;
+      valB = b.stats.win_g;
+    } else {
+      return 0;
+    }
+    // 处理 null/undefined
+    const isNullA = valA === null || valA === undefined;
+    const isNullB = valB === null || valB === undefined;
+    if (isNullA && isNullB) return 0;
+    if (isNullA) return 1;
+    if (isNullB) return -1;
+    // 数值比较
+    const diff = valA - valB;
+    return diff;
+  }
+
+  function sortPlayers(players) {
+    return [...players].sort((a, b) => {
+      let cmp = compareValues(a, b, sortColumn);
+      if (sortOrder === 'desc') cmp = -cmp;
+      return cmp;
+    });
+  }
+
+  // 渲染表格
+  function renderTable() {
+    if (!jsonData) return;
+    let players = jsonData[currentTour] || [];
+    if (activeOnly) {
+      const maxYear = jsonData.meta.max_years[currentTour];
+      players = players.filter(p => isActive(p, maxYear));
+    }
+    const sorted = sortPlayers(players);
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
+    const footerText = `        BEST = Career best GS result &nbsp;·&nbsp;
+        AO/RG/WIM/USO = Best result at each major &nbsp;·&nbsp;
+        W = Winner · F = Final · SF = Semi-final · QF = Quarter-final · R16/R32/R64/R128 &nbsp;·&nbsp; <br>
+        AGG = aggregate GS win rate &nbsp;·&nbsp;
+        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
+        Win rate: ≥70% <span style="color:#e8a838">■</span> ≥80% <span style="color:#2dd4b0">■</span>`;
+    countSpan.textContent = sorted.length + ' players';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    sorted.forEach((player, idx) => {
+      const s = player.stats;
+      const flagHtml = getFlagImg(player.ioc);
+      const birthYear = player.birth_year ? ` (${player.birth_year})` : '';
+      const playerDisplay = `${flagHtml} ${player.player}${birthYear}`;
+      const bestBadge = formatBestBadge(s.best_display);
+      const aggBgColor = aggBg(s.agg);
+      const aggTextColor = aggColor(s.agg);
+      const hardBgColor = surfBg(s.win_h);
+      const hardTextColor = surfColor(s.win_h);
+      const clayBgColor = surfBg(s.win_c);
+      const clayTextColor = surfColor(s.win_c);
+      const grassBgColor = surfBg(s.win_g);
+      const grassTextColor = surfColor(s.win_g);
+
+      html += `<tr>
+        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx+1}</td>
+        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${playerDisplay}</td>
+        <td style="text-align:center;">${bestBadge}</td>
+        <td style="text-align:center;color:#e5e5e5;">${s.ao_best || '—'}</td>
+        <td style="text-align:center;color:#e5e5e5;">${s.rg_best || '—'}</td>
+        <td style="text-align:center;color:#e5e5e5;">${s.wim_best || '—'}</td>
+        <td style="text-align:center;color:#e5e5e5;">${s.uso_best || '—'}</td>
+        <td style="text-align:center;color:#e5e5e5;">${s.W}</td>
+        <td style="text-align:center;color:#6b7280;">${s.L}</td>
+        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(s.agg)}</td>
+        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(s.win_h)}</td>
+        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(s.win_c)}</td>
+        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(s.win_g)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = html;
+    updateSortIndicators();
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('.sortable').forEach(th => {
+      const ind = th.querySelector('.sort-indicator');
+      if (ind) ind.remove();
+    });
+    const th = document.querySelector(`th[data-col="${sortColumn}"]`);
+    if (th) {
+      const arrow = sortOrder === 'asc' ? '▲' : '▼';
+      const span = document.createElement('span');
+      span.className = 'sort-indicator';
+      span.textContent = ' ' + arrow;
+      th.appendChild(span);
+    }
+  }
+
+  function handleSortClick(e) {
+    const th = e.currentTarget;
+    const col = th.getAttribute('data-col');
+    if (!col) return;
+    if (sortColumn === col) {
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn = col;
+      sortOrder = 'desc';  // 默认降序
+    }
+    renderTable();
+  }
+
+  function resetToDefault() {
+    sortColumn = 'agg';
+    sortOrder = 'desc';
+  }
+
+  // 加载数据
+  async function loadData() {
+    try {
+      const res = await fetch('../output/tour_non_gs_champions.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      jsonData = await res.json();
+      resetToDefault();
+      renderTable();
+    } catch (err) {
+      console.error('❌ 加载数据失败:', err);
+      document.getElementById('table-body').innerHTML = '<tr><td colspan="13" style="color:#f87171;text-align:center;">Failed to load data. Please check that the JSON file exists.</td></tr>';
+    }
+  }
+
+  // 事件绑定
+  document.querySelectorAll('.sortable').forEach(th => {
+    th.addEventListener('click', handleSortClick);
+  });
+  const tourSelect = document.getElementById('tourSelect');
+  if (tourSelect) {
+    tourSelect.addEventListener('change', e => {
+      currentTour = e.target.value;
+      resetToDefault();
+      renderTable();
+    });
+  }
+  const activeCheck = document.getElementById('activeOnlyCheckbox');
+  if (activeCheck) {
+    activeCheck.addEventListener('change', e => {
+      activeOnly = e.target.checked;
+      resetToDefault();
+      renderTable();
+    });
+  }
+
+  loadData();
+</script>
+</body>
+</html>

@@ -1,10 +1,11 @@
 """
 非大满贯冠军大满贯战绩排行榜（按胜率排序，Top 100）
+前后端分离版本：只生成 JSON 数据文件
 ====================================================
 统计所有未曾赢得大满贯冠军的球员在大满贯赛事中的战绩，
-按总胜率降序展示前100名（总胜场 > 5）。支持巡回赛切换、活跃球员筛选、累加式排序。
+按总胜率降序展示前100名（总胜场 > 5）。
 
-输出：./analysis/leaderboards/tour_gs_champions_non.html 等
+输出：./output/tour_non_gs_champions.json
 
 依赖：pip install pandas
 用法：python non_gs_champions_leaderboard.py
@@ -13,49 +14,21 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import json
 import pandas as pd
 from scripts.config import PROJECT_ROOT, DATA_PATHS
 
 
 # ══════════════════════════════════════════════════════════════
-# IOC -> ISO2 映射 & 国旗工具
+# IOC -> ISO2 映射（前端可用，但 Python 中不再生成 HTML）
+# 注意：前端需要此映射来显示国旗，因此 JSON 中只保留 ioc 代码，
+# 前端自行转换或 Python 直接生成 img 标签（推荐在 JSON 中存储 ioc 代码，
+# 前端用 flagcdn.com 转换）。这里我们保持 JSON 干净，只存 ioc。
 # ══════════════════════════════════════════════════════════════
-IOC_TO_ISO2 = {
-    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-}
-
-
-def ioc_to_flag(ioc):
-    """将 IOC 代码转为国旗 <img> 标签（使用 flagcdn.com，跨平台兼容）"""
-    if pd.isna(ioc) or not ioc:
-        return '<span title="Unknown">🏳</span>'
-    iso2 = IOC_TO_ISO2.get(str(ioc).upper().strip(), "")
-    if not iso2:
-        return '<span title="Unknown">🏳</span>'
-    iso2_lower = iso2.lower()
-    return (
-        f'<img src="https://flagcdn.com/16x12/{iso2_lower}.png" '
-        f'width="16" height="12" alt="{iso2}" title="{ioc}" '
-        f'style="vertical-align:middle;margin-right:6px;border-radius:1px;">'
-    )
-
 
 # ══════════════════════════════════════════════════════════════
 # 配置
 # ══════════════════════════════════════════════════════════════
-OUTPUT_DIR = PROJECT_ROOT / "./analysis/leaderboards"
 GS_TIER = "Grand Slam"
 
 SLAMS = {
@@ -128,39 +101,6 @@ def round_rank(r):
     if r is None:
         return 999
     return ROUND_ORDER.get(r, 999)
-
-
-# ══════════════════════════════════════════════════════════════
-# 颜色工具
-# ══════════════════════════════════════════════════════════════
-def rate_to_bg(v, lo=70, hi=90):
-    if v is None or v < lo:
-        return "transparent", "#6b7280"
-    if v < 80:
-        t = (v - lo) / (80 - lo)
-        t = max(0.0, min(1.0, t))
-        r = int(253 + t * (217 - 253))
-        g = int(230 + t * (119 - 230))
-        b = int(138 + t * (6 - 138))
-        fc = "#111111"
-    else:
-        t = (v - 80) / (hi - 80)
-        t = max(0.0, min(1.0, t))
-        r = int(110 + t * (4 - 110))
-        g = int(231 + t * (120 - 231))
-        b = int(183 + t * (87 - 183))
-        fc = "#111111" if t < 0.5 else "#ffffff"
-    return f"rgb({r},{g},{b})", fc
-
-
-def agg_bg(v):
-    bg, fc = rate_to_bg(v, lo=70, hi=90)
-    return bg, fc
-
-
-def surf_bg(v):
-    bg, fc = rate_to_bg(v, lo=70, hi=95)
-    return bg, fc
 
 
 # ══════════════════════════════════════════════════════════════
@@ -240,10 +180,9 @@ def calc_non_champion_stats(gs, player):
 
 
 # ══════════════════════════════════════════════════════════════
-# 主处理函数
+# 主处理函数（返回 JSON 可序列化的数据）
 # ══════════════════════════════════════════════════════════════
-def get_non_champions_leaderboard(tour='wta'):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+def get_non_champions_data(tour='wta'):
     gs_data_path = DATA_PATHS[tour]['gs_matches']
     players_path = DATA_PATHS[tour]['players']
     gs = pd.read_csv(gs_data_path)
@@ -286,10 +225,11 @@ def get_non_champions_leaderboard(tour='wta'):
         if stats:
             info = player_info.get(player, {})
             rows.append({
+                "rank": None,  # 稍后填充
                 "player": player,
-                "stats": stats,
                 "ioc": info.get('ioc'),
                 "birth_year": info.get('birth_year'),
+                "stats": stats,
             })
 
     # 按总胜率降序排序，取前100名
@@ -303,491 +243,30 @@ def get_non_champions_leaderboard(tour='wta'):
 
 
 # ══════════════════════════════════════════════════════════════
-# HTML 生成函数
+# 导出 JSON
 # ══════════════════════════════════════════════════════════════
-def build_non_gs_leaderboard(rows_dict, data_years, output_path):
-    tours = list(rows_dict.keys())
-
-    import json
-
-    def rows_to_js(rows):
-        arr = []
-        for e in rows:
-            s = e["stats"]
-            flag_html = ioc_to_flag(e.get('ioc', ''))
-            birth_year = e.get('birth_year', '')
-            birth_display = f" ({birth_year})" if birth_year else ""
-            player_display = f"{flag_html}{e['player']}{birth_display}"
-            arr.append([
-                e['rank'],
-                player_display,
-                s['best_display'],
-                s['best_rank'],
-                s['ao_best'],
-                s['rg_best'],
-                s['wim_best'],
-                s['uso_best'],
-                s['W'],
-                s['L'],
-                s['agg'] if s['agg'] is not None else None,
-                s['win_h'] if s['win_h'] is not None else None,
-                s['win_c'] if s['win_c'] is not None else None,
-                s['win_g'] if s['win_g'] is not None else None,
-                s['last_win_year'],
-            ])
-        return json.dumps(arr)
-
-    js_data = {tour: rows_to_js(rows_dict[tour]) for tour in tours}
-    max_years = {tour: data_years[tour] for tour in tours}
-    options = "\n".join(
-        f'<option value="{tour}" {"selected" if i==0 else ""}>{tour.upper()}</option>'
-        for i, tour in enumerate(tours)
-    )
-
-    hide_selector = len(tours) == 1
-    selector_style = 'style="display:none;"' if hide_selector else ''
-
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Non-GS Champions · GS Win Rate Top 100</title>
-  <style>
-    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{
-      background: #111827;
-      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', Arial, sans-serif;
-      padding: 36px 44px 60px;
-      min-width: 1200px;
-    }}
-    h1 {{ color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }}
-    .sub {{
-      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
-      text-transform: uppercase; margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }}
-    .sub span {{ color: #f5c842; }}
-    .controls {{
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }}
-    .tour-selector {{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }}
-    .tour-selector label {{ color: #9ca3af; font-size: 12px; }}
-    .tour-selector select {{
-      background: #1f2937;
-      color: #f3f4f6;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
-    }}
-    .tour-selector select:hover {{ border-color: #f5c842; }}
-    .active-toggle {{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }}
-    .active-toggle label {{
-      color: #9ca3af;
-      font-size: 12px;
-      cursor: pointer;
-    }}
-    .active-toggle input {{
-      accent-color: #f5c842;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }}
-    table {{ border-collapse: collapse; width: 100%; }}
-    thead tr {{ border-bottom: 1px solid #374151; }}
-    thead th {{
-      color: #6b7280; font-size: 10px; font-weight: 600;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 5px 6px 9px; text-align: center; white-space: nowrap;
-    }}
-    thead th.left {{ text-align: left; padding-left: 8px; }}
-    thead .gr th {{
-      color: #4b5563; font-size: 9px; border-bottom: none; padding-bottom: 2px;
-    }}
-    .dl {{ border-left: 1px solid #374151; }}
-    tbody tr {{ border-bottom: 1px solid #1f2937; }}
-    tbody tr:hover {{ background: #1f2937; }}
-    tbody td {{ padding: 6px 6px; font-size: 12px; }}
-    tfoot td {{
-      padding-top: 20px; color: #4b5563;
-      font-size: 10px; letter-spacing: 0.04em;
-    }}
-    th.sortable {{
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.15s;
-    }}
-    th.sortable:hover {{
-      color: #f5c842;
-    }}
-    .sort-indicator {{
-      display: inline-block;
-      margin-left: 4px;
-      font-size: 9px;
-      color: #f5c842;
-    }}
-    .round-badge {{
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 12px;
-      min-width: 36px;
-      text-align: center;
-    }}
-  </style>
-</head>
-<body>
-
-<h1>Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins > 5)</h1>
-<div class="sub">
-  <div>
-    <span id="champion-count">0 players</span> &nbsp;|&nbsp;
-    Grand Slam matches only &nbsp;|&nbsp;
-    Walkovers excluded &nbsp;|&nbsp;
-    <span style="color:#9ca3af;">Click headers to sort</span>
-  </div>
-  <div class="controls">
-    <div class="active-toggle">
-      <input type="checkbox" id="activeOnlyCheckbox">
-      <label for="activeOnlyCheckbox">🎾 ACTIVE ONLY (won GS match in last 2 years)</label>
-    </div>
-    <div class="tour-selector" {selector_style}>
-      <label for="tourSelect">TOUR:</label>
-      <select id="tourSelect">
-        {options}
-      </select>
-    </div>
-  </div>
-</div>
-
-<table>
-  <thead>
-    <tr class="gr">
-      <th colspan="3"></th>
-      <th colspan="4" style="text-align:center;color:#9ca3af;">BEST RESULT (BY SLAM)</th>
-      <th colspan="2"></th>
-      <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
-    </tr>
-    <tr>
-      <th>#</th>
-      <th class="left sortable" data-col="player">PLAYER</th>
-      <th class="sortable" data-col="best">BEST</th>
-      <th class="sortable" data-col="AO">AO</th>
-      <th class="sortable" data-col="RG">RG</th>
-      <th class="sortable" data-col="WIM">WIM</th>
-      <th class="sortable" data-col="USO">USO</th>
-      <th class="sortable" data-col="W">W</th>
-      <th class="sortable" data-col="L">L</th>
-      <th class="dl sortable" data-col="agg">AGG</th>
-      <th class="sortable" data-col="hard">H</th>
-      <th class="sortable" data-col="clay">C</th>
-      <th class="sortable" data-col="grass">G</th>
-    </tr>
-  </thead>
-  <tbody id="table-body"></tbody>
-  <tfoot>
-    <tr><td colspan="13" id="table-footer"></td></tr>
-  </tfoot>
-</table>
-
-<script>
-  const dataMap = {{
-    {", ".join(f'"{tour}": {js_data[tour]}' for tour in tours)}
-  }};
-  const maxYears = {json.dumps(max_years)};
-
-  const footerText = `        BEST = Career best GS result &nbsp;·&nbsp;
-        AO/RG/WIM/USO = Best result at each major &nbsp;·&nbsp;
-        W = Winner · F = Final · SF = Semi-final · QF = Quarter-final · R16/R32/R64/R128 &nbsp;·&nbsp; <br>
-        AGG = aggregate GS win rate &nbsp;·&nbsp;
-        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
-        Win rate: ≥70% <span style="color:#e8a838">■</span> ≥80% <span style="color:#2dd4b0">■</span>`;
-
-  // ---------- 颜色函数 ----------
-  function aggBg(pct) {{
-    if (pct === null) return 'transparent';
-    if (pct >= 90) return 'rgb(4,120,87)';
-    if (pct >= 85) return 'rgb(7,123,89)';
-    if (pct >= 80) return 'rgb(42,159,121)';
-    if (pct >= 75) return 'rgb(227,152,45)';
-    if (pct >= 70) return 'rgb(247,213,118)';
-    return 'transparent';
-  }}
-  function aggColor(pct) {{
-    if (pct === null) return '#6b7280';
-    if (pct >= 85) return '#ffffff';
-    if (pct >= 70) return '#111111';
-    return '#6b7280';
-  }}
-  function surfBg(pct) {{
-    if (pct === null) return 'transparent';
-    if (pct >= 90) return 'rgb(4,120,87)';
-    if (pct >= 85) return 'rgb(39,157,119)';
-    if (pct >= 80) return 'rgb(67,186,144)';
-    if (pct >= 75) return 'rgb(235,174,72)';
-    if (pct >= 70) return 'rgb(249,218,124)';
-    return 'transparent';
-  }}
-  function surfColor(pct) {{
-    if (pct === null) return '#6b7280';
-    if (pct >= 85) return '#ffffff';
-    if (pct >= 75) return '#111111';
-    if (pct >= 70) return '#111111';
-    return '#6b7280';
-  }}
-
-  function fmt(val) {{
-    return (val === null || val === undefined) ? '—' : val + '%';
-  }}
-
-  // ---------- 排序状态 ----------
-  let sortState = [{{ col: 'agg', order: 'desc' }}];
-  let userSorted = false;
-  let currentTour = '{tours[0]}';
-  let activeOnly = false;
-
-  const colIndex = {{
-    'player': 1,
-    'best': 3,
-    'AO': 4,
-    'RG': 5,
-    'WIM': 6,
-    'USO': 7,
-    'W': 8,
-    'L': 9,
-    'agg': 10,
-    'hard': 11,
-    'clay': 12,
-    'grass': 13,
-  }};
-
-  const roundRank = {{
-    'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999
-  }};
-
-  function getRoundValue(val) {{
-    if (val === null || val === undefined) return 999;
-    return roundRank[val] || 999;
-  }}
-
-  function compareValues(a, b, col, order) {{
-    let valA, valB;
-    if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {{
-      const idx = colIndex[col];
-      valA = getRoundValue(a[idx]);
-      valB = getRoundValue(b[idx]);
-    }} else if (col === 'best') {{
-      valA = a[colIndex[col]];
-      valB = b[colIndex[col]];
-    }} else {{
-      valA = a[colIndex[col]];
-      valB = b[colIndex[col]];
-    }}
-    
-    const isNullA = valA === null || valA === undefined;
-    const isNullB = valB === null || valB === undefined;
-    if (isNullA && isNullB) return 0;
-    if (isNullA) return 1;
-    if (isNullB) return -1;
-    
-    if (col === 'player') {{
-      valA = String(valA).toLowerCase();
-      valB = String(valB).toLowerCase();
-    }} else {{
-      valA = Number(valA);
-      valB = Number(valB);
-    }}
-    
-    if (valA < valB) return order === 'asc' ? -1 : 1;
-    if (valA > valB) return order === 'asc' ? 1 : -1;
-    return 0;
-  }}
-
-  function sortRows(rows) {{
-    if (!sortState.length) return rows;
-    return [...rows].sort((a, b) => {{
-      for (let rule of sortState) {{
-        const cmp = compareValues(a, b, rule.col, rule.order);
-        if (cmp !== 0) return cmp;
-      }}
-      return 0;
-    }});
-  }}
-
-  function updateSortIndicators() {{
-    document.querySelectorAll('.sortable').forEach(th => {{
-      const ind = th.querySelector('.sort-indicator');
-      if (ind) ind.remove();
-    }});
-    if (!userSorted) return;
-    if (sortState.length > 0) {{
-      const primary = sortState[0];
-      const th = document.querySelector(`th[data-col="${{primary.col}}"]`);
-      if (th) {{
-        const arrow = primary.order === 'asc' ? '▲' : '▼';
-        const span = document.createElement('span');
-        span.className = 'sort-indicator';
-        span.textContent = ' ' + arrow;
-        th.appendChild(span);
-      }}
-    }}
-  }}
-
-  function isActive(row) {{
-    const maxYear = maxYears[currentTour];
-    const lastWinYear = row[14];
-    return (maxYear - lastWinYear) < 2;
-  }}
-
-  function renderTable() {{
-    let rows = dataMap[currentTour] || [];
-    if (activeOnly) {{
-      rows = rows.filter(row => isActive(row));
-    }}
-    const sorted = sortRows(rows);
-    
-    const tbody = document.getElementById('table-body');
-    const countSpan = document.getElementById('champion-count');
-    const footerTd = document.getElementById('table-footer');
-    
-    countSpan.textContent = sorted.length + ' players';
-    footerTd.innerHTML = footerText;
-
-    let html = '';
-    sorted.forEach((row, idx) => {{
-      const [origRank, player, bestDisp, bestRank, ao, rg, wim, uso, W, L, agg, hard, clay, grass] = row;
-      const bestColors = {{
-        'F':   ['rgba(251,191,36,0.2)',  '#FCD34D'],
-        'SF':  ['rgba(167,139,250,0.2)', '#A78BFA'],
-        'QF':  ['rgba(52,211,153,0.2)',  '#34D399'],
-        'R16': ['rgba(99,179,237,0.2)',  '#63B3ED'],
-      }};
-      const [bestBg, bestColor] = bestColors[bestDisp] || ['transparent', '#9ca3af'];
-      const bestBadge = bestDisp === '—'
-        ? '<span style="color:#4b5563">—</span>'
-        : `<span class="round-badge" style="background:${{bestBg}};color:${{bestColor}};">${{bestDisp}}</span>`;
-      const aggBgColor = aggBg(agg);
-      const aggTextColor = aggColor(agg);
-      const hardBgColor = surfBg(hard);
-      const hardTextColor = surfColor(hard);
-      const clayBgColor = surfBg(clay);
-      const clayTextColor = surfColor(clay);
-      const grassBgColor = surfBg(grass);
-      const grassTextColor = surfColor(grass);
-
-      html += `<tr>
-        <td style="color:#6b7280;text-align:center;font-size:11px;">${{idx + 1}}</td>
-        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${{player}}</td>
-        <td style="text-align:center;">${{bestBadge}}</td>
-        <td style="text-align:center;color:#e5e5e5;">${{ao}}</td>
-        <td style="text-align:center;color:#e5e5e5;">${{rg}}</td>
-        <td style="text-align:center;color:#e5e5e5;">${{wim}}</td>
-        <td style="text-align:center;color:#e5e5e5;">${{uso}}</td>
-        <td style="text-align:center;color:#e5e5e5;">${{W}}</td>
-        <td style="text-align:center;color:#6b7280;">${{L}}</td>
-        <td style="text-align:center;background:${{aggBgColor}};color:${{aggTextColor}};">${{fmt(agg)}}</td>
-        <td style="text-align:center;background:${{hardBgColor}};color:${{hardTextColor}};">${{fmt(hard)}}</td>
-        <td style="text-align:center;background:${{clayBgColor}};color:${{clayTextColor}};">${{fmt(clay)}}</td>
-        <td style="text-align:center;background:${{grassBgColor}};color:${{grassTextColor}};">${{fmt(grass)}}</td>
-      </tr>`;
-    }});
-    tbody.innerHTML = html;
-    updateSortIndicators();
-  }}
-
-  function handleSortClick(e) {{
-    const th = e.currentTarget;
-    const col = th.getAttribute('data-col');
-    if (!col) return;
-    userSorted = true;
-    const existingIdx = sortState.findIndex(s => s.col === col);
-    let newOrder = 'desc';
-    if (existingIdx !== -1) {{
-      newOrder = sortState[existingIdx].order === 'asc' ? 'desc' : 'asc';
-    }}
-    if (existingIdx !== -1) {{
-      const [existing] = sortState.splice(existingIdx, 1);
-      existing.order = newOrder;
-      sortState.unshift(existing);
-    }} else {{
-      sortState.unshift({{ col, order: newOrder }});
-    }}
-    renderTable();
-  }}
-
-  function resetToDefault() {{
-    sortState = [{{ col: 'agg', order: 'desc' }}];
-    userSorted = false;
-  }}
-
-  document.querySelectorAll('.sortable').forEach(th => {{
-    th.addEventListener('click', handleSortClick);
-  }});
-
-  const selectEl = document.getElementById('tourSelect');
-  if (selectEl) {{
-    selectEl.addEventListener('change', e => {{
-      currentTour = e.target.value;
-      resetToDefault();
-      renderTable();
-    }});
-  }}
-
-  const activeCheck = document.getElementById('activeOnlyCheckbox');
-  activeCheck.addEventListener('change', e => {{
-    activeOnly = e.target.checked;
-    renderTable();
-  }});
-
-  renderTable();
-</script>
-</body>
-</html>"""
-
+def export_to_json(rows_atp, rows_wta, max_year_atp, max_year_wta, output_path):
+    data = {
+        "meta": {
+            "max_years": {
+                "atp": max_year_atp,
+                "wta": max_year_wta
+            }
+        },
+        "atp": rows_atp,
+        "wta": rows_wta
+    }
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"✅ 已保存: {output_path}")
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"✅ JSON 已生成: {output_path}")
 
 
 # ══════════════════════════════════════════════════════════════
 # 主入口
 # ══════════════════════════════════════════════════════════════
 if __name__ == "__main__":
-    rows_atp, max_year_atp = get_non_champions_leaderboard(tour='atp')
-    rows_wta, max_year_wta = get_non_champions_leaderboard(tour='wta')
-
-    # 综合页面（WTA/ATP 切换）
-    build_non_gs_leaderboard(
-        {'wta': rows_wta, 'atp': rows_atp},
-        {'wta': max_year_wta, 'atp': max_year_atp},
-        output_path='./analysis/leaderboards/tour_non_gs_champions.html'
-    )
-    # 单独 WTA
-    build_non_gs_leaderboard(
-        {'wta': rows_wta},
-        {'wta': max_year_wta},
-        output_path='./analysis/leaderboards/wta_non_gs_champions.html'
-    )
-    # 单独 ATP
-    build_non_gs_leaderboard(
-        {'atp': rows_atp},
-        {'atp': max_year_atp},
-        output_path='./analysis/leaderboards/atp_non_gs_champions.html'
-    )
+    rows_atp, max_year_atp = get_non_champions_data(tour='atp')
+    rows_wta, max_year_wta = get_non_champions_data(tour='wta')
+    output_path = os.path.join(PROJECT_ROOT, './output/tour_non_gs_champions.json')
+    export_to_json(rows_atp, rows_wta, max_year_atp, max_year_wta, output_path)
