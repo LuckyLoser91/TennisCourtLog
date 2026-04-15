@@ -147,44 +147,25 @@
 <script>
   let dataMap = {};
   let currentTour = 'wta';
-  let currentAge = null;          // null = 职业生涯总计
-  let ageOptions = [];            // 存储可用的年龄列表（从meta中获取）
+  let currentAge = null;
   let minAge = 18, maxAge = 45;
 
-  // ==================== 国旗映射 ====================
-  const IOC_TO_ISO2 = {
-    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-  };
+  // 存储每个国家（iso2）的冠军人数（不同选手数）
+  let countryChampionCount = new Map();
+  // 存储每个国家的总冠军数
+  let countryTotalTitles = new Map();
 
-  function getFlagImg(ioc) {
-    if (!ioc) return '<span title="Unknown">🏳️</span>';
-    const iso2 = IOC_TO_ISO2[ioc.toUpperCase().trim()];
+  function getFlagImg(iso2) {
     if (!iso2) return '<span title="Unknown">🏳️</span>';
     const iso2Lower = iso2.toLowerCase();
-    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" 
-                  width="16" height="12" alt="${iso2}" title="${ioc}" 
-                  style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
+    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" width="16" height="12" alt="${iso2}" title="${iso2}" style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
   }
 
-  // ==================== 数据加载与年龄选择器初始化 ====================
   async function loadData() {
     try {
       const res = await fetch("../output/tour_gs_champions.json");
       const data = await res.json();
       dataMap = data;
-      // 读取年龄范围
       if (data.meta) {
         minAge = data.meta.min_age;
         maxAge = data.meta.max_age;
@@ -200,7 +181,6 @@
   function initAgeSelector() {
     const select = document.getElementById('ageSelect');
     if (!select) return;
-    // 清空现有选项（保留第一个“Career”）
     while (select.options.length > 1) select.remove(1);
     for (let age = minAge; age <= maxAge; age++) {
       const option = document.createElement('option');
@@ -210,34 +190,23 @@
     }
     select.addEventListener('change', (e) => {
       const val = e.target.value;
-      if (val === 'career') {
-        currentAge = null;
-      } else {
-        currentAge = parseInt(val);
-      }
-      resetToDefault();   // 切换年龄时重置排序为默认（冠军数降序等）
+      if (val === 'career') currentAge = null;
+      else currentAge = parseInt(val);
+      resetToDefault();
       renderTable();
     });
   }
 
-  // ==================== 辅助函数：根据年龄获取球员数据对象 ====================
   function getPlayerDataByAge(player, age) {
-    if (age === null) {
-      // 职业生涯总计：直接返回顶层对象（包含所有字段）
-      return player;
-    }
-    // 从 age_entries 中查找对应年龄的数据
+    if (age === null) return player;
     if (player.age_entries && Array.isArray(player.age_entries)) {
       const entry = player.age_entries.find(e => e.age === age);
       if (entry) return entry;
-      // 如果没找到（例如球员退役早于该年龄），则返回最后一个（最大年龄）节点
       return player.age_entries[player.age_entries.length - 1];
     }
-    // 降级：没有 age_entries 则返回顶层
     return player;
   }
 
-  // ==================== 排序相关（基于当前年龄的数据） ====================
   let sortState = [];
   let userSorted = false;
 
@@ -261,27 +230,50 @@
     }
   }
 
+  // 比较函数，player列特殊处理：冠军人数降序 → 总冠军数降序 → iso2升序
   function compareValues(a, b, col, order) {
-    // a, b 是原始球员对象（包含顶层字段和age_entries）
-    const dataA = getPlayerDataByAge(a, currentAge);
-    const dataB = getPlayerDataByAge(b, currentAge);
-    let valA = getValueByCol(dataA, col);
-    let valB = getValueByCol(dataB, col);
-    const isNullA = valA === null || valA === undefined;
-    const isNullB = valB === null || valB === undefined;
-    if (isNullA && isNullB) return 0;
-    if (isNullA) return 1;
-    if (isNullB) return -1;
     if (col !== 'player') {
+      const dataA = getPlayerDataByAge(a, currentAge);
+      const dataB = getPlayerDataByAge(b, currentAge);
+      let valA = getValueByCol(dataA, col);
+      let valB = getValueByCol(dataB, col);
+      const isNullA = valA === null || valA === undefined;
+      const isNullB = valB === null || valB === undefined;
+      if (isNullA && isNullB) return 0;
+      if (isNullA) return 1;
+      if (isNullB) return -1;
       valA = Number(valA);
       valB = Number(valB);
+      if (valA < valB) return order === 'asc' ? -1 : 1;
+      if (valA > valB) return order === 'asc' ? 1 : -1;
+      return 0;
     } else {
-      valA = String(valA).toLowerCase();
-      valB = String(valB).toLowerCase();
+      // PLAYER 列排序规则：
+      // 1. 按国家冠军人数（不同选手数）降序
+      // 2. 若相同，按国家总冠军数降序
+      // 3. 若还相同，按国家 iso2 升序
+      const isoA = a.iso2 || '';
+      const isoB = b.iso2 || '';
+
+      const champCountA = countryChampionCount.get(isoA) || 0;
+      const champCountB = countryChampionCount.get(isoB) || 0;
+
+      if (champCountA !== champCountB) {
+        return order === 'asc' ? champCountA - champCountB : champCountB - champCountA;
+      }
+
+      const titlesTotalA = countryTotalTitles.get(isoA) || 0;
+      const titlesTotalB = countryTotalTitles.get(isoB) || 0;
+
+      if (titlesTotalA !== titlesTotalB) {
+        return order === 'asc' ? titlesTotalA - titlesTotalB : titlesTotalB - titlesTotalA;
+      }
+
+      if (isoA < isoB) return order === 'asc' ? -1 : 1;
+      if (isoA > isoB) return order === 'asc' ? 1 : -1;
+
+      return 0; // 相同国家，由后续排序条件决定
     }
-    if (valA < valB) return order === 'asc' ? -1 : 1;
-    if (valA > valB) return order === 'asc' ? 1 : -1;
-    return 0;
   }
 
   function sortRows(rows) {
@@ -338,7 +330,6 @@
     renderTable();
   }
 
-  // ==================== 渲染表格 ====================
   const footerText = `1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
     AGE 1ST = age at first title &nbsp;·&nbsp;
     LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
@@ -402,47 +393,49 @@
   }
 
   function renderTable() {
-  const players = dataMap[currentTour] || [];
-  const sorted = sortRows(players);
-  const tbody = document.getElementById('table-body');
-  const countSpan = document.getElementById('champion-count');
-  const footerTd = document.getElementById('table-footer');
+    const players = dataMap[currentTour] || [];
 
-  countSpan.textContent = sorted.length + ' champions';
-  footerTd.innerHTML = footerText;
-
-  let html = '';
-  sorted.forEach((player, idx) => {
-    // 获取当前年龄对应的数据
-    const playerData = getPlayerDataByAge(player, currentAge);
-    const titlesNum = playerData.titles ?? 0;          // 当前年龄的冠军数
-    const careerTitles = player.titles ?? 0;           // 职业生涯总冠军数
-
-    // 根据是否选择了年龄来决定显示格式
-    let titleDisplay;
-    if (currentAge === null) {
-      // 未选择年龄（Career），只显示总数
-      titleDisplay = careerTitles;
-    } else {
-      // 选择了年龄，显示 当前(总数)
-      titleDisplay = `${titlesNum} / ${careerTitles}`;
+    // 统计每个国家的冠军人数（不同选手数）和总冠军数
+    countryChampionCount.clear();
+    countryTotalTitles.clear();
+    for (const p of players) {
+      const iso = p.iso2 || '';
+      // 冠军人数：每名选手计数1
+      countryChampionCount.set(iso, (countryChampionCount.get(iso) || 0) + 1);
+      // 总冠军数：累加该选手的冠军数
+      countryTotalTitles.set(iso, (countryTotalTitles.get(iso) || 0) + (p.titles || 0));
     }
 
-    const titleBg = titlesBg(titlesNum);
-    const titleColor = titlesFc(titlesNum);
-    const aggBgColor = aggBg(playerData.agg);
-    const aggTextColor = aggColor(playerData.agg);
-    const hardBgColor = surfBg(playerData.win_h);
-    const hardTextColor = surfColor(playerData.win_h);
-    const clayBgColor = surfBg(playerData.win_c);
-    const clayTextColor = surfColor(playerData.win_c);
-    const grassBgColor = surfBg(playerData.win_g);
-    const grassTextColor = surfColor(playerData.win_g);
+    const sorted = sortRows(players);
+    const tbody = document.getElementById('table-body');
+    const countSpan = document.getElementById('champion-count');
+    const footerTd = document.getElementById('table-footer');
 
-    html += `<tr>
+    countSpan.textContent = sorted.length + ' champions';
+    footerTd.innerHTML = footerText;
+
+    let html = '';
+    sorted.forEach((player, idx) => {
+      const playerData = getPlayerDataByAge(player, currentAge);
+      const titlesNum = playerData.titles ?? 0;
+      const careerTitles = player.titles ?? 0;
+      let titleDisplay = (currentAge === null) ? careerTitles : `${titlesNum} / ${careerTitles}`;
+
+      const titleBg = titlesBg(titlesNum);
+      const titleColor = titlesFc(titlesNum);
+      const aggBgColor = aggBg(playerData.agg);
+      const aggTextColor = aggColor(playerData.agg);
+      const hardBgColor = surfBg(playerData.win_h);
+      const hardTextColor = surfColor(playerData.win_h);
+      const clayBgColor = surfBg(playerData.win_c);
+      const clayTextColor = surfColor(playerData.win_c);
+      const grassBgColor = surfBg(playerData.win_g);
+      const grassTextColor = surfColor(playerData.win_g);
+
+      html += `<tr>
       <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
       <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">
-        ${getFlagImg(player.ioc)} ${player.player} (${player.birth_year})
+        ${getFlagImg(player.iso2)} ${player.player} (${player.birth_year})
       </td>
       <td style="text-align:center;color:#e5e5e5;">${playerData.first_year ?? '—'}</td>
       <td style="text-align:center;color:#e5e5e5;">${fmtAge(playerData.age_first)}</td>
@@ -458,11 +451,11 @@
       <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(playerData.win_c)}</td>
       <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(playerData.win_g)}</td>
     </tr>`;
-  });
-  tbody.innerHTML = html;
-  updateSortIndicators();
+    });
+    tbody.innerHTML = html;
+    updateSortIndicators();
   }
-  // ==================== 事件绑定 ====================
+
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', handleSortClick);
   });

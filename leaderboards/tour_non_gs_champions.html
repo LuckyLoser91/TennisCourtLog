@@ -160,7 +160,6 @@
 </table>
 
 <script>
-  // ---------- 国旗映射 ----------
   const IOC_TO_ISO2 = {
     "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
     "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
@@ -182,19 +181,15 @@
     const iso2 = IOC_TO_ISO2[ioc.toUpperCase().trim()];
     if (!iso2) return '<span title="Unknown">🏳️</span>';
     const iso2Lower = iso2.toLowerCase();
-    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" 
-                  width="16" height="12" alt="${iso2}" title="${ioc}" 
-                  style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
+    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" width="16" height="12" alt="${iso2}" title="${ioc}" style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
   }
 
-  // 全局数据
-  let jsonData = null;          // { meta: { max_years: {atp, wta} }, atp: [], wta: [] }
+  let jsonData = null;
   let currentTour = 'wta';
   let activeOnly = false;
-  let sortColumn = 'agg';       // 当前排序列
-  let sortOrder = 'desc';       // 'asc' or 'desc'
+  let sortColumn = 'agg';
+  let sortOrder = 'desc';
 
-  // 辅助函数：轮次显示与背景色
   const bestColors = {
     'F':   ['rgba(251,191,36,0.2)',  '#FCD34D'],
     'SF':  ['rgba(167,139,250,0.2)', '#A78BFA'],
@@ -203,14 +198,11 @@
   };
 
   function formatBestBadge(bestDisp) {
-    if (!bestDisp || bestDisp === '—') {
-      return '<span style="color:#4b5563">—</span>';
-    }
+    if (!bestDisp || bestDisp === '—') return '<span style="color:#4b5563">—</span>';
     const [bg, color] = bestColors[bestDisp] || ['transparent', '#9ca3af'];
     return `<span class="round-badge" style="background:${bg};color:${color};">${bestDisp}</span>`;
   }
 
-  // 胜率背景色
   function aggBg(pct) {
     if (pct === null || pct === undefined) return 'transparent';
     if (pct >= 90) return 'rgb(4,120,87)';
@@ -246,62 +238,52 @@
     return (val === null || val === undefined) ? '—' : val + '%';
   }
 
-  // 活跃筛选
   function isActive(playerObj, maxYear) {
     const lastWinYear = playerObj.stats.last_win_year;
     if (!lastWinYear) return false;
     return (maxYear - lastWinYear) < 2;
   }
 
-  // 排序比较
   function compareValues(a, b, col) {
-    let valA, valB;
     if (col === 'player') {
-      valA = a.player.toLowerCase();
-      valB = b.player.toLowerCase();
+      // 按国旗 (ioc) 排序，再按姓名
+      const iocA = a.ioc || '';
+      const iocB = b.ioc || '';
+      if (iocA !== iocB) {
+        if (iocA < iocB) return -1;
+        if (iocA > iocB) return 1;
+      }
+      const nameA = a.player.toLowerCase();
+      const nameB = b.player.toLowerCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      return 0;
     } else if (col === 'best') {
-      valA = a.stats.best_display;
-      valB = b.stats.best_display;
-      // 轮次优先级：W < F < SF < QF < R16 ... 使用预定义映射
       const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
-      valA = rankMap[valA] || 999;
-      valB = rankMap[valB] || 999;
+      const valA = rankMap[a.stats.best_display] || 999;
+      const valB = rankMap[b.stats.best_display] || 999;
       return valA - valB;
     } else if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {
       const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
-      valA = rankMap[a.stats[`${col.toLowerCase()}_best`]] || 999;
-      valB = rankMap[b.stats[`${col.toLowerCase()}_best`]] || 999;
+      const valA = rankMap[a.stats[`${col.toLowerCase()}_best`]] || 999;
+      const valB = rankMap[b.stats[`${col.toLowerCase()}_best`]] || 999;
       return valA - valB;
-    } else if (col === 'W') {
-      valA = a.stats.W;
-      valB = b.stats.W;
-    } else if (col === 'L') {
-      valA = a.stats.L;
-      valB = b.stats.L;
-    } else if (col === 'agg') {
-      valA = a.stats.agg;
-      valB = b.stats.agg;
-    } else if (col === 'hard') {
-      valA = a.stats.win_h;
-      valB = b.stats.win_h;
-    } else if (col === 'clay') {
-      valA = a.stats.win_c;
-      valB = b.stats.win_c;
-    } else if (col === 'grass') {
-      valA = a.stats.win_g;
-      valB = b.stats.win_g;
     } else {
-      return 0;
+      let valA, valB;
+      if (col === 'W') { valA = a.stats.W; valB = b.stats.W; }
+      else if (col === 'L') { valA = a.stats.L; valB = b.stats.L; }
+      else if (col === 'agg') { valA = a.stats.agg; valB = b.stats.agg; }
+      else if (col === 'hard') { valA = a.stats.win_h; valB = b.stats.win_h; }
+      else if (col === 'clay') { valA = a.stats.win_c; valB = b.stats.win_c; }
+      else if (col === 'grass') { valA = a.stats.win_g; valB = b.stats.win_g; }
+      else return 0;
+      const isNullA = valA === null || valA === undefined;
+      const isNullB = valB === null || valB === undefined;
+      if (isNullA && isNullB) return 0;
+      if (isNullA) return 1;
+      if (isNullB) return -1;
+      return valA - valB;
     }
-    // 处理 null/undefined
-    const isNullA = valA === null || valA === undefined;
-    const isNullB = valB === null || valB === undefined;
-    if (isNullA && isNullB) return 0;
-    if (isNullA) return 1;
-    if (isNullB) return -1;
-    // 数值比较
-    const diff = valA - valB;
-    return diff;
   }
 
   function sortPlayers(players) {
@@ -312,7 +294,6 @@
     });
   }
 
-  // 渲染表格
   function renderTable() {
     if (!jsonData) return;
     let players = jsonData[currentTour] || [];
@@ -392,7 +373,7 @@
       sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       sortColumn = col;
-      sortOrder = 'desc';  // 默认降序
+      sortOrder = 'desc';
     }
     renderTable();
   }
@@ -402,7 +383,6 @@
     sortOrder = 'desc';
   }
 
-  // 加载数据
   async function loadData() {
     try {
       const res = await fetch('../output/tour_non_gs_champions.json');
@@ -416,7 +396,6 @@
     }
   }
 
-  // 事件绑定
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', handleSortClick);
   });
