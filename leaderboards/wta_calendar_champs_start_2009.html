@@ -10,7 +10,7 @@
       background: #111827;
       font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
       padding: 36px 44px 60px;
-      min-width: 1300px;
+      min-width: 1200px;
     }
     h1 {
       color: #f5c842;
@@ -45,7 +45,7 @@
       color: #9ca3af;
       font-size: 12px;
     }
-    select {
+    select, input {
       background: #1f2937;
       color: #f3f4f6;
       border: 1px solid #374151;
@@ -57,7 +57,15 @@
       outline: none;
       min-width: 140px;
     }
-    select:hover { border-color: #f5c842; }
+    input {
+      cursor: text;
+      font-weight: 400;
+    }
+    input::placeholder {
+      color: #6b7280;
+      font-weight: 400;
+    }
+    select:hover, input:hover { border-color: #f5c842; }
     .stats {
       color: #9ca3af;
       font-size: 11px;
@@ -77,24 +85,48 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 12.5px;
-      min-width: 1200px;
-      white-space: nowrap;
+      min-width: 1100px;
+      table-layout: fixed;
     }
     th, td {
       text-align: center;
-      padding: 8px 10px;
+      padding: 8px 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    /* 优化后的列宽分配 */
+    th:nth-child(1) { width: 5%; }   /* # */
+    th:nth-child(2) { width: 11%; }  /* Start Date */
+    th:nth-child(3) { width: 17%; }  /* Tournament */
+    th:nth-child(4) { width: 11%; }  /* Level */
+    th:nth-child(5) { width: 13%; }  /* Surface */
+    th:nth-child(6) { width: 21%; }  /* Champion */
+    th:nth-child(7) { width: 11%; }  /* Date of Birth */
+    th:nth-child(8) { width: 9%; }   /* Age */
+
     th {
       color: #6b7280;
       font-size: 10.5px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      padding: 9px 8px;
+      padding: 9px 6px;
       background: #1a2332;
       border-bottom: 1px solid #374151;
     }
-    th.champion-col { text-align: left; padding-left: 12px; }
+    /* Champion列表头：左对齐并添加适当左内边距 */
+    th.champion-col {
+      text-align: center;
+      padding-left: 0px;  /* 根据实际效果调整这个值 */
+    }
+
+
+    /* 内部包装器保持原样即可 */
+    .winner-cell { 
+      display: inline-flex; 
+      align-items: center; 
+      max-width: 100%;
+    }
     td {
       border-bottom: 1px solid #1f2937;
       color: #e5e5e5;
@@ -103,21 +135,24 @@
     tr:hover td { background: #1f2937; }
     td.champion-col {
       text-align: left;
-      padding-left: 12px;
+      padding-left: 120px;
       font-weight: 600;
       color: #f3f4f6;
     }
-    .winner-cell { display: inline-flex; align-items: center; }
+    .winner-cell { 
+      display: inline-flex; 
+      align-items: center; 
+      max-width: 100%;
+    }
     .badge-level {
-      padding: 4px 12px;
+      padding: 4px 8px;
       border-radius: 20px;
       font-weight: 600;
       font-size: 10.5px;
       display: inline-block;
       text-align: center;
-      min-width: 85px;
+      min-width: 80px;
     }
-    /* 等级颜色 */
     .level-GrandSlam {
       background: #b91c1c;
       color: #fee2e2;
@@ -144,7 +179,7 @@
       color: #cbd5e1;
     }
     .surface-badge {
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 20px;
       font-size: 10.5px;
       font-weight: 500;
@@ -155,13 +190,12 @@
     .surface-Grass { background: #14532d; color: #bbf7d0; }
     .surface-Carpet { background: #334155; color: #cbd5e1; }
 
-    /* dob 与 age 不再使用特殊字体大小，仅保留轻微背景区分 */
     .dob-cell, .winner-age {
       font-family: inherit;
       background: #1a2332;
-      padding: 3px 10px;
+      padding: 3px 6px;
       border-radius: 20px;
-      font-size: 12.5px;
+      font-size: 12px;
       color: #e5e5e5;
       display: inline-block;
     }
@@ -201,6 +235,10 @@
   </div>
   <div class="controls">
     <div class="filter-group">
+      <label for="searchInput">🔍 CHAMPION</label>
+      <input type="text" id="searchInput" placeholder="e.g. Iga Swiatek" style="min-width:180px;">
+    </div>
+    <div class="filter-group">
       <label for="yearSelect">📅 SEASON</label>
       <select id="yearSelect"></select>
     </div>
@@ -218,7 +256,7 @@
   <table>
     <thead>
       <tr>
-        <th>Year</th>
+        <th>#</th>
         <th>Start Date</th>
         <th>Tournament</th>
         <th>Level</th>
@@ -239,11 +277,13 @@
 
 <script>
   (function(){
-    const JSON_URL = '../output/wta_calendar_cahmps_start_2009.json';
+    const JSON_URL = '../output/wta_calendar_champs_start_2009.json';
     let allData = [];
     let currentYear = '';
     let currentLevel = '';
+    let searchTerm = '';
 
+    const searchInput = document.getElementById('searchInput');
     const yearSelect = document.getElementById('yearSelect');
     const levelSelect = document.getElementById('levelSelect');
     const tableBody = document.getElementById('tableBody');
@@ -256,7 +296,7 @@
       "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
       "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
       "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-      "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
+      "IDN": "ID", "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
       "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
       "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
       "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
@@ -280,7 +320,7 @@
           'SWE':'🇸🇪','KAZ':'🇰🇿','CAN':'🇨🇦','GRE':'🇬🇷','TUN':'🇹🇳',
           'COL':'🇨🇴','BRA':'🇧🇷','NZL':'🇳🇿','ARG':'🇦🇷','RSA':'🇿🇦',
           'BUL':'🇧🇬','PUR':'🇵🇷','UZB':'🇺🇿','EGY':'🇪🇬','INA':'🇮🇩',
-          'TUR':'🇹🇷'
+          'TUR':'🇹🇷','IDN':'🇮🇩'
         };
         return fallbackMap[ioc] ? `<span style="margin-right:6px;">${fallbackMap[ioc]}</span>` : '';
       }
@@ -331,6 +371,7 @@
         if (!item.winner || item.winner.trim() === '') return false;
         if (currentYear && item.year !== currentYear) return false;
         if (currentLevel && item.tourney_level !== currentLevel) return false;
+        if (searchTerm && !item.winner.toLowerCase().includes(searchTerm.toLowerCase())) return false;
         return true;
       });
     }
@@ -348,8 +389,7 @@
       const uniqueChampions = new Set();
       
       let html = '';
-      for (let item of sorted) {
-        const year = item.year || '';
+      sorted.forEach((item, idx) => {
         const startDate = item.tourney_start_date || '';
         const tourneyName = item.tourney_name || '';
         const level = item.tourney_level || '';
@@ -372,7 +412,7 @@
         uniqueChampions.add(`${winner}|${ioc}`);
 
         html += `<tr>
-          <td>${year}</td>
+          <td style="color:#e5e5e5;font-size:11px;">${idx + 1}</td>
           <td>${startDate}</td>
           <td style="font-weight:600;">${tourneyName}</td>
           <td><span class="badge-level ${levelClass}">${level}</span></td>
@@ -381,7 +421,7 @@
           <td><span class="dob-cell">${dob}</span></td>
           <td><span class="winner-age">${age}</span></td>
         </tr>`;
-      }
+      });
       
       tableBody.innerHTML = html;
       const displayedRows = sorted.length;
@@ -448,10 +488,14 @@
         const allLevels = allData.map(d => d.tourney_level).filter(l => l);
         initYearSelect(allYears);
         initLevelSelect(allLevels);
+        searchInput.addEventListener('input', e => {
+          searchTerm = e.target.value.trim();
+          updateView();
+        });
         updateView();
       } catch (err) {
         console.error(err);
-        tableBody.innerHTML = `<tr><td colspan="8" class="no-data">❌ Failed to load data. Ensure JSON file is at ../output/wta_calendar_cahmps_start_2009.json</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8" class="no-data">❌ Failed to load data. Ensure JSON file is at ../output/wta_calendar_champs_start_2009.json</td></tr>`;
         recordCountSpan.textContent = 'Error';
         championCountSpan.textContent = '—';
         yearSelect.innerHTML = '<option value="">All Years</option>';

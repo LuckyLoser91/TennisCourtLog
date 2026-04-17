@@ -6,12 +6,21 @@
   <title>TennisCourtLog · Data & Analysis</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      height: 100%;
+    }
     body {
       background: #111827;
       font-family: 'Segoe UI', Arial, sans-serif;
       padding: 48px 56px;
       min-width: 800px;
       color: #f3f4f6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .main-content {
+      flex: 1;  /* 让主要内容区域吃掉剩余空间，把页脚推到底部 */
     }
     h1 {
       color: #f5c842;
@@ -66,7 +75,6 @@
       display: block;
     }
     .card a:hover { color: #f5c842; }
-    /* 移除 .path 样式，但保留定义以防万一 */
     .footer {
       margin-top: 48px;
       padding-top: 18px;
@@ -81,71 +89,35 @@
 </head>
 <body>
 
-<h1>🎾 TennisCourtLog</h1>
-<div class="sub">
-  <span>Open Source Tennis Dataset</span> &nbsp;|&nbsp; 
-  WTA & ATP matches 1968–2026 &nbsp;|&nbsp; 
-  Maintained by <a href="https://github.com/LuckyLoser91" style="color:#f5c842; text-decoration:none;">LuckyLoser91</a>
-</div>
+  <!-- 主要内容区域包裹层 -->
+  <div class="main-content">
+    <h1>🎾 TennisCourtLog</h1>
+    <div class="sub">
+      <span>Open Source Tennis Dataset</span> &nbsp;|&nbsp; 
+      WTA & ATP matches 1968–2026 &nbsp;|&nbsp; 
+      Maintained by <a style="color:#f5c842; text-decoration:none;">LuckyLoser91</a>
+    </div>
 
-<!-- 分析结果区域：无路径 -->
-<div class="section">
-  <h2>📊 数据分析与可视化</h2>
-  <div class="grid">
-    <div class="card">
-      <a href="./leaderboards/tour_gs_champions.html">🏆 大满贯冠军排行榜</a>
-    </div>
-    <div class="card">
-      <a href="./leaderboards/tour_non_gs_champions.html">🏆 非大满贯冠军胜率排行榜</a>
-    </div>
-    <div class="card">
-      <a href="./leaderboards/wta_calendar_champs_start_2009.html">🏆 WTA 巡回赛冠军榜</a>
+    <div class="section">
+      <h2>📊 tennis-lists</h2>
+      <div class="grid">
+        <div class="card">
+          <a href="./leaderboards/tour_gs_champions.html">🏆 大满贯冠军排行榜</a>
+        </div>
+        <div class="card">
+          <a href="./leaderboards/tour_non_gs_champions.html">🏆 非大满贯冠军胜率排行榜</a>
+        </div>
+        <div class="card">
+          <a href="./leaderboards/wta_calendar_champs_start_2009.html">🥇 WTA 巡回赛冠军榜</a>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 原始数据区域：链接到 GitHub 仓库 -->
-<div class="section">
-  <h2>📁 原始数据文件</h2>
-  <div class="grid">
-    <div class="card">
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog/tree/main/tennis_wta" target="_blank">📂 WTA 数据目录</a>
-    </div>
-    <div class="card">
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog/tree/main/tennis_atp" target="_blank">📂 ATP 数据目录</a>
-    </div>
-    <div class="card">
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_wta/wta_players.csv" target="_blank">👩‍🎤 WTA 球员档案</a>
-    </div>
-    <div class="card">
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_atp/atp_players.csv" target="_blank">👨‍🎤 ATP 球员档案</a>
-    </div>
-    <div class="card">
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog/blob/main/tennis_wta/wta_matches_2026.csv" target="_blank">📅 最新 WTA 比赛 (2026)</a>
-    </div>
+  <!-- 页脚 -->
+  <div class="footer">
+    🕒 最后更新：2026年4月 &nbsp;·&nbsp; 
   </div>
-</div>
-
-<!-- 关于本项目（底部） -->
-<div class="section">
-  <h2>📖 关于本项目</h2>
-  <div style="background:#1f2937; border-radius:8px; padding:18px 22px; border:1px solid #374151;">
-    <p style="color:#d1d5db; line-height:1.6; margin-bottom:10px;">
-      <strong>TennisCourtLog</strong> 是一个整合了 WTA 和 ATP 网球比赛数据的开源数据集，覆盖公开赛年代（1968 年至今），并持续更新。
-      数据来源于 JeffSackmann 的 tennis_wta / tennis_atp 仓库以及 tennis-data.co.uk 的实时数据。
-    </p>
-    <p style="color:#9ca3af; font-size:13px;">
-      许可证：<a href="./LICENSE" style="color:#f5c842;">CC BY-NC-SA 4.0</a> &nbsp;·&nbsp;
-      <a href="https://github.com/LuckyLoser91/TennisCourtLog" style="color:#f5c842;">GitHub 仓库</a>
-    </p>
-  </div>
-</div>
-
-<!-- 页脚 -->
-<div class="footer">
-  🕒 最后更新：2026年4月 &nbsp;·&nbsp; 
-  <a href="https://github.com/LuckyLoser91/TennisCourtLog">View on GitHub</a>
-</div>
 
 </body>
 </html>
