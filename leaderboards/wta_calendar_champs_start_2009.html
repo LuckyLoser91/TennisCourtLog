@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WTA Champions Archive · Year & Level Filter</title>
+  <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -34,16 +34,18 @@
     .controls {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 18px;
+      flex-wrap: wrap;
     }
     .filter-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .filter-group label {
       color: #9ca3af;
       font-size: 12px;
+      white-space: nowrap;
     }
     select, input {
       background: #1f2937;
@@ -73,6 +75,7 @@
       padding: 5px 14px;
       border-radius: 6px;
       border: 1px solid #374151;
+      white-space: nowrap;
     }
     .table-wrapper {
       border-radius: 8px;
@@ -94,7 +97,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    /* 优化后的列宽分配 */
+    /* 列宽分配 */
     th:nth-child(1) { width: 5%; }   /* # */
     th:nth-child(2) { width: 11%; }  /* Start Date */
     th:nth-child(3) { width: 17%; }  /* Tournament */
@@ -114,14 +117,10 @@
       background: #1a2332;
       border-bottom: 1px solid #374151;
     }
-    /* Champion列表头：左对齐并添加适当左内边距 */
     th.champion-col {
       text-align: center;
-      padding-left: 0px;  /* 根据实际效果调整这个值 */
+      padding-left: 0px;
     }
-
-
-    /* 内部包装器保持原样即可 */
     .winner-cell { 
       display: inline-flex; 
       align-items: center; 
@@ -139,11 +138,6 @@
       font-weight: 600;
       color: #f3f4f6;
     }
-    .winner-cell { 
-      display: inline-flex; 
-      align-items: center; 
-      max-width: 100%;
-    }
     .badge-level {
       padding: 4px 8px;
       border-radius: 20px;
@@ -153,31 +147,12 @@
       text-align: center;
       min-width: 80px;
     }
-    .level-GrandSlam {
-      background: #b91c1c;
-      color: #fee2e2;
-      font-weight: 700;
-    }
-    .level-Finals {
-      background: #6d28d9;
-      color: #ede9fe;
-    }
-    .level-WTA1000 {
-      background: #2563eb;
-      color: #dbeafe;
-    }
-    .level-WTA500Premier {
-      background: #0d9488;
-      color: #ccfbf1;
-    }
-    .level-WTA250International {
-      background: #475569;
-      color: #e2e8f0;
-    }
-    .level-other {
-      background: #334155;
-      color: #cbd5e1;
-    }
+    .level-GrandSlam { background: #b91c1c; color: #fee2e2; font-weight: 700; }
+    .level-Finals { background: #6d28d9; color: #ede9fe; }
+    .level-WTA1000 { background: #2563eb; color: #dbeafe; }
+    .level-WTA500Premier { background: #0d9488; color: #ccfbf1; }
+    .level-WTA250International { background: #475569; color: #e2e8f0; }
+    .level-other { background: #334155; color: #cbd5e1; }
     .surface-badge {
       padding: 4px 8px;
       border-radius: 20px;
@@ -230,13 +205,18 @@
   <div>
     <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp;
     2009 – 2026 &nbsp;|&nbsp;
-    Only records with winner &nbsp;|&nbsp;
     <span style="color:#9ca3af;">Descending by start date</span>
   </div>
   <div class="controls">
+    <!-- 冠军搜索 (原有) -->
     <div class="filter-group">
       <label for="searchInput">🔍 CHAMPION</label>
-      <input type="text" id="searchInput" placeholder="e.g. Iga Swiatek" style="min-width:180px;">
+      <input type="text" id="searchInput" placeholder="e.g. Iga Swiatek" style="min-width:170px;">
+    </div>
+    <!-- 新增: 赛事搜索 -->
+    <div class="filter-group">
+      <label for="tournamentSearchInput">🏟️ TOURNAMENT</label>
+      <input type="text" id="tournamentSearchInput" placeholder="e.g. Australian Open" style="min-width:180px;">
     </div>
     <div class="filter-group">
       <label for="yearSelect">📅 SEASON</label>
@@ -281,9 +261,11 @@
     let allData = [];
     let currentYear = '';
     let currentLevel = '';
-    let searchTerm = '';
+    let championSearchTerm = '';
+    let tournamentSearchTerm = '';   // 新增赛事搜索词
 
     const searchInput = document.getElementById('searchInput');
+    const tournamentSearchInput = document.getElementById('tournamentSearchInput');
     const yearSelect = document.getElementById('yearSelect');
     const levelSelect = document.getElementById('levelSelect');
     const tableBody = document.getElementById('tableBody');
@@ -365,13 +347,23 @@
       return 'level-other';
     }
 
+    // 核心过滤：加入赛事搜索
     function filterData() {
       if (!allData.length) return [];
       return allData.filter(item => {
         if (!item.winner || item.winner.trim() === '') return false;
         if (currentYear && item.year !== currentYear) return false;
         if (currentLevel && item.tourney_level !== currentLevel) return false;
-        if (searchTerm && !item.winner.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        
+        // 冠军搜索 (原有)
+        if (championSearchTerm && !item.winner.toLowerCase().includes(championSearchTerm.toLowerCase())) return false;
+        
+        // 新增：赛事名称搜索 (tourney_name)
+        if (tournamentSearchTerm) {
+          const tourney = item.tourney_name || '';
+          if (!tourney.toLowerCase().includes(tournamentSearchTerm.toLowerCase())) return false;
+        }
+        
         return true;
       });
     }
@@ -488,10 +480,19 @@
         const allLevels = allData.map(d => d.tourney_level).filter(l => l);
         initYearSelect(allYears);
         initLevelSelect(allLevels);
+        
+        // 冠军搜索监听
         searchInput.addEventListener('input', e => {
-          searchTerm = e.target.value.trim();
+          championSearchTerm = e.target.value.trim();
           updateView();
         });
+        
+        // 新增：赛事搜索监听
+        tournamentSearchInput.addEventListener('input', e => {
+          tournamentSearchTerm = e.target.value.trim();
+          updateView();
+        });
+        
         updateView();
       } catch (err) {
         console.error(err);
