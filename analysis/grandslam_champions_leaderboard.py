@@ -27,7 +27,7 @@ SLAMS = {
 }
 
 # 年龄统计范围
-MIN_AGE = 18
+MIN_AGE = 17
 MAX_AGE = 45
 STEP = 1  # 整数年龄
 
@@ -58,24 +58,8 @@ def get_slam_key(tournament_name):
             return key
     return None
 
-IOC_TO_ISO2 = {
-    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-  }
 
-def get_country_code(ioc):
-    return IOC_TO_ISO2.get(ioc, None)
+
 
 def build_match_records(gs, player, player_info):
     """
@@ -256,9 +240,9 @@ def process_tour(tour):
     for _, row in champ_players_df.iterrows():
         name = row['name']
         dob = row['dob'] if pd.notna(row['dob']) else None
-        iso2 = get_country_code(row['ioc']) if pd.notna(row['ioc']) else None
+        ioc = row['ioc'] if pd.notna(row['ioc']) else None
         birth_year = dob.year if dob else None
-        player_info[name] = {'dob': dob, 'iso2': iso2, 'birth_year': birth_year}
+        player_info[name] = {'dob': dob, 'ioc': ioc, 'birth_year': birth_year}
 
     result = []
     for player, first_year in champions.items():
@@ -289,8 +273,9 @@ def process_tour(tour):
             "win_h": career.get("win_h"),
             "win_c": career.get("win_c"),
             "win_g": career.get("win_g"),
-            "iso2": info.get("iso2"),
+            "ioc": info.get("ioc"),
             "birth_year": info.get("birth_year"),
+            'dob': info.get('dob').strftime('%Y-%m-%d') if info.get('dob') else None,
             "age_entries": age_entries,   # 新增字段
         }
         result.append(player_data)

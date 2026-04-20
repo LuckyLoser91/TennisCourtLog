@@ -198,6 +198,7 @@ def get_non_champions_data(tour='wta'):
         player_info[name] = {
             'ioc': ioc,
             'birth_year': dob.year if dob else None,
+            'dob': dob.strftime('%Y-%m-%d') if dob else None
         }
 
     # 找出所有大满贯冠军
@@ -229,6 +230,7 @@ def get_non_champions_data(tour='wta'):
                 "player": player,
                 "ioc": info.get('ioc'),
                 "birth_year": info.get('birth_year'),
+                'dob': info.get('dob'),
                 "stats": stats,
             })
 
@@ -249,8 +251,8 @@ def export_to_json(rows_atp, rows_wta, max_year_atp, max_year_wta, output_path):
     data = {
         "meta": {
             "max_years": {
-                "atp": max_year_atp,
-                "wta": max_year_wta
+                "atp": int(max_year_atp),
+                "wta": int(max_year_wta)
             }
         },
         "atp": rows_atp,

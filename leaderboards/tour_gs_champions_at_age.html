@@ -4,37 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grand Slam · At Age (by Birth Year)</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #111827;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 30px 40px;
-      min-width: 1300px;
-    }
-    h1 { color: #f5c842; font-size: 22px; margin-bottom: 10px; }
-    .sub {
-      color: #6b7280; font-size: 11px; text-transform: uppercase;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+
     .controls {
       display: flex;
       gap: 20px;
     }
-    select {
-      background: #1f2937;
-      color: #f3f4f6;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    select:hover { border-color: #f5c842; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th {
       color: #6b7280; font-size: 10.5px; font-weight: 600;
@@ -55,36 +31,6 @@
     td.left { text-align: left; }
     tbody tr:hover { background: #1f2937; }
     .flag { margin-right: 6px; vertical-align: middle; }
-    .slam-cell {
-      font-weight: 500;
-      padding: 4px 6px;
-      border-radius: 4px;
-      min-width: 48px;
-      display: inline-block;
-    }
-    .result-W {
-      background: #f5c842;
-      color: #111111;
-      font-weight: bold;
-    }
-    .result-F {
-      background: #c0c0c0;
-      color: #111111;
-      font-weight: bold;
-    }
-    .result-SF {
-      background: #cd7f32;
-      color: #ffffff;
-      font-weight: bold;
-    }
-    .result-QF {
-      background: #3b82f6;
-      color: #ffffff;
-      font-weight: bold;
-    }
-    .result-other {
-      color: #e5e5e5;
-    }
     .sort-indicator {
       margin-left: 4px;
       font-size: 9px;
@@ -113,14 +59,14 @@
     <span id="player-count">0 players</span> · Grand Slam singles only
   </div>
   <div class="controls">
-    <div>
+    <div class="tour-selector">
       <label style="color:#9ca3af;">TOUR:</label>
       <select id="tourSelect">
         <option value="wta" selected>WTA</option>
         <option value="atp">ATP</option>
       </select>
     </div>
-    <div>
+    <div class="age-selector">
       <label style="color:#9ca3af;">AGE:</label>
       <select id="ageSelect"></select>
     </div>
@@ -156,24 +102,10 @@
   <tbody id="table-body"></tbody>
 </table>
 
-<script>
+<script type="module">
+  import {getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur} from "./utils.js"
+
   (function() {
-    // IOC 转 ISO2 映射
-    const IOC_TO_ISO2 = {
-      "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-      "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-      "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-      "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-      "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-      "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-      "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-      "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-      "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-      "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-      "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-      "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-      "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-    };
 
     let fullData = { atp: [], wta: [], meta: {} };
     let currentTour = 'wta';
@@ -188,21 +120,8 @@
       { col: 'careerTitles', order: 'desc' }
     ];
 
-    function getFlagHtml(ioc) {
-      const iso2 = IOC_TO_ISO2[ioc] || null;
-      if (!iso2) return `<span style="margin-right:6px;">🏳️</span>`;
-      return `<img src="https://flagcdn.com/16x12/${iso2.toLowerCase()}.png" width="16" height="12" style="margin-right:6px; border-radius:1px;" alt="${ioc}">`;
-    }
 
-    function formatRound(round) {
-      if (!round) return '<span class="result-other">—</span>';
-      const upper = round.toUpperCase();
-      if (upper === 'W') return '<span class="slam-cell result-W">W</span>';
-      if (upper === 'F') return '<span class="slam-cell result-F">F</span>';
-      if (upper === 'SF') return '<span class="slam-cell result-SF">SF</span>';
-      if (upper === 'QF') return '<span class="slam-cell result-QF">QF</span>';
-      return `<span class="result-other">${round}</span>`;
-    }
+
 
     function getCareerTitleClass(titles) {
       if (titles >= 10) return 'career-10plus';
@@ -257,7 +176,6 @@
       const players = fullData[currentTour] || [];
       const tbody = document.getElementById('table-body');
       const countSpan = document.getElementById('player-count');
-
       const entriesMap = new Map();
       const validPlayers = players.filter(p => {
         const entry = p.age_entries.find(e => e.age === currentAge);
@@ -272,6 +190,7 @@
 
       const sorted = sortPlayers(validPlayers, entriesMap);
       updateSortIndicators();
+      
 
       let html = '';
       sorted.forEach((player, idx) => {
@@ -280,23 +199,29 @@
         const yearDisplay = entry.year ? `<span class="year-badge">${entry.year}</span>` : '—';
         const careerTitles = player.career_titles || 0;
         const careerClass = getCareerTitleClass(careerTitles);
+        const titleBg_cur = titlesBg_cur(entry.titles);
+        const titleColor_cur = titlesFc_cur(entry.titles);
+        const titleBg_career = titlesBg(careerTitles);
+        const titleColor_career = titlesFc(careerTitles);
 
         html += `<tr>
           <td style="color:#6b7280;font-size:11px;">${idx + 1}</td>
           <td class="left" style="color:#f3f4f6; font-weight:500;">
-            ${getFlagHtml(player.ioc)} ${player.name} <span class="dob-text">(${dob})</span>
+            ${getFlagImg(player.ioc)} ${player.name} <span class="dob-text">(${dob})</span>
           </td>
           <td>${yearDisplay}</td>
-          <td>${formatRound(entry.AO)}</td>
-          <td>${formatRound(entry.RG)}</td>
-          <td>${formatRound(entry.WIM)}</td>
-          <td>${formatRound(entry.USO)}</td>
+          <td>${fmtRound(entry.AO)}</td>
+          <td>${fmtRound(entry.RG)}</td>
+          <td>${fmtRound(entry.WIM)}</td>
+          <td>${fmtRound(entry.USO)}</td>
           <td style="color:#e5e5e5;">${entry.W}</td>
           <td style="color:#6b7280;">${entry.L}</td>
-          <td style="color:${entry.titles > 0 ? '#f5c842' : '#6b7280'}; font-weight:bold;">
+          <td style="text-align:center;background:${titleBg_cur};color:${titleColor_cur};font-weight:bold;">
             ${entry.titles}
           </td>
-          <td class="${careerClass}">${careerTitles}</td>
+          <td style="text-align:center;background:${titleBg_career};color:${titleColor_career};font-weight:bold;">
+            ${careerTitles}
+          </td>
         </tr>`;
       });
 

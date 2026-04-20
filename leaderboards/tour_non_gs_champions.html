@@ -4,46 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Non-GS Champions · GS Win Rate Top 100</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #111827;
-      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', Arial, sans-serif;
-      padding: 36px 44px 60px;
-      min-width: 1200px;
-    }
-    h1 { color: #f5c842; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-    .sub {
-      color: #6b7280; font-size: 11px; letter-spacing: 0.07em;
-      text-transform: uppercase; margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .sub span { color: #f5c842; }
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-    .tour-selector {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .tour-selector label { color: #9ca3af; font-size: 12px; }
-    .tour-selector select {
-      background: #1f2937;
-      color: #f3f4f6;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
-    }
-    .tour-selector select:hover { border-color: #f5c842; }
+
+
     .active-toggle {
       display: flex;
       align-items: center;
@@ -74,7 +38,7 @@
     .dl { border-left: 1px solid #374151; }
     tbody tr { border-bottom: 1px solid #1f2937; }
     tbody tr:hover { background: #1f2937; }
-    tbody td { padding: 6px 6px; font-size: 12px; }
+    tbody td { padding: 6px 6px; font-size: 12px; text-align: center; }
     tfoot td {
       padding-top: 20px; color: #4b5563;
       font-size: 10px; letter-spacing: 0.04em;
@@ -159,30 +123,10 @@
   </tfoot>
 </table>
 
-<script>
-  const IOC_TO_ISO2 = {
-    "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-    "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-    "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-    "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-    "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-    "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-    "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-    "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-    "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-    "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-    "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-    "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-    "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-  };
+<script type="module">
 
-  function getFlagImg(ioc) {
-    if (!ioc) return '<span title="Unknown">🏳️</span>';
-    const iso2 = IOC_TO_ISO2[ioc.toUpperCase().trim()];
-    if (!iso2) return '<span title="Unknown">🏳️</span>';
-    const iso2Lower = iso2.toLowerCase();
-    return `<img src="https://flagcdn.com/16x12/${iso2Lower}.png" width="16" height="12" alt="${iso2}" title="${ioc}" style="vertical-align:middle; margin-right:6px; border-radius:1px;">`;
-  }
+
+  import {getFlagImg, fmtAge, fmtWinrate,fmtRound} from "./utils.js"
 
   let jsonData = null;
   let currentTour = 'wta';
@@ -196,12 +140,6 @@
     'QF':  ['rgba(52,211,153,0.2)',  '#34D399'],
     'R16': ['rgba(99,179,237,0.2)',  '#63B3ED'],
   };
-
-  function formatBestBadge(bestDisp) {
-    if (!bestDisp || bestDisp === '—') return '<span style="color:#4b5563">—</span>';
-    const [bg, color] = bestColors[bestDisp] || ['transparent', '#9ca3af'];
-    return `<span class="round-badge" style="background:${bg};color:${color};">${bestDisp}</span>`;
-  }
 
   function aggBg(pct) {
     if (pct === null || pct === undefined) return 'transparent';
@@ -233,9 +171,6 @@
     if (pct >= 75) return '#111111';
     if (pct >= 70) return '#111111';
     return '#6b7280';
-  }
-  function fmt(val) {
-    return (val === null || val === undefined) ? '—' : val + '%';
   }
 
   function isActive(playerObj, maxYear) {
@@ -318,9 +253,8 @@
     sorted.forEach((player, idx) => {
       const s = player.stats;
       const flagHtml = getFlagImg(player.ioc);
-      const birthYear = player.birth_year ? ` (${player.birth_year})` : '';
-      const playerDisplay = `${flagHtml} ${player.player}${birthYear}`;
-      const bestBadge = formatBestBadge(s.best_display);
+      const dob = player.dob ? ` (${player.dob})` : '';
+      const playerDisplay = `${flagHtml} ${player.player}${dob}`;
       const aggBgColor = aggBg(s.agg);
       const aggTextColor = aggColor(s.agg);
       const hardBgColor = surfBg(s.win_h);
@@ -332,18 +266,18 @@
 
       html += `<tr>
         <td style="color:#6b7280;text-align:center;font-size:11px;">${idx+1}</td>
-        <td style="color:#f3f4f6;font-weight:600;padding-left:8px;">${playerDisplay}</td>
-        <td style="text-align:center;">${bestBadge}</td>
-        <td style="text-align:center;color:#e5e5e5;">${s.ao_best || '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${s.rg_best || '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${s.wim_best || '—'}</td>
-        <td style="text-align:center;color:#e5e5e5;">${s.uso_best || '—'}</td>
+        <td class="player-cell">${playerDisplay}</td>
+        <td>${fmtRound(s.best_display)}</td>
+        <td>${fmtRound(s.ao_best)}</td>
+        <td>${fmtRound(s.rg_best)}</td>
+        <td>${fmtRound(s.wim_best)}</td>
+        <td>${fmtRound(s.uso_best)}</td>
         <td style="text-align:center;color:#e5e5e5;">${s.W}</td>
         <td style="text-align:center;color:#6b7280;">${s.L}</td>
-        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmt(s.agg)}</td>
-        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmt(s.win_h)}</td>
-        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmt(s.win_c)}</td>
-        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmt(s.win_g)}</td>
+        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmtWinrate(s.agg)}</td>
+        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmtWinrate(s.win_h)}</td>
+        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmtWinrate(s.win_c)}</td>
+        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmtWinrate(s.win_g)}</td>
       </tr>`;
     });
     tbody.innerHTML = html;

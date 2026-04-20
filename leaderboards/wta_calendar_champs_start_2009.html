@@ -255,7 +255,9 @@
   * Data based on WTA calendar · Empty winners omitted · Flags via flagcdn.com · Seed in parentheses after name
 </div>
 
-<script>
+<script type="module">
+  import {getFlagImg} from './utils.js'
+  
   (function(){
     const JSON_URL = '../output/wta_calendar_champs_start_2009.json';
     let allData = [];
@@ -272,44 +274,7 @@
     const recordCountSpan = document.getElementById('recordCount');
     const championCountSpan = document.getElementById('championCount');
 
-    const IOC_TO_ISO2 = {
-      "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BLR": "BY",
-      "BRA": "BR", "BUL": "BG", "CAN": "CA", "CHI": "CL", "CHN": "CN",
-      "COL": "CO", "CRO": "HR", "CYP": "CY", "CZE": "CZ", "DEN": "DK",
-      "ECU": "EC", "EGY": "EG", "ESP": "ES", "EST": "EE", "FIN": "FI",
-      "FRA": "FR", "GBR": "GB", "GER": "DE", "GRE": "GR", "HUN": "HU",
-      "IDN": "ID", "IND": "IN", "IRL": "IE", "ISR": "IL", "ITA": "IT", "JPN": "JP",
-      "KAZ": "KZ", "KOR": "KR", "LAT": "LV", "LTU": "LT", "LUX": "LU",
-      "MAR": "MA", "MEX": "MX", "MDA": "MD", "MNE": "ME", "NED": "NL",
-      "NZL": "NZ", "NOR": "NO", "PER": "PE", "POL": "PL", "POR": "PT",
-      "ROU": "RO", "RSA": "ZA", "RUS": "RU", "SRB": "RS", "SVK": "SK",
-      "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
-      "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
-      "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU"
-    };
 
-    function getFlagHtml(ioc) {
-      if (!ioc) return '';
-      const iso2 = IOC_TO_ISO2[ioc.toUpperCase()];
-      if (!iso2) {
-        const fallbackMap = {
-          'BLR':'🇧🇾','RUS':'🇷🇺','CZE':'🇨🇿','USA':'🇺🇸','FRA':'🇫🇷',
-          'ESP':'🇪🇸','SRB':'🇷🇸','DEN':'🇩🇰','ITA':'🇮🇹','GER':'🇩🇪',
-          'BEL':'🇧🇪','SVK':'🇸🇰','HUN':'🇭🇺','THA':'🇹🇭','AUS':'🇦🇺',
-          'ISR':'🇮🇱','JPN':'🇯🇵','CHN':'🇨🇳','POL':'🇵🇱','EST':'🇪🇪',
-          'LAT':'🇱🇻','ROU':'🇷🇴','UKR':'🇺🇦','SLO':'🇸🇮','AUT':'🇦🇹',
-          'CRO':'🇭🇷','SUI':'🇨🇭','NED':'🇳🇱','GBR':'🇬🇧','TPE':'🇹🇼',
-          'SWE':'🇸🇪','KAZ':'🇰🇿','CAN':'🇨🇦','GRE':'🇬🇷','TUN':'🇹🇳',
-          'COL':'🇨🇴','BRA':'🇧🇷','NZL':'🇳🇿','ARG':'🇦🇷','RSA':'🇿🇦',
-          'BUL':'🇧🇬','PUR':'🇵🇷','UZB':'🇺🇿','EGY':'🇪🇬','INA':'🇮🇩',
-          'TUR':'🇹🇷','IDN':'🇮🇩'
-        };
-        return fallbackMap[ioc] ? `<span style="margin-right:6px;">${fallbackMap[ioc]}</span>` : '';
-      }
-      const iso2Lower = iso2.toLowerCase();
-      return `<img class="flag-img" src="https://flagcdn.com/16x12/${iso2Lower}.png" width="16" height="12" alt="${ioc}" title="${ioc}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">` +
-             `<span style="display:none; margin-right:6px;">${ioc}</span>`;
-    }
 
     function formatVenue(surface, inOutdoor) {
       if (!surface) return '';
@@ -352,7 +317,7 @@
       if (!allData.length) return [];
       return allData.filter(item => {
         if (!item.winner || item.winner.trim() === '') return false;
-        if (currentYear && item.year !== currentYear) return false;
+        if (currentYear && String(item.year) !== currentYear) return false;
         if (currentLevel && item.tourney_level !== currentLevel) return false;
         
         // 冠军搜索 (原有)
@@ -393,7 +358,7 @@
         
         const winner = item.winner || '';
         const ioc = item.ioc || '';
-        const flagHtml = getFlagHtml(ioc);
+        const flagHtml = getFlagImg(ioc);
         const seedNumber = getSeedNumber(item.seed);
         const seedSuffix = seedNumber ? ` <span class="seed-suffix">(${seedNumber})</span>` : '';
         const winnerDisplay = flagHtml ? `${flagHtml} ${winner}${seedSuffix}` : `${winner}${seedSuffix}`;
