@@ -98,14 +98,17 @@
       text-overflow: ellipsis;
     }
     /* 列宽分配 */
+    
     th:nth-child(1) { width: 5%; }   /* # */
-    th:nth-child(2) { width: 11%; }  /* Start Date */
-    th:nth-child(3) { width: 17%; }  /* Tournament */
-    th:nth-child(4) { width: 11%; }  /* Level */
-    th:nth-child(5) { width: 13%; }  /* Surface */
-    th:nth-child(6) { width: 21%; }  /* Champion */
-    th:nth-child(7) { width: 11%; }  /* Date of Birth */
-    th:nth-child(8) { width: 9%; }   /* Age */
+    th:nth-child(2) { width: 5%; }   /* Season */
+    th:nth-child(3) { width: 12%; }   /* Start Date */
+    th:nth-child(4) { width: 7%; }  /* Drawsize */
+    th:nth-child(5) { width: 13%; }  /* Tournament */
+    th:nth-child(6) { width: 10%; }  /* Level */
+    th:nth-child(7) { width: 10%; }  /* Surface */
+    th:nth-child(8) { width: 18%; }  /* Champion */
+    th:nth-child(9) { width: 11%; }  /* Date of Birth */
+    th:nth-child(10) { width: 9%; }   /*Age*/
 
     th {
       color: #6b7280;
@@ -119,12 +122,12 @@
     }
     th.champion-col {
       text-align: left;
-      padding-left: 100px;
+      padding-left: 60px;
     }
     .winner-cell { 
       display: inline-flex; 
       align-items: left; 
-      padding-left: 45px;
+      padding-left: 15px;
       max-width: 100%;
     }
     td {
@@ -238,7 +241,9 @@
     <thead>
       <tr>
         <th>#</th>
+        <th>Season</th>
         <th>Start Date</th>
+        <th>Drawsize</th>
         <th>Tournament</th>
         <th>Level</th>
         <th>Surface</th>
@@ -366,12 +371,16 @@
         
         const dob = item.dob || '—';
         const age = item.winner_age ? parseFloat(item.winner_age).toFixed(2) : '—';
+        const year = item.year
+        const drawsize = item.drawsize
         
         uniqueChampions.add(`${winner}|${ioc}`);
 
         html += `<tr>
           <td style="color:#e5e5e5;font-size:11px;">${idx + 1}</td>
+          <td>${year}</td>
           <td>${startDate}</td>
+          <td>${drawsize}</td>
           <td style="font-weight:600;">${tourneyName}</td>
           <td><span class="badge-level ${levelClass}">${level}</span></td>
           <td><span class="surface-badge ${surfaceClass}">${venueDisplay}</span></td>
