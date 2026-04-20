@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #111827;
+    font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
+    padding: 36px 44px 60px;
+    min-width: 1400px;
+}
+
+h1 {
+    color: #f5c842;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.sub {
+    color: #6b7280;
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sub span {
+    color: #f5c842;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.tour-selector,
+.age-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tour-selector label,
+.age-selector label {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.tour-selector select,
+.age-selector select {
+    background: #1f2937;
+    color: #f3f4f6;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+.tour-selector select:hover,
+.age-selector select:hover {
+    border-color: #f5c842;
+}
+
+
+.player-cell {
+    color: #f3f4f6;
+    font-weight: 600;
+    padding-left: 8px;
+    text-align: left;
+}
+
+.slam-cell {
+    font-weight: 500;
+    padding: 4px 6px;
+    border-radius: 4px;
+    min-width: 48px;
+    display: inline-block;
+    text-align: center;
+}
+
+.result-W {
+    background: #f5c842;
+    color: #111111;
+    font-weight: bold;
+}
+
+.result-F {
+    background: #cd7f32;
+    color: #111111;
+    font-weight: bold;
+}
+
+.result-SF {
+    background: #46b99c;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.result-QF {
+    background: #3b82f6;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.result-other {
+    color: #e5e5e5;
+}
