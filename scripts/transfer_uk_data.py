@@ -1,6 +1,7 @@
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pandas as pd
 import numpy as np
-import os
 import re
 from pathlib import Path
 from collections import defaultdict
@@ -325,7 +326,7 @@ def build_score(row):
 
 def get_uk_data(uk_data_dir='../data/tennis_betting', tour='wta', year=2026):
 
-    file_path = os.path.join(uk_data_dir, f'tennis_{tour}/{year}.xlsx')
+    file_path = os.path.join(uk_data_dir, f'{tour}_matches_{year}.xlsx')
     df = pd.read_excel(file_path)
     if tour == 'atp':
         tourney_col = 'Series'
@@ -365,7 +366,7 @@ def get_uk_data(uk_data_dir='../data/tennis_betting', tour='wta', year=2026):
 
     return new_df
 
-def map_uk_data_name(uk_data_dir ='../data/tennis_betting', tour='wta', year=2026, use_history=False):
+def map_uk_data_name(uk_data_dir, tour, year, use_history=False):
     print('='*30)
     print(f"Loading {tour} {year} data...")
     matches = get_uk_data(uk_data_dir=uk_data_dir, tour=tour, year=year)
@@ -411,8 +412,8 @@ def map_uk_data_name(uk_data_dir ='../data/tennis_betting', tour='wta', year=202
     
 
 if __name__ == '__main__':
-    map_uk_data_name(uk_data_dir ='../data/tennis_betting', tour='wta', year=2026)
-    map_uk_data_name(uk_data_dir ='../data/tennis_betting', tour='atp', year=2026, use_history=True)
+    map_uk_data_name(uk_data_dir ='./scrape', tour='wta', year=2026, use_history=True)
+    map_uk_data_name(uk_data_dir ='./scrape', tour='atp', year=2026, use_history=True)
     
     
 

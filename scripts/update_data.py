@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from scripts.config import DATA_PATHS
+import csv
 
 def load_existing_names(players_file):
     """
