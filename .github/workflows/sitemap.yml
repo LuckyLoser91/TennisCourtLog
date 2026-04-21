@@ -1,0 +1,26 @@
+name: Generate Sitemap
+
+on:
+  push:
+    branches: [ main ] # 或你的默认分支，如 master
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 必须，用于获取提交历史以生成lastmod
+
+      - name: Generate the sitemap
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://www.tennis-leaderboard.cc.cd/ # 替换为你的实际域名
+
+      - name: Output the sitemap stats
+        run: |
+          echo "urls = ${{ steps.sitemap.outputs.urls-count }}"
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
