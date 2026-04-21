@@ -2,31 +2,31 @@ name: Generate Sitemap
 
 on:
   push:
-    branches: [ main ] # 或你的默认分支，如 master
-  workflow_dispatch: # 允许手动触发
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   sitemap:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6  # ✅ 已更新
         with:
-          fetch-depth: 0 # 必须，用于获取提交历史以生成lastmod
+          fetch-depth: 0
 
       - name: Generate the sitemap
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://www.tennis-leaderboard.cc.cd/ # 替换为你的实际域名
+          base-url-path: https://www.tennis-leaderboard.cc.cd/
 
       - name: Output the sitemap stats
         run: |
           echo "urls = ${{ steps.sitemap.outputs.urls-count }}"
           echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
-      
+
       - name: Commit and push sitemap
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7  # ✅ 已更新
         with:
           commit_message: "chore: auto-generate sitemap.xml [skip ci]"
           file_pattern: 'sitemap.xml'
