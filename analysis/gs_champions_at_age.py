@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.config import PROJECT_ROOT, DATA_PATHS
 
 # 配置
-MIN_AGE = 18
+MIN_AGE = 15
 MAX_AGE = 45
 
 SLAMS = {
