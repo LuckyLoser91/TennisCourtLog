@@ -427,7 +427,39 @@
         const footerTd = document.getElementById("table-footer");
 
         countSpan.textContent = sorted.length + " champions";
-        footerTd.innerHTML = footerText;
+        // 在 renderTable 函数内部，替换原有的 footerTd.innerHTML 赋值逻辑
+        // 构建动态图例（与 titlesBg / aggBg 颜色严格一致）
+        function buildFooterLegend() {
+          // 获取不同冠军数对应的背景色（与表格中 title 列背景相同）
+          const titleColor2 = titlesBg(2);
+          const titleColor5 = titlesBg(5);
+          const titleColor10 = titlesBg(10);
+
+          // 获取不同胜率区间对应的背景色（与表格中 AGG 列背景相同）
+          const win70Color = aggBg(70);   // ≥70% 胜率的背景色
+          const win80Color = aggBg(80);   // ≥80% 胜率的背景色
+
+          return `
+            Titles: ≥2 <span style="display:inline-block; width:12px; height:12px; background:${titleColor2}; border-radius:2px;"></span>
+            ≥5 <span style="display:inline-block; width:12px; height:12px; background:${titleColor5}; border-radius:2px;"></span>
+            ≥10 <span style="display:inline-block; width:12px; height:12px; background:${titleColor10}; border-radius:2px;"></span> &nbsp;·&nbsp;
+            Win rate: ≥70% <span style="display:inline-block; width:12px; height:12px; background:${win70Color}; border-radius:2px;"></span>
+            ≥80% <span style="display:inline-block; width:12px; height:12px; background:${win80Color}; border-radius:2px;"></span>
+            `;
+          }
+
+        const footerTextPrefix = `1ST TITLE = year of first Grand Slam title &nbsp;·&nbsp;
+          AGE 1ST = age at first title &nbsp;·&nbsp;
+          LAST TITLE = year of last Grand Slam title &nbsp;·&nbsp;
+          AGE LAST = age at last title &nbsp;·&nbsp;
+          SPAN = last - first + 1 &nbsp;·&nbsp;
+          AO = Australian Open &nbsp; RG = Roland Garros &nbsp;
+          WIM = Wimbledon &nbsp; USO = US Open &nbsp;·&nbsp; <br>
+          AGG = aggregate GS win rate &nbsp;·&nbsp;
+          H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
+          `;
+
+        footerTd.innerHTML = footerTextPrefix + buildFooterLegend();
 
         let html = "";
         sorted.forEach((player, idx) => {

@@ -20,7 +20,7 @@
       min-height: 100vh;
     }
     .main-content {
-      flex: 1;  /* 让主要内容区域吃掉剩余空间，把页脚推到底部 */
+      flex: 1;
     }
     h1 {
       color: #f5c842;
@@ -67,14 +67,25 @@
       background: #2d3a4f;
       border-color: #f5c842;
     }
+    /* 改进卡片内文字对齐：flex布局，emoji与文字分开，换行时文字与文字左对齐 */
     .card a {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
       text-decoration: none;
       color: #e5e5e5;
       font-weight: 500;
       font-size: 16px;
-      display: block;
     }
-    .card a:hover { color: #f5c842; }
+    .card-icon {
+      flex-shrink: 0;
+    }
+    .card-text {
+      flex: 1;
+    }
+    .card a:hover {
+      color: #f5c842;
+    }
     .footer {
       margin-top: 48px;
       padding-top: 18px;
@@ -89,7 +100,6 @@
 </head>
 <body>
 
-  <!-- 主要内容区域包裹层 -->
   <div class="main-content">
     <h1>🎾 TennisCourtLog</h1>
     <div class="sub">
@@ -102,25 +112,35 @@
       <h2>📊 tennis-lists</h2>
       <div class="grid">
         <div class="card">
-          <a href="./leaderboards/tour_gs_champions.html">🏆  Grand Slam Champions Leaderboard</a>
+          <a href="./leaderboards/tour_gs_champions.html">
+            <span class="card-icon">🏆</span>
+            <span class="card-text">Grand Slam Champions Leaderboard</span>
+          </a>
         </div>
         <div class="card">
-          <a href="./leaderboards/tour_gs_champions_at_age.html">🥇 Grand Slam Champions At Age Leaderboard</a>
+          <a href="./leaderboards/tour_gs_champions_at_age.html">
+            <span class="card-icon">🥇</span>
+            <span class="card-text">Grand Slam Champions At Age Leaderboard</span>
+          </a>
         </div>
         <div class="card">
-          <a href="./leaderboards/tour_non_gs_champions.html">🏆 Non-Grand Slam Champions Win Rate Leaderboard </a>
+          <a href="./leaderboards/tour_non_gs_champions.html">
+            <span class="card-icon">🏆</span>
+            <span class="card-text">Non-Grand Slam Champions Win Rate Leaderboard</span>
+          </a>
         </div>
         <div class="card">
-          <a href="./leaderboards/wta_calendar_champs_start_2009.html">🥇 WTA Tour Champions (since 2009)</a>
+          <a href="./leaderboards/wta_calendar_champs_start_2009.html">
+            <span class="card-icon">🥇</span>
+            <span class="card-text">WTA Tour Champions (since 2009)</span>
+          </a>
         </div>
-        
       </div>
     </div>
   </div>
 
-  <!-- 页脚 -->
   <div class="footer">
-    🕒 Last updated: April 2026 &nbsp;·&nbsp; 
+    🕒 Last updated: April 2026 &nbsp;·&nbsp;
   </div>
 
 </body>

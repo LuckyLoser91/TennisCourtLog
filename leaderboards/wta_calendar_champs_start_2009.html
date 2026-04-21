@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
   <style>
+    /* 样式保持不变 */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #111827;
@@ -238,7 +239,7 @@
   <div>
     <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp;
     2009 – 2026 &nbsp;|&nbsp;
-    <span style="color:#9ca3af;">Descending by start date (default) · Click Age or Start Date to sort</span>
+    <span style="color:#9ca3af;">Descending by start date (default) · Click header to sort</span>
   </div>
   <div class="controls">
     <!-- 冠军搜索 -->
@@ -277,7 +278,8 @@
         <th>Level</th>
         <th>Surface</th>
         <th class="champion-col">Champion</th>
-        <th>Date of Birth</th>
+        <!-- 给 Date of Birth 加上排序功能 -->
+        <th class="sortable" data-sort="dob">Date of Birth<span class="sort-indicator"></span></th>
         <th class="sortable" data-sort="age">Age<span class="sort-indicator"></span></th>
       </tr>
     </thead>
@@ -301,9 +303,9 @@
     let championSearchTerm = '';
     let tournamentSearchTerm = '';
     
-    // 排序状态
+    // 排序状态，增加 'dob' 作为可选列
     let currentSort = {
-      column: 'startDate',   // 'startDate' 或 'age'
+      column: 'startDate',   // 'startDate', 'age', 'dob'
       direction: 'desc'      // 'asc' 或 'desc'
     };
 
@@ -387,7 +389,7 @@
       });
     }
 
-    // 排序函数
+    // 排序函数，增加对 dob 的处理
     function sortData(data) {
       if (!data.length) return data;
       
@@ -401,21 +403,25 @@
         if (column === 'startDate') {
           valA = a.tourney_start_date || '';
           valB = b.tourney_start_date || '';
-          // 日期字符串比较 (YYYY-MM-DD)
-          if (direction === 'asc') {
-            return valA.localeCompare(valB);
-          } else {
-            return valB.localeCompare(valA);
-          }
+          return direction === 'asc' 
+            ? valA.localeCompare(valB) 
+            : valB.localeCompare(valA);
         } else if (column === 'age') {
           valA = a.winner_age ? parseFloat(a.winner_age) : -Infinity;
           valB = b.winner_age ? parseFloat(b.winner_age) : -Infinity;
+          return direction === 'asc' ? valA - valB : valB - valA;
+        } else if (column === 'dob') {
+          // 处理出生日期排序，空值放在末尾
+          valA = a.dob || '';
+          valB = b.dob || '';
+          // 如果其中一个为空，则将空值视为较大的值（排到后面）
+          if (!valA && !valB) return 0;
+          if (!valA) return 1;   // a 为空，a > b（放后面）
+          if (!valB) return -1;  // b 为空，a < b（放前面）
           
-          if (direction === 'asc') {
-            return valA - valB;
-          } else {
-            return valB - valA;
-          }
+          return direction === 'asc' 
+            ? valA.localeCompare(valB) 
+            : valB.localeCompare(valA);
         }
         return 0;
       });
