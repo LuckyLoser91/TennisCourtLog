@@ -1,37 +1,53 @@
-name: Generate Sitemap
+name: Generate and Deploy Sitemap to Pages
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
+# 赋予部署到 Pages 所需权限
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+# 确保同时只运行一个部署任务
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  sitemap:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v6  # ✅ 已更新
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Generate the sitemap
+      - name: Generate sitemap.xml
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
           base-url-path: https://www.tennis-leaderboard.cc.cd/
 
-      - name: Output the sitemap stats
+      - name: Output sitemap stats
         run: |
           echo "urls = ${{ steps.sitemap.outputs.urls-count }}"
           echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
 
-      - name: Commit and push sitemap
-        uses: stefanzweifel/git-auto-commit-action@v7  # ✅ 已更新
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact to Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          commit_message: "chore: auto-generate sitemap.xml [skip ci]"
-          file_pattern: 'sitemap.xml'
-          commit_user_name: "GitHub Actions Bot"
-          commit_user_email: "actions@github.com"
+          # 上传整个仓库根目录（包含生成的 sitemap.xml）
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
