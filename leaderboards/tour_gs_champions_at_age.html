@@ -82,7 +82,7 @@
       <th colspan="4" style="text-align:center;">GRAND SLAM RESULT</th>
       <th class="sortable" data-col="W">W <span class="sort-indicator"></span></th>
       <th>L</th>
-      <th class="sortable" data-col="ageTitles">AT AGE TITLES <span class="sort-indicator"></span></th>
+      <th class="sortable" data-col="ageTitles">cumulative titles<span class="sort-indicator"></span></th>
       <th class="sortable" data-col="careerTitles">CAREER TITLES <span class="sort-indicator"></span></th>
     </tr>
     <tr>
@@ -217,7 +217,7 @@
           <td style="color:#e5e5e5;">${entry.W}</td>
           <td style="color:#6b7280;">${entry.L}</td>
           <td style="text-align:center;background:${titleBg_cur};color:${titleColor_cur};font-weight:bold;">
-            ${entry.titles}
+            ${entry.titles}/${entry.cumulative_titles}
           </td>
           <td style="text-align:center;background:${titleBg_career};color:${titleColor_career};font-weight:bold;">
             ${careerTitles}

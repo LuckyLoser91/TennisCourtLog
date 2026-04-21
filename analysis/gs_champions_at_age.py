@@ -81,6 +81,7 @@ def process_tour(tour):
         player_matches["slam_key"] = player_matches["tourney_name"].apply(get_slam_key)
 
         age_entries = []
+        cumulative_titles = 0
         for age in range(MIN_AGE, MAX_AGE + 1):
             target_year = birth_year + age
 
@@ -130,6 +131,8 @@ def process_tour(tour):
                     entry["W"] += len(slam_matches[slam_matches["winner_name"] == player])
                     entry["L"] += len(slam_matches[slam_matches["loser_name"] == player])
 
+            cumulative_titles += entry["titles"]
+            entry["cumulative_titles"] = cumulative_titles
             age_entries.append(entry)
 
         result.append({
