@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-C15B9S69WR');
-    </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
@@ -596,6 +587,11 @@
         
         // 设置默认排序 (Start Date 降序)
         currentSort = { column: 'startDate', direction: 'desc' };
+        if (allYears.length > 0) {
+          const latestYear = Math.max(...allYears.map(y => parseInt(y))).toString();
+          yearSelect.value = latestYear;
+          currentYear = latestYear;
+        }
         updateView();
       } catch (err) {
         console.error(err);
