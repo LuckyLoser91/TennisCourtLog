@@ -97,24 +97,15 @@
     .sortable {
       cursor: pointer;
       user-select: none;
-      transition: background 0.1s;
+      transition: color 0.15s;
     }
     .sortable:hover {
-      background: #2a374b !important;
-    }
-    .sort-indicator::after {
-      content: ' ↕';
-      opacity: 0.4;
-      font-size: 10px;
-    }
-    .sort-asc::after {
-      content: ' ↑';
-      opacity: 1;
       color: #f5c842;
     }
-    .sort-desc::after {
-      content: ' ↓';
-      opacity: 1;
+    .sort-indicator {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
       color: #f5c842;
     }
 
@@ -507,7 +498,12 @@
         if (column === 'best_round') {
           const orderA = ROUND_ORDER[valA] || 0;
           const orderB = ROUND_ORDER[valB] || 0;
-          return direction === 'asc' ? orderA - orderB : orderB - orderA;
+          if (orderA !== orderB) {
+            return direction === 'asc' ? orderA - orderB : orderB - orderA;
+          }
+          const wrA = a.winrate ?? -1;
+          const wrB = b.winrate ?? -1;
+          return wrB - wrA;         
         }
         
         if (typeof valA === 'number' && typeof valB === 'number') {
@@ -546,17 +542,18 @@
     }
 
     function highlightSortIndicator() {
+      // 遍历所有带 .sortable 的表头
       document.querySelectorAll('th.sortable').forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-        const span = th.querySelector('span');
-        if (span) span.className = 'sort-indicator';
-      });
-      if (currentSort.column && currentSort.column !== 'tournament' && currentSort.column !== 'player') {
-        const active = document.querySelector(`th.sortable[data-column="${currentSort.column}"]`);
-        if (active) {
-          active.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        const span = th.querySelector('.sort-indicator');
+        if (!span) return;
+        const col = th.dataset.column;
+        // 如果当前排序列是这个列，并且不是 tournament/player 列，就显示箭头
+        if (currentSort.column && currentSort.column === col && col !== 'tournament' && col !== 'player') {
+          span.textContent = currentSort.direction === 'asc' ? ' ▲' : ' ▼';
+        } else {
+          span.textContent = '';  // 其他列或恢复默认时清空
         }
-      }
+      });
     }
 
     // ---------- 切换视图 ----------
