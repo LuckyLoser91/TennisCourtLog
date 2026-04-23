@@ -360,12 +360,17 @@
         .filter(t => isBigLevel(t.level))
         .map(t => {
           const calInfo = infoMap.get(t.tourney_name) || {};
+          const notPlayed = t.best_round == null;
           return {
             ...t,
             level: normalizeLevel(t.level),
             startDate: calInfo.startDate || '',
             endDate: calInfo.endDate || '',
-            surface: calInfo.surface || ''
+            surface: calInfo.surface || '',
+            // 排序时未参赛数据视为最差（-1），但显示仍为 "—"
+            W: notPlayed ? -1 : t.W,
+            L: notPlayed ? -1 : t.L,
+            winrate: notPlayed ? -1 : t.winrate
           };
         });
 
@@ -396,16 +401,20 @@
 
       rows.forEach((t, idx) => {
         const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
-        const dateRange = t.startDate && t.endDate ? ` (${t.startDate} ~ ${t.endDate})` : '';
+        const notPlayed = t.best_round == null;
+        const bestRoundDisplay = notPlayed ? '—' : fmtRound(t.best_round);
+        const wDisplay = notPlayed ? '—' : t.W;
+        const lDisplay = notPlayed ? '—' : t.L;
+        const wrDisplay = notPlayed ? '—' : fmtWinrate((t.winrate * 100).toFixed(1));
         html += `<tr style="background:${rowBg};">`;
         html += `<td>${idx + 1}</td>`;
         html += `<td>${t.tourney_name}</td>`;
         html += `<td>${t.level}</td>`;
         html += `<td>${t.surface || '—'}</td>`;
-        html += `<td>${fmtRound(t.best_round)}</td>`;
-        html += `<td>${t.W}</td>`;
-        html += `<td>${t.L}</td>`;
-        html += `<td>${fmtWinrate((t.winrate * 100).toFixed(1))}</td>`;
+        html += `<td>${bestRoundDisplay}</td>`;
+        html += `<td>${wDisplay}</td>`;
+        html += `<td>${lDisplay}</td>`;
+        html += `<td>${wrDisplay}</td>`;
         html += `</tr>`;
       });
 
@@ -424,15 +433,16 @@
           t.tourney_name === tournamentName && isBigLevel(t.level)
         );
         if (t) {
+          const notPlayed = t.best_round == null;
           participants.push({
             rank: player.rank,
             player_name: player.player_name,
             ioc: player.ioc,
             dob: player.dob || '—',
             best_round: t.best_round,
-            W: t.W,
-            L: t.L,
-            winrate: t.winrate
+            W: notPlayed ? -1 : t.W,
+            L: notPlayed ? -1 : t.L,
+            winrate: notPlayed ? -1 : t.winrate
           });
         }
       });
@@ -462,14 +472,19 @@
 
       rows.forEach((p, idx) => {
         const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
+        const notPlayed = p.best_round == null;
+        const bestRoundDisplay = notPlayed ? '—' : fmtRound(p.best_round);
+        const wDisplay = notPlayed ? '—' : p.W;
+        const lDisplay = notPlayed ? '—' : p.L;
+        const wrDisplay = notPlayed ? '—' : fmtWinrate((p.winrate * 100).toFixed(1));
         html += `<tr style="background:${rowBg};">`;
         html += `<td>${idx + 1}</td>`;
         html += `<td class="text-left">${getFlagImg(p.ioc)} #${p.rank} ${p.player_name}</td>`;
         html += `<td>${p.dob}</td>`;
-        html += `<td>${fmtRound(p.best_round)}</td>`;
-        html += `<td>${p.W}</td>`;
-        html += `<td>${p.L}</td>`;
-        html += `<td>${fmtWinrate((p.winrate * 100).toFixed(1))}</td>`;
+        html += `<td>${bestRoundDisplay}</td>`;
+        html += `<td>${wDisplay}</td>`;
+        html += `<td>${lDisplay}</td>`;
+        html += `<td>${wrDisplay}</td>`;
         html += `</tr>`;
       });
 

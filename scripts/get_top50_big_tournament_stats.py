@@ -151,6 +151,18 @@ def get_top50_big_tournament_stats_json(
                     entry["losses"] += 1
                 if round_val in ROUND_ORDER:
                     entry["rounds_seen"].add(round_val)
+    
+    # 补充未参赛记录
+    for player in top50_names:
+        for tname, level in big_tourney_map.items():
+            if player not in stats or tname not in stats[player]:
+                stats.setdefault(player, {})[tname] = {
+                    "rounds_seen": set(),
+                    "wins": 0,
+                    "losses": 0,
+                    "level": level,
+                    "has_won_final": False
+                }
 
     # 6. 构建 JSON 结果
     result_list = []
@@ -206,7 +218,7 @@ if __name__ == "__main__":
     get_top50_big_tournament_stats_json(
         years=range(2009, 2027),
         matches_dir="tennis_wta",
-        save_dir="scrape/temp_output",
+        save_dir="output/",
         historical_calendar_path="output/wta_calendar_champs_start_2009.json",
-        output_json_path="scrape/temp_output/top50_big_tournament_stats.json"
+        output_json_path="output/top50_big_tournament_stats.json"
     )
