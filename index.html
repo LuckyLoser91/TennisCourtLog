@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-C15B9S69WR');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TennisCourtLog · Data & Analysis</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     html {
       height: 100%;
     }
+
     body {
       background: #111827;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -19,15 +35,18 @@
       flex-direction: column;
       min-height: 100vh;
     }
+
     .main-content {
       flex: 1;
     }
+
     h1 {
       color: #f5c842;
       font-size: 26px;
       font-weight: 800;
       margin-bottom: 6px;
     }
+
     .sub {
       color: #6b7280;
       font-size: 12px;
@@ -37,10 +56,15 @@
       border-bottom: 1px solid #374151;
       padding-bottom: 18px;
     }
-    .sub span { color: #f5c842; }
+
+    .sub span {
+      color: #f5c842;
+    }
+
     .section {
       margin-bottom: 32px;
     }
+
     .section h2 {
       color: #9ca3af;
       font-size: 15px;
@@ -51,11 +75,13 @@
       border-left: 3px solid #f5c842;
       padding-left: 12px;
     }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 12px;
     }
+
     .card {
       background: #1f2937;
       border-radius: 8px;
@@ -63,10 +89,12 @@
       transition: all 0.15s;
       border: 1px solid #374151;
     }
+
     .card:hover {
       background: #2d3a4f;
       border-color: #f5c842;
     }
+
     /* 改进卡片内文字对齐：flex布局，emoji与文字分开，换行时文字与文字左对齐 */
     .card a {
       display: flex;
@@ -77,15 +105,19 @@
       font-weight: 500;
       font-size: 16px;
     }
+
     .card-icon {
       flex-shrink: 0;
     }
+
     .card-text {
       flex: 1;
     }
+
     .card a:hover {
       color: #f5c842;
     }
+
     .footer {
       margin-top: 48px;
       padding-top: 18px;
@@ -94,17 +126,25 @@
       font-size: 11px;
       letter-spacing: 0.04em;
     }
-    .footer a { color: #6b7280; text-decoration: none; }
-    .footer a:hover { color: #f5c842; }
+
+    .footer a {
+      color: #6b7280;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #f5c842;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="main-content">
     <h1>🎾 TennisCourtLog</h1>
     <div class="sub">
-      <span>Tennis Leaderboards</span> &nbsp;|&nbsp; 
-      WTA & ATP matches 1968–2026 &nbsp;|&nbsp; 
+      <span>Tennis Leaderboards</span> &nbsp;|&nbsp;
+      WTA & ATP matches 1968–2026 &nbsp;|&nbsp;
       Maintained by <a style="color:#f5c842; text-decoration:none;">LuckyLoser91</a>
     </div>
 
@@ -129,14 +169,14 @@
             <span class="card-text">Non-Grand Slam Champions Win Rate Leaderboard</span>
           </a>
         </div>
-        
+
       </div>
     </div>
 
     <div class="section">
       <h2>📊 WTA Tour</h2>
       <div class="grid">
-       
+
         <div class="card">
           <a href="./leaderboards/wta_calendar_champs_start_2009.html">
             <span class="card-icon">🥇</span>
@@ -158,4 +198,5 @@
   </div>
 
 </body>
+
 </html>

@@ -1,216 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-C15B9S69WR');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grand Slam · At Age (by Birth Year)</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-
     .controls {
       display: flex;
       gap: 20px;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
     th {
-      color: #6b7280; font-size: 10.5px; font-weight: 600;
-      text-transform: uppercase; padding: 8px 6px;
-      border-bottom: 1px solid #374151; text-align: center;
+      color: #6b7280;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 8px 6px;
+      border-bottom: 1px solid #374151;
+      text-align: center;
       white-space: nowrap;
     }
+
     th.sortable {
       cursor: pointer;
       user-select: none;
     }
-    th.sortable:hover { color: #f5c842; }
-    th.left { text-align: left; }
-    td {
-      padding: 6px; font-size: 12.5px;
-      border-bottom: 1px solid #1f2937; text-align: center;
+
+    th.sortable:hover {
+      color: #f5c842;
     }
-    td.left { text-align: left; }
-    tbody tr:hover { background: #1f2937; }
-    .flag { margin-right: 6px; vertical-align: middle; }
+
+    th.left {
+      text-align: left;
+    }
+
+    td {
+      padding: 6px;
+      font-size: 12.5px;
+      border-bottom: 1px solid #1f2937;
+      text-align: center;
+    }
+
+    td.left {
+      text-align: left;
+    }
+
+    tbody tr:hover {
+      background: #1f2937;
+    }
+
+    .flag {
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
     .sort-indicator {
       margin-left: 4px;
       font-size: 9px;
       color: #f5c842;
     }
+
     .year-badge {
       color: #f5f4f4;
       font-weight: 600;
     }
+
     .dob-text {
       color: #9ca3af;
       font-size: 11px;
       margin-left: 4px;
     }
+
     /* Career Titles 颜色分级 */
-    .career-10plus { color: #f5c842; font-weight: bold; }
-    .career-5to9   { color: #81cf8f; font-weight: bold; }
-    .career-2to4   { color: #4a9eff; font-weight: bold; }
-    .career-1      { color: #e5e5e5; font-weight: bold; }
+    .career-10plus {
+      color: #f5c842;
+      font-weight: bold;
+    }
+
+    .career-5to9 {
+      color: #81cf8f;
+      font-weight: bold;
+    }
+
+    .career-2to4 {
+      color: #4a9eff;
+      font-weight: bold;
+    }
+
+    .career-1 {
+      color: #e5e5e5;
+      font-weight: bold;
+    }
   </style>
 </head>
-<body>
- 
 
-<div style="display: flex; justify-content: space-between; ">
+<body>
+
+
+  <div style="display: flex; justify-content: space-between; ">
     <h1>🏆 Grand Slam · Performance at Age (based on Birth Year) </h1>
     <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
-</div>
-
-<div class="sub">
-  <div> 
-    <span id="player-count">0 players</span> · Grand Slam singles only
   </div>
-  <div class="controls">
-    <div class="tour-selector">
-      <label style="color:#9ca3af;">TOUR:</label>
-      <select id="tourSelect">
-        <option value="wta" selected>WTA</option>
-        <option value="atp">ATP</option>
-      </select>
+
+  <div class="sub">
+    <div>
+      <span id="player-count">0 players</span> · Grand Slam singles only
     </div>
-    <div class="age-selector">
-      <label style="color:#9ca3af;">AGE:</label>
-      <select id="ageSelect"></select>
+    <div class="controls">
+      <div class="tour-selector">
+        <label style="color:#9ca3af;">TOUR:</label>
+        <select id="tourSelect">
+          <option value="wta" selected>WTA</option>
+          <option value="atp">ATP</option>
+        </select>
+      </div>
+      <div class="age-selector">
+        <label style="color:#9ca3af;">AGE:</label>
+        <select id="ageSelect"></select>
+      </div>
     </div>
   </div>
-</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th class="left">PLAYER</th>
-      <th>YEAR</th>
-      <th colspan="4" style="text-align:center;">GRAND SLAM RESULT</th>
-      <th class="sortable" data-col="W">W <span class="sort-indicator"></span></th>
-      <th>L</th>
-      <th class="sortable" data-col="ageTitles">cumulative titles<span class="sort-indicator"></span></th>
-      <th class="sortable" data-col="careerTitles">CAREER TITLES <span class="sort-indicator"></span></th>
-    </tr>
-    <tr>
-      <th></th>
-      <th class="left"></th>
-      <th></th>
-      <th>AO</th>
-      <th>RG</th>
-      <th>WIM</th>
-      <th>USO</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="table-body"></tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th class="left">PLAYER</th>
+        <th>YEAR</th>
+        <th colspan="4" style="text-align:center;">GRAND SLAM RESULT</th>
+        <th class="sortable" data-col="W">W <span class="sort-indicator"></span></th>
+        <th>L</th>
+        <th class="sortable" data-col="ageTitles">cumulative titles<span class="sort-indicator"></span></th>
+        <th class="sortable" data-col="careerTitles">CAREER TITLES <span class="sort-indicator"></span></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th class="left"></th>
+        <th></th>
+        <th>AO</th>
+        <th>RG</th>
+        <th>WIM</th>
+        <th>USO</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
 
-<script type="module">
-  import {getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur} from "./utils.js"
+  <script type="module">
+    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "./utils.js"
 
-  (function() {
+    (function () {
 
-    let fullData = { atp: [], wta: [], meta: {} };
-    let currentTour = 'wta';
-    let currentAge = null;
+      let fullData = { atp: [], wta: [], meta: {} };
+      let currentTour = 'wta';
+      let currentAge = null;
 
-    let sortState = {
-      col: 'ageTitles',
-      order: 'desc'
-    };
-    let secondarySort = [
-      { col: 'W', order: 'desc' },
-      { col: 'careerTitles', order: 'desc' }
-    ];
-
+      let sortState = {
+        col: 'ageTitles',
+        order: 'desc'
+      };
+      let secondarySort = [
+        { col: 'W', order: 'desc' },
+        { col: 'careerTitles', order: 'desc' }
+      ];
 
 
 
-    function getCareerTitleClass(titles) {
-      if (titles >= 10) return 'career-10plus';
-      if (titles >= 5) return 'career-5to9';
-      if (titles >= 2) return 'career-2to4';
-      return 'career-1';
-    }
 
-    function getSortValue(player, entry, col) {
-      switch (col) {
-        case 'W': return entry.W;
-        case 'ageTitles': return entry.titles;
-        case 'careerTitles': return player.career_titles;
-        default: return 0;
+      function getCareerTitleClass(titles) {
+        if (titles >= 10) return 'career-10plus';
+        if (titles >= 5) return 'career-5to9';
+        if (titles >= 2) return 'career-2to4';
+        return 'career-1';
       }
-    }
 
-    function sortPlayers(players, entriesMap) {
-      return players.sort((a, b) => {
-        const entryA = entriesMap.get(a.name);
-        const entryB = entriesMap.get(b.name);
-        if (!entryA || !entryB) return 0;
-
-        let valA = getSortValue(a, entryA, sortState.col);
-        let valB = getSortValue(b, entryB, sortState.col);
-        if (valA !== valB) {
-          return sortState.order === 'desc' ? valB - valA : valA - valB;
+      function getSortValue(player, entry, col) {
+        switch (col) {
+          case 'W': return entry.W;
+          case 'ageTitles': return entry.titles;
+          case 'careerTitles': return player.career_titles;
+          default: return 0;
         }
+      }
 
-        for (let sec of secondarySort) {
-          valA = getSortValue(a, entryA, sec.col);
-          valB = getSortValue(b, entryB, sec.col);
+      function sortPlayers(players, entriesMap) {
+        return players.sort((a, b) => {
+          const entryA = entriesMap.get(a.name);
+          const entryB = entriesMap.get(b.name);
+          if (!entryA || !entryB) return 0;
+
+          let valA = getSortValue(a, entryA, sortState.col);
+          let valB = getSortValue(b, entryB, sortState.col);
           if (valA !== valB) {
-            return sec.order === 'desc' ? valB - valA : valA - valB;
+            return sortState.order === 'desc' ? valB - valA : valA - valB;
           }
-        }
-        return a.name.localeCompare(b.name);
-      });
-    }
 
-    function updateSortIndicators() {
-      document.querySelectorAll('.sortable').forEach(th => {
-        const indicator = th.querySelector('.sort-indicator');
-        if (indicator) {
-          const col = th.dataset.col;
-          indicator.textContent = (col === sortState.col) ? (sortState.order === 'desc' ? ' ▼' : ' ▲') : '';
-        }
-      });
-    }
+          for (let sec of secondarySort) {
+            valA = getSortValue(a, entryA, sec.col);
+            valB = getSortValue(b, entryB, sec.col);
+            if (valA !== valB) {
+              return sec.order === 'desc' ? valB - valA : valA - valB;
+            }
+          }
+          return a.name.localeCompare(b.name);
+        });
+      }
 
-    function render() {
-      const players = fullData[currentTour] || [];
-      const tbody = document.getElementById('table-body');
-      const countSpan = document.getElementById('player-count');
-      const entriesMap = new Map();
-      const validPlayers = players.filter(p => {
-        const entry = p.age_entries.find(e => e.age === currentAge);
-        if (entry) {
-          entriesMap.set(p.name, entry);
-          return true;
-        }
-        return false;
-      });
+      function updateSortIndicators() {
+        document.querySelectorAll('.sortable').forEach(th => {
+          const indicator = th.querySelector('.sort-indicator');
+          if (indicator) {
+            const col = th.dataset.col;
+            indicator.textContent = (col === sortState.col) ? (sortState.order === 'desc' ? ' ▼' : ' ▲') : '';
+          }
+        });
+      }
 
-      countSpan.textContent = `${validPlayers.length} players`;
+      function render() {
+        const players = fullData[currentTour] || [];
+        const tbody = document.getElementById('table-body');
+        const countSpan = document.getElementById('player-count');
+        const entriesMap = new Map();
+        const validPlayers = players.filter(p => {
+          const entry = p.age_entries.find(e => e.age === currentAge);
+          if (entry) {
+            entriesMap.set(p.name, entry);
+            return true;
+          }
+          return false;
+        });
 
-      const sorted = sortPlayers(validPlayers, entriesMap);
-      updateSortIndicators();
-      
+        countSpan.textContent = `${validPlayers.length} players`;
 
-      let html = '';
-      sorted.forEach((player, idx) => {
-        const entry = entriesMap.get(player.name);
-        const dob = player.dob ? player.dob : '—';
-        const yearDisplay = entry.year ? `<span class="year-badge">${entry.year}</span>` : '—';
-        const careerTitles = player.career_titles || 0;
-        const careerClass = getCareerTitleClass(careerTitles);
-        const titleBg_cur = titlesBg_cur(entry.titles);
-        const titleColor_cur = titlesFc_cur(entry.titles);
-        const titleBg_career = titlesBg(careerTitles);
-        const titleColor_career = titlesFc(careerTitles);
+        const sorted = sortPlayers(validPlayers, entriesMap);
+        updateSortIndicators();
 
-        html += `<tr>
+
+        let html = '';
+        sorted.forEach((player, idx) => {
+          const entry = entriesMap.get(player.name);
+          const dob = player.dob ? player.dob : '—';
+          const yearDisplay = entry.year ? `<span class="year-badge">${entry.year}</span>` : '—';
+          const careerTitles = player.career_titles || 0;
+          const careerClass = getCareerTitleClass(careerTitles);
+          const titleBg_cur = titlesBg_cur(entry.titles);
+          const titleColor_cur = titlesFc_cur(entry.titles);
+          const titleBg_career = titlesBg(careerTitles);
+          const titleColor_career = titlesFc(careerTitles);
+
+          html += `<tr>
           <td style="color:#6b7280;font-size:11px;">${idx + 1}</td>
           <td class="left" style="color:#f3f4f6; font-weight:500;">
             ${getFlagImg(player.ioc)} ${player.name} <span class="dob-text">(${dob})</span>
@@ -229,65 +288,66 @@
             ${careerTitles}
           </td>
         </tr>`;
-      });
+        });
 
-      tbody.innerHTML = html || '<tr><td colspan="11" style="padding:40px;color:#6b7280;text-align:center;">No data for this age</td></tr>';
-    }
-
-    function initAgeSelect() {
-      const select = document.getElementById('ageSelect');
-      const meta = fullData.meta;
-      for (let age = meta.min_age; age <= meta.max_age; age++) {
-        const opt = document.createElement('option');
-        opt.value = age;
-        opt.textContent = age;
-        select.appendChild(opt);
+        tbody.innerHTML = html || '<tr><td colspan="11" style="padding:40px;color:#6b7280;text-align:center;">No data for this age</td></tr>';
       }
-      currentAge = meta.min_age;
-      select.value = currentAge;
-      select.addEventListener('change', e => {
-        currentAge = parseInt(e.target.value);
-        render();
-      });
-    }
 
-    function bindSortEvents() {
-      document.querySelectorAll('.sortable').forEach(th => {
-        th.addEventListener('click', () => {
-          const col = th.dataset.col;
-          if (!col) return;
-          if (sortState.col === col) {
-            sortState.order = sortState.order === 'desc' ? 'asc' : 'desc';
-          } else {
-            sortState.col = col;
-            sortState.order = 'desc';
-          }
+      function initAgeSelect() {
+        const select = document.getElementById('ageSelect');
+        const meta = fullData.meta;
+        for (let age = meta.min_age; age <= meta.max_age; age++) {
+          const opt = document.createElement('option');
+          opt.value = age;
+          opt.textContent = age;
+          select.appendChild(opt);
+        }
+        currentAge = meta.min_age;
+        select.value = currentAge;
+        select.addEventListener('change', e => {
+          currentAge = parseInt(e.target.value);
           render();
         });
-      });
-    }
-
-    async function loadData() {
-      try {
-        const res = await fetch('../output/gs_champions_by_age_year.json');
-        const data = await res.json();
-        fullData = data;
-        initAgeSelect();
-        bindSortEvents();
-        render();
-      } catch (err) {
-        console.error('加载失败:', err);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="11" style="padding:40px;color:#f87171;text-align:center;">Failed to load data</td></tr>';
       }
-    }
 
-    document.getElementById('tourSelect').addEventListener('change', e => {
-      currentTour = e.target.value;
-      render();
-    });
+      function bindSortEvents() {
+        document.querySelectorAll('.sortable').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (!col) return;
+            if (sortState.col === col) {
+              sortState.order = sortState.order === 'desc' ? 'asc' : 'desc';
+            } else {
+              sortState.col = col;
+              sortState.order = 'desc';
+            }
+            render();
+          });
+        });
+      }
 
-    loadData();
-  })();
-</script>
+      async function loadData() {
+        try {
+          const res = await fetch('../output/gs_champions_by_age_year.json');
+          const data = await res.json();
+          fullData = data;
+          initAgeSelect();
+          bindSortEvents();
+          render();
+        } catch (err) {
+          console.error('加载失败:', err);
+          document.getElementById('table-body').innerHTML = '<tr><td colspan="11" style="padding:40px;color:#f87171;text-align:center;">Failed to load data</td></tr>';
+        }
+      }
+
+      document.getElementById('tourSelect').addEventListener('change', e => {
+        currentTour = e.target.value;
+        render();
+      });
+
+      loadData();
+    })();
+  </script>
 </body>
+
 </html>

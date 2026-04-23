@@ -1,473 +1,604 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
-  <style>
-    /* 样式保持不变 */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #111827;
-      font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
-      padding: 36px 44px 60px;
-      min-width: 1200px;
-    }
-    h1 {
-      color: #f5c842;
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .sub {
-      color: #6b7280;
-      font-size: 11px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .sub span { color: #f5c842; }
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .filter-group label {
-      color: #9ca3af;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    select, input {
-      background: #1f2937;
-      color: #f3f4f6;
-      border: 1px solid #374151;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
-      min-width: 140px;
-    }
-    input {
-      cursor: text;
-      font-weight: 400;
-    }
-    input::placeholder {
-      color: #6b7280;
-      font-weight: 400;
-    }
-    select:hover, input:hover { border-color: #f5c842; }
-    .stats {
-      color: #9ca3af;
-      font-size: 11px;
-      background: #1f2937;
-      padding: 5px 14px;
-      border-radius: 6px;
-      border: 1px solid #374151;
-      white-space: nowrap;
-    }
-    .table-wrapper {
-      border-radius: 8px;
-      overflow-x: auto;
-      border: 1px solid #374151;
-      background: #0f172a;
-      margin-top: 12px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12.5px;
-      min-width: 900px;
-      table-layout: fixed;
-    }
-    th, td {
-      text-align: center;
-      padding: 8px 6px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    /* 列宽分配 */
-    th:nth-child(1) { width: 5%; }   /* # */
-    th:nth-child(2) { width: 5%; }   /* Season */
-    th:nth-child(3) { width: 12%; }   /* Start Date */
-    th:nth-child(4) { width: 7%; }  /* Drawsize */
-    th:nth-child(5) { width: 13%; }  /* Tournament */
-    th:nth-child(6) { width: 10%; }  /* Level */
-    th:nth-child(7) { width: 10%; }  /* Surface */
-    th:nth-child(8) { width: 18%; }  /* Champion */
-    th:nth-child(9) { width: 11%; }  /* Date of Birth */
-    th:nth-child(10) { width: 9%; }   /* Age */
-
-    th {
-      color: #6b7280;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 9px 6px;
-      background: #1a2332;
-      border-bottom: 1px solid #374151;
-    }
-    th.sortable {
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.15s;
-    }
-    th.sortable:hover {
-      background: #2d3a4e;
-      color: #f5c842;
-    }
-    th .sort-indicator {
-      margin-left: 6px;
-      font-size: 9px;
-      display: inline-block;
-      vertical-align: middle;
-      opacity: 0.6;
-    }
-    th.sort-asc .sort-indicator::after {
-      content: "▲";
-      opacity: 1;
-      color: #f5c842;
-    }
-    th.sort-desc .sort-indicator::after {
-      content: "▼";
-      opacity: 1;
-      color: #f5c842;
-    }
-    th.champion-col {
-      text-align: left;
-      padding-left: 60px;
-    }
-    .winner-cell { 
-      display: inline-flex; 
-      align-items: left; 
-      padding-left: 15px;
-      max-width: 100%;
-    }
-    td {
-      border-bottom: 1px solid #1f2937;
-      color: #e5e5e5;
-      font-size: 12.5px;
-    }
-    tr:hover td { background: #1f2937; }
-    td.champion-col {
-      text-align: left;
-      padding-left: 10px;
-      font-weight: 600;
-      color: #f3f4f6;
-    }
-    .badge-level {
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 10.5px;
-      display: inline-block;
-      text-align: center;
-      min-width: 80px;
-    }
-    .level-GrandSlam { background: #b91c1c; color: #fee2e2; font-weight: 700; }
-    .level-Finals { background: #6d28d9; color: #ede9fe; }
-    .level-WTA1000 { background: #2563eb; color: #dbeafe; }
-    .level-WTA500Premier { background: #0d9488; color: #ccfbf1; }
-    .level-WTA250International { background: #475569; color: #e2e8f0; }
-    .level-other { background: #334155; color: #cbd5e1; }
-    .surface-badge {
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 10.5px;
-      font-weight: 500;
-      display: inline-block;
-    }
-    .surface-Hard { background: #1e3a5f; color: #93c5fd; }
-    .surface-Clay { background: #78350f; color: #fde68a; }
-    .surface-Grass { background: #14532d; color: #bbf7d0; }
-    .surface-Carpet { background: #334155; color: #cbd5e1; }
-
-    .dob-cell, .winner-age {
-      font-family: inherit;
-      background: #1a2332;
-      padding: 3px 6px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: #e5e5e5;
-      display: inline-block;
-    }
-    .loading, .no-data {
-      text-align: center;
-      padding: 48px;
-      color: #9ca3af;
-      font-size: 13px;
-    }
-    .footer-note {
-      margin-top: 22px;
-      text-align: right;
-      color: #4b5563;
-      font-size: 10px;
-      letter-spacing: 0.04em;
-    }
-    .flag-img {
-      margin-right: 6px;
-      vertical-align: middle;
-      border-radius: 2px;
-    }
-    .seed-suffix {
-      font-weight: 400;
-      color: #9ca3af;
-      margin-left: 4px;
-    }
-  </style>
-</head>
-<body>
-  <div style="display: flex; justify-content: space-between; ">
-    <h1>🎾 WTA Champions · Singles </h1>
-    <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
-  </div>
-
-<div class="sub">
-  <div>
-    <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp;
-    2009 – 2026 &nbsp;|&nbsp;
-    <span style="color:#9ca3af;">Descending by start date (default) · Click header to sort</span>
-  </div>
-  <div class="controls">
-    <!-- 冠军搜索 -->
-    <div class="filter-group">
-      <label for="searchInput">🔍 CHAMPION</label>
-      <input type="text" id="searchInput" placeholder="e.g. Iga Swiatek" style="min-width:170px;">
-    </div>
-    <!-- 赛事搜索 -->
-    <div class="filter-group">
-      <label for="tournamentSearchInput">🏟️ TOURNAMENT</label>
-      <input type="text" id="tournamentSearchInput" placeholder="e.g. Australian Open" style="min-width:180px;">
-    </div>
-    <div class="filter-group">
-      <label for="yearSelect">📅 SEASON</label>
-      <select id="yearSelect"></select>
-    </div>
-    <div class="filter-group">
-      <label for="levelSelect">🏆 LEVEL</label>
-      <select id="levelSelect">
-        <option value="">All Levels</option>
-      </select>
-    </div>
-    <div class="stats" id="championCount">— champions</div>
-  </div>
-</div>
-
-<div class="table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Season</th>
-        <th class="sortable" data-sort="startDate">Start Date<span class="sort-indicator"></span></th>
-        <th>Drawsize</th>
-        <th>Tournament</th>
-        <th>Level</th>
-        <th>Surface</th>
-        <th class="champion-col">Champion</th>
-        <!-- 给 Date of Birth 加上排序功能 -->
-        <th class="sortable" data-sort="dob">Date of Birth<span class="sort-indicator"></span></th>
-        <th class="sortable" data-sort="age">Age<span class="sort-indicator"></span></th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <tr><td colspan="10" class="loading">Loading champion data…</td></tr>
-    </tbody>
-  </table>
-</div>
-<div class="footer-note">
-  * Data based on WTA calendar · Empty winners omitted · Flags via flagcdn.com · Seed in parentheses after name
-</div>
-
-<script type="module">
-  import {getFlagImg} from './utils.js'
-  
-  (function(){
-    const JSON_URL = '../output/wta_calendar_champs_start_2009.json';
-    let allData = [];
-    let currentYear = '';
-    let currentLevel = '';
-    let championSearchTerm = '';
-    let tournamentSearchTerm = '';
-    
-    // 排序状态，增加 'dob' 作为可选列
-    let currentSort = {
-      column: 'startDate',   // 'startDate', 'age', 'dob'
-      direction: 'desc'      // 'asc' 或 'desc'
-    };
-
-    const searchInput = document.getElementById('searchInput');
-    const tournamentSearchInput = document.getElementById('tournamentSearchInput');
-    const yearSelect = document.getElementById('yearSelect');
-    const levelSelect = document.getElementById('levelSelect');
-    const tableBody = document.getElementById('tableBody');
-    const recordCountSpan = document.getElementById('recordCount');
-    const championCountSpan = document.getElementById('championCount');
-
-    // 获取表头元素并添加点击监听
-    const sortableHeaders = document.querySelectorAll('th.sortable');
-    
-    function updateSortIndicator() {
-      // 移除所有排序类
-      sortableHeaders.forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-      });
-      // 为当前排序列添加类
-      const activeHeader = Array.from(sortableHeaders).find(
-        th => th.dataset.sort === currentSort.column
-      );
-      if (activeHeader) {
-        activeHeader.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
       }
-    }
+      gtag("js", new Date());
 
-    function formatVenue(surface, inOutdoor) {
-      if (!surface) return '';
-      const s = surface.trim();
-      let venue = s;
-      if (inOutdoor === 'I') venue += ' (Indoor)';
-      else if (inOutdoor === 'O') venue += ' (Outdoor)';
-      return venue;
-    }
+      gtag("config", "G-C15B9S69WR");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
+    <style>
+      /* 样式保持不变 */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #111827;
+        font-family:
+          "Segoe UI", "Apple Color Emoji", "Noto Color Emoji", "EmojiOne Color",
+          "Twemoji Mozilla", sans-serif;
+        padding: 36px 44px 60px;
+        min-width: 1200px;
+      }
+      h1 {
+        color: #f5c842;
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .sub {
+        color: #6b7280;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .sub span {
+        color: #f5c842;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .filter-group label {
+        color: #9ca3af;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      select,
+      input {
+        background: #1f2937;
+        color: #f3f4f6;
+        border: 1px solid #374151;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        min-width: 140px;
+      }
+      input {
+        cursor: text;
+        font-weight: 400;
+      }
+      input::placeholder {
+        color: #6b7280;
+        font-weight: 400;
+      }
+      select:hover,
+      input:hover {
+        border-color: #f5c842;
+      }
+      .stats {
+        color: #9ca3af;
+        font-size: 11px;
+        background: #1f2937;
+        padding: 5px 14px;
+        border-radius: 6px;
+        border: 1px solid #374151;
+        white-space: nowrap;
+      }
+      .table-wrapper {
+        border-radius: 8px;
+        overflow-x: auto;
+        border: 1px solid #374151;
+        background: #0f172a;
+        margin-top: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+        min-width: 900px;
+        table-layout: fixed;
+      }
+      th,
+      td {
+        text-align: center;
+        padding: 8px 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* 列宽分配 */
+      th:nth-child(1) {
+        width: 5%;
+      } /* # */
+      th:nth-child(2) {
+        width: 5%;
+      } /* Season */
+      th:nth-child(3) {
+        width: 12%;
+      } /* Start Date */
+      th:nth-child(4) {
+        width: 7%;
+      } /* Drawsize */
+      th:nth-child(5) {
+        width: 13%;
+      } /* Tournament */
+      th:nth-child(6) {
+        width: 10%;
+      } /* Level */
+      th:nth-child(7) {
+        width: 10%;
+      } /* Surface */
+      th:nth-child(8) {
+        width: 18%;
+      } /* Champion */
+      th:nth-child(9) {
+        width: 11%;
+      } /* Date of Birth */
+      th:nth-child(10) {
+        width: 9%;
+      } /* Age */
 
-    function getSurfaceClass(surface) {
-      if (!surface) return '';
-      const s = surface.trim();
-      if (s === 'Hard') return 'surface-Hard';
-      if (s === 'Clay') return 'surface-Clay';
-      if (s === 'Grass') return 'surface-Grass';
-      if (s === 'Carpet') return 'surface-Carpet';
-      return '';
-    }
-
-    function getSeedNumber(seed) {
-      if (!seed || seed === 'Non-seed') return null;
-      const num = parseFloat(seed);
-      if (!isNaN(num)) return Math.floor(num);
-      return null;
-    }
-
-    function getLevelClass(level) {
-      if (!level) return 'level-other';
-      if (level === 'Grand Slam') return 'level-GrandSlam';
-      if (level === 'Finals') return 'level-Finals';
-      if (level === 'WTA 1000') return 'level-WTA1000';
-      if (level === 'WTA 500' || level === 'Premier') return 'level-WTA500Premier';
-      if (level === 'WTA 250' || level === 'International') return 'level-WTA250International';
-      return 'level-other';
-    }
-
-    // 过滤数据
-    function filterData() {
-      if (!allData.length) return [];
-      return allData.filter(item => {
-        if (!item.winner || item.winner.trim() === '') return false;
-        if (currentYear && String(item.year) !== currentYear) return false;
-        if (currentLevel && item.tourney_level !== currentLevel) return false;
-        
-        if (championSearchTerm && !item.winner.toLowerCase().includes(championSearchTerm.toLowerCase())) return false;
-        
-        if (tournamentSearchTerm) {
-          const tourney = item.tourney_name || '';
-          if (!tourney.toLowerCase().includes(tournamentSearchTerm.toLowerCase())) return false;
-        }
-        
-        return true;
-      });
-    }
-
-    // 排序函数，增加对 dob 的处理
-    function sortData(data) {
-      if (!data.length) return data;
-      
-      const sorted = [...data];
-      const column = currentSort.column;
-      const direction = currentSort.direction;
-      
-      sorted.sort((a, b) => {
-        let valA, valB;
-        
-        if (column === 'startDate') {
-          valA = a.tourney_start_date || '';
-          valB = b.tourney_start_date || '';
-          return direction === 'asc' 
-            ? valA.localeCompare(valB) 
-            : valB.localeCompare(valA);
-        } else if (column === 'age') {
-          valA = a.winner_age ? parseFloat(a.winner_age) : -Infinity;
-          valB = b.winner_age ? parseFloat(b.winner_age) : -Infinity;
-          return direction === 'asc' ? valA - valB : valB - valA;
-        } else if (column === 'dob') {
-          // 处理出生日期排序，空值放在末尾
-          valA = a.dob || '';
-          valB = b.dob || '';
-          // 如果其中一个为空，则将空值视为较大的值（排到后面）
-          if (!valA && !valB) return 0;
-          if (!valA) return 1;   // a 为空，a > b（放后面）
-          if (!valB) return -1;  // b 为空，a < b（放前面）
-          
-          return direction === 'asc' 
-            ? valA.localeCompare(valB) 
-            : valB.localeCompare(valA);
-        }
-        return 0;
-      });
-      
-      return sorted;
-    }
-
-    function renderTable(data) {
-      if (!data || data.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="10" class="no-data">🎯 No champion records match the filters</td></tr>`;
-        recordCountSpan.textContent = `0 tournaments`;
-        championCountSpan.textContent = `0 champions`;
-        return;
+      th {
+        color: #6b7280;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 9px 6px;
+        background: #1a2332;
+        border-bottom: 1px solid #374151;
+      }
+      th.sortable {
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s;
+      }
+      th.sortable:hover {
+        background: #2d3a4e;
+        color: #f5c842;
+      }
+      th .sort-indicator {
+        margin-left: 6px;
+        font-size: 9px;
+        display: inline-block;
+        vertical-align: middle;
+        opacity: 0.6;
+      }
+      th.sort-asc .sort-indicator::after {
+        content: "▲";
+        opacity: 1;
+        color: #f5c842;
+      }
+      th.sort-desc .sort-indicator::after {
+        content: "▼";
+        opacity: 1;
+        color: #f5c842;
+      }
+      th.champion-col {
+        text-align: left;
+        padding-left: 60px;
+      }
+      .winner-cell {
+        display: inline-flex;
+        align-items: left;
+        padding-left: 15px;
+        max-width: 100%;
+      }
+      td {
+        border-bottom: 1px solid #1f2937;
+        color: #e5e5e5;
+        font-size: 12.5px;
+      }
+      tr:hover td {
+        background: #1f2937;
+      }
+      td.champion-col {
+        text-align: left;
+        padding-left: 10px;
+        font-weight: 600;
+        color: #f3f4f6;
+      }
+      .badge-level {
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 10.5px;
+        display: inline-block;
+        text-align: center;
+        min-width: 80px;
+      }
+      .level-GrandSlam {
+        background: #b91c1c;
+        color: #fee2e2;
+        font-weight: 700;
+      }
+      .level-Finals {
+        background: #6d28d9;
+        color: #ede9fe;
+      }
+      .level-WTA1000 {
+        background: #2563eb;
+        color: #dbeafe;
+      }
+      .level-WTA500Premier {
+        background: #0d9488;
+        color: #ccfbf1;
+      }
+      .level-WTA250International {
+        background: #475569;
+        color: #e2e8f0;
+      }
+      .level-other {
+        background: #334155;
+        color: #cbd5e1;
+      }
+      .surface-badge {
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 10.5px;
+        font-weight: 500;
+        display: inline-block;
+      }
+      .surface-Hard {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .surface-Clay {
+        background: #78350f;
+        color: #fde68a;
+      }
+      .surface-Grass {
+        background: #14532d;
+        color: #bbf7d0;
+      }
+      .surface-Carpet {
+        background: #334155;
+        color: #cbd5e1;
       }
 
-      // 先排序
-      const sorted = sortData(data);
-      
-      const uniqueChampions = new Set();
-      
-      let html = '';
-      sorted.forEach((item, idx) => {
-        const startDate = item.tourney_start_date || '';
-        const tourneyName = item.tourney_name || '';
-        const level = item.tourney_level || '';
-        const levelClass = getLevelClass(level);
-        const surface = item.surface || '';
-        const inOut = item.inOutdoor || '';
-        const venueDisplay = formatVenue(surface, inOut);
-        const surfaceClass = getSurfaceClass(surface);
-        
-        const winner = item.winner || '';
-        const ioc = item.ioc || '';
-        const flagHtml = getFlagImg(ioc);
-        const seedNumber = getSeedNumber(item.seed);
-        const seedSuffix = seedNumber ? ` <span class="seed-suffix">(${seedNumber})</span>` : '';
-        const winnerDisplay = flagHtml ? `${flagHtml} ${winner}${seedSuffix}` : `${winner}${seedSuffix}`;
-        
-        const dob = item.dob || '—';
-        const age = item.winner_age ? parseFloat(item.winner_age).toFixed(2) : '—';
-        const year = item.year;
-        const drawsize = item.drawsize;
-        
-        uniqueChampions.add(`${winner}|${ioc}`);
+      .dob-cell,
+      .winner-age {
+        font-family: inherit;
+        background: #1a2332;
+        padding: 3px 6px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #e5e5e5;
+        display: inline-block;
+      }
+      .loading,
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: #9ca3af;
+        font-size: 13px;
+      }
+      .footer-note {
+        margin-top: 22px;
+        text-align: right;
+        color: #4b5563;
+        font-size: 10px;
+        letter-spacing: 0.04em;
+      }
+      .flag-img {
+        margin-right: 6px;
+        vertical-align: middle;
+        border-radius: 2px;
+      }
+      .seed-suffix {
+        font-weight: 400;
+        color: #9ca3af;
+        margin-left: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; justify-content: space-between">
+      <h1>🎾 WTA Champions · Singles</h1>
+      <a
+        href="../index.html"
+        style="text-decoration: none; color: #d7dfc6; font-weight: bold"
+        >HOME 🏠
+      </a>
+    </div>
 
-        html += `<tr>
+    <div class="sub">
+      <div>
+        <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp; 2009 – 2026
+        &nbsp;|&nbsp;
+        <span style="color: #9ca3af"
+          >Descending by start date (default) · Click header to sort</span
+        >
+      </div>
+      <div class="controls">
+        <!-- 冠军搜索 -->
+        <div class="filter-group">
+          <label for="searchInput">🔍 CHAMPION</label>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="e.g. Iga Swiatek"
+            style="min-width: 170px"
+          />
+        </div>
+        <!-- 赛事搜索 -->
+        <div class="filter-group">
+          <label for="tournamentSearchInput">🏟️ TOURNAMENT</label>
+          <input
+            type="text"
+            id="tournamentSearchInput"
+            placeholder="e.g. Australian Open"
+            style="min-width: 180px"
+          />
+        </div>
+        <div class="filter-group">
+          <label for="yearSelect">📅 SEASON</label>
+          <select id="yearSelect"></select>
+        </div>
+        <div class="filter-group">
+          <label for="levelSelect">🏆 LEVEL</label>
+          <select id="levelSelect">
+            <option value="">All Levels</option>
+          </select>
+        </div>
+        <div class="stats" id="championCount">— champions</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Season</th>
+            <th class="sortable" data-sort="startDate">
+              Start Date<span class="sort-indicator"></span>
+            </th>
+            <th>Drawsize</th>
+            <th>Tournament</th>
+            <th>Level</th>
+            <th>Surface</th>
+            <th class="champion-col">Champion</th>
+            <!-- 给 Date of Birth 加上排序功能 -->
+            <th class="sortable" data-sort="dob">
+              Date of Birth<span class="sort-indicator"></span>
+            </th>
+            <th class="sortable" data-sort="age">
+              Age<span class="sort-indicator"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="10" class="loading">Loading champion data…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-note">
+      * Data based on WTA calendar · Empty winners omitted · Flags via
+      flagcdn.com · Seed in parentheses after name
+    </div>
+
+    <script type="module">
+      import { getFlagImg } from "./utils.js";
+
+      (function () {
+        const JSON_URL = "../output/wta_calendar_champs_start_2009.json";
+        let allData = [];
+        let currentYear = "";
+        let currentLevel = "";
+        let championSearchTerm = "";
+        let tournamentSearchTerm = "";
+
+        // 排序状态，增加 'dob' 作为可选列
+        let currentSort = {
+          column: "startDate", // 'startDate', 'age', 'dob'
+          direction: "desc", // 'asc' 或 'desc'
+        };
+
+        const searchInput = document.getElementById("searchInput");
+        const tournamentSearchInput = document.getElementById(
+          "tournamentSearchInput",
+        );
+        const yearSelect = document.getElementById("yearSelect");
+        const levelSelect = document.getElementById("levelSelect");
+        const tableBody = document.getElementById("tableBody");
+        const recordCountSpan = document.getElementById("recordCount");
+        const championCountSpan = document.getElementById("championCount");
+
+        // 获取表头元素并添加点击监听
+        const sortableHeaders = document.querySelectorAll("th.sortable");
+
+        function updateSortIndicator() {
+          // 移除所有排序类
+          sortableHeaders.forEach((th) => {
+            th.classList.remove("sort-asc", "sort-desc");
+          });
+          // 为当前排序列添加类
+          const activeHeader = Array.from(sortableHeaders).find(
+            (th) => th.dataset.sort === currentSort.column,
+          );
+          if (activeHeader) {
+            activeHeader.classList.add(
+              currentSort.direction === "asc" ? "sort-asc" : "sort-desc",
+            );
+          }
+        }
+
+        function formatVenue(surface, inOutdoor) {
+          if (!surface) return "";
+          const s = surface.trim();
+          let venue = s;
+          if (inOutdoor === "I") venue += " (Indoor)";
+          else if (inOutdoor === "O") venue += " (Outdoor)";
+          return venue;
+        }
+
+        function getSurfaceClass(surface) {
+          if (!surface) return "";
+          const s = surface.trim();
+          if (s === "Hard") return "surface-Hard";
+          if (s === "Clay") return "surface-Clay";
+          if (s === "Grass") return "surface-Grass";
+          if (s === "Carpet") return "surface-Carpet";
+          return "";
+        }
+
+        function getSeedNumber(seed) {
+          if (!seed || seed === "Non-seed") return null;
+          const num = parseFloat(seed);
+          if (!isNaN(num)) return Math.floor(num);
+          return null;
+        }
+
+        function getLevelClass(level) {
+          if (!level) return "level-other";
+          if (level === "Grand Slam") return "level-GrandSlam";
+          if (level === "Finals") return "level-Finals";
+          if (level === "WTA 1000") return "level-WTA1000";
+          if (level === "WTA 500" || level === "Premier")
+            return "level-WTA500Premier";
+          if (level === "WTA 250" || level === "International")
+            return "level-WTA250International";
+          return "level-other";
+        }
+
+        // 过滤数据
+        function filterData() {
+          if (!allData.length) return [];
+          return allData.filter((item) => {
+            if (!item.winner || item.winner.trim() === "") return false;
+            if (currentYear && String(item.year) !== currentYear) return false;
+            if (currentLevel && item.tourney_level !== currentLevel)
+              return false;
+
+            if (
+              championSearchTerm &&
+              !item.winner
+                .toLowerCase()
+                .includes(championSearchTerm.toLowerCase())
+            )
+              return false;
+
+            if (tournamentSearchTerm) {
+              const tourney = item.tourney_name || "";
+              if (
+                !tourney
+                  .toLowerCase()
+                  .includes(tournamentSearchTerm.toLowerCase())
+              )
+                return false;
+            }
+
+            return true;
+          });
+        }
+
+        // 排序函数，增加对 dob 的处理
+        function sortData(data) {
+          if (!data.length) return data;
+
+          const sorted = [...data];
+          const column = currentSort.column;
+          const direction = currentSort.direction;
+
+          sorted.sort((a, b) => {
+            let valA, valB;
+
+            if (column === "startDate") {
+              valA = a.tourney_start_date || "";
+              valB = b.tourney_start_date || "";
+              return direction === "asc"
+                ? valA.localeCompare(valB)
+                : valB.localeCompare(valA);
+            } else if (column === "age") {
+              valA = a.winner_age ? parseFloat(a.winner_age) : -Infinity;
+              valB = b.winner_age ? parseFloat(b.winner_age) : -Infinity;
+              return direction === "asc" ? valA - valB : valB - valA;
+            } else if (column === "dob") {
+              // 处理出生日期排序，空值放在末尾
+              valA = a.dob || "";
+              valB = b.dob || "";
+              // 如果其中一个为空，则将空值视为较大的值（排到后面）
+              if (!valA && !valB) return 0;
+              if (!valA) return 1; // a 为空，a > b（放后面）
+              if (!valB) return -1; // b 为空，a < b（放前面）
+
+              return direction === "asc"
+                ? valA.localeCompare(valB)
+                : valB.localeCompare(valA);
+            }
+            return 0;
+          });
+
+          return sorted;
+        }
+
+        function renderTable(data) {
+          if (!data || data.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="10" class="no-data">🎯 No champion records match the filters</td></tr>`;
+            recordCountSpan.textContent = `0 tournaments`;
+            championCountSpan.textContent = `0 champions`;
+            return;
+          }
+
+          // 先排序
+          const sorted = sortData(data);
+
+          const uniqueChampions = new Set();
+
+          let html = "";
+          sorted.forEach((item, idx) => {
+            const startDate = item.tourney_start_date || "";
+            const tourneyName = item.tourney_name || "";
+            const level = item.tourney_level || "";
+            const levelClass = getLevelClass(level);
+            const surface = item.surface || "";
+            const inOut = item.inOutdoor || "";
+            const venueDisplay = formatVenue(surface, inOut);
+            const surfaceClass = getSurfaceClass(surface);
+
+            const winner = item.winner || "";
+            const ioc = item.ioc || "";
+            const flagHtml = getFlagImg(ioc);
+            const seedNumber = getSeedNumber(item.seed);
+            const seedSuffix = seedNumber
+              ? ` <span class="seed-suffix">(${seedNumber})</span>`
+              : "";
+            const winnerDisplay = flagHtml
+              ? `${flagHtml} ${winner}${seedSuffix}`
+              : `${winner}${seedSuffix}`;
+
+            const dob = item.dob || "—";
+            const age = item.winner_age
+              ? parseFloat(item.winner_age).toFixed(2)
+              : "—";
+            const year = item.year;
+            const drawsize = item.drawsize;
+
+            uniqueChampions.add(`${winner}|${ioc}`);
+
+            html += `<tr>
           <td style="color:#e5e5e5;font-size:11px;">${idx + 1}</td>
           <td>${year}</td>
           <td>${startDate}</td>
@@ -479,131 +610,146 @@
           <td><span class="dob-cell">${dob}</span></td>
           <td><span class="winner-age">${age}</span></td>
         </tr>`;
-      });
-      
-      tableBody.innerHTML = html;
-      const displayedRows = sorted.length;
-      recordCountSpan.textContent = `${displayedRows} tournaments`;
-      championCountSpan.textContent = `${uniqueChampions.size} champions`;
-      
-      // 更新排序指示器
-      updateSortIndicator();
-    }
+          });
 
-    function updateView() {
-      const filtered = filterData();
-      renderTable(filtered);
-    }
+          tableBody.innerHTML = html;
+          const displayedRows = sorted.length;
+          recordCountSpan.textContent = `${displayedRows} tournaments`;
+          championCountSpan.textContent = `${uniqueChampions.size} champions`;
 
-    // 处理排序点击
-    function handleSortClick(e) {
-      const th = e.currentTarget;
-      const column = th.dataset.sort;
-      
-      if (currentSort.column === column) {
-        // 同一列：切换方向
-        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-      } else {
-        // 不同列：设置为新列，默认降序
-        currentSort.column = column;
-        currentSort.direction = 'desc';
-      }
-      
-      updateView();
-    }
-
-    // 为可排序列添加监听
-    sortableHeaders.forEach(th => {
-      th.addEventListener('click', handleSortClick);
-    });
-
-    function initYearSelect(years) {
-      const uniqueYears = [...new Set(years)].sort((a, b) => parseInt(b) - parseInt(a));
-      yearSelect.innerHTML = `<option value="">All Years</option>`;
-      uniqueYears.forEach(y => {
-        const option = document.createElement('option');
-        option.value = y;
-        option.textContent = y;
-        yearSelect.appendChild(option);
-      });
-      yearSelect.value = '';
-      currentYear = '';
-      yearSelect.addEventListener('change', e => {
-        currentYear = e.target.value;
-        updateView();
-      });
-    }
-
-    function initLevelSelect(levels) {
-      const levelOrder = ['Grand Slam','Finals','WTA 1000','WTA 500','Premier','WTA 250','International'];
-      const existingLevels = [...new Set(levels)].filter(l => l);
-      levelSelect.innerHTML = '<option value="">All Levels</option>';
-      levelOrder.forEach(lv => {
-        if (existingLevels.includes(lv)) {
-          const option = document.createElement('option');
-          option.value = lv;
-          option.textContent = lv;
-          levelSelect.appendChild(option);
+          // 更新排序指示器
+          updateSortIndicator();
         }
-      });
-      existingLevels.forEach(lv => {
-        if (!levelOrder.includes(lv)) {
-          const option = document.createElement('option');
-          option.value = lv;
-          option.textContent = lv;
-          levelSelect.appendChild(option);
-        }
-      });
-      levelSelect.value = '';
-      currentLevel = '';
-      levelSelect.addEventListener('change', e => {
-        currentLevel = e.target.value;
-        updateView();
-      });
-    }
 
-    async function loadData() {
-      try {
-        tableBody.innerHTML = `<tr><td colspan="10" class="loading">⏳ Fetching champion data…</td></tr>`;
-        const response = await fetch(JSON_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        allData = await response.json();
-        const allYears = allData.map(d => d.year).filter(y => y);
-        const allLevels = allData.map(d => d.tourney_level).filter(l => l);
-        initYearSelect(allYears);
-        initLevelSelect(allLevels);
-        
-        // 冠军搜索监听
-        searchInput.addEventListener('input', e => {
-          championSearchTerm = e.target.value.trim();
+        function updateView() {
+          const filtered = filterData();
+          renderTable(filtered);
+        }
+
+        // 处理排序点击
+        function handleSortClick(e) {
+          const th = e.currentTarget;
+          const column = th.dataset.sort;
+
+          if (currentSort.column === column) {
+            // 同一列：切换方向
+            currentSort.direction =
+              currentSort.direction === "asc" ? "desc" : "asc";
+          } else {
+            // 不同列：设置为新列，默认降序
+            currentSort.column = column;
+            currentSort.direction = "desc";
+          }
+
           updateView();
-        });
-        
-        // 赛事搜索监听
-        tournamentSearchInput.addEventListener('input', e => {
-          tournamentSearchTerm = e.target.value.trim();
-          updateView();
-        });
-        
-        // 设置默认排序 (Start Date 降序)
-        currentSort = { column: 'startDate', direction: 'desc' };
-        if (allYears.length > 0) {
-          const latestYear = Math.max(...allYears.map(y => parseInt(y))).toString();
-          yearSelect.value = latestYear;
-          currentYear = latestYear;
         }
-        updateView();
-      } catch (err) {
-        console.error(err);
-        tableBody.innerHTML = `<tr><td colspan="10" class="no-data">❌ Failed to load data. Ensure JSON file is at ../output/wta_calendar_champs_start_2009.json</td></tr>`;
-        recordCountSpan.textContent = 'Error';
-        championCountSpan.textContent = '—';
-        yearSelect.innerHTML = '<option value="">All Years</option>';
-      }
-    }
 
-    loadData();
-  })();
-</script>
-</body>
+        // 为可排序列添加监听
+        sortableHeaders.forEach((th) => {
+          th.addEventListener("click", handleSortClick);
+        });
+
+        function initYearSelect(years) {
+          const uniqueYears = [...new Set(years)].sort(
+            (a, b) => parseInt(b) - parseInt(a),
+          );
+          yearSelect.innerHTML = `<option value="">All Years</option>`;
+          uniqueYears.forEach((y) => {
+            const option = document.createElement("option");
+            option.value = y;
+            option.textContent = y;
+            yearSelect.appendChild(option);
+          });
+          yearSelect.value = "";
+          currentYear = "";
+          yearSelect.addEventListener("change", (e) => {
+            currentYear = e.target.value;
+            updateView();
+          });
+        }
+
+        function initLevelSelect(levels) {
+          const levelOrder = [
+            "Grand Slam",
+            "Finals",
+            "WTA 1000",
+            "WTA 500",
+            "Premier",
+            "WTA 250",
+            "International",
+          ];
+          const existingLevels = [...new Set(levels)].filter((l) => l);
+          levelSelect.innerHTML = '<option value="">All Levels</option>';
+          levelOrder.forEach((lv) => {
+            if (existingLevels.includes(lv)) {
+              const option = document.createElement("option");
+              option.value = lv;
+              option.textContent = lv;
+              levelSelect.appendChild(option);
+            }
+          });
+          existingLevels.forEach((lv) => {
+            if (!levelOrder.includes(lv)) {
+              const option = document.createElement("option");
+              option.value = lv;
+              option.textContent = lv;
+              levelSelect.appendChild(option);
+            }
+          });
+          levelSelect.value = "";
+          currentLevel = "";
+          levelSelect.addEventListener("change", (e) => {
+            currentLevel = e.target.value;
+            updateView();
+          });
+        }
+
+        async function loadData() {
+          try {
+            tableBody.innerHTML = `<tr><td colspan="10" class="loading">⏳ Fetching champion data…</td></tr>`;
+            const response = await fetch(JSON_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            allData = await response.json();
+            const allYears = allData.map((d) => d.year).filter((y) => y);
+            const allLevels = allData
+              .map((d) => d.tourney_level)
+              .filter((l) => l);
+            initYearSelect(allYears);
+            initLevelSelect(allLevels);
+
+            // 冠军搜索监听
+            searchInput.addEventListener("input", (e) => {
+              championSearchTerm = e.target.value.trim();
+              updateView();
+            });
+
+            // 赛事搜索监听
+            tournamentSearchInput.addEventListener("input", (e) => {
+              tournamentSearchTerm = e.target.value.trim();
+              updateView();
+            });
+
+            // 设置默认排序 (Start Date 降序)
+            currentSort = { column: "startDate", direction: "desc" };
+            if (allYears.length > 0) {
+              const latestYear = Math.max(
+                ...allYears.map((y) => parseInt(y)),
+              ).toString();
+              yearSelect.value = latestYear;
+              currentYear = latestYear;
+            }
+            updateView();
+          } catch (err) {
+            console.error(err);
+            tableBody.innerHTML = `<tr><td colspan="10" class="no-data">❌ Failed to load data. Ensure JSON file is at ../output/wta_calendar_champs_start_2009.json</td></tr>`;
+            recordCountSpan.textContent = "Error";
+            championCountSpan.textContent = "—";
+            yearSelect.innerHTML = '<option value="">All Years</option>';
+          }
+        }
+
+        loadData();
+      })();
+    </script>
+  </body>
 </html>
