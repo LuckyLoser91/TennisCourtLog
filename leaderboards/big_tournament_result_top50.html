@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WTA Top 50 · Big Tournament Stats</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    body {
+      background: #111827;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 36px 44px 60px;
+    }
+    h1 {
+      color: #f5c842;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .sub {
+      color: #6b7280;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .tour-selector, .age-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-selector label, .age-selector label {
+      color: #9ca3af;
+      font-size: 12px;
+      text-transform: none;
+    }
+    .tour-selector select, .age-selector select {
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .tour-selector select:hover, .age-selector select:hover {
+      border-color: #f5c842;
+    }
+
+    /* 表格容器限制宽度并居中 */
+    .table-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+
+    #stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #e5e5e5;
+      font-size: 14px;
+      table-layout: auto;
+      white-space: nowrap;
+    }
+
+    #stats-table th {
+      background: #1f2937;
+      color: #f5c842;
+      padding: 12px 8px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    #stats-table td {
+      padding: 8px 8px;
+      text-align: center;
+      border-bottom: 1px solid #2a374b;
+    }
+
+    #stats-table tbody tr:hover {
+      background: #1f2937 !important;
+    }
+
+    /* 排序列样式 */
+    .sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .sortable:hover {
+      background: #2a374b !important;
+    }
+    .sort-indicator::after {
+      content: ' ↕';
+      opacity: 0.4;
+      font-size: 10px;
+    }
+    .sort-asc::after {
+      content: ' ↑';
+      opacity: 1;
+      color: #f5c842;
+    }
+    .sort-desc::after {
+      content: ' ↓';
+      opacity: 1;
+      color: #f5c842;
+    }
+
+    /* 左对齐列 */
+    .text-left {
+      text-align: left !important;
+      padding-left: 100px !important;
+    }
+
+    .flag-icon {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="display: flex; justify-content: space-between;">
+    <h1>📊 WTA Top 50 · Elite Event History </h1>
+    <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
+  </div>
+  <div class="sub">
+    <span>Grand Slams · WTA 1000</span>
+    <div class="controls">
+      <div class="tour-selector">
+        <label>View mode</label>
+        <select id="view-select">
+          <option value="tournament" selected>🏟️ By Tournament</option>
+          <option value="player">🎾 By Player</option>
+          
+        </select>
+      </div>
+      <div class="age-selector" id="selector-container">
+        <!-- 动态生成下拉框 -->
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table id="stats-table"></table>
+  </div>
+
+  <script type="module">
+    import { getFlagImg, fmtRound, fmtWinrate } from './utils.js';
+
+    // ---------- 辅助函数 ----------
+    function toTitleCase(str) {
+      return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+    }
+
+    // ---------- 常量 ----------
+    const ROUND_ORDER = {
+      'W': 8,
+      'F': 7,
+      'SF': 6,
+      'QF': 5,
+      'R16': 4,
+      'R32': 3,
+      'R64': 2,
+      'R128': 1
+    };
+
+    const LEVEL_ORDER = {
+      'Grand Slam': 1,
+      'WTA1000': 2
+    };
+
+    function normalizeLevel(level) {
+      if (!level) return '';
+      const trimmed = level.trim();
+      if (trimmed === 'WTA 1000' || trimmed === 'WTA1000') return 'WTA1000';
+      return trimmed;
+    }
+
+    function isBigLevel(level) {
+      const norm = normalizeLevel(level);
+      return norm === 'Grand Slam' || norm === 'WTA1000';
+    }
+
+    // ---------- 全局变量 ----------
+    let fullData = [];
+    let calendarData = [];
+    let currentView = 'tournament';   // 默认视图改为 tournament
+    let currentSelected = null;
+    let currentSort = { column: null, direction: 'desc' };
+
+    const viewSelect = document.getElementById('view-select');
+    const selectorContainer = document.getElementById('selector-container');
+    const tableContainer = document.getElementById('stats-table');
+
+    // ---------- 加载数据 ----------
+    async function loadData() {
+      try {
+        const [statsRes, calendarRes] = await Promise.all([
+          fetch('../output/top50_big_tournament_stats.json'),
+          fetch('../output/calendar-2026.json')
+        ]);
+        fullData = await statsRes.json();
+        const cal = await calendarRes.json();
+        calendarData = cal.content || [];
+        console.log(`✅ 加载 ${fullData.length} 名球员，${calendarData.length} 个赛事`);
+        initView();
+      } catch (err) {
+        console.error('❌ 加载失败:', err);
+        tableContainer.innerHTML = '<p style="color:red; padding:20px;">数据加载失败</p>';
+      }
+    }
+
+    // ---------- 初始化（默认为 tournament 视图）----------
+    function initView() {
+      // 计算赛事列表
+      const tourneyList = getSortedTourneyList();
+      currentSelected = tourneyList[0]?.name || '';
+      currentView = 'tournament';
+      viewSelect.value = 'tournament';
+      currentSort = { column: null, direction: 'desc' };
+      renderSelector();
+      renderTable();
+    }
+
+    // ---------- 构建赛事信息映射（名称 -> 日期、级别、场地）----------
+    function buildTourneyInfoMap() {
+      const map = new Map();
+      calendarData.forEach(t => {
+        const group = t.tournamentGroup || {};
+        const rawName = group.name;
+        if (!rawName) return;
+        const name = toTitleCase(rawName);
+        
+        const level = normalizeLevel(t.level);
+        if (!isBigLevel(level)) return;
+        
+        const start = t.startDate || '';
+        const end = t.endDate || '';
+        const surface = t.surface || '';
+        const inOut = t.inOutdoor || '';
+        const surfaceFull = surface ? `${surface} (${inOut === 'O' ? 'Outdoor' : (inOut === 'I' ? 'Indoor' : '')})` : '';
+        
+        if (!map.has(name)) {
+          map.set(name, {
+            level: level,
+            startDate: start,
+            endDate: end,
+            surface: surfaceFull
+          });
+        }
+      });
+      return map;
+    }
+
+    // 获取排序后的赛事列表（用于下拉菜单）
+    function getSortedTourneyList() {
+      const infoMap = buildTourneyInfoMap();
+      const list = [];
+      for (let [name, info] of infoMap.entries()) {
+        list.push({ name, ...info });
+      }
+      list.sort((a, b) => {
+        const la = LEVEL_ORDER[a.level] || 99;
+        const lb = LEVEL_ORDER[b.level] || 99;
+        if (la !== lb) return la - lb;
+        return (a.startDate || '').localeCompare(b.startDate || '');
+      });
+      return list;
+    }
+
+    // ---------- 渲染下拉选择器 ----------
+    function renderSelector() {
+      let html = '';
+      if (currentView === 'player') {
+        const sorted = [...fullData].sort((a, b) => a.rank - b.rank);
+        html = `
+          <label for="player-select">Player</label>
+          <select id="player-select">
+            ${sorted.map(p => {
+              const sel = p.player_name === currentSelected ? 'selected' : '';
+              return `<option value="${p.player_name}" ${sel}>#${p.rank} ${p.player_name}</option>`;
+            }).join('')}
+          </select>
+        `;
+      } else {
+        const tourneyList = getSortedTourneyList();
+        if (!currentSelected || !tourneyList.some(t => t.name === currentSelected)) {
+          currentSelected = tourneyList[0]?.name || '';
+        }
+        html = `
+          <label for="tourney-select">Tournament</label>
+          <select id="tourney-select">
+            ${tourneyList.map(t => {
+              const sel = t.name === currentSelected ? 'selected' : '';
+              // 移除括号中的 level
+              return `<option value="${t.name}" ${sel}>${t.name}</option>`;
+            }).join('')}
+          </select>
+        `;
+      }
+      selectorContainer.innerHTML = html;
+
+      const selectEl = currentView === 'player' 
+        ? document.getElementById('player-select')
+        : document.getElementById('tourney-select');
+      
+      if (selectEl) {
+        selectEl.addEventListener('change', (e) => {
+          currentSelected = e.target.value;
+          currentSort = { column: null, direction: 'desc' };
+          renderTable();
+        });
+      }
+    }
+
+    // ---------- 渲染表格 ----------
+    function renderTable() {
+      if (currentView === 'player') {
+        renderPlayerView();
+      } else {
+        renderTournamentView();
+      }
+      bindSortEvents();
+    }
+
+    // ---------- 默认排序：By Player 下的赛事默认排序 ----------
+    function sortPlayerTournamentsDefault(tournaments) {
+      return [...tournaments].sort((a, b) => {
+        const la = LEVEL_ORDER[a.level] || 99;
+        const lb = LEVEL_ORDER[b.level] || 99;
+        if (la !== lb) return la - lb;
+        return (a.startDate || '').localeCompare(b.startDate || '');
+      });
+    }
+
+    // ---------- 默认排序：By Tournament 下的球员默认排序（按排名升序）----------
+    function sortTournamentPlayersDefault(players) {
+      return [...players].sort((a, b) => a.rank - b.rank);
+    }
+
+    // ---------- By Player 视图 ----------
+    function renderPlayerView() {
+      const player = fullData.find(p => p.player_name === currentSelected);
+      if (!player) return;
+
+      const infoMap = buildTourneyInfoMap();
+      const tournaments = player.tournaments
+        .filter(t => isBigLevel(t.level))
+        .map(t => {
+          const calInfo = infoMap.get(t.tourney_name) || {};
+          return {
+            ...t,
+            level: normalizeLevel(t.level),
+            startDate: calInfo.startDate || '',
+            endDate: calInfo.endDate || '',
+            surface: calInfo.surface || ''
+          };
+        });
+
+      let rows = tournaments;
+      
+      // 如果有排序，应用排序；否则使用默认排序
+      if (currentSort.column && currentSort.column !== 'tournament') {
+        rows = sortRows(rows, currentSort.column, currentSort.direction);
+      } else {
+        rows = sortPlayerTournamentsDefault(rows);
+      }
+
+      let html = `
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="sortable" data-column="tournament">Tournament <span class="sort-indicator"></span></th>
+            <th>Level</th>
+            <th>Surface</th>
+            <th class="sortable" data-column="best_round">Best Round <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="W">W <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="L">L <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="winrate">Win% <span class="sort-indicator"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+      rows.forEach((t, idx) => {
+        const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
+        const dateRange = t.startDate && t.endDate ? ` (${t.startDate} ~ ${t.endDate})` : '';
+        html += `<tr style="background:${rowBg};">`;
+        html += `<td>${idx + 1}</td>`;
+        html += `<td>${t.tourney_name}</td>`;
+        html += `<td>${t.level}</td>`;
+        html += `<td>${t.surface || '—'}</td>`;
+        html += `<td>${fmtRound(t.best_round)}</td>`;
+        html += `<td>${t.W}</td>`;
+        html += `<td>${t.L}</td>`;
+        html += `<td>${fmtWinrate((t.winrate * 100).toFixed(1))}</td>`;
+        html += `</tr>`;
+      });
+
+      html += `</tbody>`;
+      tableContainer.innerHTML = html;
+      highlightSortIndicator();
+    }
+
+    // ---------- By Tournament 视图 ----------
+    function renderTournamentView() {
+      const tournamentName = currentSelected;
+      const participants = [];
+      
+      fullData.forEach(player => {
+        const t = player.tournaments.find(t => 
+          t.tourney_name === tournamentName && isBigLevel(t.level)
+        );
+        if (t) {
+          participants.push({
+            rank: player.rank,
+            player_name: player.player_name,
+            ioc: player.ioc,
+            dob: player.dob || '—',
+            best_round: t.best_round,
+            W: t.W,
+            L: t.L,
+            winrate: t.winrate
+          });
+        }
+      });
+
+      let rows = participants;
+      
+      if (currentSort.column && currentSort.column !== 'player') {
+        rows = sortRows(rows, currentSort.column, currentSort.direction);
+      } else {
+        rows = sortTournamentPlayersDefault(rows);
+      }
+
+      let html = `
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="sortable" data-column="player">Player <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="dob">DOB <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="best_round">Best Round <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="W">W <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="L">L <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="winrate">Win% <span class="sort-indicator"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+      rows.forEach((p, idx) => {
+        const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
+        html += `<tr style="background:${rowBg};">`;
+        html += `<td>${idx + 1}</td>`;
+        html += `<td class="text-left">${getFlagImg(p.ioc)} #${p.rank} ${p.player_name}</td>`;
+        html += `<td>${p.dob}</td>`;
+        html += `<td>${fmtRound(p.best_round)}</td>`;
+        html += `<td>${p.W}</td>`;
+        html += `<td>${p.L}</td>`;
+        html += `<td>${fmtWinrate((p.winrate * 100).toFixed(1))}</td>`;
+        html += `</tr>`;
+      });
+
+      if (rows.length === 0) {
+        html += `<tr><td colspan="7" style="padding:20px; text-align:center; color:#9ca3af;">No Top 50 players have competed in this event.</td></tr>`;
+      }
+
+      html += `</tbody>`;
+      tableContainer.innerHTML = html;
+      highlightSortIndicator();
+    }
+
+    // ---------- 通用排序逻辑 ----------
+    function sortRows(rows, column, direction) {
+      const sorted = [...rows];
+      sorted.sort((a, b) => {
+        let valA = a[column];
+        let valB = b[column];
+        
+        if (column === 'best_round') {
+          const orderA = ROUND_ORDER[valA] || 0;
+          const orderB = ROUND_ORDER[valB] || 0;
+          return direction === 'asc' ? orderA - orderB : orderB - orderA;
+        }
+        
+        if (typeof valA === 'number' && typeof valB === 'number') {
+          return direction === 'asc' ? valA - valB : valB - valA;
+        }
+        
+        const strA = String(valA || '');
+        const strB = String(valB || '');
+        return direction === 'asc' 
+          ? strA.localeCompare(strB) 
+          : strB.localeCompare(strA);
+      });
+      return sorted;
+    }
+
+    function bindSortEvents() {
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', (e) => {
+          const column = th.dataset.column;
+          if (!column) return;
+          
+          // 对于 'tournament' 或 'player' 列，点击后恢复默认排序（清空 currentSort）
+          if (column === 'tournament' || column === 'player') {
+            currentSort = { column: null, direction: 'desc' };
+          } else {
+            if (currentSort.column === column) {
+              currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+              currentSort.column = column;
+              currentSort.direction = 'desc';
+            }
+          }
+          renderTable();
+        });
+      });
+    }
+
+    function highlightSortIndicator() {
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        const span = th.querySelector('span');
+        if (span) span.className = 'sort-indicator';
+      });
+      if (currentSort.column && currentSort.column !== 'tournament' && currentSort.column !== 'player') {
+        const active = document.querySelector(`th.sortable[data-column="${currentSort.column}"]`);
+        if (active) {
+          active.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+      }
+    }
+
+    // ---------- 切换视图 ----------
+    viewSelect.addEventListener('change', (e) => {
+      currentView = e.target.value;
+      currentSort = { column: null, direction: 'desc' };
+      if (currentView === 'player') {
+        const sorted = [...fullData].sort((a, b) => a.rank - b.rank);
+        currentSelected = sorted[0]?.player_name || '';
+      } else {
+        const list = getSortedTourneyList();
+        currentSelected = list[0]?.name || '';
+      }
+      renderSelector();
+      renderTable();
+    });
+
+    // 启动
+    loadData();
+  </script>
+</body>
+</html>
