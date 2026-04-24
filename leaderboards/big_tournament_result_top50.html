@@ -382,7 +382,6 @@
             startDate: calInfo.startDate || '',
             endDate: calInfo.endDate || '',
             surface: calInfo.surface || '',
-            // 排序时未参赛数据视为最差（-1），但显示仍为 "—"
             W: notPlayed ? -1 : t.W,
             L: notPlayed ? -1 : t.L,
             winrate: notPlayed ? -1 : t.winrate
@@ -390,8 +389,6 @@
         });
 
       let rows = tournaments;
-
-      // 如果有排序，应用排序；否则使用默认排序
       if (currentSort.column && currentSort.column !== 'tournament') {
         rows = sortRows(rows, currentSort.column, currentSort.direction);
       } else {
@@ -433,11 +430,38 @@
         html += `</tr>`;
       });
 
+      // ========== 汇总行 ==========
+      const allEvents = player.tournaments.filter(t => isBigLevel(t.level));
+      const totalEvents = allEvents.length;
+      let totalW = 0, totalL = 0, championCount = 0;
+      allEvents.forEach(t => {
+        if (t.best_round != null) {          // 只统计实际参赛的赛事
+          totalW += t.W;
+          totalL += t.L;
+          if (t.best_round === 'W') championCount++;
+        }
+      });
+      const totalWR = (totalW + totalL) > 0 
+        ? (totalW / (totalW + totalL) * 100).toFixed(1) 
+        : null;
+
+        // ---- 汇总行（放在表头下方，最左侧跨两列）----
+      html += `<tr style="background: #2d3a4a; font-weight: bold; border-bottom: 2px solid #f5c842;">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align:center;">Summary</td>
+        
+        <td>${championCount}/${totalEvents}</td>
+        <td>${totalW}</td>
+        <td>${totalL}</td>
+        <td>${totalWR !== null ? fmtWinrate(totalWR) : '—'}</td>
+      </tr>`;
+
       html += `</tbody>`;
       tableContainer.innerHTML = html;
       highlightSortIndicator();
     }
-
     // ---------- By Tournament 视图 ----------
     function renderTournamentView() {
       const tournamentName = currentSelected;
