@@ -20,7 +20,7 @@ ROUND_ORDER = {
 
 def to_title_case(s: str) -> str:
     """转换为 Title Case 用于匹配"""
-    return s.title()
+    return s.strip().title()
 
 def load_historical_calendar(calendar_path: str) -> Dict[Tuple[int, str], str]:
     """
@@ -38,6 +38,8 @@ def load_historical_calendar(calendar_path: str) -> Dict[Tuple[int, str], str]:
         if year is None or not name or not level:
             continue
         # 统一转换为 Title Case 以便与 CSV 中的名称匹配
+        if to_title_case(name) in ['Montreal', 'Toronto']:
+            name = 'Canada'
         key = (year, to_title_case(name))
         mapping[key] = level
     return mapping
@@ -55,6 +57,8 @@ def get_current_year_big_tournaments(save_dir: str) -> Dict[str, str]:
             group = t.get("tournamentGroup", {})
             name = group.get("name")
             if name:
+                if to_title_case(name) in ['Montreal', 'Toronto']:
+                    name = 'Canada'
                 tourney_map[to_title_case(name)] = level
     return tourney_map
 
@@ -105,12 +109,15 @@ def get_top50_big_tournament_stats_json(
         for _, row in df.iterrows():
             raw_tourney = row["tourney_name"]
             tourney_title = to_title_case(raw_tourney)
+            if to_title_case(tourney_title) in ['Montreal', 'Toronto']:
+                tourney_title = 'Canada'
             
             # 仅当该赛事在最终输出列表中才继续（节省处理时间）
             if tourney_title not in big_tourney_map:
                 continue
 
             # 根据年份和赛事名查找历史真实级别
+            
             actual_level = hist_cal.get((year, tourney_title))
             if actual_level not in BIG_LEVELS:
                 continue  # 该年此赛事不是 Big Level，跳过
