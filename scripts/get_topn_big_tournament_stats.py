@@ -62,22 +62,23 @@ def get_current_year_big_tournaments(save_dir: str) -> Dict[str, str]:
                 tourney_map[to_title_case(name)] = level
     return tourney_map
 
-def get_top50_big_tournament_stats_json(
+def get_topn_big_tournament_stats_json(
     years: range,
+    topn: int = 100,
     matches_dir: str = "tennis_wta",
-    save_dir: str = "scrape/temp_output",
+    liverankd_save_dir: str = "scrape/temp_output",
     historical_calendar_path: str = "scrape/temp_output/wta_calendar_champs_start_2009.json",
     output_json_path: str = "scrape/temp_output/top50_big_tournament_stats.json"
 ) -> List[Dict]:
-    # 1. 获取 Top 50 球员数据
-    rank_data = fetch_live_rank_topn(save_dir=save_dir, topn=50)
+    # 1. 获取 Top n 球员数据
+    rank_data = fetch_live_rank_topn(save_dir=liverankd_save_dir, topn=topn)
     
     player_info = {}
-    top50_names = set()
+    topn_names = set()
     for item in rank_data:
         p = item["player"]
         full_name = p["fullName"]
-        top50_names.add(full_name)
+        topn_names.add(full_name)
         player_info[full_name] = {
             "rank": item["ranking"],
             "dob": p.get("dateOfBirth"),
@@ -87,10 +88,11 @@ def get_top50_big_tournament_stats_json(
 
     # 2. 加载历史日历映射 (year, tourney_name) -> level
     hist_cal = load_historical_calendar(historical_calendar_path)
-    print(f"加载历史日历，共 {len(hist_cal)} 条记录")
+    # ✓ 找到缓存文件: output/calendar-2026.json
+    print(f'✓ 找到缓存文件:{historical_calendar_path}')
 
     # 3. 获取当前年份 Big Tournament 列表（最终输出范围）
-    big_tourney_map = get_current_year_big_tournaments(save_dir)
+    big_tourney_map = get_current_year_big_tournaments(liverankd_save_dir)
     print(f"当前年份 Big Tournaments 共 {len(big_tourney_map)} 站: {list(big_tourney_map.keys())}")
 
     # 4. 初始化统计结构
@@ -128,7 +130,7 @@ def get_top50_big_tournament_stats_json(
             score = str(row.get("score", "")).strip()
 
             # 处理胜者
-            if winner in top50_names:
+            if winner in topn_names:
                 stats.setdefault(winner, {}).setdefault(tourney_title, {
                     "rounds_seen": set(),
                     "wins": 0,
@@ -145,7 +147,7 @@ def get_top50_big_tournament_stats_json(
                     entry["has_won_final"] += 1
 
             # 处理负者
-            if loser in top50_names:
+            if loser in topn_names:
                 stats.setdefault(loser, {}).setdefault(tourney_title, {
                     "rounds_seen": set(),
                     "wins": 0,
@@ -160,7 +162,7 @@ def get_top50_big_tournament_stats_json(
                     entry["rounds_seen"].add(round_val)
     
     # 补充未参赛记录
-    for player in top50_names:
+    for player in topn_names:
         for tname, level in big_tourney_map.items():
             if player not in stats or tname not in stats[player]:
                 stats.setdefault(player, {})[tname] = {
@@ -223,10 +225,12 @@ def get_top50_big_tournament_stats_json(
     return result_list
 
 if __name__ == "__main__":
-    get_top50_big_tournament_stats_json(
+    topn = 100
+    get_topn_big_tournament_stats_json(
         years=range(2009, 2027),
+        topn=topn,
         matches_dir="tennis_wta",
-        save_dir="output/",
+        liverankd_save_dir="output/",
         historical_calendar_path="output/wta_calendar_champs_start_2009.json",
-        output_json_path="output/top50_big_tournament_stats.json"
+        output_json_path=f"output/top{topn}_big_tournament_stats.json"
     )

@@ -12,7 +12,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WTA Top 50 · Big Tournament Stats</title>
+  <title>WTA Top 100 · Big Tournament Stats</title>
   <link rel="stylesheet" href="./styles.css">
   <style>
     body {
@@ -143,7 +143,7 @@
 <body>
 
   <div style="display: flex; justify-content: space-between;">
-    <h1>📊 WTA Top 50 · Elite Event History </h1>
+    <h1>📊 WTA Top 100 · Elite Event History </h1>
     <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
   </div>
   <div class="sub">
@@ -219,7 +219,7 @@
     async function loadData() {
       try {
         const [statsRes, calendarRes] = await Promise.all([
-          fetch('../output/top50_big_tournament_stats.json'),
+          fetch('../output/top100_big_tournament_stats.json'),
           fetch('../output/calendar-2026.json')
         ]);
         fullData = await statsRes.json();
@@ -524,7 +524,7 @@
       });
 
       if (rows.length === 0) {
-        html += `<tr><td colspan="7" style="padding:20px; text-align:center; color:#9ca3af;">No Top 50 players have competed in this event.</td></tr>`;
+        html += `<tr><td colspan="7" style="padding:20px; text-align:center; color:#9ca3af;">No Top 100 players have competed in this event.</td></tr>`;
       }
 
       html += `</tbody>`;
