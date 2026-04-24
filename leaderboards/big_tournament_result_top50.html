@@ -8,7 +8,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
@@ -80,7 +79,6 @@
       border-color: #f5c842;
     }
 
-    /* 表格容器限制宽度并居中 */
     .table-wrapper {
       max-width: 1000px;
       margin: 0 auto;
@@ -114,7 +112,6 @@
       background: #1f2937 !important;
     }
 
-    /* 排序列样式 */
     .sortable {
       cursor: pointer;
       user-select: none;
@@ -132,7 +129,6 @@
       color: #f5c842;
     }
 
-    /* 左对齐列 */
     .text-left {
       text-align: left !important;
       padding-left: 100px !important;
@@ -158,11 +154,9 @@
         <select id="view-select">
           <option value="tournament" selected>🏟️ By Tournament</option>
           <option value="player">🎾 By Player</option>
-
         </select>
       </div>
       <div class="age-selector" id="selector-container">
-        <!-- 动态生成下拉框 -->
       </div>
     </div>
   </div>
@@ -172,7 +166,7 @@
   </div>
 
   <script type="module">
-    import { getFlagImg, fmtRound, fmtWinrate } from './utils.js';
+    import { getFlagImg, fmtBestRound, fmtWinrate } from './utils.js';
 
     // ---------- 辅助函数 ----------
     function toTitleCase(str) {
@@ -208,10 +202,12 @@
       return norm === 'Grand Slam' || norm === 'WTA1000';
     }
 
+
+
     // ---------- 全局变量 ----------
     let fullData = [];
     let calendarData = [];
-    let currentView = 'tournament';   // 默认视图改为 tournament
+    let currentView = 'tournament';
     let currentSelected = null;
     let currentSort = { column: null, direction: 'desc' };
 
@@ -237,9 +233,8 @@
       }
     }
 
-    // ---------- 初始化（默认为 tournament 视图）----------
+    // ---------- 初始化 ----------
     function initView() {
-      // 计算赛事列表
       const tourneyList = getSortedTourneyList();
       currentSelected = tourneyList[0]?.name || '';
       currentView = 'tournament';
@@ -249,7 +244,6 @@
       renderTable();
     }
 
-    // ---------- 构建赛事信息映射（名称 -> 日期、级别、场地）----------
     function buildTourneyInfoMap() {
       const map = new Map();
       calendarData.forEach(t => {
@@ -268,18 +262,12 @@
         const surfaceFull = surface ? `${surface} (${inOut === 'O' ? 'Outdoor' : (inOut === 'I' ? 'Indoor' : '')})` : '';
 
         if (!map.has(name)) {
-          map.set(name, {
-            level: level,
-            startDate: start,
-            endDate: end,
-            surface: surfaceFull
-          });
+          map.set(name, { level, startDate: start, endDate: end, surface: surfaceFull });
         }
       });
       return map;
     }
 
-    // 获取排序后的赛事列表（用于下拉菜单）
     function getSortedTourneyList() {
       const infoMap = buildTourneyInfoMap();
       const list = [];
@@ -295,7 +283,6 @@
       return list;
     }
 
-    // ---------- 渲染下拉选择器 ----------
     function renderSelector() {
       let html = '';
       if (currentView === 'player') {
@@ -304,9 +291,9 @@
           <label for="player-select">Player</label>
           <select id="player-select">
             ${sorted.map(p => {
-          const sel = p.player_name === currentSelected ? 'selected' : '';
-          return `<option value="${p.player_name}" ${sel}>#${p.rank} ${p.player_name}</option>`;
-        }).join('')}
+              const sel = p.player_name === currentSelected ? 'selected' : '';
+              return `<option value="${p.player_name}" ${sel}>#${p.rank} ${p.player_name}</option>`;
+            }).join('')}
           </select>
         `;
       } else {
@@ -318,10 +305,9 @@
           <label for="tourney-select">Tournament</label>
           <select id="tourney-select">
             ${tourneyList.map(t => {
-          const sel = t.name === currentSelected ? 'selected' : '';
-          // 移除括号中的 level
-          return `<option value="${t.name}" ${sel}>${t.name}</option>`;
-        }).join('')}
+              const sel = t.name === currentSelected ? 'selected' : '';
+              return `<option value="${t.name}" ${sel}>${t.name}</option>`;
+            }).join('')}
           </select>
         `;
       }
@@ -340,7 +326,6 @@
       }
     }
 
-    // ---------- 渲染表格 ----------
     function renderTable() {
       if (currentView === 'player') {
         renderPlayerView();
@@ -350,7 +335,6 @@
       bindSortEvents();
     }
 
-    // ---------- 默认排序：By Player 下的赛事默认排序 ----------
     function sortPlayerTournamentsDefault(tournaments) {
       return [...tournaments].sort((a, b) => {
         const la = LEVEL_ORDER[a.level] || 99;
@@ -360,12 +344,10 @@
       });
     }
 
-    // ---------- 默认排序：By Tournament 下的球员默认排序（按排名升序）----------
     function sortTournamentPlayersDefault(players) {
       return [...players].sort((a, b) => a.rank - b.rank);
     }
 
-    // ---------- By Player 视图 ----------
     function renderPlayerView() {
       const player = fullData.find(p => p.player_name === currentSelected);
       if (!player) return;
@@ -384,7 +366,8 @@
             surface: calInfo.surface || '',
             W: notPlayed ? -1 : t.W,
             L: notPlayed ? -1 : t.L,
-            winrate: notPlayed ? -1 : t.winrate
+            winrate: notPlayed ? -1 : t.winrate,
+            titles: t.titles || (t.best_round === 'W' ? 1 : 0)  // 确保 titles 存在
           };
         });
 
@@ -414,7 +397,15 @@
       rows.forEach((t, idx) => {
         const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
         const notPlayed = t.best_round == null;
-        const bestRoundDisplay = notPlayed ? '—' : fmtRound(t.best_round);
+        const titles = t.titles || 1;
+        let bestRoundDisplay;
+        if (notPlayed) {
+          bestRoundDisplay = '—';
+        } else{
+          bestRoundDisplay = fmtBestRound(t.best_round, titles);
+        }
+        
+        
         const wDisplay = notPlayed ? '—' : t.W;
         const lDisplay = notPlayed ? '—' : t.L;
         const wrDisplay = notPlayed ? '—' : fmtWinrate((t.winrate * 100).toFixed(1));
@@ -430,28 +421,26 @@
         html += `</tr>`;
       });
 
-      // ========== 汇总行 ==========
+      // ========== 汇总行（仅统计 best_round === 'W'）==========
       const allEvents = player.tournaments.filter(t => isBigLevel(t.level));
       const totalEvents = allEvents.length;
       let totalW = 0, totalL = 0, championCount = 0;
       allEvents.forEach(t => {
-        if (t.best_round != null) {          // 只统计实际参赛的赛事
+        if (t.best_round != null) {
           totalW += t.W;
           totalL += t.L;
           if (t.best_round === 'W') championCount++;
         }
       });
-      const totalWR = (totalW + totalL) > 0 
-        ? (totalW / (totalW + totalL) * 100).toFixed(1) 
+      const totalWR = (totalW + totalL) > 0
+        ? (totalW / (totalW + totalL) * 100).toFixed(1)
         : null;
 
-        // ---- 汇总行（放在表头下方，最左侧跨两列）----
       html += `<tr style="background: #2d3a4a; font-weight: bold; border-bottom: 2px solid #f5c842;">
         <td></td>
         <td></td>
         <td></td>
         <td style="text-align:center;"> ${player.player_name}: </td>
-        
         <td>${championCount}/${totalEvents}</td>
         <td>${totalW}</td>
         <td>${totalL}</td>
@@ -462,7 +451,7 @@
       tableContainer.innerHTML = html;
       highlightSortIndicator();
     }
-    // ---------- By Tournament 视图 ----------
+
     function renderTournamentView() {
       const tournamentName = currentSelected;
       const participants = [];
@@ -481,7 +470,8 @@
             best_round: t.best_round,
             W: notPlayed ? -1 : t.W,
             L: notPlayed ? -1 : t.L,
-            winrate: notPlayed ? -1 : t.winrate
+            winrate: notPlayed ? -1 : t.winrate,
+            titles: t.titles || (t.best_round === 'W' ? 1 : 0)
           });
         }
       });
@@ -512,7 +502,13 @@
       rows.forEach((p, idx) => {
         const rowBg = idx % 2 === 0 ? '#111827' : '#1a2332';
         const notPlayed = p.best_round == null;
-        const bestRoundDisplay = notPlayed ? '—' : fmtRound(p.best_round);
+        let bestRoundDisplay;
+        if (notPlayed) {
+          bestRoundDisplay = '—';
+        } else {
+          const titles = p.titles || 1;
+          bestRoundDisplay = fmtBestRound(p.best_round, p.titles);
+        }
         const wDisplay = notPlayed ? '—' : p.W;
         const lDisplay = notPlayed ? '—' : p.L;
         const wrDisplay = notPlayed ? '—' : fmtWinrate((p.winrate * 100).toFixed(1));
@@ -536,7 +532,6 @@
       highlightSortIndicator();
     }
 
-    // ---------- 通用排序逻辑 ----------
     function sortRows(rows, column, direction) {
       const sorted = [...rows];
       sorted.sort((a, b) => {
@@ -548,6 +543,12 @@
           const orderB = ROUND_ORDER[valB] || 0;
           if (orderA !== orderB) {
             return direction === 'asc' ? orderA - orderB : orderB - orderA;
+          }
+          // 同轮次按 titles 降序，再按 winrate 降序
+          const titlesA = a.titles || 0;
+          const titlesB = b.titles || 0;
+          if (titlesA !== titlesB) {
+            return direction === 'asc' ? titlesA - titlesB : titlesB - titlesA;
           }
           const wrA = a.winrate ?? -1;
           const wrB = b.winrate ?? -1;
@@ -573,7 +574,6 @@
           const column = th.dataset.column;
           if (!column) return;
 
-          // 对于 'tournament' 或 'player' 列，点击后恢复默认排序（清空 currentSort）
           if (column === 'tournament' || column === 'player') {
             currentSort = { column: null, direction: 'desc' };
           } else {
@@ -590,16 +590,14 @@
     }
 
     function highlightSortIndicator() {
-      // 遍历所有带 .sortable 的表头
       document.querySelectorAll('th.sortable').forEach(th => {
         const span = th.querySelector('.sort-indicator');
         if (!span) return;
         const col = th.dataset.column;
-        // 如果当前排序列是这个列，并且不是 tournament/player 列，就显示箭头
         if (currentSort.column && currentSort.column === col && col !== 'tournament' && col !== 'player') {
           span.textContent = currentSort.direction === 'asc' ? ' ▲' : ' ▼';
         } else {
-          span.textContent = '';  // 其他列或恢复默认时清空
+          span.textContent = '';
         }
       });
     }

@@ -75,6 +75,17 @@ export function fmtRound(round) {
   return `<span class="result-other">${round}</span>`;
 }
 
+export function fmtBestRound(round, titles) {
+  if (!round) return '<span class="result-other">—</span>';
+  const upper = round.toUpperCase();
+  if (upper === "W") {
+    const t = titles || 1;
+    return `<span class="slam-cell result-W">W×${t}</span>`;
+  }
+  // 其余情况直接复用原有的 fmtRound
+  return fmtRound(round);
+}
+
 // 开发辅助：将缺失集合暴露到全局（可选）
 if (typeof window !== 'undefined') {
   window.__missingIOCs = missingIOCSet;

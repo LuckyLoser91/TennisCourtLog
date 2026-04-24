@@ -134,7 +134,7 @@ def get_top50_big_tournament_stats_json(
                     "wins": 0,
                     "losses": 0,
                     "level": actual_level,  # 使用真实级别
-                    "has_won_final": False
+                    "has_won_final": 0
                 })
                 entry = stats[winner][tourney_title]
                 if score.upper() != "W/O":
@@ -142,7 +142,7 @@ def get_top50_big_tournament_stats_json(
                 if round_val in ROUND_ORDER:
                     entry["rounds_seen"].add(round_val)
                 if round_val == "F":
-                    entry["has_won_final"] = True
+                    entry["has_won_final"] += 1
 
             # 处理负者
             if loser in top50_names:
@@ -177,7 +177,7 @@ def get_top50_big_tournament_stats_json(
         info = player_info.get(player, {})
         tournaments_data = []
         for tname, data in tourneys.items():
-            if data["has_won_final"]:
+            if data["has_won_final"] > 0:
                 best_round = "W"
             else:
                 rounds = data["rounds_seen"]
@@ -198,7 +198,8 @@ def get_top50_big_tournament_stats_json(
                 "best_round": best_round,
                 "W": wins,
                 "L": losses,
-                "winrate": round(winrate, 3)
+                "winrate": round(winrate, 3),
+                "titles": data["has_won_final"]
             })
 
         tournaments_data.sort(key=lambda x: x["W"], reverse=True)
