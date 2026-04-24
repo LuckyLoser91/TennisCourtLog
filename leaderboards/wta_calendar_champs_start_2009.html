@@ -326,8 +326,8 @@
         <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp; 2009 – 2026
         &nbsp;|&nbsp;
         <span style="color: #9ca3af"
-          >Descending by start date (default) · Click header to sort</span
-        >
+          > Click header to sort</span> | <span id="last-updated" style="color:#6b7280; font-size:11px; margin-left:auto;"></span>
+
       </div>
       <div class="controls">
         <!-- 冠军搜索 -->
@@ -394,10 +394,9 @@
         </tbody>
       </table>
     </div>
-    <div class="footer-note">
-      * Data based on WTA calendar · Empty winners omitted · Flags via
-      flagcdn.com · Seed in parentheses after name
-    </div>
+    <div class="footer-note" style="color:#6b7280; font-size:11px; text-align:center; margin-top:24px; padding-top:12px; border-top:1px solid #374151;">
+  * Data sourced from <a href="https://www.wtatennis.com/tournaments" target="_blank" style="color:#9ca3af; text-decoration:underline;">wtatennis.com</a>
+</div>
 
     <script type="module">
       import { getFlagImg } from "./utils.js";
@@ -749,6 +748,15 @@
         }
 
         loadData();
+            // 设置更新时间
+const updateEl = document.getElementById('last-updated');
+if (updateEl) {
+  // 方式一：使用文件最后修改时间（适合静态文件）
+  // updateEl.textContent = 'Last updated: ' + new Date(document.lastModified).toLocaleDateString('en-CA'); // 格式 YYYY-MM-DD
+
+  // 方式二：如果想手动维护日期，直接赋值
+  updateEl.textContent = 'Last updated: 2026-04-20';
+}
       })();
     </script>
   </body>

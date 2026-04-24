@@ -12,7 +12,7 @@ export const IOC_TO_ISO2 = {
     "SLO": "SI", "SWE": "SE", "SUI": "CH", "THA": "TH", "TUN": "TN",
     "TUR": "TR", "UKR": "UA", "URU": "UY", "USA": "US", "UZB": "UZ",
     "VEN": "VE", "ZIM": "ZW", "FRG": "DE", "URS": "RU", "INA": "ID",
-    "TPE": "TW", "PUR": "PR"
+    "TPE": "TW", "PUR": "PR", "PHI": "PH"
   };
 
 const missingIOCSet = new Set();

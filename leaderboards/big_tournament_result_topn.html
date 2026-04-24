@@ -147,7 +147,8 @@
     <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
   </div>
   <div class="sub">
-    <span>Grand Slams · WTA 1000</span>
+    <span>Grand Slams · WTA 1000 | <span id="last-updated" style="color:#6b7280; font-size:11px; margin-left:auto;">  </span>
+  </span> 
     <div class="controls">
       <div class="tour-selector">
         <label>View mode</label>
@@ -159,6 +160,7 @@
       <div class="age-selector" id="selector-container">
       </div>
     </div>
+    
   </div>
 
   <div class="table-wrapper">
@@ -619,6 +621,15 @@
 
     // 启动
     loadData();
+    // 设置更新时间
+const updateEl = document.getElementById('last-updated');
+if (updateEl) {
+  // 方式一：使用文件最后修改时间（适合静态文件）
+  // updateEl.textContent = 'Last updated: ' + new Date(document.lastModified).toLocaleDateString('en-CA'); // 格式 YYYY-MM-DD
+
+  // 方式二：如果想手动维护日期，直接赋值
+  updateEl.textContent = 'Last updated: 2026-04-20';
+}
   </script>
 </body>
 
