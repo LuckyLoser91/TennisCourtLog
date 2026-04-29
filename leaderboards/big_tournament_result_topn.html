@@ -231,6 +231,16 @@ body > .row > .col-auto {
 body > .row .d-flex.gap-2 {
   flex-wrap: nowrap !important;
 }
+/* 表格隔行交替色 */
+#stats-table tbody tr:nth-child(odd) td {
+  background: var(--bg-card);
+}
+#stats-table tbody tr:nth-child(even) td {
+  background: var(--bg-row-alt);
+}
+#stats-table tbody tr:hover td {
+  background: var(--bg-hover) !important;
+}
   </style>
 </head>
 
