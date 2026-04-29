@@ -84,9 +84,9 @@
     /* ===== 列宽分配 ===== */
     /* Player View 列宽 */
 .player-view col.c-no         { width: 40px; }
-.player-view col.c-tournament { width: 100px; }
+.player-view col.c-tournament { width: 160px; }
 .player-view col.c-level      { width: 90px; }
-.player-view col.c-surface    { width: 160px; }
+.player-view col.c-surface    { width: 120px; }
 .player-view col.c-best       { width: 90px; }
 .player-view col.c-w          { width: 48px; }
 .player-view col.c-l          { width: 48px; }
@@ -571,8 +571,10 @@ body > .row .d-flex.gap-2 {
       html += `<tr class="summary-row">
         <td></td>
         <td></td>
-        <td></td>
-        <td style="text-align:center;">${player.player_name}:</td>
+        <td colspan="2" style="text-align:right;">
+  ${player.player_name}
+  <span style="font-weight:400; color:var(--text-muted); font-size:11px;">(${player.dob || '—'})</span>
+</td>
         <td>${championCount}/${totalEvents}</td>
         <td>${totalW}</td>
         <td>${totalL}</td>
