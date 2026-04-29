@@ -21,7 +21,7 @@ def get_monday_date(date: datetime = None) -> str:
     return monday.strftime("%Y-%m-%d")
 
 
-def fetch_live_rank_topn(save_dir: str = "tennis_wta", topn=50) -> dict:
+def fetch_live_rank_topn(save_dir: str = "tennis_wta", topn=100) -> dict:
     """
     获取 WTA 单打 Live Rank 前 topn 名球员数据。
     
