@@ -1,190 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Non-GS Champions · GS Win Rate Top 100</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    .active-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    body { padding: 28px 24px 64px; max-width: 1280px; }
+    h1   { font-size: 19px !important; }
 
-    .active-toggle label {
-      color: #9ca3af;
-      font-size: 12px;
-      cursor: pointer;
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
     }
+    .table { min-width: 860px; }
 
-    .active-toggle input {
-      accent-color: #f5c842;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
+    #table-body td:nth-child(2) {
+      text-align: left !important;
+      padding-left: 12px !important;
     }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    thead tr {
-      border-bottom: 1px solid #374151;
-    }
-
-    thead th {
-      color: #6b7280;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 5px 6px 9px;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    thead th.left {
-      text-align: left;
-      padding-left: 8px;
-    }
-
-    thead .gr th {
-      color: #4b5563;
-      font-size: 9px;
-      border-bottom: none;
+    .table thead tr:first-child th {
+      border-bottom: none !important;
+      font-size: 10px !important;
+      color: #a78b5e;
       padding-bottom: 2px;
     }
 
-    .dl {
-      border-left: 1px solid #374151;
-    }
 
-    tbody tr {
-      border-bottom: 1px solid #1f2937;
-    }
 
-    tbody tr:hover {
-      background: #1f2937;
+    /* Winrate 色块 */
+    .wr-cell {
+      border-radius: 5px; padding: 3px 5px;
+      display: inline-block; font-weight: 600; font-size: 12px;
+      min-width: 46px; text-align: center;
     }
-
-    tbody td {
-      padding: 6px 6px;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    tfoot td {
-      padding-top: 20px;
-      color: #4b5563;
-      font-size: 10px;
-      letter-spacing: 0.04em;
-    }
-
-    th.sortable {
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.15s;
-    }
-
-    th.sortable:hover {
-      color: #f5c842;
-    }
-
-    .sort-indicator {
-      display: inline-block;
-      margin-left: 4px;
-      font-size: 9px;
-      color: #f5c842;
-    }
-
-    .round-badge {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 12px;
-      min-width: 36px;
-      text-align: center;
-    }
+    .agg-90 { background: var(--agg-90-bg); color: var(--agg-90-color); }
+    .agg-85 { background: var(--agg-85-bg); color: var(--agg-85-color); }
+    .agg-80 { background: var(--agg-80-bg); color: var(--agg-80-color); }
+    .agg-75 { background: var(--agg-75-bg); color: var(--agg-75-color); }
+    .agg-70 { background: var(--agg-70-bg); color: var(--agg-70-color); }
+    .agg-no { color: var(--text-muted); }
+    .surf-90 { background: var(--surf-90-bg); color: var(--surf-90-color); }
+    .surf-85 { background: var(--surf-85-bg); color: var(--surf-85-color); }
+    .surf-80 { background: var(--surf-80-bg); color: var(--surf-80-color); }
+    .surf-75 { background: var(--surf-75-bg); color: var(--surf-75-color); }
+    .surf-70 { background: var(--surf-70-bg); color: var(--surf-70-color); }
+    .surf-no { color: var(--text-muted); }
   </style>
 </head>
-
 <body>
-  <div style="display: flex; justify-content: space-between; ">
-    <h1>Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins > 5) </h1>
-    <a href="../index.html" style="text-decoration: none; color: #d7dfc6; font-weight: bold;">HOME 🏠 </a>
-  </div>
 
-  <div class="sub">
-    <div>
-      <span id="champion-count">0 players</span> &nbsp;|&nbsp;
-      Grand Slam matches only &nbsp;|&nbsp;
-      Walkovers excluded &nbsp;|&nbsp;
-      <span style="color:#9ca3af;">Click headers to sort</span>
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <h1 class="mb-0">Grand Slam Singles · Non-Champions Leaderboard (Top 100 by Win%, Wins &gt; 5)</h1>
     </div>
-    <div class="controls">
-      <div class="active-toggle">
-        <input type="checkbox" id="activeOnlyCheckbox">
-        <label for="activeOnlyCheckbox">🎾 ACTIVE ONLY (won GS match in last 2 years)</label>
-      </div>
-      <div class="tour-selector">
-        <label for="tourSelect">TOUR:</label>
-        <select id="tourSelect">
-          <option value="wta" selected>WTA</option>
-          <option value="atp">ATP</option>
-        </select>
-      </div>
+    <div class="col-auto">
+      <a href="../index.html" class="btn btn-outline-warning btn-sm">HOME</a>
     </div>
   </div>
 
-  <table>
-    <thead>
-      <tr class="gr">
-        <th colspan="3"></th>
-        <th colspan="4" style="text-align:center;color:#9ca3af;">BEST RESULT (BY SLAM)</th>
-        <th colspan="2"></th>
-        <th colspan="4" class="dl" style="text-align:center;color:#9ca3af;">WINRATE</th>
-      </tr>
-      <tr>
-        <th>#</th>
-        <th class="left sortable" data-col="player">PLAYER</th>
-        <th class="sortable" data-col="best">BEST</th>
-        <th class="sortable" data-col="AO">AO</th>
-        <th class="sortable" data-col="RG">RG</th>
-        <th class="sortable" data-col="WIM">WIM</th>
-        <th class="sortable" data-col="USO">USO</th>
-        <th class="sortable" data-col="W">W</th>
-        <th class="sortable" data-col="L">L</th>
-        <th class="dl sortable" data-col="agg">AGG</th>
-        <th class="sortable" data-col="hard">H</th>
-        <th class="sortable" data-col="clay">C</th>
-        <th class="sortable" data-col="grass">G</th>
-      </tr>
-    </thead>
-    <tbody id="table-body"></tbody>
-    <tfoot>
-      <tr>
-        <td colspan="13" id="table-footer"></td>
-      </tr>
-    </tfoot>
-  </table>
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <small class="text-muted">
+        <span id="champion-count" class="fw-bold text-warning">0 players</span>
+        &nbsp;|&nbsp; Click headers to sort
+        &nbsp;|&nbsp; <span id="last-updated"></span>
+      </small>
+    </div>
+    <div class="col-auto">
+      <div class="d-flex gap-3 align-items-center">
+        <div class="form-check form-check-inline mb-0">
+          <input type="checkbox" id="activeOnlyCheckbox" class="form-check-input">
+          <label for="activeOnlyCheckbox" class="form-check-label small">
+            🎾 ACTIVE ONLY (won GS match in last 2 years)
+          </label>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <label for="tourSelect" class="form-label mb-0 text-nowrap">TOUR:</label>
+          <select id="tourSelect" class="form-select form-select-sm">
+            <option value="wta" selected>WTA</option>
+            <option value="atp">ATP</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table class="table table-hover table-sm mb-0">
+      <thead>
+        <tr>
+          <th colspan="3"></th>
+          <th colspan="4" style="text-align:center; padding-bottom:2px;">BEST RESULT (BY SLAM)</th>
+          <th colspan="2"></th>
+          <th colspan="4" style="border-left:1px solid var(--border-main); text-align:center; padding-bottom:2px;">WINRATE</th>
+        </tr>
+        <tr>
+          <th>#</th>
+          <th class="sortable" data-col="player">PLAYER</th>
+          <th class="sortable" data-col="best">⭐ BEST</th>
+          <th class="sortable" data-col="AO">AO</th>
+          <th class="sortable" data-col="RG">RG</th>
+          <th class="sortable" data-col="WIM">WIM</th>
+          <th class="sortable" data-col="USO">USO</th>
+          <th class="sortable" data-col="W">W</th>
+          <th class="sortable" data-col="L">L</th>
+          <th class="sortable" data-col="agg" style="border-left:1px solid var(--border-main);">AGG</th>
+          <th class="sortable" data-col="hard">H</th>
+          <th class="sortable" data-col="clay">C</th>
+          <th class="sortable" data-col="grass">G</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="13" id="table-footer" style="padding-top:18px;color:var(--text-muted);font-size:12px;line-height:1.8;border-bottom:none;background:transparent;white-space:normal;"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
   <script type="module">
-
-
-    import { getFlagImg, fmtAge, fmtWinrate, fmtRound } from "./utils.js"
+    import { getFlagImg, fmtWinrate, fmtRound } from "./utils.js"
 
     let jsonData = null;
     let currentTour = 'wta';
@@ -192,98 +139,54 @@
     let sortColumn = 'agg';
     let sortOrder = 'desc';
 
-    const bestColors = {
-      'F': ['rgba(251,191,36,0.2)', '#FCD34D'],
-      'SF': ['rgba(167,139,250,0.2)', '#A78BFA'],
-      'QF': ['rgba(52,211,153,0.2)', '#34D399'],
-      'R16': ['rgba(99,179,237,0.2)', '#63B3ED'],
-    };
-
-    function aggBg(pct) {
-      if (pct === null || pct === undefined) return 'transparent';
-      if (pct >= 90) return 'rgb(4,120,87)';
-      if (pct >= 85) return 'rgb(7,123,89)';
-      if (pct >= 80) return 'rgb(42,159,121)';
-      if (pct >= 75) return 'rgb(227,152,45)';
-      if (pct >= 70) return 'rgb(247,213,118)';
-      return 'transparent';
+    function aggCls(pct) {
+      if (pct == null) return 'wr-cell agg-no';
+      if (pct >= 90) return 'wr-cell agg-90';
+      if (pct >= 85) return 'wr-cell agg-85';
+      if (pct >= 80) return 'wr-cell agg-80';
+      if (pct >= 75) return 'wr-cell agg-75';
+      if (pct >= 70) return 'wr-cell agg-70';
+      return 'wr-cell agg-no';
     }
-    function aggColor(pct) {
-      if (pct === null || pct === undefined) return '#6b7280';
-      if (pct >= 85) return '#ffffff';
-      if (pct >= 70) return '#111111';
-      return '#6b7280';
-    }
-    function surfBg(pct) {
-      if (pct === null || pct === undefined) return 'transparent';
-      if (pct >= 90) return 'rgb(4,120,87)';
-      if (pct >= 85) return 'rgb(39,157,119)';
-      if (pct >= 80) return 'rgb(67,186,144)';
-      if (pct >= 75) return 'rgb(235,174,72)';
-      if (pct >= 70) return 'rgb(249,218,124)';
-      return 'transparent';
-    }
-    function surfColor(pct) {
-      if (pct === null || pct === undefined) return '#6b7280';
-      if (pct >= 85) return '#ffffff';
-      if (pct >= 75) return '#111111';
-      if (pct >= 70) return '#111111';
-      return '#6b7280';
+    function surfCls(pct) {
+      if (pct == null) return 'wr-cell surf-no';
+      if (pct >= 90) return 'wr-cell surf-90';
+      if (pct >= 85) return 'wr-cell surf-85';
+      if (pct >= 80) return 'wr-cell surf-80';
+      if (pct >= 75) return 'wr-cell surf-75';
+      if (pct >= 70) return 'wr-cell surf-70';
+      return 'wr-cell surf-no';
     }
 
-    function isActive(playerObj, maxYear) {
-      const lastWinYear = playerObj.stats.last_win_year;
-      if (!lastWinYear) return false;
-      return (maxYear - lastWinYear) < 2;
+    function isActive(p, maxYear) {
+      return p.stats.last_win_year && (maxYear - p.stats.last_win_year) < 2;
     }
 
     function compareValues(a, b, col) {
       if (col === 'player') {
-        // 按国旗 (ioc) 排序，再按姓名
-        const iocA = a.ioc || '';
-        const iocB = b.ioc || '';
-        if (iocA !== iocB) {
-          if (iocA < iocB) return -1;
-          if (iocA > iocB) return 1;
-        }
-        const nameA = a.player.toLowerCase();
-        const nameB = b.player.toLowerCase();
-        if (nameA < nameB) return -1;
-        if (nameA > nameB) return 1;
-        return 0;
-      } else if (col === 'best') {
-        const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
-        const valA = rankMap[a.stats.best_display] || 999;
-        const valB = rankMap[b.stats.best_display] || 999;
-        return valA - valB;
-      } else if (col === 'AO' || col === 'RG' || col === 'WIM' || col === 'USO') {
-        const rankMap = { 'W': 1, 'F': 2, 'SF': 3, 'QF': 4, 'R16': 5, 'R32': 6, 'R64': 7, 'R128': 8, '—': 999 };
-        const valA = rankMap[a.stats[`${col.toLowerCase()}_best`]] || 999;
-        const valB = rankMap[b.stats[`${col.toLowerCase()}_best`]] || 999;
-        return valA - valB;
-      } else {
-        let valA, valB;
-        if (col === 'W') { valA = a.stats.W; valB = b.stats.W; }
-        else if (col === 'L') { valA = a.stats.L; valB = b.stats.L; }
-        else if (col === 'agg') { valA = a.stats.agg; valB = b.stats.agg; }
-        else if (col === 'hard') { valA = a.stats.win_h; valB = b.stats.win_h; }
-        else if (col === 'clay') { valA = a.stats.win_c; valB = b.stats.win_c; }
-        else if (col === 'grass') { valA = a.stats.win_g; valB = b.stats.win_g; }
-        else return 0;
-        const isNullA = valA === null || valA === undefined;
-        const isNullB = valB === null || valB === undefined;
-        if (isNullA && isNullB) return 0;
-        if (isNullA) return 1;
-        if (isNullB) return -1;
-        return valA - valB;
+        const iA = a.ioc || '', iB = b.ioc || '';
+        if (iA !== iB) return iA < iB ? -1 : 1;
+        return a.player.toLowerCase().localeCompare(b.player.toLowerCase());
       }
+      const rankMap = { W:1,F:2,SF:3,QF:4,R16:5,R32:6,R64:7,R128:8,'—':999 };
+      if (col === 'best') {
+        return (rankMap[a.stats.best_display]||999) - (rankMap[b.stats.best_display]||999);
+      }
+      if (['AO','RG','WIM','USO'].includes(col)) {
+        return (rankMap[a.stats[`${col.toLowerCase()}_best`]]||999) - (rankMap[b.stats[`${col.toLowerCase()}_best`]]||999);
+      }
+      const key = { W:'W',L:'L',agg:'agg',hard:'win_h',clay:'win_c',grass:'win_g' }[col];
+      const vA = a.stats[key] ?? null, vB = b.stats[key] ?? null;
+      if (vA === null && vB === null) return 0;
+      if (vA === null) return 1;
+      if (vB === null) return -1;
+      return vA - vB;
     }
 
     function sortPlayers(players) {
       return [...players].sort((a, b) => {
         let cmp = compareValues(a, b, sortColumn);
-        if (sortOrder === 'desc') cmp = -cmp;
-        return cmp;
+        return sortOrder === 'desc' ? -cmp : cmp;
       });
     }
 
@@ -295,50 +198,42 @@
         players = players.filter(p => isActive(p, maxYear));
       }
       const sorted = sortPlayers(players);
-      const tbody = document.getElementById('table-body');
-      const countSpan = document.getElementById('champion-count');
-      const footerTd = document.getElementById('table-footer');
-      const footerText = `        BEST = Career best GS result &nbsp;·&nbsp;
+      document.getElementById('champion-count').textContent = sorted.length + ' players';
+      document.getElementById('table-footer').innerHTML = `
+        BEST = Career best GS result &nbsp;·&nbsp;
         AO/RG/WIM/USO = Best result at each major &nbsp;·&nbsp;
-        W = Winner · F = Final · SF = Semi-final · QF = Quarter-final · R16/R32/R64/R128 &nbsp;·&nbsp; <br>
-        AGG = aggregate GS win rate &nbsp;·&nbsp;
-        H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;
-        Win rate: ≥70% <span style="color:#e8a838">■</span> ≥80% <span style="color:#2dd4b0">■</span>`;
-      countSpan.textContent = sorted.length + ' players';
-      footerTd.innerHTML = footerText;
+        AGG = aggregate GS win rate &nbsp;·&nbsp; H = Hard · C = Clay · G = Grass &nbsp;·&nbsp;<br>
+        Win rate colour: ≥70%
+        <span style="display:inline-block;width:12px;height:12px;background:var(--agg-70-bg);border-radius:2px;vertical-align:middle;"></span>
+        ≥80%
+        <span style="display:inline-block;width:12px;height:12px;background:var(--agg-80-bg);border-radius:2px;vertical-align:middle;"></span>
+        ≥90%
+        <span style="display:inline-block;width:12px;height:12px;background:var(--agg-90-bg);border-radius:2px;vertical-align:middle;"></span>
+        (AGG solid · H/C/G tint)`;
 
       let html = '';
       sorted.forEach((player, idx) => {
         const s = player.stats;
-        const flagHtml = getFlagImg(player.ioc);
         const dob = player.dob ? ` (${player.dob})` : '';
-        const playerDisplay = `${flagHtml} ${player.player}${dob}`;
-        const aggBgColor = aggBg(s.agg);
-        const aggTextColor = aggColor(s.agg);
-        const hardBgColor = surfBg(s.win_h);
-        const hardTextColor = surfColor(s.win_h);
-        const clayBgColor = surfBg(s.win_c);
-        const clayTextColor = surfColor(s.win_c);
-        const grassBgColor = surfBg(s.win_g);
-        const grassTextColor = surfColor(s.win_g);
-
         html += `<tr>
-        <td style="color:#6b7280;text-align:center;font-size:11px;">${idx + 1}</td>
-        <td class="player-cell">${playerDisplay}</td>
-        <td>${fmtRound(s.best_display)}</td>
-        <td>${fmtRound(s.ao_best)}</td>
-        <td>${fmtRound(s.rg_best)}</td>
-        <td>${fmtRound(s.wim_best)}</td>
-        <td>${fmtRound(s.uso_best)}</td>
-        <td style="text-align:center;color:#e5e5e5;">${s.W}</td>
-        <td style="text-align:center;color:#6b7280;">${s.L}</td>
-        <td style="text-align:center;background:${aggBgColor};color:${aggTextColor};">${fmtWinrate(s.agg)}</td>
-        <td style="text-align:center;background:${hardBgColor};color:${hardTextColor};">${fmtWinrate(s.win_h)}</td>
-        <td style="text-align:center;background:${clayBgColor};color:${clayTextColor};">${fmtWinrate(s.win_c)}</td>
-        <td style="text-align:center;background:${grassBgColor};color:${grassTextColor};">${fmtWinrate(s.win_g)}</td>
-      </tr>`;
+          <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
+          <td style="text-align:left;padding-left:12px;">${getFlagImg(player.ioc)} ${player.player}${dob}</td>
+          <td>${fmtRound(s.best_display)}</td>
+          <td>${fmtRound(s.ao_best)}</td>
+          <td>${fmtRound(s.rg_best)}</td>
+          <td>${fmtRound(s.wim_best)}</td>
+          <td>${fmtRound(s.uso_best)}</td>
+          <td style="color:var(--text-secondary);font-weight:600;">${s.W}</td>
+          <td style="color:var(--text-muted);">${s.L}</td>
+          <td style="border-left:1px solid var(--border-light);">
+            <span class="${aggCls(s.agg)}">${fmtWinrate(s.agg)}</span>
+          </td>
+          <td><span class="${surfCls(s.win_h)}">${fmtWinrate(s.win_h)}</span></td>
+          <td><span class="${surfCls(s.win_c)}">${fmtWinrate(s.win_c)}</span></td>
+          <td><span class="${surfCls(s.win_g)}">${fmtWinrate(s.win_g)}</span></td>
+        </tr>`;
       });
-      tbody.innerHTML = html;
+      document.getElementById('table-body').innerHTML = html;
       updateSortIndicators();
     }
 
@@ -349,67 +244,45 @@
       });
       const th = document.querySelector(`th[data-col="${sortColumn}"]`);
       if (th) {
-        const arrow = sortOrder === 'asc' ? '▲' : '▼';
         const span = document.createElement('span');
         span.className = 'sort-indicator';
-        span.textContent = ' ' + arrow;
+        span.textContent = sortOrder === 'asc' ? ' ▲' : ' ▼';
         th.appendChild(span);
       }
     }
 
-    function handleSortClick(e) {
-      const th = e.currentTarget;
-      const col = th.getAttribute('data-col');
-      if (!col) return;
-      if (sortColumn === col) {
-        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-      } else {
-        sortColumn = col;
-        sortOrder = 'desc';
-      }
-      renderTable();
-    }
+    document.querySelectorAll('.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = th.getAttribute('data-col');
+        if (!col) return;
+        if (sortColumn === col) sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        else { sortColumn = col; sortOrder = 'desc'; }
+        renderTable();
+      });
+    });
 
-    function resetToDefault() {
-      sortColumn = 'agg';
-      sortOrder = 'desc';
-    }
+    document.getElementById('tourSelect').addEventListener('change', e => {
+      currentTour = e.target.value; sortColumn = 'agg'; sortOrder = 'desc'; renderTable();
+    });
+    document.getElementById('activeOnlyCheckbox').addEventListener('change', e => {
+      activeOnly = e.target.checked; sortColumn = 'agg'; sortOrder = 'desc'; renderTable();
+    });
 
     async function loadData() {
       try {
         const res = await fetch('../output/tour_non_gs_champions.json');
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         jsonData = await res.json();
-        resetToDefault();
         renderTable();
       } catch (err) {
-        console.error('❌ 加载数据失败:', err);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="13" style="color:#f87171;text-align:center;">Failed to load data. Please check that the JSON file exists.</td></tr>';
+        document.getElementById('table-body').innerHTML =
+          '<tr><td colspan="13" style="color:#b91c1c;text-align:center;padding:40px;">Failed to load data.</td></tr>';
       }
     }
 
-    document.querySelectorAll('.sortable').forEach(th => {
-      th.addEventListener('click', handleSortClick);
-    });
-    const tourSelect = document.getElementById('tourSelect');
-    if (tourSelect) {
-      tourSelect.addEventListener('change', e => {
-        currentTour = e.target.value;
-        resetToDefault();
-        renderTable();
-      });
-    }
-    const activeCheck = document.getElementById('activeOnlyCheckbox');
-    if (activeCheck) {
-      activeCheck.addEventListener('change', e => {
-        activeOnly = e.target.checked;
-        resetToDefault();
-        renderTable();
-      });
-    }
-
     loadData();
+    const el = document.getElementById('last-updated');
+    if (el) el.textContent = 'Last updated: 2026-04-20';
   </script>
 </body>
-
 </html>

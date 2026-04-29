@@ -12,391 +12,328 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-C15B9S69WR");
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css">
     <style>
-      /* 样式保持不变 */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
       body {
-        background: #111827;
-        font-family:
-          "Segoe UI", "Apple Color Emoji", "Noto Color Emoji", "EmojiOne Color",
-          "Twemoji Mozilla", sans-serif;
-        padding: 36px 44px 60px;
-        min-width: 1200px;
+        min-width: 0;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 28px 24px 64px;
       }
+      
       h1 {
-        color: #f5c842;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 800;
-        margin-bottom: 6px;
+        margin-bottom: 16px;
+        letter-spacing: -0.01em;
+        color: var(--text-primary);
       }
-      .sub {
-        color: #6b7280;
+      
+      .text-muted {
+        color: var(--text-muted) !important;
+      }
+      
+      .text-warning {
+        color: var(--accent) !important;
+        font-weight: 600;
+      }
+      
+      .btn-outline-warning {
+        color: var(--accent);
+        border-color: var(--accent);
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.15s;
+      }
+      
+      .btn-outline-warning:hover {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      
+      .btn-outline-warning:focus {
+        box-shadow: 0 0 0 3px rgba(180,83,9,0.15);
+      }
+      /* 控制 placeholder 的透明度和颜色 */
+      .form-control::placeholder {
+        color: var(--text-hint) !important;    /* 使用 CSS 变量中的 hint 颜色 */
+        opacity: 0.7 !important;              /* 调整透明度，1 = 完全不透明，0 = 完全透明 */
+      }
+
+      /* 针对不同浏览器引擎的兼容写法 */
+      .form-control::-webkit-input-placeholder {
+        color: var(--text-hint) !important;
+        opacity: 0.7 !important;
+      }
+
+      .form-control::-moz-placeholder {
+        color: var(--text-hint) !important;
+        opacity: 0.7 !important;
+      }
+
+      .form-control:-ms-input-placeholder {
+        color: var(--text-hint) !important;
+        opacity: 0.7 !important;
+      }
+      /* 表格容器 */
+      .table-responsive {
+        border-radius: 8px;
+        border: 1px solid var(--border-main);
+        overflow: hidden;
+      }
+      
+      .table {
+        background: var(--bg-card) !important;
+        border-collapse: collapse;
+        font-size: 13px;
+        width: 100%;
+        margin-bottom: 0;
+      }
+      
+      .table thead th {
+        background: var(--bg-header) !important;
+        color: var(--text-muted);
         font-size: 11px;
+        font-weight: 700;
         letter-spacing: 0.07em;
         text-transform: uppercase;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .sub span {
-        color: #f5c842;
-      }
-      .controls {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        flex-wrap: wrap;
-      }
-      .filter-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .filter-group label {
-        color: #9ca3af;
-        font-size: 12px;
-        white-space: nowrap;
-      }
-      select,
-      input {
-        background: #1f2937;
-        color: #f3f4f6;
-        border: 1px solid #374151;
-        border-radius: 6px;
-        padding: 6px 12px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        outline: none;
-        min-width: 140px;
-      }
-      input {
-        cursor: text;
-        font-weight: 400;
-      }
-      input::placeholder {
-        color: #6b7280;
-        font-weight: 400;
-      }
-      select:hover,
-      input:hover {
-        border-color: #f5c842;
-      }
-      .stats {
-        color: #9ca3af;
-        font-size: 11px;
-        background: #1f2937;
-        padding: 5px 14px;
-        border-radius: 6px;
-        border: 1px solid #374151;
-        white-space: nowrap;
-      }
-      .table-wrapper {
-        border-radius: 8px;
-        overflow-x: auto;
-        border: 1px solid #374151;
-        background: #0f172a;
-        margin-top: 12px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12.5px;
-        min-width: 900px;
-        table-layout: fixed;
-      }
-      th,
-      td {
+        padding: 10px 8px;
         text-align: center;
-        padding: 8px 6px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        border-bottom: 1px solid var(--border-main);
+        vertical-align: middle;
+        white-space: nowrap;
       }
-      /* 列宽分配 */
-      th:nth-child(1) {
-        width: 5%;
-      } /* # */
-      th:nth-child(2) {
-        width: 5%;
-      } /* Season */
-      th:nth-child(3) {
-        width: 12%;
-      } /* Start Date */
-      th:nth-child(4) {
-        width: 7%;
-      } /* Drawsize */
-      th:nth-child(5) {
-        width: 13%;
-      } /* Tournament */
-      th:nth-child(6) {
-        width: 10%;
-      } /* Level */
-      th:nth-child(7) {
-        width: 10%;
-      } /* Surface */
-      th:nth-child(8) {
-        width: 18%;
-      } /* Champion */
-      th:nth-child(9) {
-        width: 11%;
-      } /* Date of Birth */
-      th:nth-child(10) {
-        width: 9%;
-      } /* Age */
-
-      th {
-        color: #6b7280;
-        font-size: 10.5px;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: 9px 6px;
-        background: #1a2332;
-        border-bottom: 1px solid #374151;
-      }
+      
       th.sortable {
         cursor: pointer;
         user-select: none;
-        transition: background 0.15s;
+        transition: background 0.15s, color 0.15s;
       }
+      
       th.sortable:hover {
-        background: #2d3a4e;
-        color: #f5c842;
+        background: var(--bg-hover) !important;
+        color: var(--accent);
       }
+      
       th .sort-indicator {
-        margin-left: 6px;
-        font-size: 9px;
+        margin-left: 4px;
+        font-size: 10px;
         display: inline-block;
         vertical-align: middle;
-        opacity: 0.6;
+        color: var(--accent) !important;
+        opacity: 1 !important;
       }
-      th.sort-asc .sort-indicator::after {
-        content: "▲";
-        opacity: 1;
-        color: #f5c842;
+      
+      .table td {
+        padding: 8px 8px;
+        text-align: center;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--border-light);
+        color: var(--text-primary);
+        font-size: 13px;
+        background: transparent;
       }
-      th.sort-desc .sort-indicator::after {
-        content: "▼";
-        opacity: 1;
-        color: #f5c842;
+      
+      .table tbody tr:nth-child(odd) td {
+        background: var(--bg-card);
       }
-      th.champion-col {
-        text-align: left;
-        padding-left: 60px;
+      
+      .table tbody tr:nth-child(even) td {
+        background: var(--bg-row-alt);
       }
+      
+      .table-hover tbody tr:hover td {
+        background: var(--bg-hover) !important;
+      }
+      
+      .table > :not(caption) > * > * {
+        border-bottom-color: var(--border-light);
+      }
+      
+      /* 冠军列左对齐 */
+      .champion-col {
+        text-align: left !important;
+        padding-left: 12px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      
       .winner-cell {
         display: inline-flex;
-        align-items: left;
-        padding-left: 15px;
+        align-items: center;
+        padding-left: 4px;
         max-width: 100%;
       }
-      td {
-        border-bottom: 1px solid #1f2937;
-        color: #e5e5e5;
-        font-size: 12.5px;
-      }
-      tr:hover td {
-        background: #1f2937;
-      }
-      td.champion-col {
-        text-align: left;
-        padding-left: 10px;
-        font-weight: 600;
-        color: #f3f4f6;
-      }
-      .badge-level {
-        padding: 4px 8px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 10.5px;
-        display: inline-block;
-        text-align: center;
-        min-width: 80px;
-      }
-      .level-GrandSlam {
-        background: #b91c1c;
-        color: #fee2e2;
-        font-weight: 700;
-      }
-      .level-Finals {
-        background: #6d28d9;
-        color: #ede9fe;
-      }
-      .level-WTA1000 {
-        background: #2563eb;
-        color: #dbeafe;
-      }
-      .level-WTA500Premier {
-        background: #0d9488;
-        color: #ccfbf1;
-      }
-      .level-WTA250International {
-        background: #475569;
-        color: #e2e8f0;
-      }
-      .level-other {
-        background: #334155;
-        color: #cbd5e1;
-      }
-      .surface-badge {
-        padding: 4px 8px;
-        border-radius: 20px;
-        font-size: 10.5px;
-        font-weight: 500;
-        display: inline-block;
-      }
-      .surface-Hard {
-        background: #1e3a5f;
-        color: #93c5fd;
-      }
-      .surface-Clay {
-        background: #78350f;
-        color: #fde68a;
-      }
-      .surface-Grass {
-        background: #14532d;
-        color: #bbf7d0;
-      }
-      .surface-Carpet {
-        background: #334155;
-        color: #cbd5e1;
-      }
-
-      .dob-cell,
-      .winner-age {
-        font-family: inherit;
-        background: #1a2332;
-        padding: 3px 6px;
-        border-radius: 20px;
-        font-size: 12px;
-        color: #e5e5e5;
-        display: inline-block;
-      }
-      .loading,
-      .no-data {
+      
+      .loading, .no-data {
         text-align: center;
         padding: 48px;
-        color: #9ca3af;
+        color: var(--text-muted);
         font-size: 13px;
       }
-      .footer-note {
-        margin-top: 22px;
-        text-align: right;
-        color: #4b5563;
-        font-size: 10px;
-        letter-spacing: 0.04em;
-      }
-      .flag-img {
-        margin-right: 6px;
-        vertical-align: middle;
-        border-radius: 2px;
-      }
+      
       .seed-suffix {
         font-weight: 400;
-        color: #9ca3af;
+        color: var(--text-muted);
         margin-left: 4px;
+      }
+      
+      .dob-cell, .winner-age {
+        background: var(--bg-header);
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        display: inline-block;
+        border: 1px solid var(--border-light);
+      }
+      
+      /* 脚注 */
+      .footer-note {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border-main);
+      }
+      
+      .footer-note small {
+        color: var(--text-muted);
+        font-size: 11px;
+      }
+      
+      .footer-note a {
+        color: var(--text-hint);
+        text-decoration: underline;
       }
     </style>
   </head>
+
   <body>
-    <div style="display: flex; justify-content: space-between">
-      <h1>🎾 WTA Champions · Singles</h1>
-      <a
-        href="../index.html"
-        style="text-decoration: none; color: #d7dfc6; font-weight: bold"
-        >HOME 🏠
-      </a>
-    </div>
-
-    <div class="sub">
-      <div>
-        <span id="recordCount">0 tournaments</span> &nbsp;|&nbsp; 2009 – 2026
-        &nbsp;|&nbsp;
-        <span style="color: #9ca3af"
-          > Click header to sort</span> | <span id="last-updated" style="color:#6b7280; font-size:11px; margin-left:auto;"></span>
-
+    <!-- 标题行 -->
+    <div class="row align-items-center mb-3">
+      <div class="col">
+        <h1 class="mb-0">🎾 WTA Champions · Singles (Since 2009)</h1>
       </div>
-      <div class="controls">
-        <!-- 冠军搜索 -->
-        <div class="filter-group">
-          <label for="searchInput">🔍 CHAMPION</label>
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="e.g. Iga Swiatek"
-            style="min-width: 170px"
-          />
-        </div>
-        <!-- 赛事搜索 -->
-        <div class="filter-group">
-          <label for="tournamentSearchInput">🏟️ TOURNAMENT</label>
-          <input
-            type="text"
-            id="tournamentSearchInput"
-            placeholder="e.g. Australian Open"
-            style="min-width: 180px"
-          />
-        </div>
-        <div class="filter-group">
-          <label for="yearSelect">📅 SEASON</label>
-          <select id="yearSelect"></select>
-        </div>
-        <div class="filter-group">
-          <label for="levelSelect">🏆 LEVEL</label>
-          <select id="levelSelect">
-            <option value="">All Levels</option>
-          </select>
-        </div>
-        <div class="stats" id="championCount">— champions</div>
+      <div class="col-auto">
+        <a href="../index.html" class="btn btn-outline-warning btn-sm">HOME</a>
       </div>
     </div>
 
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Season</th>
-            <th class="sortable" data-sort="startDate">
-              Start Date<span class="sort-indicator"></span>
-            </th>
-            <th>Drawsize</th>
-            <th>Tournament</th>
-            <th>Level</th>
-            <th>Surface</th>
-            <th class="champion-col">Champion</th>
-            <!-- 给 Date of Birth 加上排序功能 -->
-            <th class="sortable" data-sort="dob">
-              Date of Birth<span class="sort-indicator"></span>
-            </th>
-            <th class="sortable" data-sort="age">
-              Age<span class="sort-indicator"></span>
-            </th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr>
-            <td colspan="10" class="loading">Loading champion data…</td>
-          </tr>
-        </tbody>
-      </table>
+ <!-- ========== 第二行：统计数据 + 赛季/级别筛选 ========== -->
+<div class="row align-items-center mb-2">
+  <div class="col">
+    <small class="text-muted">
+      <span id="recordCount" class="fw text-warning">0 tournaments</span>
+      &nbsp;|&nbsp;
+      <span id="championCount" class="fw text-warning">— champions</span>
+      &nbsp;|&nbsp; Click header to sort &nbsp;|&nbsp;
+      <span id="last-updated"></span>
+    </small>
+  </div>
+  <div class="col-auto">
+    <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex align-items-center gap-1">
+        <label for="yearSelect" class="form-label mb-0 text-nowrap">📅 Season</label>
+        <select id="yearSelect" class="form-select form-select-sm" style="width: 120px;"></select>
+      </div>
+      <div class="d-flex align-items-center gap-1">
+        <label for="levelSelect" class="form-label mb-0 text-nowrap">🏆 Level</label>
+        <select id="levelSelect" class="form-select form-select-sm" style="width: 150px;">
+          <option value="">All Levels</option>
+        </select>
+      </div>
     </div>
-    <div class="footer-note" style="color:#6b7280; font-size:11px; text-align:center; margin-top:24px; padding-top:12px; border-top:1px solid #374151;">
-  * Data sourced from <a href="https://www.wtatennis.com/tournaments" target="_blank" style="color:#9ca3af; text-decoration:underline;">wtatennis.com</a>
+  </div>
 </div>
+
+<!-- ========== 第三行：搜索框 ========== -->
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="d-flex gap-2 align-items-center">
+      <div class="input-group input-group-sm" style="width: 280px;">
+        <span class="input-group-text">🔍 CHAMPION</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="form-control"
+          placeholder="e.g. Iga Swiatek..."
+        />
+      </div>
+
+      <div class="input-group input-group-sm" style="width: 320px;">
+        <span class="input-group-text">🏟️ TOURNAMENT</span>
+        <input
+          type="text"
+          id="tournamentSearchInput"
+          class="form-control"
+          placeholder="e.g. Australian Open..."
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- ========== 第三行：表格 ========== -->
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-hover table-sm mb-0">
+            <thead>
+              <tr>
+                <th style="width: 5%">#</th>
+                <th style="width: 5%">Season</th>
+                <th class="sortable" data-sort="startDate" style="width: 12%">
+                  Start Date<span class="sort-indicator"></span>
+                </th>
+                <th style="width: 6%">Drawsize</th>
+                <th style="width: 13%">Tournament</th>
+                <th style="width: 10%">Level</th>
+                <th style="width: 10%">Surface</th>
+                <th style="width: 18%">Champion</th>
+                <th class="sortable" data-sort="dob" style="width: 11%">
+                  Date of Birth<span class="sort-indicator"></span>
+                </th>
+                <th class="sortable" data-sort="age" style="width: 9%">
+                  Age<span class="sort-indicator"></span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="10" class="loading">Loading champion data…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 第四行：脚注 ========== -->
+    <div class="row">
+      <div class="col-12">
+        <div class="footer-note">
+          <small>
+            * Data sourced from
+            <a
+              href="https://www.wtatennis.com/tournaments"
+              target="_blank"
+            >
+              wtatennis.com
+            </a>
+          </small>
+        </div>
+      </div>
+    </div>
 
     <script type="module">
       import { getFlagImg } from "./utils.js";
@@ -409,10 +346,10 @@
         let championSearchTerm = "";
         let tournamentSearchTerm = "";
 
-        // 排序状态，增加 'dob' 作为可选列
+        // 排序状态
         let currentSort = {
-          column: "startDate", // 'startDate', 'age', 'dob'
-          direction: "desc", // 'asc' 或 'desc'
+          column: "startDate",
+          direction: "desc",
         };
 
         const searchInput = document.getElementById("searchInput");
@@ -425,22 +362,24 @@
         const recordCountSpan = document.getElementById("recordCount");
         const championCountSpan = document.getElementById("championCount");
 
-        // 获取表头元素并添加点击监听
         const sortableHeaders = document.querySelectorAll("th.sortable");
 
         function updateSortIndicator() {
-          // 移除所有排序类
           sortableHeaders.forEach((th) => {
-            th.classList.remove("sort-asc", "sort-desc");
+            const indicator = th.querySelector('.sort-indicator');
+            if (indicator) {
+              indicator.textContent = '';
+            }
           });
-          // 为当前排序列添加类
+          
           const activeHeader = Array.from(sortableHeaders).find(
             (th) => th.dataset.sort === currentSort.column,
           );
           if (activeHeader) {
-            activeHeader.classList.add(
-              currentSort.direction === "asc" ? "sort-asc" : "sort-desc",
-            );
+            const indicator = activeHeader.querySelector('.sort-indicator');
+            if (indicator) {
+              indicator.textContent = currentSort.direction === "asc" ? " ▲" : " ▼";
+            }
           }
         }
 
@@ -482,7 +421,6 @@
           return "level-other";
         }
 
-        // 过滤数据
         function filterData() {
           if (!allData.length) return [];
           return allData.filter((item) => {
@@ -513,7 +451,6 @@
           });
         }
 
-        // 排序函数，增加对 dob 的处理
         function sortData(data) {
           if (!data.length) return data;
 
@@ -535,13 +472,11 @@
               valB = b.winner_age ? parseFloat(b.winner_age) : -Infinity;
               return direction === "asc" ? valA - valB : valB - valA;
             } else if (column === "dob") {
-              // 处理出生日期排序，空值放在末尾
               valA = a.dob || "";
               valB = b.dob || "";
-              // 如果其中一个为空，则将空值视为较大的值（排到后面）
               if (!valA && !valB) return 0;
-              if (!valA) return 1; // a 为空，a > b（放后面）
-              if (!valB) return -1; // b 为空，a < b（放前面）
+              if (!valA) return 1;
+              if (!valB) return -1;
 
               return direction === "asc"
                 ? valA.localeCompare(valB)
@@ -561,9 +496,7 @@
             return;
           }
 
-          // 先排序
           const sorted = sortData(data);
-
           const uniqueChampions = new Set();
 
           let html = "";
@@ -598,17 +531,17 @@
             uniqueChampions.add(`${winner}|${ioc}`);
 
             html += `<tr>
-          <td style="color:#e5e5e5;font-size:11px;">${idx + 1}</td>
-          <td>${year}</td>
-          <td>${startDate}</td>
-          <td>${drawsize}</td>
-          <td style="font-weight:600;">${tourneyName}</td>
-          <td><span class="badge-level ${levelClass}">${level}</span></td>
-          <td><span class="surface-badge ${surfaceClass}">${venueDisplay}</span></td>
-          <td class="champion-col"><span class="winner-cell">${winnerDisplay}</span></td>
-          <td><span class="dob-cell">${dob}</span></td>
-          <td><span class="winner-age">${age}</span></td>
-        </tr>`;
+              <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
+              <td>${year}</td>
+              <td>${startDate}</td>
+              <td>${drawsize}</td>
+              <td style="font-weight:600;">${tourneyName}</td>
+              <td><span class="badge-level ${levelClass}">${level}</span></td>
+              <td><span class="surface-badge ${surfaceClass}">${venueDisplay}</span></td>
+              <td class="champion-col"><span class="winner-cell">${winnerDisplay}</span></td>
+              <td>${dob}</td>
+              <td>${age}</td>
+            </tr>`;
           });
 
           tableBody.innerHTML = html;
@@ -616,7 +549,6 @@
           recordCountSpan.textContent = `${displayedRows} tournaments`;
           championCountSpan.textContent = `${uniqueChampions.size} champions`;
 
-          // 更新排序指示器
           updateSortIndicator();
         }
 
@@ -625,17 +557,14 @@
           renderTable(filtered);
         }
 
-        // 处理排序点击
         function handleSortClick(e) {
           const th = e.currentTarget;
           const column = th.dataset.sort;
 
           if (currentSort.column === column) {
-            // 同一列：切换方向
             currentSort.direction =
               currentSort.direction === "asc" ? "desc" : "asc";
           } else {
-            // 不同列：设置为新列，默认降序
             currentSort.column = column;
             currentSort.direction = "desc";
           }
@@ -643,7 +572,6 @@
           updateView();
         }
 
-        // 为可排序列添加监听
         sortableHeaders.forEach((th) => {
           th.addEventListener("click", handleSortClick);
         });
@@ -716,19 +644,16 @@
             initYearSelect(allYears);
             initLevelSelect(allLevels);
 
-            // 冠军搜索监听
             searchInput.addEventListener("input", (e) => {
               championSearchTerm = e.target.value.trim();
               updateView();
             });
 
-            // 赛事搜索监听
             tournamentSearchInput.addEventListener("input", (e) => {
               tournamentSearchTerm = e.target.value.trim();
               updateView();
             });
 
-            // 设置默认排序 (Start Date 降序)
             currentSort = { column: "startDate", direction: "desc" };
             if (allYears.length > 0) {
               const latestYear = Math.max(
@@ -748,15 +673,11 @@
         }
 
         loadData();
-            // 设置更新时间
-const updateEl = document.getElementById('last-updated');
-if (updateEl) {
-  // 方式一：使用文件最后修改时间（适合静态文件）
-  // updateEl.textContent = 'Last updated: ' + new Date(document.lastModified).toLocaleDateString('en-CA'); // 格式 YYYY-MM-DD
-
-  // 方式二：如果想手动维护日期，直接赋值
-  updateEl.textContent = 'Last updated: 2026-04-20';
-}
+        
+        const updateEl = document.getElementById("last-updated");
+        if (updateEl) {
+          updateEl.textContent = "Last updated: 2026-04-20";
+        }
       })();
     </script>
   </body>

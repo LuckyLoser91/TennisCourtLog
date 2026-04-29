@@ -1,151 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TennisCourtLog · Data & Analysis</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      height: 100%;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
     body {
-      background: #111827;
+      background: #f8f6f0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 48px 56px;
-      min-width: 800px;
-      color: #f3f4f6;
+      padding: 48px 56px 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 100vh;
+      color: #1c1917;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
+    .main-content { flex: 1; }
 
-    .main-content {
-      flex: 1;
-    }
-
+    /* 标题区 */
     h1 {
-      color: #f5c842;
+      color: #1c1917;
       font-size: 26px;
       font-weight: 800;
       margin-bottom: 6px;
+      letter-spacing: -0.01em;
     }
-
     .sub {
       color: #6b7280;
       font-size: 12px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 36px;
-      border-bottom: 1px solid #374151;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #e0d9cc;
       padding-bottom: 18px;
     }
+    .sub span { color: #b45309; font-weight: 600; }
+    .sub a    { color: #b45309; text-decoration: none; font-weight: 600; }
 
-    .sub span {
-      color: #f5c842;
-    }
-
-    .section {
-      margin-bottom: 32px;
-    }
-
+    /* section */
+    .section { margin-bottom: 36px; }
     .section h2 {
-      color: #9ca3af;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      color: #44403c;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-bottom: 12px;
-      border-left: 3px solid #f5c842;
+      margin-bottom: 14px;
+      border-left: 3px solid #b45309;
       padding-left: 12px;
     }
 
+    /* 卡片网格 */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
     }
-
     .card {
-      background: #1f2937;
+      background: #ffffff;
       border-radius: 8px;
-      padding: 16px 18px;
+      padding: 15px 18px;
+      border: 1px solid #e0d9cc;
       transition: all 0.15s;
-      border: 1px solid #374151;
     }
-
     .card:hover {
-      background: #2d3a4f;
-      border-color: #f5c842;
+      background: #fef3c7;
+      border-color: #b45309;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(180,83,9,0.1);
     }
-
-    /* 改进卡片内文字对齐：flex布局，emoji与文字分开，换行时文字与文字左对齐 */
     .card a {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
       text-decoration: none;
-      color: #e5e5e5;
+      color: #1c1917;
       font-weight: 500;
-      font-size: 16px;
+      font-size: 15px;
+      line-height: 1.4;
     }
+    .card-icon { flex-shrink: 0; font-size: 16px; }
+    .card-text { flex: 1; }
+    .card a:hover { color: #b45309; }
 
-    .card-icon {
-      flex-shrink: 0;
-    }
-
-    .card-text {
-      flex: 1;
-    }
-
-    .card a:hover {
-      color: #f5c842;
-    }
-
+    /* footer */
     .footer {
       margin-top: 48px;
       padding-top: 18px;
-      border-top: 1px solid #1f2937;
-      color: #4b5563;
+      border-top: 1px solid #e0d9cc;
+      color: #9ca3af;
       font-size: 11px;
       letter-spacing: 0.04em;
     }
+    .footer a { color: #6b7280; text-decoration: none; }
+    .footer a:hover { color: #b45309; }
 
-    .footer a {
-      color: #6b7280;
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      color: #f5c842;
+    @media (max-width: 640px) {
+      body { padding: 28px 20px 40px; }
+      h1   { font-size: 20px; }
     }
   </style>
 </head>
-
 <body>
-
   <div class="main-content">
     <h1>🎾 TennisCourtLog</h1>
     <div class="sub">
       <span>Tennis Leaderboards</span> &nbsp;|&nbsp;
       WTA & ATP matches 1968–2026 &nbsp;|&nbsp;
-      Maintained by <a style="color:#f5c842; text-decoration:none;">LuckyLoser91</a>
+      Maintained by <a>LuckyLoser91</a>
     </div>
 
     <div class="section">
@@ -165,18 +137,16 @@
         </div>
         <div class="card">
           <a href="./leaderboards/tour_non_gs_champions.html">
-            <span class="card-icon">🏆</span>
+            <span class="card-icon">🎾</span>
             <span class="card-text">Non-Grand Slam Champions Win Rate Leaderboard</span>
           </a>
         </div>
-
       </div>
     </div>
 
     <div class="section">
       <h2>📊 WTA Tour</h2>
       <div class="grid">
-
         <div class="card">
           <a href="./leaderboards/wta_calendar_champs_start_2009.html">
             <span class="card-icon">🥇</span>
@@ -185,7 +155,7 @@
         </div>
         <div class="card">
           <a href="./leaderboards/big_tournament_result_topn.html">
-            <span class="card-icon">🥇</span>
+            <span class="card-icon">📊</span>
             <span class="card-text">WTA Top 100 · Elite Event History</span>
           </a>
         </div>
@@ -194,9 +164,7 @@
   </div>
 
   <div class="footer">
-    🕒 Last updated: April 2026 &nbsp;·&nbsp;
+    🕒 Last updated: April 2026
   </div>
-
 </body>
-
 </html>

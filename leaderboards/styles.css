@@ -1,118 +1,302 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* ================================================================ */
+/*  CSS 变量 — 统一色彩系统（改颜色只需改这里）                        */
+/* ================================================================ */
+:root {
+    --bg-page:        #f8f6f0;
+    --bg-card:        #ffffff;
+    --bg-row-alt:     #faf8f4;
+    --bg-header:      #f0ebe0;
+    --bg-hover:       #ede8dc;
+    --bg-input:       #ffffff;
+    --bg-input-label: #f0ebe0;
+    --border-main:    #e0d9cc;
+    --border-light:   #ede8dc;
+    --border-input:   #d6cfc3;
+    --text-primary:   #1c1917;
+    --text-secondary: #44403c;
+    --text-muted:     #6b7280;
+    --text-hint:      #aaa49a;
+    --accent:         #b45309;
+    --accent-dark:    #92400e;
+    --accent-light:   #fef3c7;
+    --accent-amber:   #d97706;
+--badge-W-bg:     #d4a017;  --badge-W-color:  #ffffff;    /* 冠军 - 古典金 */
+--badge-F-bg:     #b45309;  --badge-F-color:  #ffffff;    /* 亚军 - 琥珀铜 */
+--badge-SF-bg:    #2d6a4f;  --badge-SF-color: #d1fae5;    /* 四强 - 森林绿 */
+--badge-QF-bg:    #3b5998;  --badge-QF-color: #dbeafe;    /* 八强 - 深蓝 */
+    --surface-hard-bg:    #dbeafe; --surface-hard-text:  #1e3a8a;
+    --surface-clay-bg:    #fef3c7; --surface-clay-text:  #78350f;
+    --surface-grass-bg:   #d1fae5; --surface-grass-text: #065f46;
+    --surface-carpet-bg:  #f1f5f9; --surface-carpet-text:#334155;
+    --level-gs-bg:      #7f1d1d;  --level-gs-color:    #fee2e2;
+    --level-finals-bg:  #4c1d95;  --level-finals-color:#ede9fe;
+    --level-1000-bg:    #1e3a8a;  --level-1000-color:  #dbeafe;
+    --level-500-bg:     #134e4a;  --level-500-color:   #ccfbf1;
+    --level-250-bg:     #374151;  --level-250-color:   #f3f4f6;
+    --level-other-bg:   #d1d5db;  --level-other-color: #374151;
+    --titles-1-bg:  #d1fae5;  --titles-1-color:  #065f46;
+    --titles-2-bg:  #6ee7b7;  --titles-2-color:  #064e3b;
+    --titles-5-bg:  #0f766e;  --titles-5-color:  #ccfbf1;
+    --titles-10-bg: #134e4a;  --titles-10-color: #f0fdfa;
+    --agg-90-bg: #7c2d12;  --agg-90-color: #fed7aa;
+    --agg-85-bg: #b45309;  --agg-85-color: #fef3c7;
+    --agg-80-bg: #f59e0b;  --agg-80-color: #ffffff;
+    --agg-75-bg: #fde68a;  --agg-75-color: #78350f;
+    --agg-70-bg: #fef9c3;  --agg-70-color: #713f12;
+    --surf-90-bg: #ffedd5;  --surf-90-color: #7c2d12;
+    --surf-85-bg: #ffedd5;  --surf-85-color: #9a3412;
+    --surf-80-bg: #fef3c7;  --surf-80-color: #b45309;
+    --surf-75-bg: #fef9c3;  --surf-75-color: #92400e;
+    --surf-70-bg: #fffbeb;  --surf-70-color: #a16207;
 }
 
+/* ================================================================ */
+/*  基础                                                              */
+/* ================================================================ */
 body {
-    background: #111827;
-    font-family: 'Segoe UI', 'Apple Color Emoji', 'Noto Color Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
-    padding: 36px 44px 60px;
-    min-width: 1400px;
+    background: var(--bg-page);
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text-primary);
+    padding: 32px 48px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
 }
-
 h1 {
-    color: #f5c842;
-    font-size: 22px;
+    color: var(--text-primary);
+    font-size: 20px;
     font-weight: 800;
-    margin-bottom: 6px;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
 }
+.text-muted    { color: var(--text-muted) !important; }
+.text-warning  { color: var(--accent) !important; font-weight: 600; }
 
-.sub {
-    color: #6b7280;
+/* ================================================================ */
+/*  表单控件                                                          */
+/* ================================================================ */
+.form-label {
+    color: var(--text-muted);
     font-size: 11px;
+    font-weight: 600;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
+    margin-bottom: 0;
 }
-
-.sub span {
-    color: #f5c842;
+.input-group-text {
+    background: var(--bg-input-label);
+    color: var(--text-muted);
+    border-color: var(--border-input);
+    font-size: 11px !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
-
-.controls {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.tour-selector,
-.age-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.tour-selector label,
-.age-selector label {
-    color: #9ca3af;
-    font-size: 12px;
-}
-
-.tour-selector select,
-.age-selector select {
-    background: #1f2937;
-    color: #f3f4f6;
-    border: 1px solid #374151;
-    border-radius: 6px;
-    padding: 6px 12px;
+.form-control,
+.form-select {
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-input) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
     font-size: 13px;
-    font-weight: 600;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-primary) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--bg-input) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+.form-control::placeholder { color: var(--text-hint) !important; opacity: 1; }
+.form-control:hover,
+.form-select:hover  { border-color: var(--accent) !important; }
+.form-control:focus,
+.form-select:focus  {
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(180,83,9,0.1) !important;
+}
+.form-select option { background: var(--bg-card); color: var(--text-primary); }
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23b45309' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+.form-check-input {
+    accent-color: var(--accent);
     cursor: pointer;
-    outline: none;
+    border-color: var(--border-input);
+    background-color: var(--bg-input);
 }
+.form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
+.form-check-input:focus   { box-shadow: 0 0 0 3px rgba(180,83,9,0.1); border-color: var(--accent); }
+.form-check-label { color: var(--text-secondary); font-size: 13px; cursor: pointer; }
 
-.tour-selector select:hover,
-.age-selector select:hover {
-    border-color: #f5c842;
+/* ================================================================ */
+/*  Badge / 按钮                                                      */
+/* ================================================================ */
+.badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; }
+.badge.bg-secondary {
+    background: var(--bg-header) !important;
+    color: var(--text-muted);
+    border: 1px solid var(--border-main);
 }
-
-
-.player-cell {
-    color: #f3f4f6;
+.btn-outline-warning {
+    color: var(--accent);
+    border-color: var(--accent);
     font-weight: 600;
-    padding-left: 8px;
-    text-align: left;
+    font-size: 13px;
+    transition: all 0.15s;
+}
+.btn-outline-warning:hover  { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-outline-warning:focus  { box-shadow: 0 0 0 3px rgba(180,83,9,0.15); }
+
+/* ================================================================ */
+/*  表格                                                              */
+/* ================================================================ */
+.table-responsive {
+    border-radius: 8px;
+    border: 1px solid var(--border-main);
+    overflow: hidden;
+}
+.table {
+    background: var(--bg-card) !important;
+    border-collapse: collapse;
+    font-size: 13px;
+    width: 100%;
+}
+.table thead th {
+    background: var(--bg-header) !important;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-main);
+    vertical-align: middle;
+    white-space: nowrap;
+}
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
+}
+th.sortable:hover { background: var(--bg-hover) !important; color: var(--accent); }
+th .sort-indicator {
+    margin-left: 4px;
+    font-size: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--accent) !important;
+    opacity: 1 !important;
+}
+th.sort-asc  .sort-indicator::after { content: "▲"; color: var(--accent); }
+th.sort-desc .sort-indicator::after { content: "▼"; color: var(--accent); }
+
+.table td {
+    padding: 8px 8px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+    font-size: 13px;
+    background: transparent;
+}
+.table tbody tr:nth-child(odd)  td { background: var(--bg-card); }
+.table tbody tr:nth-child(even) td { background: var(--bg-row-alt); }
+.table-hover tbody tr:hover     td { background: var(--bg-hover) !important; }
+.table > :not(caption) > * > *     { border-bottom-color: var(--border-light); }
+
+th.champion-col,
+td.champion-col {
+    text-align: left !important;
+    padding-left: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.winner-cell { display: inline-flex; align-items: center; padding-left: 4px; max-width: 100%; }
+.loading, .no-data { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; }
+.seed-suffix { font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+.dob-cell,
+.winner-age {
+    background: var(--bg-header);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: inline-block;
+    border: 1px solid var(--border-light);
 }
 
-.slam-cell {
-    font-weight: 500;
-    padding: 4px 6px;
-    border-radius: 4px;
-    min-width: 48px;
+/* ================================================================ */
+/*  汇总行                                                            */
+/* ================================================================ */
+.summary-row td {
+    background: var(--bg-hover) !important;
+    font-weight: 700;
+    border-top: 2px solid var(--accent) !important;
+    border-bottom: 2px solid var(--accent) !important;
+    color: var(--text-primary);
+}
+
+/* ================================================================ */
+/*  等级徽章                                                          */
+/* ================================================================ */
+.badge-level {
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 10px;
     display: inline-block;
     text-align: center;
+    min-width: 80px;
+    letter-spacing: 0.03em;
 }
+.level-GrandSlam           { background: var(--level-gs-bg);      color: var(--level-gs-color); }
+.level-Finals              { background: var(--level-finals-bg);   color: var(--level-finals-color); }
+.level-WTA1000             { background: var(--level-1000-bg);     color: var(--level-1000-color); }
+.level-WTA500Premier       { background: var(--level-500-bg);      color: var(--level-500-color); }
+.level-WTA250International { background: var(--level-250-bg);      color: var(--level-250-color); }
+.level-other               { background: var(--level-other-bg);    color: var(--level-other-color); }
 
+/* ================================================================ */
+/*  场地徽章                                                          */
+/* ================================================================ */
+.surface-badge {
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+}
+.surface-Hard   { background: var(--surface-hard-bg);   color: var(--surface-hard-text); }
+.surface-Clay   { background: var(--surface-clay-bg);   color: var(--surface-clay-text); }
+.surface-Grass  { background: var(--surface-grass-bg);  color: var(--surface-grass-text); }
+.surface-Carpet { background: var(--surface-carpet-bg); color: var(--surface-carpet-text); }
+
+/* ================================================================ */
+/*  结果徽章                                                          */
+/* ================================================================ */
 .result-W {
-    background: #f5c842;
-    color: #111111;
-    font-weight: bold;
+    background: var(--badge-W-bg); color: var(--badge-W-color); 
+    font-weight: 700; padding: 4px 7px; border-radius: 4px;
+    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
 }
 
 .result-F {
-    background: #cd7f32;
-    color: #111111;
-    font-weight: bold;
+    background: var(--badge-F-bg); color: var(--badge-F-color);
+    font-weight: 700; padding: 4px 7px; border-radius: 4px;
+    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
 }
-
 .result-SF {
-    background: #46b99c;
-    color: #ffffff;
-    font-weight: bold;
+    background: var(--badge-SF-bg); color: var(--badge-SF-color);
+    font-weight: 700; padding: 4px 7px; border-radius: 4px;
+    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
 }
-
 .result-QF {
-    background: #3b82f6;
-    color: #ffffff;
-    font-weight: bold;
+    background: var(--badge-QF-bg); color: var(--badge-QF-color);
+    font-weight: 700; padding: 4px 7px; border-radius: 4px;
+    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
 }
-
-.result-other {
-    color: #e5e5e5;
-}
+.result-other { color: var(--text-muted); font-size: 12px; }
