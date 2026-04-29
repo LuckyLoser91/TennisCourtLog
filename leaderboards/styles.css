@@ -20,20 +20,20 @@
     --accent-dark:    #92400e;
     --accent-light:   #fef3c7;
     --accent-amber:   #d97706;
---badge-W-bg:     #d4a017;  --badge-W-color:  #ffffff;    /* 冠军 - 古典金 */
---badge-F-bg:     #b45309;  --badge-F-color:  #ffffff;    /* 亚军 - 琥珀铜 */
---badge-SF-bg:    #2d6a4f;  --badge-SF-color: #d1fae5;    /* 四强 - 森林绿 */
---badge-QF-bg:    #3b5998;  --badge-QF-color: #dbeafe;    /* 八强 - 深蓝 */
+    --badge-W-bg:     #d4a017;  --badge-W-color:  #ffffff;    /* 冠军 - 古典金 */
+    --badge-F-bg:     #b45309;  --badge-F-color:  #ffffff;    /* 亚军 - 琥珀铜 */
+    --badge-SF-bg:    #2d6a4f;  --badge-SF-color: #d1fae5;    /* 四强 - 森林绿 */
+    --badge-QF-bg:    #3b5998;  --badge-QF-color: #dbeafe;    /* 八强 - 深蓝 */
     --surface-hard-bg:    #dbeafe; --surface-hard-text:  #1e3a8a;
     --surface-clay-bg:    #fef3c7; --surface-clay-text:  #78350f;
     --surface-grass-bg:   #d1fae5; --surface-grass-text: #065f46;
     --surface-carpet-bg:  #f1f5f9; --surface-carpet-text:#334155;
-    --level-gs-bg:      #7f1d1d;  --level-gs-color:    #fee2e2;
-    --level-finals-bg:  #4c1d95;  --level-finals-color:#ede9fe;
-    --level-1000-bg:    #1e3a8a;  --level-1000-color:  #dbeafe;
-    --level-500-bg:     #134e4a;  --level-500-color:   #ccfbf1;
-    --level-250-bg:     #374151;  --level-250-color:   #f3f4f6;
-    --level-other-bg:   #d1d5db;  --level-other-color: #374151;
+    --level-gs-bg:      #b45309;  --level-gs-color:    #ffffff;    /* Grand Slam */
+    --level-finals-bg:  #92400e;  --level-finals-color:#fef3c7;    /* Finals */
+    --level-1000-bg:    #d97706;  --level-1000-color:  #ffffff;    /* WTA 1000 */
+    --level-500-bg:     #2d6a4f;  --level-500-color:   #d1fae5;    /* WTA 500 / Premier */
+    --level-250-bg:     #3b5998;  --level-250-color:   #dbeafe;    /* WTA 250 / International */
+    --level-other-bg:   #a8a29e;  --level-other-color: #ffffff;    /* Other */
     --titles-1-bg:  #d1fae5;  --titles-1-color:  #065f46;
     --titles-2-bg:  #6ee7b7;  --titles-2-color:  #064e3b;
     --titles-5-bg:  #0f766e;  --titles-5-color:  #ccfbf1;
@@ -59,6 +59,7 @@ body {
     color: var(--text-primary);
     padding: 32px 48px 64px;
     max-width: 1280px;
+    min-width: 500px;
     margin: 0 auto;
 }
 h1 {
@@ -162,6 +163,7 @@ h1 {
     background: var(--bg-card) !important;
     border-collapse: collapse;
     font-size: 13px;
+    min-width:500px
     width: 100%;
 }
 .table thead th {
