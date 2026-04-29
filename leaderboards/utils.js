@@ -109,7 +109,7 @@ export function getFlagImg(ioc) {
         if (!missingIOCSet.has(ioc)) {
             missingIOCSet.add(ioc);
             console.warn(
-                `%c[FLAG MISSING] %cUnknown IOC: "${ioc}"%c\n👉 Please add it to IOC_TO_ISO2 map in utils.js`,
+                `%c[FLAG MISSING] %cUnknown IOC: "${ioc}"%c\n👉 Please add it to IOC_TO_ISO2 map in utils.js?v=202604291654`,
                 'color: #b45309; font-weight: bold;',
                 'color: #b91c1c; font-weight: bold;',
                 'color: inherit;'

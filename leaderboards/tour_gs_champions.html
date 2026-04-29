@@ -9,14 +9,14 @@
       gtag('config', 'G-C15B9S69WR');
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes" />
     <title>Grand Slam Champions · WTA · ATP · Age Cutoff</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=202604291654" />
     <style>
       /* ===== 页面宽度限制：手机到宽屏都合适 ===== */
       body {
-        min-width: 0;
+        min-width: 1280px;
         max-width: 1280px;
         margin: 0 auto;
         padding: 28px 24px 64px;
@@ -48,13 +48,6 @@
         font-size: 13px !important;
       }
 
-      /* ===== 表格滚动容器：手机横向可滑动 ===== */
-      .table-scroll {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid var(--border-main);
-        border-radius: 8px;
-      }
 
       /* ===== 表格整体 ===== */
       .table {
@@ -63,26 +56,26 @@
         table-layout: fixed;   /* 各列宽度可控 */
         border-collapse: collapse;
         background: var(--bg-card) !important;
-        font-size: 13.5px;     /* 比原版大 */
+        font-size: 13px;     /* 比原版大 */
         margin-bottom: 0;
       }
 
       /* ===== 列宽分配（合计 ≈ 900px，紧凑均衡）===== */
-      col.c-no       { width: 38px; }
-      col.c-player   { width: 240px; }
-      col.c-first    { width: 68px; }
-      col.c-agefirst { width: 62px; }
-      col.c-last     { width: 68px; }
-      col.c-agelast  { width: 62px; }
-      col.c-span     { width: 52px; }
-      col.c-titles   { width: 58px; }
-      col.c-breakdown{ width: 180px; }
-      col.c-w        { width: 42px; }
-      col.c-l        { width: 42px; }
-      col.c-agg      { width: 58px; }
-      col.c-h        { width: 50px; }
-      col.c-c        { width: 50px; }
-      col.c-g        { width: 50px; }
+      col.c-no       { width: 40px; }
+      col.c-player   { width: 290px; }
+      col.c-first    { width: 50px; }
+      col.c-agefirst { width: 60px; }
+      col.c-last     { width: 50px; }
+      col.c-agelast  { width: 60px; }
+      col.c-span     { width: 45px; }
+      col.c-titles   { width: 70px; }
+      col.c-breakdown{ width: 170px; }
+      col.c-w        { width: 50px; }
+      col.c-l        { width: 50px; }
+      col.c-agg      { width: 60px; }
+      col.c-h        { width: 60px; }
+      col.c-c        { width: 60px; }
+      col.c-g        { width: 60px; }
 
       /* ===== 表头 ===== */
       .table thead th {
@@ -292,7 +285,6 @@
     </div>
 
     <!-- 第三行：表格 -->
-    <div class="table-scroll">
       <table class="table table-hover table-sm mb-0">
         <colgroup>
           <col class="c-no">
@@ -343,10 +335,9 @@
           </tr>
         </tfoot>
       </table>
-    </div>
 
     <script type="module">
-      import { getFlagImg, fmtAge, fmtWinrate } from "./utils.js";
+      import { getFlagImg, fmtAge, fmtWinrate } from "./utils.js?v=202604291654";
 
       let dataMap = {};
       let currentTour = "wta";

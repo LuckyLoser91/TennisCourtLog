@@ -15,20 +15,20 @@
       gtag("config", "G-C15B9S69WR");
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v=202604291654">
     <style>
       body {
-        min-width: 0;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 28px 24px 64px;
-      }
+  min-width: 980px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
       
       h1 {
         font-size: 20px;
@@ -87,18 +87,19 @@
       }
       /* 表格容器 */
       .table-responsive {
-        border-radius: 8px;
-        border: 1px solid var(--border-main);
-        overflow: hidden;
-      }
+  border-radius: 8px;
+  border: 1px solid var(--border-main);
+}
       
       .table {
-        background: var(--bg-card) !important;
-        border-collapse: collapse;
-        font-size: 13px;
-        width: 100%;
-        margin-bottom: 0;
-      }
+  background: var(--bg-card) !important;
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 100%;
+  min-width: 950px;
+  table-layout: fixed;
+  margin-bottom: 0;
+}
       
       .table thead th {
         background: var(--bg-header) !important;
@@ -215,6 +216,25 @@
         color: var(--text-hint);
         text-decoration: underline;
       }
+      /* 强制顶部行不换行，无视小屏断点 */
+body > .row {
+  flex-wrap: nowrap !important;
+}
+body > .row > .col {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+  width: auto !important;
+}
+body > .row > .col-auto {
+  flex: 0 0 auto !important;
+}
+body > .row .d-flex.gap-2 {
+  flex-wrap: nowrap !important;
+}
+/* 搜索行也保持不换行 */
+body > .row .col-12 > .d-flex.gap-2 {
+  flex-wrap: nowrap !important;
+}
     </style>
   </head>
 
@@ -288,24 +308,30 @@
       <div class="col-12">
         <div class="table-responsive">
           <table class="table table-hover table-sm mb-0">
+            <colgroup>
+  <col style="width: 38px;">
+  <col style="width: 55px;">
+  <col style="width: 100px;">
+  <col style="width: 65px;">
+  <col style="width: 150px;">
+  <col style="width: 90px;">
+  <col style="width: 100px;">
+  <col style="width: 180px;">
+  <col style="width: 95px;">
+  <col style="width: 55px;">
+</colgroup>
             <thead>
               <tr>
-                <th style="width: 5%">#</th>
-                <th style="width: 5%">Season</th>
-                <th class="sortable" data-sort="startDate" style="width: 12%">
-                  Start Date<span class="sort-indicator"></span>
-                </th>
-                <th style="width: 6%">Drawsize</th>
-                <th style="width: 13%">Tournament</th>
-                <th style="width: 10%">Level</th>
-                <th style="width: 10%">Surface</th>
-                <th style="width: 18%">Champion</th>
-                <th class="sortable" data-sort="dob" style="width: 11%">
-                  Date of Birth<span class="sort-indicator"></span>
-                </th>
-                <th class="sortable" data-sort="age" style="width: 9%">
-                  Age<span class="sort-indicator"></span>
-                </th>
+                <th>#</th>
+<th>Season</th>
+<th class="sortable" data-sort="startDate">Start Date<span class="sort-indicator"></span></th>
+<th>Drawsize</th>
+<th>Tournament</th>
+<th>Level</th>
+<th>Surface</th>
+<th>Champion</th>
+<th class="sortable" data-sort="dob">Date of Birth<span class="sort-indicator"></span></th>
+<th class="sortable" data-sort="age">Age<span class="sort-indicator"></span></th>
               </tr>
             </thead>
             <tbody id="tableBody">
@@ -336,7 +362,7 @@
     </div>
 
     <script type="module">
-      import { getFlagImg } from "./utils.js";
+      import { getFlagImg } from "./utils.js?v=202604291654";
 
       (function () {
         const JSON_URL = "../output/wta_calendar_champs_start_2009.json";

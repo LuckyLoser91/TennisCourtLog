@@ -11,17 +11,17 @@
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>WTA Top 100 · Big Tournament Stats</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=202604291654">
   <style>
     body {
-      min-width: 0;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 28px 24px 64px;
-    }
+  min-width: 680px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
     
     h1 {
       font-size: 20px;
@@ -69,44 +69,37 @@
       padding-left: 15px !important;
     }
 
-    /* ===== 表格滚动容器：手机横向可滑动 ===== */
-    .table-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border-main);
-      border-radius: 8px;
-    }
 
     /* ===== 表格整体 ===== */
     #stats-table {
-      min-width: 480px;      /* 保证内容不压缩 */
-      width: 100%;
-      table-layout: fixed;   /* 各列宽度可控 */
-      border-collapse: collapse;
-      background: var(--bg-card) !important;
-      font-size: 13px;
-      margin-bottom: 0;
-    }
+  min-width: 520px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: var(--bg-card) !important;
+  font-size: 13px;
+  margin-bottom: 0;
+}
 
     /* ===== 列宽分配 ===== */
     /* Player View 列宽 */
-    .player-view col.c-no       { width: 40px; }
-    .player-view col.c-tournament { width: 70px; }
-    .player-view col.c-level    { width: 50px; }
-    .player-view col.c-surface  { width: 90px; }
-    .player-view col.c-best     { width: 70px; }
-    .player-view col.c-w        { width: 30px; }
-    .player-view col.c-l        { width: 30px; }
-    .player-view col.c-wr       { width: 30px; }
+.player-view col.c-no         { width: 40px; }
+.player-view col.c-tournament { width: 160px; }
+.player-view col.c-level      { width: 90px; }
+.player-view col.c-surface    { width: 100px; }
+.player-view col.c-best       { width: 75px; }
+.player-view col.c-w          { width: 48px; }
+.player-view col.c-l          { width: 48px; }
+.player-view col.c-wr         { width: 55px; }
 
     /* Tournament View 列宽 */
-    .tournament-view col.c-no       { width: 30px; }
-    .tournament-view col.c-player   { width: 70px; }
-    .tournament-view col.c-dob      { width: 50px; }
-    .tournament-view col.c-best     { width: 70px; }
-    .tournament-view col.c-w        { width: 30px; }
-    .tournament-view col.c-l        { width: 30px; }
-    .tournament-view col.c-wr       { width: 30px; }
+.tournament-view col.c-no     { width: 38px; }
+.tournament-view col.c-player { width: 195px; }
+.tournament-view col.c-dob    { width: 90px; }
+.tournament-view col.c-best   { width: 75px; }
+.tournament-view col.c-w      { width: 48px; }
+.tournament-view col.c-l      { width: 48px; }
+.tournament-view col.c-wr     { width: 55px; }
     
     /* ===== 表头 ===== */
     #stats-table thead th {
@@ -223,6 +216,21 @@
       border-bottom: 2px solid var(--accent) !important;
       color: var(--text-primary);
     }
+    /* 强制顶部行不换行，无视小屏断点 */
+body > .row {
+  flex-wrap: nowrap !important;
+}
+body > .row > .col {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+  width: auto !important;
+}
+body > .row > .col-auto {
+  flex: 0 0 auto !important;
+}
+body > .row .d-flex.gap-2 {
+  flex-wrap: nowrap !important;
+}
   </style>
 </head>
 
@@ -265,14 +273,14 @@
   <!-- ========== 第三行：表格 ========== -->
   <div class="row">
     <div class="col-12">
-      <div class="table-scroll">
+
         <table id="stats-table" class="table table-hover table-sm mb-0"></table>
-      </div>
+
     </div>
   </div>
 
   <script type="module">
-    import { getFlagImg, fmtBestRound, fmtWinrate } from './utils.js?v=20260424';
+    import { getFlagImg, fmtBestRound, fmtWinrate } from './utils.js?v=202604291654';
 
     // ---------- 辅助函数 ----------
     function toTitleCase(str) {

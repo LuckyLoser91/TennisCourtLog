@@ -9,23 +9,18 @@
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Grand Slam · At Age (by Birth Year)</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=202604291654">
   <style>
-    body { padding: 28px 24px 64px; max-width: 1280px; }
+    body { padding: 28px 24px 64px; max-width: 1280px; min-width: 820px;}
     h1   { font-size: 21px !important; }
 
-    /* 表格滚动容器 */
-    .table-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border-main);
-      border-radius: 8px;
-    }
     .table {
-      min-width: 860px;
+      width:100%;
+      table-layout: fixed;
+      margin-bottom: 0;
       font-size: 13px;
     }
     /* 第二列左对齐 */
@@ -62,6 +57,23 @@
       color: var(--text-secondary);
     }
     .dob-text { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+        body > .row {
+      flex-wrap: nowrap !important;
+    }
+    body > .row > .col {
+      flex: 1 1 auto !important;
+      max-width: none !important;
+      width: auto !important;
+    }
+    body > .row > .col-auto {
+      flex: 0 0 auto !important;
+    }
+    body > .row .d-flex.gap-2 {
+      flex-wrap: nowrap !important;
+    }
+    #ageSelect {
+      width: 85px;
+    }
   </style>
 </head>
 <body>
@@ -100,8 +112,22 @@
     </div>
   </div>
 
-  <div class="table-scroll">
+
+     
     <table class="table table-hover table-sm mb-0">
+      <colgroup>
+      <col style="width: 40px;">
+      <col style="width: 200px;">
+      <col style="width: 55px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 40px;">
+      <col style="width: 40px;">
+      <col style="width: 88px;">
+      <col style="width: 65px;">
+    </colgroup>  
       <thead>
         <tr>
           <th colspan="3"></th>
@@ -124,10 +150,10 @@
       </thead>
       <tbody id="table-body"></tbody>
     </table>
-  </div>
+
 
   <script type="module">
-    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "./utils.js"
+    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "./utils.js?v=202604291654"
 
     (function () {
       let fullData = { atp: [], wta: [], meta: {} };

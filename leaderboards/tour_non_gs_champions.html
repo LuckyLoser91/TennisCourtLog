@@ -9,21 +9,26 @@
     gtag('config', 'G-C15B9S69WR');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Non-GS Champions · GS Win Rate Top 100</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=202604291654">
   <style>
-    body { padding: 28px 24px 64px; max-width: 1280px; }
+    body {
+      min-width: 920px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
     h1   { font-size: 19px !important; }
 
-    .table-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border-main);
-      border-radius: 8px;
-    }
-    .table { min-width: 860px; }
+    .table {
+    min-width: 850px;
+    width: 100%;
+    table-layout: fixed;
+    font-size: 13px;
+    margin-bottom: 0;
+  }
 
     #table-body td:nth-child(2) {
       text-align: left !important;
@@ -56,6 +61,26 @@
     .surf-75 { background: var(--surf-75-bg); color: var(--surf-75-color); }
     .surf-70 { background: var(--surf-70-bg); color: var(--surf-70-color); }
     .surf-no { color: var(--text-muted); }
+
+    /* 强制顶部两行不换行，无视小屏断点 */
+body > .row {
+  flex-wrap: nowrap !important;
+}
+body > .row > .col {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+  width: auto !important;
+}
+body > .row > .col-auto {
+  flex: 0 0 auto !important;
+}
+body > .row .d-flex.gap-3 {
+  flex-wrap: nowrap !important;
+}
+/* checkbox 文字不折行 */
+.form-check-inline {
+  white-space: nowrap !important;
+}
   </style>
 </head>
 <body>
@@ -96,8 +121,22 @@
     </div>
   </div>
 
-  <div class="table-scroll">
     <table class="table table-hover table-sm mb-0">
+      <colgroup>
+  <col style="width: 40px;">
+  <col style="width: 210px;">
+  <col style="width: 60px;">
+  <col style="width: 50px;">
+  <col style="width: 50px;">
+  <col style="width: 50px;">
+  <col style="width: 50px;">
+  <col style="width: 48px;">
+  <col style="width: 48px;">
+  <col style="width: 62px;">
+  <col style="width: 55px;">
+  <col style="width: 55px;">
+  <col style="width: 55px;">
+</colgroup>
       <thead>
         <tr>
           <th colspan="3"></th>
@@ -128,10 +167,10 @@
         </tr>
       </tfoot>
     </table>
-  </div>
+
 
   <script type="module">
-    import { getFlagImg, fmtWinrate, fmtRound } from "./utils.js"
+    import { getFlagImg, fmtWinrate, fmtRound } from "./utils.js?v=202604291654"
 
     let jsonData = null;
     let currentTour = 'wta';
