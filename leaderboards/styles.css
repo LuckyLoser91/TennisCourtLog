@@ -2,303 +2,573 @@
 /*  CSS 变量 — 统一色彩系统（改颜色只需改这里）                        */
 /* ================================================================ */
 :root {
-    --bg-page:        #f8f6f0;
-    --bg-card:        #ffffff;
-    --bg-row-alt:     #faf8f4;
-    --bg-header:      #f0ebe0;
-    --bg-hover:       #ede8dc;
-    --bg-input:       #ffffff;
-    --bg-input-label: #f0ebe0;
-    --border-main:    #e0d9cc;
-    --border-light:   #ede8dc;
-    --border-input:   #d6cfc3;
-    --text-primary:   #1c1917;
-    --text-secondary: #44403c;
-    --text-muted:     #6b7280;
-    --text-hint:      #aaa49a;
-    --accent:         #b45309;
-    --accent-dark:    #92400e;
-    --accent-light:   #fef3c7;
-    --accent-amber:   #d97706;
-    --badge-W-bg:     #d4a017;  --badge-W-color:  #ffffff;    /* 冠军 - 古典金 */
-    --badge-F-bg:     #b45309;  --badge-F-color:  #ffffff;    /* 亚军 - 琥珀铜 */
-    --badge-SF-bg:    #2d6a4f;  --badge-SF-color: #d1fae5;    /* 四强 - 森林绿 */
-    --badge-QF-bg:    #3b5998;  --badge-QF-color: #dbeafe;    /* 八强 - 深蓝 */
-    --surface-hard-bg:    #dbeafe; --surface-hard-text:  #1e3a8a;
-    --surface-clay-bg:    #fef3c7; --surface-clay-text:  #78350f;
-    --surface-grass-bg:   #d1fae5; --surface-grass-text: #065f46;
-    --surface-carpet-bg:  #f1f5f9; --surface-carpet-text:#334155;
-    --level-gs-bg:      #b45309;  --level-gs-color:    #ffffff;    /* Grand Slam */
-    --level-finals-bg:  #92400e;  --level-finals-color:#fef3c7;    /* Finals */
-    --level-1000-bg:    #d97706;  --level-1000-color:  #ffffff;    /* WTA 1000 */
-    --level-500-bg:     #2d6a4f;  --level-500-color:   #d1fae5;    /* WTA 500 / Premier */
-    --level-250-bg:     #3b5998;  --level-250-color:   #dbeafe;    /* WTA 250 / International */
-    --level-other-bg:   #a8a29e;  --level-other-color: #ffffff;    /* Other */
-    --titles-1-bg:  #d1fae5;  --titles-1-color:  #065f46;
-    --titles-2-bg:  #6ee7b7;  --titles-2-color:  #064e3b;
-    --titles-5-bg:  #0f766e;  --titles-5-color:  #ccfbf1;
-    --titles-10-bg: #134e4a;  --titles-10-color: #f0fdfa;
-    --agg-90-bg: #7c2d12;  --agg-90-color: #fed7aa;
-    --agg-85-bg: #b45309;  --agg-85-color: #fef3c7;
-    --agg-80-bg: #f59e0b;  --agg-80-color: #ffffff;
-    --agg-75-bg: #fde68a;  --agg-75-color: #78350f;
-    --agg-70-bg: #fef9c3;  --agg-70-color: #713f12;
-    --surf-90-bg: #ffedd5;  --surf-90-color: #7c2d12;
-    --surf-85-bg: #ffedd5;  --surf-85-color: #9a3412;
-    --surf-80-bg: #fef3c7;  --surf-80-color: #b45309;
-    --surf-75-bg: #fef9c3;  --surf-75-color: #92400e;
-    --surf-70-bg: #fffbeb;  --surf-70-color: #a16207;
+  --bg-page: #f8f6f0;
+  --bg-card: #ffffff;
+  --bg-row-alt: #faf8f4;
+  --bg-header: #f0ebe0;
+  --bg-hover: #ede8dc;
+  --bg-input: #ffffff;
+  --bg-input-label: #f0ebe0;
+  --border-main: #e0d9cc;
+  --border-light: #ede8dc;
+  --border-input: #d6cfc3;
+  --text-primary: #1c1917;
+  --text-secondary: #44403c;
+  --text-muted: #6b7280;
+  --text-hint: #aaa49a;
+  --accent: #b45309;
+  --accent-dark: #92400e;
+  --accent-light: #fef3c7;
+  --accent-amber: #d97706;
+  --badge-W-bg: #d4a017;
+  --badge-W-color: #ffffff; /* 冠军 - 古典金 */
+  --badge-F-bg: #b45309;
+  --badge-F-color: #ffffff; /* 亚军 - 琥珀铜 */
+  --badge-SF-bg: #2d6a4f;
+  --badge-SF-color: #d1fae5; /* 四强 - 森林绿 */
+  --badge-QF-bg: #3b5998;
+  --badge-QF-color: #dbeafe; /* 八强 - 深蓝 */
+  --surface-hard-bg: #dbeafe;
+  --surface-hard-text: #1e3a8a;
+  --surface-clay-bg: #fef3c7;
+  --surface-clay-text: #78350f;
+  --surface-grass-bg: #d1fae5;
+  --surface-grass-text: #065f46;
+  --surface-carpet-bg: #f1f5f9;
+  --surface-carpet-text: #334155;
+  --level-gs-bg: #b45309;
+  --level-gs-color: #ffffff; /* Grand Slam */
+  --level-finals-bg: #92400e;
+  --level-finals-color: #fef3c7; /* Finals */
+  --level-1000-bg: #d97706;
+  --level-1000-color: #ffffff; /* WTA 1000 */
+  --level-500-bg: #2d6a4f;
+  --level-500-color: #d1fae5; /* WTA 500 / Premier */
+  --level-250-bg: #3b5998;
+  --level-250-color: #dbeafe; /* WTA 250 / International */
+  --level-other-bg: #a8a29e;
+  --level-other-color: #ffffff; /* Other */
+  /* 冠军数配色 */
+  --titles-1-bg: transparent;
+  --titles-1-color: var(--text-primary);
+  --titles-2-bg: #1e3a8a;
+  --titles-2-color: #dbeafe;
+  --titles-5-bg: #3f6212;
+  --titles-5-color: #ecfccb;
+  --titles-10-bg: #92400e;
+  --titles-10-color: #fef3c7;
+
+  /* 综合胜率配色 */
+  --agg-90-bg: #0f766e;
+  --agg-90-color: #ffffff;
+  --agg-85-bg: #0d9488;
+  --agg-85-color: #ffffff;
+  --agg-80-bg: #16a34a;
+  --agg-80-color: #ffffff;
+  --agg-75-bg: #65a30d;
+  --agg-75-color: #ffffff;
+  --agg-70-bg: #ca8a04;
+  --agg-70-color: #ffffff;
+
+  /* 场地胜率配色 */
+  --surf-90-bg: #ccfbf1;
+  --surf-90-color: #134e4a;
+  --surf-85-bg: #d1fae5;
+  --surf-85-color: #065f46;
+  --surf-80-bg: #dcfce7;
+  --surf-80-color: #166534;
+  --surf-75-bg: #fef9c3;
+  --surf-75-color: #713f12;
+  --surf-70-bg: #fef3c7;
+  --surf-70-color: #92400e;
 }
 
 /* ================================================================ */
 /*  基础                                                              */
 /* ================================================================ */
 body {
-    background: var(--bg-page);
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    color: var(--text-primary);
-    padding: 32px 48px 64px;
-    max-width: 1280px;
-    min-width: 500px;
-    margin: 0 auto;
+  background: var(--bg-page);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-primary);
+  padding: 32px 48px 64px;
+  max-width: 1280px;
+  min-width: 500px;
+  margin: 0 auto;
 }
 h1 {
-    color: var(--text-primary);
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 16px;
-    letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
 }
-.text-muted    { color: var(--text-muted) !important; }
-.text-warning  { color: var(--accent) !important; font-weight: 600; }
+/* ===== 顶部信息栏字号 ===== */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+.text-warning {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+.top-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.top-meta .count-label {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
 
-/* ================================================================ */
-/*  表单控件                                                          */
-/* ================================================================ */
+/*  ===== Badge / 按钮 ===== */
+.badge {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.badge.bg-secondary {
+  background: var(--bg-header) !important;
+  color: var(--text-muted);
+  border: 1px solid var(--border-main);
+}
+.btn-outline-warning {
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.btn-outline-warning:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn-outline-warning:focus {
+  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+}
+
+/* ===== 表单控件 ===== */
+
 .form-label {
-    color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    margin-bottom: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 0;
 }
 .input-group-text {
-    background: var(--bg-input-label);
-    color: var(--text-muted);
-    border-color: var(--border-input);
-    font-size: 11px !important;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  background: var(--bg-input-label);
+  color: var(--text-muted);
+  border-color: var(--border-input);
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 .form-control,
 .form-select {
-    background-color: var(--bg-input) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-input) !important;
-    -webkit-text-fill-color: var(--text-primary) !important;
-    font-size: 13px;
-    transition: border-color 0.15s, box-shadow 0.15s;
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-input) !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  font-size: 13px;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 .form-control:-webkit-autofill,
 .form-control:-webkit-autofill:hover,
 .form-control:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--text-primary) !important;
-    -webkit-box-shadow: 0 0 0px 1000px var(--bg-input) inset !important;
-    transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-input) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
-.form-control::placeholder { color: var(--text-hint) !important; opacity: 1; }
+.form-control::placeholder {
+  color: var(--text-hint) !important;
+  opacity: 1;
+}
 .form-control:hover,
-.form-select:hover  { border-color: var(--accent) !important; }
-.form-control:focus,
-.form-select:focus  {
-    background-color: var(--bg-input) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(180,83,9,0.1) !important;
+.form-select:hover {
+  border-color: var(--accent) !important;
 }
-.form-select option { background: var(--bg-card); color: var(--text-primary); }
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1) !important;
+}
+.form-select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
 .form-select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23b45309' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23b45309' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
 }
 .form-check-input {
-    accent-color: var(--accent);
-    cursor: pointer;
-    border-color: var(--border-input);
-    background-color: var(--bg-input);
+  accent-color: var(--accent);
+  cursor: pointer;
+  border-color: var(--border-input);
+  background-color: var(--bg-input);
 }
-.form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
-.form-check-input:focus   { box-shadow: 0 0 0 3px rgba(180,83,9,0.1); border-color: var(--accent); }
-.form-check-label { color: var(--text-secondary); font-size: 13px; cursor: pointer; }
+.form-check-input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+.form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1);
+  border-color: var(--accent);
+}
+.form-check-label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
 
-/* ================================================================ */
-/*  Badge / 按钮                                                      */
-/* ================================================================ */
-.badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; }
-.badge.bg-secondary {
-    background: var(--bg-header) !important;
-    color: var(--text-muted);
-    border: 1px solid var(--border-main);
-}
-.btn-outline-warning {
-    color: var(--accent);
-    border-color: var(--accent);
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.15s;
-}
-.btn-outline-warning:hover  { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn-outline-warning:focus  { box-shadow: 0 0 0 3px rgba(180,83,9,0.15); }
 
 /* ================================================================ */
 /*  表格                                                              */
 /* ================================================================ */
 .table-responsive {
-    border-radius: 8px;
-    border: 1px solid var(--border-main);
-    overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border-main);
+  overflow: hidden;
 }
 .table {
-    background: var(--bg-card) !important;
-    border-collapse: collapse;
-    font-size: 13px;
-    min-width:500px;
-    width: 100%;
+  background: var(--bg-card) !important;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 500px;
+  width: 100%;
 }
 .table thead th {
-    background: var(--bg-header) !important;
-    color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 10px 8px;
-    text-align: center;
-    border-bottom: 1px solid var(--border-main);
-    vertical-align: middle;
-    white-space: nowrap;
+  background: var(--bg-header) !important;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 10px 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-main);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 th.sortable {
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
-th.sortable:hover { background: var(--bg-hover) !important; color: var(--accent); }
+th.sortable:hover {
+  background: var(--bg-hover) !important;
+  color: var(--accent);
+}
 th .sort-indicator {
-    margin-left: 4px;
-    font-size: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    color: var(--accent) !important;
-    opacity: 1 !important;
+  margin-left: 4px;
+  font-size: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--accent) !important;
+  opacity: 1 !important;
 }
-th.sort-asc  .sort-indicator::after { content: "▲"; color: var(--accent); }
-th.sort-desc .sort-indicator::after { content: "▼"; color: var(--accent); }
+th.sort-asc .sort-indicator::after {
+  content: "▲";
+  color: var(--accent);
+}
+th.sort-desc .sort-indicator::after {
+  content: "▼";
+  color: var(--accent);
+}
 
 .table td {
-    padding: 8px 8px;
-    text-align: center;
-    vertical-align: middle;
-    border-bottom: 1px solid var(--border-light);
-    color: var(--text-primary);
-    font-size: 13px;
-    background: transparent;
+  padding: 8px 8px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-size: 13px;
+  background: transparent;
 }
-.table tbody tr:nth-child(odd)  td { background: var(--bg-card); }
-.table tbody tr:nth-child(even) td { background: var(--bg-row-alt); }
-.table-hover tbody tr:hover     td { background: var(--bg-hover) !important; }
-.table > :not(caption) > * > *     { border-bottom-color: var(--border-light); }
+
+/*  冠军数配色（titles）—— 使用 CSS 变量*/
+
+.titles-1 {
+  color: var(--text-primary);
+  background: transparent;
+}
+.titles-2 {
+  background: var(--titles-2-bg);
+  color: var(--titles-2-color);
+}
+.titles-5 {
+  background: var(--titles-5-bg);
+  color: var(--titles-5-color);
+}
+.titles-10 {
+  background: var(--titles-10-bg);
+  color: var(--titles-10-color);
+}
+
+/*  综合胜率配色（AGG）—— 使用 CSS 变量*/
+
+.agg-90 {
+  background: var(--agg-90-bg);
+  color: var(--agg-90-color);
+}
+.agg-85 {
+  background: var(--agg-85-bg);
+  color: var(--agg-85-color);
+}
+.agg-80 {
+  background: var(--agg-80-bg);
+  color: var(--agg-80-color);
+}
+.agg-75 {
+  background: var(--agg-75-bg);
+  color: var(--agg-75-color);
+}
+.agg-70 {
+  background: var(--agg-70-bg);
+  color: var(--agg-70-color);
+}
+.agg-no {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+/*  场地胜率配色（H / C / G）—— 使用 CSS 变量*/
+
+.surf-90 {
+  background: var(--surf-90-bg);
+  color: var(--surf-90-color);
+}
+.surf-85 {
+  background: var(--surf-85-bg);
+  color: var(--surf-85-color);
+}
+.surf-80 {
+  background: var(--surf-80-bg);
+  color: var(--surf-80-color);
+}
+.surf-75 {
+  background: var(--surf-75-bg);
+  color: var(--surf-75-color);
+}
+.surf-70 {
+  background: var(--surf-70-bg);
+  color: var(--surf-70-color);
+}
+.surf-no {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+/*  选手姓名列（player name + dob）*/
+
+.player-name {
+  text-align: left;
+  padding-left: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-dob {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ===== 脚注 ===== */
+.table-footer-row td {
+  padding-top: 16px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.8;
+  border-bottom: none;
+  background: transparent !important;
+  white-space: normal;
+  text-align: center;
+}
+.table tbody tr:nth-child(odd) td {
+  background: var(--bg-card);
+}
+.table tbody tr:nth-child(even) td {
+  background: var(--bg-row-alt);
+}
+.table-hover tbody tr:hover td {
+  background: var(--bg-hover) !important;
+}
+.table > :not(caption) > * > * {
+  border-bottom-color: var(--border-light);
+}
 
 th.champion-col,
 td.champion-col {
-    text-align: left !important;
-    padding-left: 12px;
-    font-weight: 600;
-    color: var(--text-primary);
+  text-align: left !important;
+  padding-left: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
-.winner-cell { display: inline-flex; align-items: center; padding-left: 4px; max-width: 100%; }
-.loading, .no-data { text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px; }
-.seed-suffix { font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+.winner-cell {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 4px;
+  max-width: 100%;
+}
+.loading,
+.no-data {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.seed-suffix {
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
 .dob-cell,
 .winner-age {
-    background: var(--bg-header);
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    display: inline-block;
-    border: 1px solid var(--border-light);
+  background: var(--bg-header);
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: inline-block;
+  border: 1px solid var(--border-light);
 }
 
 /* ================================================================ */
 /*  汇总行                                                            */
 /* ================================================================ */
 .summary-row td {
-    background: var(--bg-hover) !important;
-    font-weight: 700;
-    border-top: 2px solid var(--accent) !important;
-    border-bottom: 2px solid var(--accent) !important;
-    color: var(--text-primary);
+  background: var(--bg-hover) !important;
+  font-weight: 700;
+  border-top: 2px solid var(--accent) !important;
+  border-bottom: 2px solid var(--accent) !important;
+  color: var(--text-primary);
 }
 
 /* ================================================================ */
 /*  等级徽章                                                          */
 /* ================================================================ */
 .badge-level {
-    padding: 4px 9px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 10px;
-    display: inline-block;
-    text-align: center;
-    min-width: 80px;
-    letter-spacing: 0.03em;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 10px;
+  display: inline-block;
+  text-align: center;
+  min-width: 80px;
+  letter-spacing: 0.03em;
 }
-.level-GrandSlam           { background: var(--level-gs-bg);      color: var(--level-gs-color); }
-.level-Finals              { background: var(--level-finals-bg);   color: var(--level-finals-color); }
-.level-WTA1000             { background: var(--level-1000-bg);     color: var(--level-1000-color); }
-.level-WTA500Premier       { background: var(--level-500-bg);      color: var(--level-500-color); }
-.level-WTA250International { background: var(--level-250-bg);      color: var(--level-250-color); }
-.level-other               { background: var(--level-other-bg);    color: var(--level-other-color); }
+.level-GrandSlam {
+  background: var(--level-gs-bg);
+  color: var(--level-gs-color);
+}
+.level-Finals {
+  background: var(--level-finals-bg);
+  color: var(--level-finals-color);
+}
+.level-WTA1000 {
+  background: var(--level-1000-bg);
+  color: var(--level-1000-color);
+}
+.level-WTA500Premier {
+  background: var(--level-500-bg);
+  color: var(--level-500-color);
+}
+.level-WTA250International {
+  background: var(--level-250-bg);
+  color: var(--level-250-color);
+}
+.level-other {
+  background: var(--level-other-bg);
+  color: var(--level-other-color);
+}
 
 /* ================================================================ */
 /*  场地徽章                                                          */
 /* ================================================================ */
 .surface-badge {
-    padding: 4px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
 }
-.surface-Hard   { background: var(--surface-hard-bg);   color: var(--surface-hard-text); }
-.surface-Clay   { background: var(--surface-clay-bg);   color: var(--surface-clay-text); }
-.surface-Grass  { background: var(--surface-grass-bg);  color: var(--surface-grass-text); }
-.surface-Carpet { background: var(--surface-carpet-bg); color: var(--surface-carpet-text); }
+.surface-Hard {
+  background: var(--surface-hard-bg);
+  color: var(--surface-hard-text);
+}
+.surface-Clay {
+  background: var(--surface-clay-bg);
+  color: var(--surface-clay-text);
+}
+.surface-Grass {
+  background: var(--surface-grass-bg);
+  color: var(--surface-grass-text);
+}
+.surface-Carpet {
+  background: var(--surface-carpet-bg);
+  color: var(--surface-carpet-text);
+}
 
 /* ================================================================ */
 /*  结果徽章                                                          */
 /* ================================================================ */
 .result-W {
-    background: var(--badge-W-bg); color: var(--badge-W-color); 
-    font-weight: 700; padding: 4px 7px; border-radius: 4px;
-    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
+  background: var(--badge-W-bg);
+  color: var(--badge-W-color);
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  min-width: 48px;
+  font-size: 12px;
 }
 
 .result-F {
-    background: var(--badge-F-bg); color: var(--badge-F-color);
-    font-weight: 700; padding: 4px 7px; border-radius: 4px;
-    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
+  background: var(--badge-F-bg);
+  color: var(--badge-F-color);
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  min-width: 48px;
+  font-size: 12px;
 }
 .result-SF {
-    background: var(--badge-SF-bg); color: var(--badge-SF-color);
-    font-weight: 700; padding: 4px 7px; border-radius: 4px;
-    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
+  background: var(--badge-SF-bg);
+  color: var(--badge-SF-color);
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  min-width: 48px;
+  font-size: 12px;
 }
 .result-QF {
-    background: var(--badge-QF-bg); color: var(--badge-QF-color);
-    font-weight: 700; padding: 4px 7px; border-radius: 4px;
-    display: inline-block; text-align: center; min-width: 48px; font-size: 12px;
+  background: var(--badge-QF-bg);
+  color: var(--badge-QF-color);
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  min-width: 48px;
+  font-size: 12px;
 }
-.result-other { color: var(--text-muted); font-size: 12px; }
+.result-other {
+  color: var(--text-muted);
+  font-size: 12px;
+}

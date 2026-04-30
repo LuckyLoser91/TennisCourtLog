@@ -1,95 +1,96 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-C15B9S69WR');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-C15B9S69WR");
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0,user-scalable=yes"
+    />
     <title>Grand Slam Champions · WTA · ATP · Age Cutoff</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css?v=202604291654" />
     <style>
       /* ===== 页面宽度限制：手机到宽屏都合适 ===== */
       body {
-        min-width: 1280px;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 28px 24px 64px;
+        width: 1280px;
       }
-
-      /* ===== 标题加大 ===== */
-      h1 {
-        font-size: 22px !important;
-        font-weight: 800 !important;
-      }
-
-      /* ===== 顶部信息栏字号 ===== */
-      .top-meta {
-        font-size: 13px;
-        color: var(--text-muted);
-      }
-      .top-meta .count-label {
-        color: var(--accent);
-        font-weight: 700;
-        font-size: 14px;
-      }
-
-      /* ===== 控件标签加大 ===== */
-      .form-label {
-        font-size: 12px !important;
-        font-weight: 700 !important;
-      }
-      .form-select {
-        font-size: 13px !important;
-      }
-
 
       /* ===== 表格整体 ===== */
       .table {
-        min-width: 900px;      /* 保证内容不压缩 */
+        min-width: 900px; /* 保证内容不压缩 */
         width: 100%;
-        table-layout: fixed;   /* 各列宽度可控 */
+        table-layout: fixed; /* 各列宽度可控 */
         border-collapse: collapse;
         background: var(--bg-card) !important;
-        font-size: 13px;     /* 比原版大 */
+        font-size: 13px;
         margin-bottom: 0;
       }
 
       /* ===== 列宽分配（合计 ≈ 900px，紧凑均衡）===== */
-      col.c-no       { width: 40px; }
-      col.c-player   { width: 290px; }
-      col.c-first    { width: 50px; }
-      col.c-agefirst { width: 60px; }
-      col.c-last     { width: 50px; }
-      col.c-agelast  { width: 60px; }
-      col.c-span     { width: 45px; }
-      col.c-titles   { width: 70px; }
-      col.c-breakdown{ width: 170px; }
-      col.c-w        { width: 50px; }
-      col.c-l        { width: 50px; }
-      col.c-agg      { width: 60px; }
-      col.c-h        { width: 60px; }
-      col.c-c        { width: 60px; }
-      col.c-g        { width: 60px; }
+      col.c-no {
+        width: 40px;
+      }
+      col.c-player {
+        width: 290px;
+      }
+      col.c-first {
+        width: 50px;
+      }
+      col.c-agefirst {
+        width: 60px;
+      }
+      col.c-last {
+        width: 50px;
+      }
+      col.c-agelast {
+        width: 60px;
+      }
+      col.c-span {
+        width: 45px;
+      }
+      col.c-titles {
+        width: 70px;
+      }
+      col.c-breakdown {
+        width: 170px;
+      }
+      col.c-w {
+        width: 50px;
+      }
+      col.c-l {
+        width: 50px;
+      }
+      col.c-agg {
+        width: 60px;
+      }
+      col.c-h {
+        width: 60px;
+      }
+      col.c-c {
+        width: 60px;
+      }
+      col.c-g {
+        width: 60px;
+      }
 
       /* ===== 表头 ===== */
       .table thead th {
-        background: var(--bg-header) !important;
-        color: var(--text-muted);
-        font-size: 11px !important;
-        font-weight: 700;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
         padding: 10px 6px;
-        text-align: center;
-        border-bottom: 1px solid var(--border-main);
-        vertical-align: middle;
-        white-space: nowrap;
       }
       .table thead tr:first-child th {
         border-bottom: none !important;
@@ -97,20 +98,6 @@
         font-size: 10px !important;
         letter-spacing: 0.1em;
         color: #a78b5e;
-      }
-      th.sortable {
-        cursor: pointer;
-        user-select: none;
-        transition: background 0.15s, color 0.15s;
-      }
-      th.sortable:hover {
-        background: var(--bg-hover) !important;
-        color: var(--accent);
-      }
-      .sort-indicator {
-        color: var(--accent) !important;
-        font-size: 10px !important;
-        opacity: 1 !important;
       }
 
       /* ===== 表格行 ===== */
@@ -126,9 +113,15 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .table tbody tr:nth-child(odd) td  { background: var(--bg-card); }
-      .table tbody tr:nth-child(even) td { background: var(--bg-row-alt); }
-      .table tbody tr:hover td           { background: var(--bg-hover) !important; }
+      .table tbody tr:nth-child(odd) td {
+        background: var(--bg-card);
+      }
+      .table tbody tr:nth-child(even) td {
+        background: var(--bg-row-alt);
+      }
+      .table tbody tr:hover td {
+        background: var(--bg-hover) !important;
+      }
 
       /* ===== 选手列：左对齐 ===== */
       #table-body td:nth-child(2) {
@@ -149,7 +142,7 @@
 
       /* ===== 序号列 ===== */
       .col-no {
-        color: var(--text-hint);
+        color: var(--text-muted);
         font-size: 12px;
         text-align: center;
       }
@@ -161,39 +154,14 @@
       }
 
       /* ===== W / L 列 ===== */
-      .col-w { color: var(--text-secondary); font-weight: 600; }
-      .col-l { color: var(--text-muted); }
-
-      /* ===== TITLES 色块（新配色）===== */
-      /*
-        ≥10  深棕金  #92400e / 文字白
-        ≥5   深橄榄绿  #3f6212 / 文字白
-        ≥2   深靛蓝  #1e3a8a / 文字白
-        1    浅金边框，无背景
-      */
-      .titles-cell {
-        font-weight: 700;
-        border-radius: 5px;
-        padding: 3px 0;
-        display: block;
-        text-align: center;
+      .col-w {
+        color: var(--text-secondary);
+        font-weight: 600;
       }
-      .titles-1  { color: var(--text-primary); background: transparent; }
-      .titles-2  { background: #1e3a8a; color: #dbeafe; }
-      .titles-5  { background: #3f6212; color: #ecfccb; }
-      .titles-10 { background: #92400e; color: #fef3c7; }
+      .col-l {
+        color: var(--text-muted);
+      }
 
-      /* ===== WINRATE 胜率渐变配色 ===== */
-      /*
-        用连续色相渐变：
-          ≥90%  深青碧  #0f766e  白字
-          ≥85%  青碧    #0d9488  白字
-          ≥80%  中绿    #16a34a  白字
-          ≥75%  草绿    #65a30d  白字
-          ≥70%  橄榄金  #ca8a04  白字
-          <70%  无背景  灰字
-        AGG（综合）用稍深的同色系，视觉区分主/副
-      */
       .wr-cell {
         border-radius: 5px;
         padding: 3px 4px;
@@ -202,32 +170,15 @@
         font-weight: 600;
         font-size: 13px;
       }
-      /* 综合胜率 AGG（主列，稍深） */
-      .agg-90 { background: #0f766e; color: #fff; }
-      .agg-85 { background: #0d9488; color: #fff; }
-      .agg-80 { background: #16a34a; color: #fff; }
-      .agg-75 { background: #65a30d; color: #fff; }
-      .agg-70 { background: #ca8a04; color: #fff; }
-      .agg-no { background: transparent; color: var(--text-muted); }
 
-      /* 场地胜率（副列，透明度低一档，色调一致）*/
-      .surf-90 { background: #ccfbf1; color: #134e4a; }
-      .surf-85 { background: #d1fae5; color: #065f46; }
-      .surf-80 { background: #dcfce7; color: #166534; }
-      .surf-75 { background: #fef9c3; color: #713f12; }
-      .surf-70 { background: #fef3c7; color: #92400e; }
-      .surf-no { background: transparent; color: var(--text-muted); }
-
-      /* ===== 脚注 ===== */
-      .table-footer-row td {
-        padding-top: 16px;
-        color: var(--text-muted);
-        font-size: 12px;
-        line-height: 1.8;
-        border-bottom: none;
-        background: transparent !important;
-        white-space: normal;
+      .titles-cell {
+        font-weight: 700;
+        border-radius: 5px;
+        padding: 3px 0;
+        display: block;
+        text-align: center;
       }
+
       .legend-dot {
         display: inline-block;
         width: 13px;
@@ -235,12 +186,6 @@
         border-radius: 3px;
         vertical-align: middle;
         margin: 0 2px;
-      }
-
-      /* ===== HOME 按钮 ===== */
-      .btn-outline-warning {
-        font-size: 13px;
-        padding: 5px 14px;
       }
     </style>
   </head>
@@ -261,21 +206,25 @@
       <div class="col">
         <span class="top-meta">
           <span id="champion-count" class="count-label">0 champions</span>
-          &nbsp;|&nbsp; Click headers to sort
-          &nbsp;|&nbsp; <span id="last-updated"></span>
+          &nbsp;|&nbsp; Click headers to sort &nbsp;|&nbsp;
+          <span id="last-updated"></span>
         </span>
       </div>
       <div class="col-auto">
         <div class="d-flex gap-2 align-items-center">
           <div class="d-flex align-items-center gap-1">
-            <label for="tourSelect" class="form-label mb-0 text-nowrap">TOUR:</label>
+            <label for="tourSelect" class="form-label mb-0 text-nowrap"
+              >TOUR:</label
+            >
             <select id="tourSelect" class="form-select form-select-sm">
               <option value="wta" selected>WTA</option>
               <option value="atp">ATP</option>
             </select>
           </div>
           <div class="d-flex align-items-center gap-1">
-            <label for="ageSelect" class="form-label mb-0 text-nowrap">CUTOFF AGE:</label>
+            <label for="ageSelect" class="form-label mb-0 text-nowrap"
+              >CUTOFF AGE:</label
+            >
             <select id="ageSelect" class="form-select form-select-sm">
               <option value="career" selected>Career (All ages)</option>
             </select>
@@ -285,72 +234,86 @@
     </div>
 
     <!-- 第三行：表格 -->
-      <table class="table table-hover table-sm mb-0">
-        <colgroup>
-          <col class="c-no">
-          <col class="c-player">
-          <col class="c-first">
-          <col class="c-agefirst">
-          <col class="c-last">
-          <col class="c-agelast">
-          <col class="c-span">
-          <col class="c-titles">
-          <col class="c-breakdown">
-          <col class="c-w">
-          <col class="c-l">
-          <col class="c-agg">
-          <col class="c-h">
-          <col class="c-c">
-          <col class="c-g">
-        </colgroup>
-        <thead>
-          <tr>
-            <th colspan="11"></th>
-            <th colspan="4" style="text-align:center; border-bottom:none; padding-bottom:3px;">
-              WINRATE
-            </th>
-          </tr>
-          <tr>
-            <th>#</th>
-            <th class="sortable" data-col="player" style="text-align:left; padding-left:12px;">PLAYER</th>
-            <th class="sortable" data-col="firstYear">1ST</th>
-            <th class="sortable" data-col="ageFirst">AGE 1ST</th>
-            <th class="sortable" data-col="lastYear">LAST</th>
-            <th class="sortable" data-col="ageLast">AGE LAST</th>
-            <th class="sortable" data-col="span">SPAN</th>
-            <th class="sortable" data-col="titles">TITLES</th>
-            <th>BREAKDOWN</th>
-            <th class="sortable" data-col="W">W</th>
-            <th class="sortable" data-col="L">L</th>
-            <th class="sortable" data-col="agg" style="border-left:1px solid var(--border-main);">AGG</th>
-            <th class="sortable" data-col="hard">H</th>
-            <th class="sortable" data-col="clay">C</th>
-            <th class="sortable" data-col="grass">G</th>
-          </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-        <tfoot>
-          <tr class="table-footer-row">
-            <td colspan="15" id="table-footer"></td>
-          </tr>
-        </tfoot>
-      </table>
+    <table class="table table-hover table-sm mb-0">
+      <colgroup>
+        <col class="c-no" />
+        <col class="c-player" />
+        <col class="c-first" />
+        <col class="c-agefirst" />
+        <col class="c-last" />
+        <col class="c-agelast" />
+        <col class="c-span" />
+        <col class="c-titles" />
+        <col class="c-breakdown" />
+        <col class="c-w" />
+        <col class="c-l" />
+        <col class="c-agg" />
+        <col class="c-h" />
+        <col class="c-c" />
+        <col class="c-g" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th colspan="11"></th>
+          <th
+            colspan="4"
+            style="text-align: center; border-bottom: none; padding-bottom: 3px"
+          >
+            WINRATE
+          </th>
+        </tr>
+        <tr>
+          <th>#</th>
+          <th class="sortable" data-col="player">PLAYER</th>
+          <th class="sortable" data-col="firstYear">1ST</th>
+          <th class="sortable" data-col="ageFirst">AGE 1ST</th>
+          <th class="sortable" data-col="lastYear">LAST</th>
+          <th class="sortable" data-col="ageLast">AGE LAST</th>
+          <th class="sortable" data-col="span">SPAN</th>
+          <th class="sortable" data-col="titles">TITLES</th>
+          <th>BREAKDOWN</th>
+          <th class="sortable" data-col="W">W</th>
+          <th class="sortable" data-col="L">L</th>
+          <th
+            class="sortable"
+            data-col="agg"
+            style="border-left: 1px solid var(--border-main)"
+          >
+            AGG
+          </th>
+          <th class="sortable" data-col="hard">H</th>
+          <th class="sortable" data-col="clay">C</th>
+          <th class="sortable" data-col="grass">G</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+      <tfoot>
+        <tr class="table-footer-row">
+          <td colspan="15" id="table-footer"></td>
+        </tr>
+      </tfoot>
+    </table>
 
     <script type="module">
-      import { getFlagImg, fmtAge, fmtWinrate } from "./utils.js?v=202604291654";
+      import {
+        getFlagImg,
+        fmtAge,
+        fmtWinrate,
+      } from "./utils.js?v=202604291654";
 
       let dataMap = {};
       let currentTour = "wta";
       let currentAge = null;
-      let minAge = 18, maxAge = 45;
+      let minAge = 18,
+        maxAge = 45;
       let countryChampionCount = new Map();
-      let countryTotalTitles   = new Map();
+      let countryTotalTitles = new Map();
 
       /* ---- 新 TITLES 配色 ---- */
       function titlesCls(n) {
         if (n >= 10) return "titles-cell titles-10";
-        if (n >= 5)  return "titles-cell titles-5";
-        if (n >= 2)  return "titles-cell titles-2";
+        if (n >= 5) return "titles-cell titles-5";
+        if (n >= 2) return "titles-cell titles-2";
         return "titles-cell titles-1";
       }
 
@@ -377,26 +340,32 @@
       /* ---- 脚注图例 ---- */
       function buildFooterLegend() {
         const dots = [
-          ["#1e3a8a","#dbeafe","≥2"],
-          ["#3f6212","#ecfccb","≥5"],
-          ["#92400e","#fef3c7","≥10"],
+          ["#1e3a8a", "#dbeafe", "≥2"],
+          ["#3f6212", "#ecfccb", "≥5"],
+          ["#92400e", "#fef3c7", "≥10"],
         ];
         const wrDots = [
-          ["#ca8a04","≥70%"],
-          ["#65a30d","≥75%"],
-          ["#16a34a","≥80%"],
-          ["#0d9488","≥85%"],
-          ["#0f766e","≥90%"],
+          ["#ca8a04", "≥70%"],
+          ["#65a30d", "≥75%"],
+          ["#16a34a", "≥80%"],
+          ["#0d9488", "≥85%"],
+          ["#0f766e", "≥90%"],
         ];
-        const titlesHtml = dots.map(([bg,fg,label]) =>
-          `${label}<span class="legend-dot" style="background:${bg};"></span>`
-        ).join(" ");
-        const wrHtml = wrDots.map(([bg,label]) =>
-          `${label}<span class="legend-dot" style="background:${bg};"></span>`
-        ).join(" ");
+        const titlesHtml = dots
+          .map(
+            ([bg, fg, label]) =>
+              `${label}<span class="legend-dot" style="background:${bg};"></span>`,
+          )
+          .join(" ");
+        const wrHtml = wrDots
+          .map(
+            ([bg, label]) =>
+              `${label}<span class="legend-dot" style="background:${bg};"></span>`,
+          )
+          .join(" ");
         return `
-          <strong>Titles:</strong> ${titlesHtml} &nbsp;·&nbsp;
-          <strong>AGG / Surface win rate:</strong> ${wrHtml}
+          <span>Titles:</span> ${titlesHtml} &nbsp;·&nbsp;
+          <span>AGG / Surface win rate:</span> ${wrHtml}
         `;
       }
 
@@ -418,7 +387,10 @@
           const res = await fetch("../output/tour_gs_champions.json");
           const data = await res.json();
           dataMap = data;
-          if (data.meta) { minAge = data.meta.min_age; maxAge = data.meta.max_age; }
+          if (data.meta) {
+            minAge = data.meta.min_age;
+            maxAge = data.meta.max_age;
+          }
           initAgeSelector();
           resetToDefault();
           renderTable();
@@ -435,12 +407,15 @@
         while (select.options.length > 1) select.remove(1);
         for (let age = minAge; age <= maxAge; age++) {
           const opt = document.createElement("option");
-          opt.value = age; opt.textContent = age;
+          opt.value = age;
+          opt.textContent = age;
           select.appendChild(opt);
         }
         select.addEventListener("change", (e) => {
-          currentAge = e.target.value === "career" ? null : parseInt(e.target.value);
-          resetToDefault(); renderTable();
+          currentAge =
+            e.target.value === "career" ? null : parseInt(e.target.value);
+          resetToDefault();
+          renderTable();
         });
       }
 
@@ -461,10 +436,19 @@
       function getValueByCol(pd, col) {
         if (!pd) return null;
         const map = {
-          player: pd.player, firstYear: pd.first_year, ageFirst: pd.age_first,
-          lastYear: pd.last_year, ageLast: pd.age_last, span: pd.span,
-          titles: pd.titles, W: pd.W, L: pd.L, agg: pd.agg,
-          hard: pd.win_h, clay: pd.win_c, grass: pd.win_g
+          player: pd.player,
+          firstYear: pd.first_year,
+          ageFirst: pd.age_first,
+          lastYear: pd.last_year,
+          ageLast: pd.age_last,
+          span: pd.span,
+          titles: pd.titles,
+          W: pd.W,
+          L: pd.L,
+          agg: pd.agg,
+          hard: pd.win_h,
+          clay: pd.win_c,
+          grass: pd.win_g,
         };
         return map[col] ?? null;
       }
@@ -475,16 +459,19 @@
           const dataB = getPlayerDataByAge(b, currentAge);
           let valA = getValueByCol(dataA, col);
           let valB = getValueByCol(dataB, col);
-          const nullA = valA == null, nullB = valB == null;
+          const nullA = valA == null,
+            nullB = valB == null;
           if (nullA && nullB) return 0;
           if (nullA) return 1;
           if (nullB) return -1;
-          valA = Number(valA); valB = Number(valB);
+          valA = Number(valA);
+          valB = Number(valB);
           if (valA < valB) return order === "asc" ? -1 : 1;
           if (valA > valB) return order === "asc" ? 1 : -1;
           return 0;
         } else {
-          const iocA = a.ioc || "", iocB = b.ioc || "";
+          const iocA = a.ioc || "",
+            iocB = b.ioc || "";
           const ccA = countryChampionCount.get(iocA) || 0;
           const ccB = countryChampionCount.get(iocB) || 0;
           if (ccA !== ccB) return order === "asc" ? ccA - ccB : ccB - ccA;
@@ -526,9 +513,9 @@
 
       function resetToDefault() {
         sortState = [
-          { col: "titles",    order: "desc" },
-          { col: "firstYear", order: "asc"  },
-          { col: "W",         order: "desc" },
+          { col: "titles", order: "desc" },
+          { col: "firstYear", order: "asc" },
+          { col: "W", order: "desc" },
         ];
         userSorted = false;
       }
@@ -538,7 +525,8 @@
         if (!col) return;
         userSorted = true;
         const idx = sortState.findIndex((s) => s.col === col);
-        const newOrder = idx !== -1 && sortState[idx].order === "desc" ? "asc" : "desc";
+        const newOrder =
+          idx !== -1 && sortState[idx].order === "desc" ? "asc" : "desc";
         if (idx !== -1) sortState.splice(idx, 1);
         sortState.unshift({ col, order: newOrder });
         renderTable();
@@ -552,27 +540,37 @@
         countryTotalTitles.clear();
         for (const p of players) {
           const ioc = p.ioc || "";
-          countryChampionCount.set(ioc, (countryChampionCount.get(ioc) || 0) + 1);
-          countryTotalTitles.set(ioc, (countryTotalTitles.get(ioc) || 0) + (p.titles || 0));
+          countryChampionCount.set(
+            ioc,
+            (countryChampionCount.get(ioc) || 0) + 1,
+          );
+          countryTotalTitles.set(
+            ioc,
+            (countryTotalTitles.get(ioc) || 0) + (p.titles || 0),
+          );
         }
 
         const sorted = sortRows(players);
-        document.getElementById("champion-count").textContent = sorted.length + " champions";
-        document.getElementById("table-footer").innerHTML = footerPrefix + buildFooterLegend();
+        document.getElementById("champion-count").textContent =
+          sorted.length + " champions";
+        document.getElementById("table-footer").innerHTML =
+          footerPrefix + buildFooterLegend();
 
         let html = "";
         sorted.forEach((player, idx) => {
           const pd = getPlayerDataByAge(player, currentAge);
-          const titlesNum    = pd.titles ?? 0;
+          const titlesNum = pd.titles ?? 0;
           const careerTitles = player.titles ?? 0;
-          const titleDisplay = currentAge === null
-            ? careerTitles
-            : `${titlesNum} / ${careerTitles}`;
+          const titleDisplay =
+            currentAge === null
+              ? careerTitles
+              : `${titlesNum} / ${careerTitles}`;
 
           html += `<tr>
             <td class="col-no">${idx + 1}</td>
-            <td style="text-align:left;padding-left:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-              ${getFlagImg(player.ioc)} ${player.player} <span style="font-weight:400;color:var(--text-muted);font-size:12px;">(${player.dob})</span>
+            <td class="player-name">
+              ${getFlagImg(player.ioc)} ${player.player}
+              <span class="player-dob">(${player.dob})</span>
             </td>
             <td>${pd.first_year ?? "—"}</td>
             <td>${fmtAge(pd.age_first)}</td>
@@ -590,7 +588,8 @@
           </tr>`;
         });
 
-        document.getElementById("table-body").innerHTML = html ||
+        document.getElementById("table-body").innerHTML =
+          html ||
           '<tr><td colspan="15" style="padding:40px;text-align:center;color:var(--text-muted);">No data</td></tr>';
         updateSortIndicators();
       }
@@ -599,7 +598,9 @@
         th.addEventListener("click", handleSortClick);
       });
       document.getElementById("tourSelect")?.addEventListener("change", (e) => {
-        currentTour = e.target.value; resetToDefault(); renderTable();
+        currentTour = e.target.value;
+        resetToDefault();
+        renderTable();
       });
 
       loadData();
