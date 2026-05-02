@@ -5,13 +5,6 @@
 <!-- DIR_STRUCTURE_START -->
 ```
 TennisCourtLog/
-├── scripts
-│   ├── config.py  # 项目路径配置模块
-│   ├── file_descriptions.json
-│   ├── transfer_tennisabstract_data.py  # Tennis Abstract 数据获取
-│   ├── transfer_uk_data.py  # 从 tennis-data.co.uk 数据进行统一化数据转换包括name映射
-│   ├── update_data.py  # 主更新脚本：更新球员库和 GS 汇总
-│   └── update_readme_tree.py  # 自动更新 README 目录树
 ├── tennis_atp
 │   ├── atp_gs_matches.csv  # ATP 大满贯汇总
 │   ├── atp_manual_mapping.csv  # ATP 手动姓名缩写映射表
@@ -59,25 +52,24 @@ round, best_of, winner_name, loser_name, score, winner_rank, loser_rank, winner_
 * xxx_manual_mapping.csv：在对uk的名字缩写进行映射时的一些手动映射文件，列名包括abbreviation,full_name
 
 # 数据更新与维护
-1. 月更，更新wta tour champs
+1. 月更，更新wta tour champs,big tournament result top100
 2. 季度性更新，每个大满贯过后会进行一次数据更新
    * 调用transfer_uk_data.py脚本，更新最新年份的比赛数据
 3. 年更
    * 调用update_data.py脚本，更新大满贯数据和球员库数据
 
-# 📝 数据分析
+# 📝 数据统计
 
-1. 大满贯冠军Leaderboard数据统计
+1. [大满贯冠军数据统计](https://www.tennis-leaderboard.cc.cd/leaderboards/tour_gs_champions.html)
+2. [非大满贯冠军数据统计](https://www.tennis-leaderboard.cc.cd/leaderboards/tour_non_gs_champions.html)
+3. [大满贯冠军同龄对比](https://www.tennis-leaderboard.cc.cd/leaderboards/tour_gs_champions_at_age.html)
+4. [2009年以来巡回赛冠军榜](https://www.tennis-leaderboard.cc.cd/leaderboards/wta_calendar_champs_start_2009.html)
+5. [Top100球员大赛成绩表](https://www.tennis-leaderboard.cc.cd/leaderboards/big_tournament_result_topn.html)
 
 # ToDo
 
-1. 做一些有意思的数据分析脚本
-
-
-
-
-
-
+1. 做一些关于得分率的数据leaderboard
+2. 整理更新文件夹，专门负责更新数据的一些脚本的文件夹
 
 
 
