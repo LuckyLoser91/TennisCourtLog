@@ -66,7 +66,7 @@ round, best_of, winner_name, loser_name, score, winner_rank, loser_rank, winner_
 # ToDo
 
 1. 做一些关于得分率的数据leaderboard
-2. 整理更新文件夹，专门负责更新数据的一些脚本的文件夹
+2. 利用google action实现一些数据的自动更新，脚本自动执行。
 
 
 

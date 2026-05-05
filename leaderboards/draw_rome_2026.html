@@ -68,29 +68,25 @@
             justify-content: center;
         }
         /* 移动端左对齐 */
-@media (max-width: 768px) {
-    .bracket {
-        justify-content: flex-start;  /* 移动端从左开始 */
-        min-width: 1200px;            /* 保持足够宽度可滑动 */
-    }
-    
-    .round {
-        min-width: 180px;
-        padding: 0 5px;
-    }
-
-    .player-name {
-        font-size: 0.75em;
-    }
-
-    .rome-stats {
-        font-size: 0.63em;
-    }
-
-    .round-title {
-        font-size: 0.8em;
-    }
-}
+        @media (max-width: 768px) {
+            .bracket {
+                justify-content: flex-start;
+                min-width: 1200px;
+            }
+            .round {
+                min-width: 180px;
+                padding: 0 5px;
+            }
+            .player-name {
+                font-size: 0.75em;
+            }
+            .rome-stats {
+                font-size: 0.63em;
+            }
+            .round-title {
+                font-size: 0.8em;
+            }
+        }
 
         .round {
             display: flex;
@@ -131,11 +127,6 @@
             border-left-color: #2196F3;
         }
 
-        .match.dimmed {
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
         .player {
             padding: 8px 12px;
             display: flex;
@@ -148,10 +139,27 @@
             border-bottom: none;
         }
 
-        .player.winner {
-            background: linear-gradient(90deg, #e8f5e9 0%, transparent 100%);
-            font-weight: bold;
-        }
+.player.winner {
+    background: linear-gradient(90deg, #e8f5e9 0%, transparent 100%);
+    font-weight: bold;
+}
+
+.player.winner .player-name {
+    color: #1b5e20;
+}
+
+.winner-badge {
+    display: inline-block;
+    background: #2e7d32;
+    color: white;
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: auto;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
 
         .player-info {
             flex: 1;
@@ -178,6 +186,14 @@
             color: #888;
             margin-right: 4px;
             font-weight: 500;
+        }
+
+        .player-flag {
+            width: 16px;
+            height: 12px;
+            margin-right: 4px;
+            border-radius: 1px;
+            vertical-align: middle;
         }
 
         .rome-stats {
@@ -266,24 +282,20 @@
             .player-name {
                 font-size: 0.75em;
             }
+            .bracket-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 20px 0;
+            }
+            .bracket-container::after {
+                content: '← 左右滑动查看签表 →';
+                display: block;
+                text-align: center;
+                color: rgba(255,255,255,0.6);
+                font-size: 0.75em;
+                padding: 5px;
+            }
         }
-        @media (max-width: 768px) {
-    .bracket-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
-        padding: 20px 0;
-    }
-    
-    /* 添加滑动提示 */
-    .bracket-container::after {
-        content: '← 左右滑动查看签表 →';
-        display: block;
-        text-align: center;
-        color: rgba(255,255,255,0.6);
-        font-size: 0.75em;
-        padding: 5px;
-    }
-}
     </style>
 </head>
 <body>
@@ -326,8 +338,13 @@
             return '';
         }
 
+        function getFlagImg(iso2) {
+            if (!iso2) return '';
+            return `<img class="player-flag" src="https://flagcdn.com/16x12/${iso2.toLowerCase()}.png" alt="${iso2}">`;
+        }
+
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json')
+            fetch('../api_folder/data/rome_2026/draw_with_history_stats.json')
                 .then(response => response.json())
                 .then(data => {
                     window.drawData = data;
@@ -339,10 +356,8 @@
 
         function setupTabs() {
             const tabsContainer = document.getElementById('tabs');
-            // 保留"全部签表"按钮，清空其他
             tabsContainer.innerHTML = '<button class="tab active" onclick="showAll()">全部签表</button>';
-
-            const sections = 8; // 128签表固定8个区
+            const sections = 8;
             for (let i = 1; i <= sections; i++) {
                 const button = document.createElement('button');
                 button.className = 'tab';
@@ -366,136 +381,139 @@
             renderBracket(window.drawData, section);
         }
 
-function renderBracket(data, activeSection) {
-    const bracket = document.getElementById('bracket');
-    bracket.innerHTML = '';
+        function renderBracket(data, activeSection) {
+            const bracket = document.getElementById('bracket');
+            bracket.innerHTML = '';
 
-    const currentRound = data.currentRound || 1;
-    const roundOrder = allRoundOrder.slice(0, currentRound);
+            const currentRound = data.currentRound || 1;
+            const roundOrder = allRoundOrder.slice(0, currentRound);
 
-    // 构建 block_id 到 section 的映射（从 Round of 128 开始）
-    const blockSectionMap = {};
-    if (data.rounds.length > 0) {
-        const r128 = data.rounds[0];
-        r128.blocks.forEach(block => {
-            const section = Math.ceil(block.order / 8);
-            blockSectionMap[block.order] = section;
-        });
-    }
+            const blockSectionMap = {};
+            if (data.rounds.length > 0) {
+                const r128 = data.rounds[0];
+                r128.blocks.forEach(block => {
+                    const section = Math.ceil(block.order / 8);
+                    blockSectionMap[block.order] = section;
+                });
+            }
 
-    // 追踪晋级关系
-    const blockLineage = {};
-    if (data.rounds.length > 0) {
-        data.rounds[0].blocks.forEach(block => {
-            blockLineage[block.order] = block.order;
-        });
-    }
-    for (let i = 1; i < data.rounds.length; i++) {
-        data.rounds[i].blocks.forEach(block => {
-            block.participants.forEach(p => {
-                if (p.sourceBlockId && blockLineage[p.sourceBlockId]) {
-                    if (!blockLineage[block.order]) {
-                        blockLineage[block.order] = blockLineage[p.sourceBlockId];
-                    }
+            const blockLineage = {};
+            if (data.rounds.length > 0) {
+                data.rounds[0].blocks.forEach(block => {
+                    blockLineage[block.order] = block.order;
+                });
+            }
+            for (let i = 1; i < data.rounds.length; i++) {
+                data.rounds[i].blocks.forEach(block => {
+                    block.participants.forEach(p => {
+                        if (p.sourceBlockId && blockLineage[p.sourceBlockId]) {
+                            if (!blockLineage[block.order]) {
+                                blockLineage[block.order] = blockLineage[p.sourceBlockId];
+                            }
+                        }
+                    });
+                });
+            }
+
+            roundOrder.forEach(roundName => {
+                const roundData = data.rounds.find(r => r.description === roundName);
+                if (!roundData) return;
+
+                let blocks = roundData.blocks;
+                if (activeSection) {
+                    blocks = blocks.filter(block => {
+                        if (roundName === 'Round of 128') {
+                            return blockSectionMap[block.order] === activeSection;
+                        } else {
+                            const sourceOrder = blockLineage[block.order];
+                            if (sourceOrder) {
+                                return blockSectionMap[sourceOrder] === activeSection;
+                            }
+                            return false;
+                        }
+                    });
                 }
-            });
-        });
-    }
 
-    roundOrder.forEach(roundName => {
-        const roundData = data.rounds.find(r => r.description === roundName);
-        if (!roundData) return;
+                if (blocks.length === 0) return;
 
-        // 如果是分区模式，先过滤 blocks
-        let blocks = roundData.blocks;
-        if (activeSection) {
-            blocks = blocks.filter(block => {
-                if (roundName === 'Round of 128') {
-                    return blockSectionMap[block.order] === activeSection;
-                } else {
-                    const sourceOrder = blockLineage[block.order];
-                    if (sourceOrder) {
-                        return blockSectionMap[sourceOrder] === activeSection;
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                roundDiv.innerHTML = `<div class="round-title">${roundName}</div>`;
+
+                blocks.sort((a, b) => a.order - b.order).forEach(block => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+                    if (block.finished === true) {
+                        matchDiv.classList.add('finished');
                     }
-                    return false;
-                }
+
+                    let playersHTML = '';
+                    block.participants.forEach(player => {
+                        const isWinner = player.winner === true;
+                        const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
+                        const bestRound = player.best_round;
+                        const titles = player.titles;
+
+                        let romeStats = '';
+                        if (player.name === 'Bye') {
+                            romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
+                        } else if (player.name === 'TBD') {
+                            romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
+                        } else if (bestRound && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
+                            const winrate = parseFloat(player.winrate) || 0;
+                            const winratePct = (winrate * 100).toFixed(0);
+
+                            let winrateClass = 'low';
+                            if (winrate >= 0.6) winrateClass = 'high';
+                            else if (winrate >= 0.4) winrateClass = 'medium';
+
+                            romeStats = `
+                                <div class="rome-stats">
+                                    <span class="best-round-badge ${getBestRoundClass(bestRound)}">
+                                        ${bestRoundLabels[bestRound] || bestRound}
+                                        ${formatTitles(titles)}
+                                    </span>
+                                    <span class="winrate-badge ${winrateClass}">${winratePct}%</span>
+                                    <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
+                                </div>`;
+                        } else {
+                            romeStats = `
+                                <div class="rome-stats">
+                                    <span class="no-data-badge">首次参加正赛</span>
+                                </div>`;
+                        }
+
+                        let nameClass = '';
+                        if (player.name === 'Bye') nameClass = 'bye';
+                        if (player.name === 'TBD') nameClass = 'tbd';
+
+  
+const winnerClass = isWinner ? 'winner' : '';
+                        const flagImg = getFlagImg(player.iso2);
+
+                        playersHTML += `
+                            <div class="player ${winnerClass}">
+                                <div class="player-info">
+                                    <div class="player-name ${nameClass}">
+                                        ${player.name !== 'Bye' && player.name !== 'TBD' ? `<span class="player-rank">#${player.ranking || '-'}</span>` : ''}
+                                        ${player.name !== 'Bye' && player.name !== 'TBD' ? flagImg : ''}
+                                        ${player.name}
+                                        <span class="seed">${seed}</span>
+                                        ${isWinner ? '<span class="winner-badge">W</span>' : ''}
+                                    </div>
+                                    ${romeStats}
+                                </div>
+                            </div>`;
+                    });
+
+                    matchDiv.innerHTML = playersHTML;
+                    roundDiv.appendChild(matchDiv);
+                });
+
+                bracket.appendChild(roundDiv);
             });
         }
 
-        if (blocks.length === 0) return;
-
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        roundDiv.innerHTML = `<div class="round-title">${roundName}</div>`;
-
-        blocks.sort((a, b) => a.order - b.order).forEach(block => {
-            const matchDiv = document.createElement('div');
-            matchDiv.className = 'match';
-            if (block.finished === true) {
-                matchDiv.classList.add('finished');
-            }
-
-            let playersHTML = '';
-            block.participants.forEach(player => {
-                const isWinner = player.winner === true;
-                const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
-                const bestRound = player.best_round;
-                const titles = player.titles;
-
-                let romeStats = '';
-                if (player.name === 'Bye') {
-                     romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
-                } else if (player.name === 'TBD') {
-                     romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
-                } else if (bestRound && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
-                    const winrate = parseFloat(player.winrate) || 0;
-                    const winratePct = (winrate * 100).toFixed(0);
-
-                    let winrateClass = 'low';
-                    if (winrate >= 0.6) winrateClass = 'high';
-                    else if (winrate >= 0.4) winrateClass = 'medium';
-
-                    romeStats = `
-                        <div class="rome-stats">
-                            <span class="best-round-badge ${getBestRoundClass(bestRound)}">
-                                ${bestRoundLabels[bestRound] || bestRound}
-                                ${formatTitles(titles)}
-                            </span>
-                            <span class="winrate-badge ${winrateClass}">${winratePct}%</span>
-                            <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
-                        </div>`;
-                } else {
-                    romeStats = `
-                        <div class="rome-stats">
-                            <span class="no-data-badge">首次参加正赛</span>
-                        </div>`;
-                }
-
-                let nameClass = '';
-                if (player.name === 'Bye') nameClass = 'bye';
-                if (player.name === 'TBD') nameClass = 'tbd';
-
-                const winnerClass = isWinner ? 'winner' : '';
-
-                playersHTML += `
-                    <div class="player ${winnerClass}">
-                        <div class="player-info">
-                            <div class="player-name ${nameClass}">
-                                ${player.name !== 'Bye' && player.name !== 'TBD' ? `<span class="player-rank">#${player.ranking || '-'}</span>` : ''}
-                                <span class="seed">${seed}</span>${player.name}
-                            </div>
-                            ${romeStats}
-                        </div>
-                    </div>`;
-            });
-
-            matchDiv.innerHTML = playersHTML;
-            roundDiv.appendChild(matchDiv);
-        });
-
-        bracket.appendChild(roundDiv);
-    });
-}
         fetchAndRender();
     </script>
 </body>
