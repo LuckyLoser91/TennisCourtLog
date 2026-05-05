@@ -52,11 +52,8 @@ round, best_of, winner_name, loser_name, score, winner_rank, loser_rank, winner_
 * xxx_manual_mapping.csv：在对uk的名字缩写进行映射时的一些手动映射文件，列名包括abbreviation,full_name
 
 # 数据更新与维护
-1. 月更，更新wta tour champs,big tournament result top100
-2. 季度性更新，每个大满贯过后会进行一次数据更新
-   * 调用transfer_uk_data.py脚本，更新最新年份的比赛数据
-3. 年更
-   * 调用update_data.py脚本，更新大满贯数据和球员库数据
+1. 月更：wta tour-related;
+2. 大满贯周期更新：gs-related;
 
 # 📝 数据统计
 

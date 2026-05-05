@@ -265,7 +265,7 @@ body > .row .d-flex.gap-3 {
           <td style="color:var(--text-secondary);font-weight:600;">${s.W}</td>
           <td style="color:var(--text-muted);">${s.L}</td>
           <td style="border-left:1px solid var(--border-light);">
-            <span class="${aggCls(s.agg)}">${fmtWinrate(s.agg)}</span>
+            <span class="${aggCls(s.agg)}">${fmtWinrate(Number(s.agg).toFixed(1))}</span>
           </td>
           <td><span class="${surfCls(s.win_h)}">${fmtWinrate(s.win_h)}</span></td>
           <td><span class="${surfCls(s.win_c)}">${fmtWinrate(s.win_c)}</span></td>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Rome WTA 1000 - 签表</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #19503b 0%, #379460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .tab:hover, .tab.active {
+            background: rgba(255,255,255,0.4);
+            font-weight: bold;
+        }
+
+        .bracket-container {
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .bracket {
+            display: flex;
+            gap: 0;
+            min-width: 1200px;
+            justify-content: center;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            min-width: 260px;
+            padding: 0 10px;
+        }
+
+        .round-title {
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+
+        .match {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, opacity 0.3s;
+            border-left: 4px solid #379460;
+        }
+
+        .match:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .match.finished {
+            border-left-color: #2196F3;
+        }
+
+        .match.dimmed {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .player {
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .player:last-child {
+            border-bottom: none;
+        }
+
+        .player.winner {
+            background: linear-gradient(90deg, #e8f5e9 0%, transparent 100%);
+            font-weight: bold;
+        }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-name {
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .player-name .seed {
+            font-size: 0.85em;
+            color: #379460;
+        }
+
+        .player-rank {
+            font-size: 0.8em;
+            color: #888;
+            margin-right: 4px;
+            font-weight: 500;
+        }
+
+        .rome-stats {
+            font-size: 0.7em;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            color: #555;
+        }
+
+        .best-round-badge {
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .best-round-R128 { background: #9e9e9e; }
+        .best-round-R64 { background: #8d6e63; }
+        .best-round-R32 { background: #5dade2; }
+        .best-round-R16 { background: #4db6ac; }
+        .best-round-QF { background: #7b1fa2; }
+        .best-round-SF { background: #f39c12; }
+        .best-round-F { background: #e74c3c; }
+        .best-round-W {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #333;
+        }
+
+        .wl-record {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .winrate-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .winrate-badge.high {
+            background: #d5f5e3;
+            color: #27ae60;
+        }
+
+        .winrate-badge.medium {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .winrate-badge.low {
+            background: #fadbd8;
+            color: #c0392b;
+        }
+
+        .no-data-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: #3498db;
+            background: #ebf5fb;
+            font-style: italic;
+            white-space: nowrap;
+        }
+
+        .bye {
+            color: #999;
+            font-style: italic;
+        }
+
+        .tbd {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .round {
+                min-width: 200px;
+                padding: 0 5px;
+            }
+            .player-name {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏆 2026 Rome, Italy</h1>
+        <p>WTA 1000 | Internazionali BNL d'Italia</p>
+        <p style="font-size:0.9em;margin-top:5px;opacity:0.8;">球员在罗马赛事的历史战绩</p>
+    </div>
+
+    <div class="tabs" id="tabs">
+        <button class="tab active" onclick="showAll()">全部签表</button>
+    </div>
+
+    <div class="bracket-container">
+        <div class="bracket" id="bracket"></div>
+    </div>
+
+    <script>
+        const bestRoundLabels = {
+            'R128': 'R128', 'R64': 'R64', 'R32': 'R32', 'R16': 'R16',
+            'QF': 'QF', 'SF': 'SF', 'F': 'F', 'W': 'W'
+        };
+
+        const allRoundOrder = [
+            'Round of 128', 'Round of 64', 'Round of 32',
+            'Round of 16', 'Quarterfinal', 'Semifinal', 'Final'
+        ];
+
+        function getBestRoundClass(bestRound) {
+            if (!bestRound) return '';
+            return 'best-round-' + bestRound;
+        }
+
+        function formatTitles(titles) {
+            if (!titles || titles === '0' || titles === 'false' || titles === false) return '';
+            const count = parseInt(titles);
+            if (count > 0) {
+                return ` 🏆×${count}`;
+            }
+            return '';
+        }
+
+        function fetchAndRender() {
+            fetch('../output/draw_rome_2026_with_history_stats.json')
+                .then(response => response.json())
+                .then(data => {
+                    window.drawData = data;
+                    window.currentRound = data.currentRound || 1;
+                    setupTabs();
+                    showAll();
+                });
+        }
+
+        function setupTabs() {
+            const tabsContainer = document.getElementById('tabs');
+            // 保留"全部签表"按钮，清空其他
+            tabsContainer.innerHTML = '<button class="tab active" onclick="showAll()">全部签表</button>';
+
+            const sections = 8; // 128签表固定8个区
+            for (let i = 1; i <= sections; i++) {
+                const button = document.createElement('button');
+                button.className = 'tab';
+                button.textContent = `${i}/8 区`;
+                button.onclick = function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    showSection(i);
+                };
+                tabsContainer.appendChild(button);
+            }
+        }
+
+        function showAll() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.tab').classList.add('active');
+            renderBracket(window.drawData, null);
+        }
+
+        function showSection(section) {
+            renderBracket(window.drawData, section);
+        }
+
+function renderBracket(data, activeSection) {
+    const bracket = document.getElementById('bracket');
+    bracket.innerHTML = '';
+
+    const currentRound = data.currentRound || 1;
+    const roundOrder = allRoundOrder.slice(0, currentRound);
+
+    // 构建 block_id 到 section 的映射（从 Round of 128 开始）
+    const blockSectionMap = {};
+    if (data.rounds.length > 0) {
+        const r128 = data.rounds[0];
+        r128.blocks.forEach(block => {
+            const section = Math.ceil(block.order / 8);
+            blockSectionMap[block.order] = section;
+        });
+    }
+
+    // 追踪晋级关系
+    const blockLineage = {};
+    if (data.rounds.length > 0) {
+        data.rounds[0].blocks.forEach(block => {
+            blockLineage[block.order] = block.order;
+        });
+    }
+    for (let i = 1; i < data.rounds.length; i++) {
+        data.rounds[i].blocks.forEach(block => {
+            block.participants.forEach(p => {
+                if (p.sourceBlockId && blockLineage[p.sourceBlockId]) {
+                    if (!blockLineage[block.order]) {
+                        blockLineage[block.order] = blockLineage[p.sourceBlockId];
+                    }
+                }
+            });
+        });
+    }
+
+    roundOrder.forEach(roundName => {
+        const roundData = data.rounds.find(r => r.description === roundName);
+        if (!roundData) return;
+
+        // 如果是分区模式，先过滤 blocks
+        let blocks = roundData.blocks;
+        if (activeSection) {
+            blocks = blocks.filter(block => {
+                if (roundName === 'Round of 128') {
+                    return blockSectionMap[block.order] === activeSection;
+                } else {
+                    const sourceOrder = blockLineage[block.order];
+                    if (sourceOrder) {
+                        return blockSectionMap[sourceOrder] === activeSection;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        if (blocks.length === 0) return;
+
+        const roundDiv = document.createElement('div');
+        roundDiv.className = 'round';
+        roundDiv.innerHTML = `<div class="round-title">${roundName}</div>`;
+
+        blocks.sort((a, b) => a.order - b.order).forEach(block => {
+            const matchDiv = document.createElement('div');
+            matchDiv.className = 'match';
+            if (block.finished === true) {
+                matchDiv.classList.add('finished');
+            }
+
+            let playersHTML = '';
+            block.participants.forEach(player => {
+                const isWinner = player.winner === true;
+                const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
+                const bestRound = player.best_round;
+                const titles = player.titles;
+
+                let romeStats = '';
+                if (player.name === 'Bye') {
+                    romeStats = '';
+                } else if (player.name === 'TBD') {
+                    romeStats = '';
+                } else if (bestRound && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
+                    const winrate = parseFloat(player.winrate) || 0;
+                    const winratePct = (winrate * 100).toFixed(0);
+
+                    let winrateClass = 'low';
+                    if (winrate >= 0.6) winrateClass = 'high';
+                    else if (winrate >= 0.4) winrateClass = 'medium';
+
+                    romeStats = `
+                        <div class="rome-stats">
+                            <span class="best-round-badge ${getBestRoundClass(bestRound)}">
+                                ${bestRoundLabels[bestRound] || bestRound}
+                                ${formatTitles(titles)}
+                            </span>
+                            <span class="winrate-badge ${winrateClass}">${winratePct}%</span>
+                            <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
+                        </div>`;
+                } else {
+                    romeStats = `
+                        <div class="rome-stats">
+                            <span class="no-data-badge">首次参加正赛</span>
+                        </div>`;
+                }
+
+                let nameClass = '';
+                if (player.name === 'Bye') nameClass = 'bye';
+                if (player.name === 'TBD') nameClass = 'tbd';
+
+                const winnerClass = isWinner ? 'winner' : '';
+
+                playersHTML += `
+                    <div class="player ${winnerClass}">
+                        <div class="player-info">
+                            <div class="player-name ${nameClass}">
+                                ${player.name !== 'Bye' && player.name !== 'TBD' ? `<span class="player-rank">#${player.ranking || '-'}</span>` : ''}
+                                <span class="seed">${seed}</span>${player.name}
+                            </div>
+                            ${romeStats}
+                        </div>
+                    </div>`;
+            });
+
+            matchDiv.innerHTML = playersHTML;
+            roundDiv.appendChild(matchDiv);
+        });
+
+        bracket.appendChild(roundDiv);
+    });
+}
+        fetchAndRender();
+    </script>
+</body>
+</html>
