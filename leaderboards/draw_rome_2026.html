@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>2026 Rome WTA 1000 - 签表</title>
     <style>
         * {
@@ -197,6 +200,8 @@
             color: #888;
             margin-right: 4px;
             font-weight: 500;
+            min-width: 28px;
+            display: inline-block;
         }
 
         .player-flag {
@@ -415,7 +420,7 @@
         }
 
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json')
+            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060726')
                 .then(response => response.json())
                 .then(data => {
                     window.drawData = data;
@@ -566,7 +571,7 @@
                         } else {
                             romeStats = `
                                 <div class="rome-stats">
-                                    <span class="no-data-badge">首次参加正赛</span>
+                                    <span class="no-data-badge">Debut</span>
                                 </div>`;
                         }
 
