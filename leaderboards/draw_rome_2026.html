@@ -444,9 +444,9 @@ function renderBracket(data, activeSection) {
 
                 let romeStats = '';
                 if (player.name === 'Bye') {
-                    romeStats = '';
+                     romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
                 } else if (player.name === 'TBD') {
-                    romeStats = '';
+                     romeStats = '<div class="rome-stats" style="visibility:hidden;">占位</div>';
                 } else if (bestRound && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
                     const winrate = parseFloat(player.winrate) || 0;
                     const winratePct = (winrate * 100).toFixed(0);
