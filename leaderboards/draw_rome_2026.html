@@ -67,6 +67,30 @@
             min-width: 1200px;
             justify-content: center;
         }
+        /* 移动端左对齐 */
+@media (max-width: 768px) {
+    .bracket {
+        justify-content: flex-start;  /* 移动端从左开始 */
+        min-width: 1200px;            /* 保持足够宽度可滑动 */
+    }
+    
+    .round {
+        min-width: 180px;
+        padding: 0 5px;
+    }
+
+    .player-name {
+        font-size: 0.75em;
+    }
+
+    .rome-stats {
+        font-size: 0.63em;
+    }
+
+    .round-title {
+        font-size: 0.8em;
+    }
+}
 
         .round {
             display: flex;
