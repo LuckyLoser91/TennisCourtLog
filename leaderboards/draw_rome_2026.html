@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 Rome WTA 1000 - 签表</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -267,6 +267,23 @@
                 font-size: 0.75em;
             }
         }
+        @media (max-width: 768px) {
+    .bracket-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
+        padding: 20px 0;
+    }
+    
+    /* 添加滑动提示 */
+    .bracket-container::after {
+        content: '← 左右滑动查看签表 →';
+        display: block;
+        text-align: center;
+        color: rgba(255,255,255,0.6);
+        font-size: 0.75em;
+        padding: 5px;
+    }
+}
     </style>
 </head>
 <body>
