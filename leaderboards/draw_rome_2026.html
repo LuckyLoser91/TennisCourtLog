@@ -200,7 +200,7 @@
             color: #888;
             margin-right: 4px;
             font-weight: 500;
-            min-width: 28px;
+            min-width: 22px;
             display: inline-block;
         }
 
@@ -222,7 +222,7 @@
             flex-wrap: wrap;
             color: #555;
             line-height: 1.2;
-            padding-left: 45px;
+            padding-left: 48px;
         }
 
         .best-round-badge {
@@ -364,6 +364,13 @@
                 padding: 5px;
             }
         }
+
+
+        /* 在前面加一个小星星 */
+        .no-data-badge::before {
+            content: '🌟 ';
+            font-style: normal;
+        }
     </style>
 </head>
 
@@ -420,7 +427,7 @@
         }
 
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060726')
+            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060741')
                 .then(response => response.json())
                 .then(data => {
                     window.drawData = data;
@@ -571,7 +578,7 @@
                         } else {
                             romeStats = `
                                 <div class="rome-stats">
-                                    <span class="no-data-badge">Debut</span>
+                                    <span class="no-data-badge">Rome Debut</span>
                                 </div>`;
                         }
 
