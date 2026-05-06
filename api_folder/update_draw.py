@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import pandas as pd
@@ -244,7 +245,8 @@ def enhance_draw():
     """为 draw.json 添加 Rome 赛事历史统计和排名数据，生成结构化的 JSON"""
 
     draw_json_path = "api_folder/data/rome_2026/draw.json"
-    rank_json_path = "api_folder/data/wta_rank_2026-05-04.json"
+    rank_files = sorted(glob.glob("api_folder/data/wta_rank_*.json"))
+    rank_json_path = rank_files[-1]
 
     # 读取原始 draw.json
     with open(draw_json_path, 'r', encoding='utf-8') as f:
