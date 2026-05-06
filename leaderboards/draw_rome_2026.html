@@ -718,7 +718,7 @@
         }
 
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060813')
+            fetch('../output/draw_rome_2026_with_history_stats.json?v=' + Date.now())
                 .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
