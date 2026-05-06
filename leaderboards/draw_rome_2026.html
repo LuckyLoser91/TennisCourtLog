@@ -232,6 +232,195 @@
         }
         .no-data-badge::before { content: '🌟 '; font-style: normal; }
         .placeholder { color: #999; font-style: italic; }
+
+        /* Stats badge */
+        .stats-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #1565c0;
+            color: white;
+            font-size: 0.62em;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            cursor: pointer;
+            user-select: none;
+            letter-spacing: 0.02em;
+            transition: background 0.15s;
+        }
+        .stats-badge:hover { background: #0d47a1; }
+
+        /* Modal overlay */
+        .stats-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .stats-modal-overlay.open { display: flex; }
+        .stats-modal {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+            max-width: 600px;
+            width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 0;
+            position: relative;
+        }
+        .stats-modal-header {
+            background: linear-gradient(135deg, #19503b, #379460);
+            color: white;
+            padding: 16px 20px 12px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .stats-modal-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+        .stats-modal-subtitle {
+            font-size: 0.8em;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+        .stats-modal-close {
+            background: rgba(255,255,255,0.25);
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stats-modal-close:hover { background: rgba(255,255,255,0.4); }
+        .stats-modal-body { padding: 16px 20px 20px; }
+
+        /* Score section */
+        .score-section {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid #e0e0e0;
+        }
+        .score-player {
+            flex: 1;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .score-player.winner-side { background: linear-gradient(135deg, #e8f5e9, #f1faf2); }
+        .score-player-name {
+            font-weight: 700;
+            font-size: 0.95em;
+            color: #222;
+        }
+        .score-player.winner-side .score-player-name { color: #1b5e20; }
+        .score-player-country { font-size: 0.75em; color: #888; }
+        .score-sets {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .set-score {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.9em;
+            background: #e0e0e0;
+            color: #555;
+        }
+        .set-score.won { background: #2e7d32; color: white; }
+        .set-score.lost { background: #e0e0e0; color: #999; }
+        .score-divider {
+            width: 2px;
+            background: #e0e0e0;
+            align-self: stretch;
+        }
+        .score-winner-tag {
+            font-size: 0.68em;
+            background: #2e7d32;
+            color: white;
+            padding: 1px 6px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 4px;
+            width: fit-content;
+        }
+
+        /* Stats section */
+        .stats-section-title {
+            font-size: 0.82em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #19503b;
+            margin: 14px 0 8px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+        }
+        .stats-table thead th {
+            padding: 5px 8px;
+            font-weight: 700;
+            color: #fff;
+            background: #379460;
+            font-size: 0.9em;
+        }
+        .stats-table thead th:first-child { border-radius: 6px 0 0 0; }
+        .stats-table thead th:last-child  { border-radius: 0 6px 0 0; }
+        .stats-table tbody tr:nth-child(even) { background: #f5faf6; }
+        .stats-table tbody td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e8f0e9;
+            color: #333;
+        }
+        .stats-table tbody td:first-child { font-weight: 600; color: #444; }
+        .stats-table tbody td:not(:first-child) { text-align: center; }
+        .stat-val.better { color: #2e7d32; font-weight: 700; }
+        .stat-val.worse  { color: #c62828; }
+        .dr-row td { background: #fff9e6 !important; font-weight: 700; }
+        .dr-row td:first-child { color: #e65100; }
+
+        .stats-loading {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 0.95em;
+        }
+        .stats-error {
+            text-align: center;
+            padding: 20px;
+            color: #c62828;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -240,6 +429,22 @@
         <h1>🏆 2026 Rome, Italy</h1>
         <p>WTA 1000 | Internazionali BNL d'Italia</p>
         <p style="font-size:0.9em;margin-top:5px;opacity:0.8;">球员在罗马赛事的历史战绩</p>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="stats-modal-overlay" id="statsModalOverlay" onclick="closeStatsModal(event)">
+        <div class="stats-modal" id="statsModal">
+            <div class="stats-modal-header">
+                <div>
+                    <div class="stats-modal-title" id="statsModalTitle">比赛数据</div>
+                    <div class="stats-modal-subtitle" id="statsModalSubtitle"></div>
+                </div>
+                <button class="stats-modal-close" onclick="document.getElementById('statsModalOverlay').classList.remove('open')">✕</button>
+            </div>
+            <div class="stats-modal-body" id="statsModalBody">
+                <div class="stats-loading">加载中…</div>
+            </div>
+        </div>
     </div>
 
     <div class="tabs" id="tabs"></div>
@@ -284,7 +489,7 @@
             if (startSection !== endSection) return null;
             return startSection;
         }
-        function buildPlayerHTML(player) {
+        function buildPlayerHTML(player, block) {
             const isWinner    = player.winner === true;
             const seed        = player.teamSeed ? `[${player.teamSeed}]` : '';
             const isValid     = hasValidRanking(player);
@@ -303,6 +508,13 @@
             } else {
                 romeStats = `<div class="rome-stats"><span class="no-data-badge">Rome Debut</span></div>`;
             }
+
+            // Stats badge: only on winner row of finished match with event_id
+            const eventId = block && block.finished && block.event_id && isWinner ? block.event_id : null;
+            const statsBadge = eventId
+                ? `<span class="stats-badge" onclick="openStatsModal(${eventId}, event)" title="查看比赛数据">STATS</span>`
+                : '';
+
             const winnerClass  = isWinner ? 'winner' : '';
             const avatarImg    = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
             const rankDisplay  = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
@@ -314,6 +526,7 @@
                         ${rankDisplay}
                         <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
                         ${isWinner ? '<span class="winner-badge">W</span>' : ''}
+                        ${statsBadge}
                     </div>
                     ${romeStats}
                 </div>
@@ -379,7 +592,7 @@
                         matchEl.style.borderLeftColor = '#aaa';
                     } else {
                         const parts = block.participants || [];
-                        let html = parts.map(buildPlayerHTML).join('');
+                        let html = parts.map(p => buildPlayerHTML(p, block)).join('');
                         if (parts.length === 1) {
                             html += `<div class="player" style="flex:1;opacity:0.35;">
                                 <div style="width:40px;height:40px;border-radius:50%;background:#eee;flex-shrink:0;"></div>
@@ -575,15 +788,232 @@
             enableDragScroll();
         });
 
+        // ── Stats Modal ──
+        function closeStatsModal(e) {
+            if (e.target === document.getElementById('statsModalOverlay')) {
+                document.getElementById('statsModalOverlay').classList.remove('open');
+            }
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') document.getElementById('statsModalOverlay').classList.remove('open');
+        });
+
+        function fmt(val, total) {
+            if (total == null || total === '') return val;
+            const pct = total > 0 ? Math.round(val / total * 100) : 0;
+            return `${val}/${total} (${pct}%)`;
+        }
+
+        function parseFraction(str) {
+            // e.g. "30/71 (42%)" or "28/46 (61%)"
+            if (!str) return { val: 0, total: 0 };
+            const m = String(str).match(/(\d+)\/(\d+)/);
+            if (m) return { val: parseInt(m[1]), total: parseInt(m[2]) };
+            return { val: parseInt(str) || 0, total: null };
+        }
+
+        function cmp(hVal, aVal, higher = true) {
+            // returns css class for home/away
+            if (hVal === aVal) return ['', ''];
+            if (higher) return hVal > aVal ? ['better', 'worse'] : ['worse', 'better'];
+            return hVal < aVal ? ['better', 'worse'] : ['worse', 'better'];
+        }
+
+        function statRow(label, hStr, aStr, lowerBetter) {
+            const h = parseFraction(hStr);
+            const a = parseFraction(aStr);
+            const [hc, ac] = cmp(h.val / (h.total || 1), a.val / (a.total || 1), !lowerBetter);
+            const hDisp = h.total != null ? fmt(h.val, h.total) : hStr;
+            const aDisp = a.total != null ? fmt(a.val, a.total) : aStr;
+            return `<tr>
+                <td>${label}</td>
+                <td><span class="stat-val ${hc}">${hDisp}</span></td>
+                <td><span class="stat-val ${ac}">${aDisp}</span></td>
+            </tr>`;
+        }
+
+        function buildScoreSection(detail) {
+            const ev = detail.event;
+            const home = ev.homeTeam;
+            const away = ev.awayTeam;
+            const hs = ev.homeScore;
+            const as_ = ev.awayScore;
+            const homeWon = ev.winnerCode === 1;
+
+            const sets = [];
+            for (const p of ['period1','period2','period3','period4','period5']) {
+                if (hs[p] != null && as_[p] != null) {
+                    sets.push({ h: hs[p], a: as_[p] });
+                }
+            }
+
+            const setsHtml = (isHome) => sets.map(s => {
+                const myScore = isHome ? s.h : s.a;
+                const opScore = isHome ? s.a : s.h;
+                const won = myScore > opScore;
+                return `<div class="set-score ${won ? 'won' : 'lost'}">${myScore}</div>`;
+            }).join('');
+
+            return `<div class="score-section">
+                <div class="score-player ${homeWon ? 'winner-side' : ''}">
+                    <div class="score-player-name">${home.fullName || home.name}</div>
+                    <div class="score-player-country">${home.country?.name || ''} · #${home.ranking || '-'}</div>
+                    <div class="score-sets">${setsHtml(true)}</div>
+                    ${homeWon ? '<div class="score-winner-tag">🏆 获胜</div>' : ''}
+                </div>
+                <div class="score-divider"></div>
+                <div class="score-player ${!homeWon ? 'winner-side' : ''}">
+                    <div class="score-player-name">${away.fullName || away.name}</div>
+                    <div class="score-player-country">${away.country?.name || ''} · #${away.ranking || '-'}</div>
+                    <div class="score-sets">${setsHtml(false)}</div>
+                    ${!homeWon ? '<div class="score-winner-tag">🏆 获胜</div>' : ''}
+                </div>
+            </div>`;
+        }
+
+        function buildStatsBody(detail, stats) {
+            const ev = detail.event;
+            const homeName = ev.homeTeam.shortName || ev.homeTeam.name;
+            const awayName = ev.awayTeam.shortName || ev.awayTeam.name;
+
+            const allPeriod = stats.statistics.find(s => s.period === 'ALL');
+            if (!allPeriod) return '<div class="stats-error">无统计数据</div>';
+
+            const getGroup = name => allPeriod.groups.find(g => g.groupName === name);
+            const getItem  = (grp, key) => grp?.statisticsItems.find(i => i.key === key);
+            const gv = (grp, key, side) => getItem(grp, key)?.[side] ?? '—';
+
+            const svc = getGroup('Service');
+            const ret = getGroup('Return');
+            const pts = getGroup('Points');
+
+            // DR = receiver_points_scored / (service_points - service_points_scored)
+            // = firstReturnPts + secondReturnPts wins / total service points by opponent
+            // Standard: receivePointsWon% / (1 - servePointsWon%)
+            // Data: servicePointsScored = points won while serving
+            //       receiverPointsScored = points won while receiving
+            //       pointsTotal = total points played
+            // DR = receiveRate / (1 - serveRate)  where rates are fractions of points on that side
+            // Let's compute from firstReturnPoints + secondReturnPoints vs opponent's service points
+            function calcDR(isHome) {
+                const side = isHome ? 'home' : 'away';
+                const oside = isHome ? 'away' : 'home';
+                // Return points won = firstReturn + secondReturn (already in Return group)
+                const fr = parseFraction(gv(ret, 'firstReturnPoints', side));
+                const sr = parseFraction(gv(ret, 'secondReturnPoints', side));
+                const retWon = fr.val + sr.val;
+                const retTotal = (fr.total || 0) + (sr.total || 0);
+                // Opponent's service points won
+                const oFsp = parseFraction(gv(svc, 'firstServePointsAccuracy', oside));
+                const oSsp = parseFraction(gv(svc, 'secondServePointsAccuracy', oside));
+                const svcWon = oFsp.val + oSsp.val;
+                const svcTotal = (oFsp.total || 0) + (oSsp.total || 0);
+                // receiveRate = retWon / retTotal
+                // serveRate (opponent) = svcWon / svcTotal
+                // DR = receiveRate / (1 - serveRate)
+                if (!retTotal || !svcTotal) return '—';
+                const receiveRate = retWon / retTotal;
+                const serveRate = svcWon / svcTotal;
+                const denom = 1 - serveRate;
+                if (denom <= 0) return '∞';
+                return (receiveRate / denom).toFixed(2);
+            }
+
+            const homeScore = buildScoreSection(detail);
+            const hDR = calcDR(true);
+            const aDR = calcDR(false);
+            const [hDRc, aDRc] = (() => {
+                const h = parseFloat(hDR), a = parseFloat(aDR);
+                if (isNaN(h) || isNaN(a) || h === a) return ['',''];
+                return h > a ? ['better','worse'] : ['worse','better'];
+            })();
+
+            return `
+                ${homeScore}
+
+                <div class="stats-section-title">🎾 发球数据</div>
+                <table class="stats-table">
+                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
+                    <tbody>
+                        ${statRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
+                        ${statRow('双误 Double Faults', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
+                        ${statRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
+                        ${statRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
+                        ${statRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
+                        ${statRow('保发局数', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
+                    </tbody>
+                </table>
+
+                <div class="stats-section-title">🔄 接发数据</div>
+                <table class="stats-table">
+                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
+                    <tbody>
+                        ${statRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
+                        ${statRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
+                        ${statRow('破发次数', gv(ret,'breakPointsScored','home'), gv(ret,'breakPointsScored','away'))}
+                    </tbody>
+                </table>
+
+                <div class="stats-section-title">📊 得分数据</div>
+                <table class="stats-table">
+                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
+                    <tbody>
+                        ${statRow('总得分', gv(pts,'pointsTotal','home'), gv(pts,'pointsTotal','away'))}
+                        ${statRow('发球得分', gv(pts,'servicePointsScored','home'), gv(pts,'servicePointsScored','away'))}
+                        ${statRow('接发得分', gv(pts,'receiverPointsScored','home'), gv(pts,'receiverPointsScored','away'))}
+                        <tr class="dr-row">
+                            <td>DR (Dominance Ratio)</td>
+                            <td><span class="stat-val ${hDRc}">${hDR}</span></td>
+                            <td><span class="stat-val ${aDRc}">${aDR}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function openStatsModal(eventId, e) {
+            e && e.stopPropagation();
+            const overlay = document.getElementById('statsModalOverlay');
+            const body    = document.getElementById('statsModalBody');
+            const title   = document.getElementById('statsModalTitle');
+            const subtitle= document.getElementById('statsModalSubtitle');
+
+            title.textContent   = '比赛数据';
+            subtitle.textContent = `Event #${eventId}`;
+            body.innerHTML = '<div class="stats-loading">⏳ 加载中…</div>';
+            overlay.classList.add('open');
+
+            try {
+                const basePath = `../api_folder/data/rome_2026`;
+                const [detailRes, statsRes] = await Promise.all([
+                    fetch(`${basePath}/event_detail_${eventId}.json`),
+                    fetch(`${basePath}/event_statistics_${eventId}.json`)
+                ]);
+                if (!detailRes.ok || !statsRes.ok) throw new Error('数据文件未找到');
+                const [detail, stats] = await Promise.all([detailRes.json(), statsRes.json()]);
+
+                const ev = detail.event;
+                title.textContent    = `${ev.homeTeam.name} vs ${ev.awayTeam.name}`;
+                subtitle.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}`;
+                body.innerHTML = buildStatsBody(detail, stats);
+            } catch (err) {
+                body.innerHTML = `<div class="stats-error">❌ 无法加载数据：${err.message}<br><small>路径: ./api_folder/data/rome_2026/event_detail_${eventId}.json</small></div>`;
+            }
+        }
+
         // ── 启动 ──
+        // 使用更彻底的缓存破坏,强制刷新CDN
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json?v=' + Date.now())
+            const timestamp = Date.now();
+            const random = Math.random();
+            fetch(`../output/draw_rome_2026_with_history_stats.json?v=${timestamp}&r=${random}`)
                 .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
                     setupTabs();
                     enableDragScroll();
-                });
+                })
+                .catch(err => console.error('Fetch failed:', err));
         }
         fetchAndRender();
     </script>
