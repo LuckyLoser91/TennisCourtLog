@@ -3,18 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <!-- 关键修改：允许用户缩放，不做最小/最大限制 -->
+    <!-- 关键：不阻止缩放，但 JS 会接管移动端行为 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, shrink-to-fit=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>2026 Rome WTA 1000 - 签表</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,8 +18,6 @@
             min-height: 100vh;
             padding: 20px;
             color: #333;
-            /* 确保 body 不阻止滚动 */
-            overflow-x: hidden;
         }
 
         .header {
@@ -31,19 +25,13 @@
             color: white;
             margin-bottom: 20px;
         }
-
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+        .header p { font-size: 1.2em; opacity: 0.9; }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        /* ── Tabs ── */
         .tabs {
             display: flex;
             justify-content: center;
@@ -51,10 +39,9 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
         .tab {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             color: white;
             border: none;
             border-radius: 5px;
@@ -63,95 +50,41 @@
             transition: all 0.3s;
             white-space: nowrap;
         }
-
-        .tab:hover,
-        .tab.active {
-            background: rgba(255, 255, 255, 0.4);
+        .tab:hover, .tab.active {
+            background: rgba(255,255,255,0.4);
             font-weight: bold;
         }
 
-        /* ── Bracket container ── */
+        /* 基础容器样式 */
         .bracket-container {
             overflow: auto;
-            /* 关键：允许触摸手势用于滚动和缩放 */
             touch-action: pan-x pan-y pinch-zoom;
-            /* iOS 平滑滚动 */
             -webkit-overflow-scrolling: touch;
             padding: 20px 10px;
-            cursor: grab;
             max-height: 85vh;
+            width: 100%;               /* 确保容器占满宽度 */
         }
 
-        .bracket-container:active {
-            cursor: grabbing;
+        /* 桌面端用 flex 居中，但仅当 JS 判断非移动设备时添加 class */
+        .bracket-container.desktop-center {
+            display: flex;
+            justify-content: center;
+            cursor: grab;
+        }
+
+        /* 移动端强制左对齐 */
+        .bracket-container.mobile-left {
+            display: block;
+            cursor: default;
         }
 
         .bracket-container.dragging {
-            cursor: grabbing;
             user-select: none;
         }
 
-        /* ── Section mode ── */
-        .bracket-container.section-mode {
-            display: block;
-            cursor: default;
-            max-height: none;
-            padding: 20px 10px;
-        }
-
-        /* 桌面端 section 模式：居中并允许拖拽滚动 */
-        @media (min-width: 768px) {
-            .bracket-container.section-mode {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                overflow: auto;
-                cursor: grab;
-                max-height: 85vh;
-                padding: 20px 10px;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .bracket-container.section-mode:active {
-                cursor: grabbing;
-            }
-
-            .bracket-container.section-mode.dragging {
-                cursor: grabbing;
-                user-select: none;
-            }
-        }
-
-        /* 移动端：强制使用原生滚动，并允许缩放 */
-        @media (max-width: 767px) {
-            body {
-                padding: 10px;
-            }
-
-            .bracket-container.section-mode {
-                display: block;
-                overflow: auto;
-                /* 移动端也开启触摸动作 */
-                touch-action: pan-x pan-y pinch-zoom;
-                cursor: default;
-                max-height: 85vh;
-                padding: 20px 10px;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .bracket-container.section-mode:active {
-                cursor: default;
-            }
-
-            .bracket-container.section-mode.dragging {
-                cursor: default;
-                user-select: auto;
-            }
-        }
-
-        /* ── Tennis bracket ── */
         .bracket {
             display: inline-flex;
+            min-width: max-content;    /* 防止内容被压缩 */
             gap: 0;
             align-items: flex-start;
         }
@@ -161,14 +94,13 @@
             flex-direction: column;
             flex-shrink: 0;
         }
-
         .round-header {
             text-align: center;
             color: white;
             font-weight: bold;
             font-size: 0.9em;
             padding: 6px 8px;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0,0,0,0.35);
             border-radius: 5px;
             text-transform: uppercase;
             height: 36px;
@@ -177,33 +109,21 @@
             justify-content: center;
             margin: 0 8px;
         }
+        .round-matches-area { position: relative; }
 
-        .round-matches-area {
-            position: relative;
-        }
-
-        /* ── Match card ── */
         .match {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.13);
             overflow: hidden;
             border-left: 5px solid #379460;
             display: flex;
             flex-direction: column;
             position: absolute;
         }
+        .match:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.22); z-index: 10; }
+        .match.finished { border-left-color: #2196F3; }
 
-        .match:hover {
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22);
-            z-index: 10;
-        }
-
-        .match.finished {
-            border-left-color: #2196F3;
-        }
-
-        /* ── Player row ── */
         .player {
             padding: 7px 10px 7px 8px;
             display: flex;
@@ -212,19 +132,9 @@
             min-height: 0;
             gap: 8px;
         }
-
-        .player+.player {
-            border-top: 1px solid #ececec;
-        }
-
-        .player.winner {
-            background: linear-gradient(90deg, #c8ead0 0%, #f0faf2 100%);
-        }
-
-        .player.winner .player-name {
-            color: #1b5e20;
-            font-weight: 700;
-        }
+        .player + .player { border-top: 1px solid #ececec; }
+        .player.winner { background: linear-gradient(90deg, #c8ead0 0%, #f0faf2 100%); }
+        .player.winner .player-name { color: #1b5e20; font-weight: 700; }
 
         .player-avatar {
             width: 40px;
@@ -235,10 +145,7 @@
             border: 2px solid #e0e0e0;
             background: #f0f0f0;
         }
-
-        .player.winner .player-avatar {
-            border-color: #81c784;
-        }
+        .player.winner .player-avatar { border-color: #81c784; }
 
         .player-info {
             flex: 1;
@@ -247,14 +154,12 @@
             flex-direction: column;
             gap: 3px;
         }
-
         .player-name-row {
             display: flex;
             align-items: center;
             gap: 5px;
             min-width: 0;
         }
-
         .player-rank {
             font-size: 0.72em;
             color: #aaa;
@@ -262,7 +167,6 @@
             flex-shrink: 0;
             min-width: 28px;
         }
-
         .player-name {
             font-size: 0.92em;
             font-weight: 600;
@@ -273,14 +177,12 @@
             flex: 1;
             min-width: 0;
         }
-
         .player-name .seed {
             font-size: 0.82em;
             color: #379460;
             font-weight: 500;
             margin-left: 2px;
         }
-
         .winner-badge {
             display: inline-flex;
             align-items: center;
@@ -292,14 +194,12 @@
             border-radius: 10px;
             flex-shrink: 0;
         }
-
         .rome-stats {
             display: flex;
             align-items: center;
             gap: 5px;
             flex-wrap: nowrap;
         }
-
         .best-round-badge {
             padding: 2px 7px;
             border-radius: 10px;
@@ -308,68 +208,19 @@
             color: white;
             white-space: nowrap;
         }
-
-        .best-round-R128 {
-            background: #9e9e9e;
-        }
-
-        .best-round-R64 {
-            background: #8d6e63;
-        }
-
-        .best-round-R32 {
-            background: #5dade2;
-        }
-
-        .best-round-R16 {
-            background: #4db6ac;
-        }
-
-        .best-round-QF {
-            background: #7b1fa2;
-        }
-
-        .best-round-SF {
-            background: #f39c12;
-        }
-
-        .best-round-F {
-            background: #e74c3c;
-        }
-
-        .best-round-W {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #333;
-        }
-
-        .winrate-badge {
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.75em;
-        }
-
-        .winrate-badge.high {
-            background: #d5f5e3;
-            color: #27ae60;
-        }
-
-        .winrate-badge.medium {
-            background: #fef9e7;
-            color: #f39c12;
-        }
-
-        .winrate-badge.low {
-            background: #fadbd8;
-            color: #c0392b;
-        }
-
-        .wl-record {
-            font-size: 0.75em;
-            color: #777;
-            font-weight: 500;
-        }
-
+        .best-round-R128 { background: #9e9e9e; }
+        .best-round-R64  { background: #8d6e63; }
+        .best-round-R32  { background: #5dade2; }
+        .best-round-R16  { background: #4db6ac; }
+        .best-round-QF   { background: #7b1fa2; }
+        .best-round-SF   { background: #f39c12; }
+        .best-round-F    { background: #e74c3c; }
+        .best-round-W    { background: linear-gradient(135deg,#ffd700,#ff8c00); color:#333; }
+        .winrate-badge { padding: 2px 6px; border-radius: 8px; font-weight: bold; font-size: 0.75em; }
+        .winrate-badge.high   { background: #d5f5e3; color: #27ae60; }
+        .winrate-badge.medium { background: #fef9e7; color: #f39c12; }
+        .winrate-badge.low    { background: #fadbd8; color: #c0392b; }
+        .wl-record { font-size: 0.75em; color: #777; font-weight: 500; }
         .no-data-badge {
             padding: 2px 7px;
             border-radius: 10px;
@@ -379,16 +230,8 @@
             font-style: italic;
             white-space: nowrap;
         }
-
-        .no-data-badge::before {
-            content: '🌟 ';
-            font-style: normal;
-        }
-
-        .placeholder {
-            color: #999;
-            font-style: italic;
-        }
+        .no-data-badge::before { content: '🌟 '; font-style: normal; }
+        .placeholder { color: #999; font-style: italic; }
     </style>
 </head>
 
@@ -407,67 +250,51 @@
 
     <script>
         const bestRoundLabels = {
-            'R128': 'R128',
-            'R64': 'R64',
-            'R32': 'R32',
-            'R16': 'R16',
-            'QF': 'QF',
-            'SF': 'SF',
-            'F': 'F',
-            'W': 'W'
+            'R128':'R128','R64':'R64','R32':'R32','R16':'R16',
+            'QF':'QF','SF':'SF','F':'F','W':'W'
         };
-
         const allRoundOrder = [
-            'Round of 128', 'Round of 64', 'Round of 32',
-            'Round of 16', 'Quarterfinal', 'Semifinal', 'Final'
+            'Round of 128','Round of 64','Round of 32',
+            'Round of 16','Quarterfinal','Semifinal','Final'
         ];
+        const fullBlocksPerRound = [64,32,16,8,4,2,1];
 
-        const fullBlocksPerRound = [64, 32, 16, 8, 4, 2, 1];
-
-        function getBestRoundClass(r) {
-            return r ? 'best-round-' + r : '';
-        }
-
+        function getBestRoundClass(r) { return r ? 'best-round-' + r : ''; }
         function formatTitles(titles) {
             if (!titles || titles === '0' || titles === 'false' || titles === false) return '';
             const count = parseInt(titles);
             return count > 0 ? ` 🏆×${count}` : '';
         }
-
         function getAvatarImg(teamId) {
             if (!teamId) return '';
             const imagePath = `https://img.sofascore.com/api/v1/team/${teamId}/image`;
             const proxied = `https://betting.asdasddsgdfgfdsgfj.website/sofascore/image-proxy?imagePath=${encodeURIComponent(imagePath)}`;
             return `<img class="player-avatar" src="${proxied}" alt="avatar" onerror="this.style.visibility='hidden'">`;
         }
-
         function hasValidRanking(player) {
             return player.ranking && player.ranking !== '-' && !isNaN(player.ranking) && parseInt(player.ranking) > 0;
         }
-
         function getR128Section(roundIndex, blockOrder) {
             if (roundIndex === 0) return Math.ceil(blockOrder / 8);
             const multiplier = Math.pow(2, roundIndex);
             const r128StartOrder = (blockOrder - 1) * multiplier + 1;
-            const r128EndOrder = blockOrder * multiplier;
-            const startSection = Math.ceil(r128StartOrder / 8);
-            const endSection = Math.ceil(r128EndOrder / 8);
+            const r128EndOrder   = blockOrder * multiplier;
+            const startSection   = Math.ceil(r128StartOrder / 8);
+            const endSection     = Math.ceil(r128EndOrder / 8);
             if (startSection !== endSection) return null;
             return startSection;
         }
-
         function buildPlayerHTML(player) {
-            const isWinner = player.winner === true;
-            const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
-            const isValid = hasValidRanking(player);
-
+            const isWinner    = player.winner === true;
+            const seed        = player.teamSeed ? `[${player.teamSeed}]` : '';
+            const isValid     = hasValidRanking(player);
             let romeStats = '';
             if (!isValid) {
                 romeStats = '<div class="rome-stats" style="visibility:hidden;min-height:18px;">-</div>';
             } else if (player.best_round && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
-                const winrate = parseFloat(player.winrate) || 0;
+                const winrate    = parseFloat(player.winrate) || 0;
                 const winratePct = (winrate * 100).toFixed(0);
-                const wrClass = winrate >= 0.6 ? 'high' : winrate >= 0.4 ? 'medium' : 'low';
+                const wrClass    = winrate >= 0.6 ? 'high' : winrate >= 0.4 ? 'medium' : 'low';
                 romeStats = `<div class="rome-stats">
                     <span class="best-round-badge ${getBestRoundClass(player.best_round)}">${bestRoundLabels[player.best_round] || player.best_round}${formatTitles(player.titles)}</span>
                     <span class="winrate-badge ${wrClass}">${winratePct}%</span>
@@ -476,12 +303,10 @@
             } else {
                 romeStats = `<div class="rome-stats"><span class="no-data-badge">Rome Debut</span></div>`;
             }
-
-            const winnerClass = isWinner ? 'winner' : '';
-            const avatarImg = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
-            const rankDisplay = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
-            const nameClass = !isValid ? 'placeholder' : '';
-
+            const winnerClass  = isWinner ? 'winner' : '';
+            const avatarImg    = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
+            const rankDisplay  = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
+            const nameClass    = !isValid ? 'placeholder' : '';
             return `<div class="player ${winnerClass}">
                 ${avatarImg}
                 <div class="player-info">
@@ -494,7 +319,6 @@
                 </div>
             </div>`;
         }
-
         function buildPlaceholderBlock() {
             const ghost = (label) => `<div class="player">
                 <div style="width:40px;height:40px;border-radius:50%;background:#eee;flex-shrink:0;"></div>
@@ -506,7 +330,6 @@
             return ghost('TBD') + ghost('TBD');
         }
 
-        // ── Layout constants ─────────────────────────────────────────────────
         const MATCH_H = 142;
         const BLOCK_GAP = 14;
         const MATCH_W = 320;
@@ -516,23 +339,20 @@
 
         function computeLayout(firstCount) {
             const firstSlot = MATCH_H + BLOCK_GAP;
-            const totalH = firstCount * firstSlot + MARGIN_TOP;
+            const totalH    = firstCount * firstSlot + MARGIN_TOP;
             return { firstSlot, totalH };
         }
 
         function renderTennisBracket(containerEl, roundsData) {
             containerEl.innerHTML = '';
             if (!roundsData.length) return;
-
             const blockCounts = roundsData.map(rd => rd.blocks.length);
-            const firstCount = blockCounts[0];
+            const firstCount  = blockCounts[0];
             const { firstSlot, totalH } = computeLayout(firstCount);
             const slots = blockCounts.map(c => (firstCount / c) * firstSlot);
 
             roundsData.forEach((rd, colIdx) => {
-                const slot = slots[colIdx];
-                const count = rd.blocks.length;
-
+                const slot  = slots[colIdx];
                 const col = document.createElement('div');
                 col.className = 'round-col';
                 col.style.width = MATCH_W + 'px';
@@ -549,12 +369,10 @@
 
                 rd.blocks.forEach((block, bi) => {
                     const slotCenter = MARGIN_TOP + bi * slot + slot / 2;
-                    const topOffset = slotCenter - MATCH_H / 2;
-
+                    const topOffset  = slotCenter - MATCH_H / 2;
                     const matchEl = document.createElement('div');
                     matchEl.className = 'match' + (block.finished ? ' finished' : '') + (block.placeholder ? ' placeholder-block' : '');
                     matchEl.style.cssText = `left:0;top:${topOffset}px;width:${MATCH_W}px;height:${MATCH_H}px;`;
-
                     if (block.placeholder) {
                         matchEl.innerHTML = buildPlaceholderBlock();
                         matchEl.style.opacity = '0.45';
@@ -575,38 +393,32 @@
                     }
                     area.appendChild(matchEl);
                 });
-
                 col.appendChild(area);
                 containerEl.appendChild(col);
 
-                // Connector SVG
                 if (colIdx < roundsData.length - 1) {
-                    const nextSlot = slots[colIdx + 1];
+                    const nextSlot  = slots[colIdx + 1];
                     const nextCount = blockCounts[colIdx + 1];
-
                     const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                     svgEl.setAttribute('width', SVG_W);
                     svgEl.setAttribute('height', totalH + HEADER_H);
                     svgEl.style.cssText = 'flex-shrink:0;display:block;';
-
                     const stroke = 'rgba(55,148,96,0.75)';
                     const sw = 1.5;
-
                     for (let ni = 0; ni < nextCount; ni++) {
-                        const si1 = 2 * ni;
-                        const si2 = 2 * ni + 1;
-                        const y1 = HEADER_H + MARGIN_TOP + si1 * slot + slot / 2;
-                        const y2 = HEADER_H + MARGIN_TOP + si2 * slot + slot / 2;
-                        const yNext = HEADER_H + MARGIN_TOP + ni * nextSlot + nextSlot / 2;
+                        const si1  = 2 * ni;
+                        const si2  = 2 * ni + 1;
+                        const y1   = HEADER_H + MARGIN_TOP + si1 * slot + slot / 2;
+                        const y2   = HEADER_H + MARGIN_TOP + si2 * slot + slot / 2;
+                        const yNext= HEADER_H + MARGIN_TOP + ni * nextSlot + nextSlot / 2;
                         const yMid = (y1 + y2) / 2;
                         const xMid = SVG_W / 2;
-
                         addLine(svgEl, 0, y1, xMid, y1, stroke, sw);
                         addLine(svgEl, 0, y2, xMid, y2, stroke, sw);
                         addLine(svgEl, xMid, y1, xMid, y2, stroke, sw);
                         addLine(svgEl, xMid, yMid, SVG_W, yMid, stroke, sw);
                         if (Math.abs(yMid - yNext) > 1) {
-                            addLine(svgEl, SVG_W - 1, yMid, SVG_W - 1, yNext, stroke, sw);
+                            addLine(svgEl, SVG_W-1, yMid, SVG_W-1, yNext, stroke, sw);
                         }
                     }
                     containerEl.appendChild(svgEl);
@@ -616,18 +428,53 @@
 
         function addLine(svgEl, x1, y1, x2, y2, stroke, sw) {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', x1);
-            line.setAttribute('y1', y1);
-            line.setAttribute('x2', x2);
-            line.setAttribute('y2', y2);
+            line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2); line.setAttribute('y2', y2);
             line.setAttribute('stroke', stroke);
             line.setAttribute('stroke-width', sw);
             svgEl.appendChild(line);
         }
 
-        // ── Tab logic ────────────────────────────────────────────────────────
-        let activeTabMode = 'all';
+        // ── 移动端判断（使用屏幕物理宽度，不受桌面模式请求影响）──
+        function isMobileDevice() {
+            return window.screen.width < 1024 || window.outerWidth < 1024;
+        }
 
+        function applyContainerMode(mode) {
+            const c = document.getElementById('bracketContainer');
+            const mobile = isMobileDevice();
+
+            c.classList.remove('desktop-center', 'mobile-left');
+
+            if (mode === 'all') {
+                c.classList.remove('section-mode');
+                if (mobile) {
+                    c.classList.add('mobile-left');
+                } else {
+                    c.classList.add('desktop-center');
+                }
+            } else {
+                c.classList.add('section-mode');
+                if (mobile) {
+                    // 移动端强制左对齐，允许横向滚动
+                    c.classList.add('mobile-left');
+                } else {
+                    c.classList.add('desktop-center');
+                }
+            }
+
+            // 统一设置 overflow 等
+            c.style.overflow = 'auto';
+            c.style.maxHeight = '85vh';
+            if (mobile) {
+                c.style.cursor = 'default';
+            } else {
+                c.style.cursor = 'grab';
+            }
+        }
+
+        // ── Tab 和渲染 ──
+        let activeTabMode = 'all';
         function setupTabs() {
             const tabsEl = document.getElementById('tabs');
             tabsEl.innerHTML = '';
@@ -658,28 +505,9 @@
             applyContainerMode(mode);
         }
 
-        function applyContainerMode(mode) {
-            const c = document.getElementById('bracketContainer');
-            if (mode === 'all') {
-                c.classList.remove('section-mode');
-                c.style.maxHeight = '85vh';
-                c.style.overflow = 'auto';
-                c.style.cursor = 'grab';
-                c.style.display = 'block';
-            } else {
-                c.classList.add('section-mode');
-                // 清除内联样式，让CSS媒体查询控制
-                c.style.maxHeight = '';
-                c.style.overflow = '';
-                c.style.cursor = '';
-                c.style.display = '';
-            }
-        }
-
         function buildRoundsData(data, mode) {
             const currentRound = data.currentRound || 1;
             let roundSlice, blocksPerSection;
-
             if (mode === 'qf') {
                 roundSlice = allRoundOrder.slice(4);
                 blocksPerSection = [4, 2, 1];
@@ -690,11 +518,9 @@
                 roundSlice = allRoundOrder.slice(0, 4);
                 blocksPerSection = [8, 4, 2, 1];
             }
-
             return roundSlice.map((roundName, ri) => {
                 const roundData = data.rounds.find(r => r.description === roundName);
                 const roundIndex = roundData ? data.rounds.indexOf(roundData) : -1;
-
                 let realBlocks = [];
                 if (roundData) {
                     realBlocks = [...roundData.blocks].sort((a, b) => a.order - b.order);
@@ -702,13 +528,12 @@
                         realBlocks = realBlocks.filter(b => getR128Section(roundIndex, b.order) === mode);
                     }
                 }
-
                 const expectedCount = blocksPerSection[ri];
                 const blocks = [];
                 for (let i = 0; i < expectedCount; i++) {
-                    blocks.push(i < realBlocks.length ?
-                        realBlocks[i] :
-                        { placeholder: true, order: i + 1, finished: false, participants: [] }
+                    blocks.push(i < realBlocks.length
+                        ? realBlocks[i]
+                        : { placeholder: true, order: i+1, finished: false, participants: [] }
                     );
                 }
                 return { roundName, blocks };
@@ -719,44 +544,38 @@
             renderTennisBracket(document.getElementById('bracket'), buildRoundsData(data, mode));
         }
 
-        // ── Drag-to-scroll (仅桌面端鼠标拖拽) ──────────────────────────────────
+        // ── 桌面端鼠标拖拽滚动（移动端不启用）──
         function enableDragScroll() {
             const c = document.getElementById('bracketContainer');
-            if (!c) return;
+            if (!c || isMobileDevice()) return;
 
-            // 触摸设备不注册鼠标拖拽，完全依赖原生滚动/缩放
-            if ('ontouchstart' in window) {
-                return;
-            }
-
-            let down = false,
-                startX, startY, sl, st;
-
+            let down = false, startX, startY, sl, st;
             c.addEventListener('mousedown', e => {
                 down = true;
                 c.classList.add('dragging');
-                startX = e.clientX;
-                startY = e.clientY;
-                sl = c.scrollLeft;
-                st = c.scrollTop;
+                startX = e.clientX; startY = e.clientY;
+                sl = c.scrollLeft; st = c.scrollTop;
                 e.preventDefault();
             });
-
             document.addEventListener('mouseup', () => {
                 down = false;
                 c.classList.remove('dragging');
             });
-
             document.addEventListener('mousemove', e => {
                 if (!down) return;
                 c.scrollLeft = sl - (e.clientX - startX);
                 c.scrollTop = st - (e.clientY - startY);
             });
-
             c.addEventListener('dragstart', e => e.preventDefault());
         }
 
-        // ── Boot ─────────────────────────────────────────────────────────────
+        // 监听窗口大小变化，重新应用容器样式（以防横屏等）
+        window.addEventListener('resize', () => {
+            if (activeTabMode) applyContainerMode(activeTabMode);
+            enableDragScroll();
+        });
+
+        // ── 启动 ──
         function fetchAndRender() {
             fetch('../output/draw_rome_2026_with_history_stats.json?v=' + Date.now())
                 .then(r => r.json())
@@ -766,9 +585,7 @@
                     enableDragScroll();
                 });
         }
-
         fetchAndRender();
     </script>
 </body>
-
 </html>
