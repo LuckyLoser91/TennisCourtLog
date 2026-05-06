@@ -9,6 +9,9 @@ on:
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
 
+permissions:
+  contents: write
+  
 jobs:
   update-draw:
     runs-on: ubuntu-latest
