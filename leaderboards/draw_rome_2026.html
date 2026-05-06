@@ -72,68 +72,68 @@
             justify-content: center;
         }
 
+        /* ── Tennis bracket SVG layout ── */
         .bracket {
             display: flex;
-            gap: 20px;
-            justify-content: center;
+            gap: 0;
+            justify-content: flex-start;
             align-items: flex-start;
+            position: relative;
         }
 
-        .round-column {
+        .round-col {
             display: flex;
             flex-direction: column;
-            min-width: 280px;
-            width: 280px;
+            position: relative;
             flex-shrink: 0;
         }
 
-        .round-title {
+        .round-header {
             text-align: center;
             color: white;
             font-weight: bold;
-            font-size: 1em;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.3);
+            font-size: 0.9em;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.35);
             border-radius: 5px;
             text-transform: uppercase;
-            height: 40px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin: 0 8px 0 8px;
         }
 
-        .matches-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* SVG connector layer sits between two columns */
+        .connector-svg {
+            flex-shrink: 0;
+            display: block;
         }
 
-        .match-wrapper {
-            height: 100px;
-            display: flex;
-            align-items: stretch;
-        }
-
+        /* Each match card */
         .match {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
             overflow: hidden;
-            transition: transform 0.2s, opacity 0.3s;
             border-left: 4px solid #379460;
-            width: 100%;
             display: flex;
             flex-direction: column;
+            position: absolute;
         }
 
         .match:hover {
-            transform: translateX(3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+            z-index: 10;
         }
 
         .match.finished {
             border-left-color: #2196F3;
+        }
+
+        /* The scrollable area holding match cards absolutely */
+        .round-matches-area {
+            position: relative;
         }
 
         .player {
@@ -150,7 +150,7 @@
         }
 
         .player.winner {
-            background: linear-gradient(90deg, #e8f5e9 0%, transparent 100%);
+            background: linear-gradient(90deg, #a7d7ab 0%, transparent 100%);
             font-weight: bold;
         }
 
@@ -273,23 +273,31 @@
         }
 
         .bracket-container {
-            overflow-x: auto;
-            padding: 20px 0;
+            overflow: auto;
+            padding: 20px 40px;
             display: flex;
             justify-content: center;
             cursor: grab;
-            /* 添加抓手光标 */
+            max-height: 85vh;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* On mobile, left-align so content is reachable by swiping */
+        @media (max-width: 768px) {
+            .bracket-container {
+                justify-content: flex-start;
+                padding: 16px 16px 32px 16px;
+                max-height: none;
+            }
         }
 
         .bracket-container:active {
             cursor: grabbing;
-            /* 拖动时显示抓取光标 */
         }
 
         .bracket-container.dragging {
             cursor: grabbing;
             user-select: none;
-            /* 拖动时禁止选择文字 */
         }
 
         .winrate-badge {
@@ -385,7 +393,7 @@
         <button class="tab active" onclick="showAll()">全部签表</button>
     </div>
 
-    <div class="bracket-container">
+    <div class="bracket-container" id="bracketContainer">
         <div class="bracket" id="bracket"></div>
     </div>
 
@@ -400,21 +408,15 @@
             'Round of 16', 'Quarterfinal', 'Semifinal', 'Final'
         ];
 
-        // 每个轮次的block数量
-        const blocksPerRound = [64, 32, 16, 8, 4, 2, 1];
+        // Full bracket: how many blocks per round (for placeholder pre-rendering)
+        const fullBlocksPerRound = [64, 32, 16, 8, 4, 2, 1];
 
-        function getBestRoundClass(bestRound) {
-            if (!bestRound) return '';
-            return 'best-round-' + bestRound;
-        }
+        function getBestRoundClass(r) { return r ? 'best-round-' + r : ''; }
 
         function formatTitles(titles) {
             if (!titles || titles === '0' || titles === 'false' || titles === false) return '';
             const count = parseInt(titles);
-            if (count > 0) {
-                return ` 🏆×${count}`;
-            }
-            return '';
+            return count > 0 ? ` 🏆×${count}` : '';
         }
 
         function getFlagImg(iso2) {
@@ -426,255 +428,326 @@
             return player.ranking && player.ranking !== '-' && !isNaN(player.ranking) && parseInt(player.ranking) > 0;
         }
 
-        function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060741')
-                .then(response => response.json())
-                .then(data => {
-                    window.drawData = data;
-                    window.currentRound = data.currentRound || 1;
-                    setupTabs();
-                    showAll();
-                });
-        }
-
-        function setupTabs() {
-            const tabsContainer = document.getElementById('tabs');
-            tabsContainer.innerHTML = '<button class="tab active" onclick="showAll()">全部签表</button>';
-            const sections = 8;
-            for (let i = 1; i <= sections; i++) {
-                const button = document.createElement('button');
-                button.className = 'tab';
-                button.textContent = `${i}/8 区`;
-                button.onclick = function () {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    showSection(i);
-                };
-                tabsContainer.appendChild(button);
-            }
-        }
-
-        function showAll() {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector('.tab').classList.add('active');
-            renderBracket(window.drawData, null);
-        }
-
-        function showSection(section) {
-            renderBracket(window.drawData, section);
-        }
-
-        // 根据order计算该block属于哪个R128 section（1-8）
         function getR128Section(roundIndex, blockOrder) {
-            if (roundIndex === 0) {
-                // R128: order 1-64，每8个一个section
-                return Math.ceil(blockOrder / 8);
-            }
-
-            // 对于后续轮次，使用数学关系：
-            // R64 order 1-32，order N 对应 R128 的 (N*2-1) 和 (N*2)
-            // R32 order 1-16，order N 对应 R128 的 (N*4-3) 到 (N*4)
-            // R16 order 1-8，order N 对应 R128 的 (N*8-7) 到 (N*8)
-
+            if (roundIndex === 0) return Math.ceil(blockOrder / 8);
             const multiplier = Math.pow(2, roundIndex);
             const r128StartOrder = (blockOrder - 1) * multiplier + 1;
             const r128EndOrder = blockOrder * multiplier;
-
-            // 检查这些R128 order是否都属于同一个section
             const startSection = Math.ceil(r128StartOrder / 8);
             const endSection = Math.ceil(r128EndOrder / 8);
-
-            // 如果跨越多个section，返回null（不应该发生）
-            if (startSection !== endSection) {
-                console.warn(`Block round${roundIndex} order${blockOrder} 跨越了多个section: ${startSection}-${endSection}`);
-                return null;
-            }
-
+            if (startSection !== endSection) return null;
             return startSection;
         }
 
-        function renderBracket(data, activeSection) {
-            const bracket = document.getElementById('bracket');
-            bracket.innerHTML = '';
+        function buildPlayerHTML(player) {
+            const isWinner = player.winner === true;
+            const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
+            const isValidPlayer = hasValidRanking(player);
 
-            const currentRound = data.currentRound || 1;
-
-            // 确定要显示的轮次
-            let roundsToShow;
-            if (activeSection) {
-                const maxRound = Math.min(currentRound, 4);
-                roundsToShow = allRoundOrder.slice(0, maxRound);
+            let romeStats = '';
+            if (!isValidPlayer) {
+                romeStats = '<div class="rome-stats" style="visibility:hidden;height:1.2em;">-</div>';
+            } else if (player.best_round && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
+                const winrate = parseFloat(player.winrate) || 0;
+                const winratePct = (winrate * 100).toFixed(0);
+                let winrateClass = winrate >= 0.6 ? 'high' : winrate >= 0.4 ? 'medium' : 'low';
+                romeStats = `<div class="rome-stats">
+                    <span class="best-round-badge ${getBestRoundClass(player.best_round)}">${bestRoundLabels[player.best_round] || player.best_round}${formatTitles(player.titles)}</span>
+                    <span class="winrate-badge ${winrateClass}">${winratePct}%</span>
+                    <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
+                </div>`;
             } else {
-                roundsToShow = allRoundOrder.slice(0, currentRound);
+                romeStats = `<div class="rome-stats"><span class="no-data-badge">Rome Debut</span></div>`;
             }
 
-            roundsToShow.forEach(roundName => {
-                const roundData = data.rounds.find(r => r.description === roundName);
-                if (!roundData) return;
+            const winnerClass = isWinner ? 'winner' : '';
+            const flagImg = isValidPlayer ? getFlagImg(player.iso2) : '';
+            const rankDisplay = isValidPlayer ? `<span class="player-rank">#${player.ranking}</span>` : '';
+            const nameClass = !isValidPlayer ? 'placeholder' : '';
 
-                const roundIndex = data.rounds.indexOf(roundData);
-                let blocks = roundData.blocks;
-
-                if (activeSection) {
-                    blocks = blocks.filter(block => {
-                        const section = getR128Section(roundIndex, block.order);
-                        return section === activeSection;
-                    });
-                }
-
-                if (blocks.length === 0) return;
-
-                const roundColumn = document.createElement('div');
-                roundColumn.className = 'round-column';
-
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'round-title';
-                titleDiv.textContent = roundName;
-                roundColumn.appendChild(titleDiv);
-
-                const matchesContainer = document.createElement('div');
-                matchesContainer.className = 'matches-container';
-
-                blocks.sort((a, b) => a.order - b.order).forEach(block => {
-                    const matchWrapper = document.createElement('div');
-                    matchWrapper.className = 'match-wrapper';
-
-                    const matchDiv = document.createElement('div');
-                    matchDiv.className = 'match';
-                    if (block.finished === true) {
-                        matchDiv.classList.add('finished');
-                    }
-
-                    let playersHTML = '';
-                    block.participants.forEach(player => {
-                        const isWinner = player.winner === true;
-                        const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
-                        const isValidPlayer = hasValidRanking(player);
-
-                        let romeStats = '';
-
-                        if (!isValidPlayer) {
-                            romeStats = '<div class="rome-stats" style="visibility: hidden; height: 1.2em;">占位</div>';
-                        } else if (player.best_round && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
-                            const winrate = parseFloat(player.winrate) || 0;
-                            const winratePct = (winrate * 100).toFixed(0);
-
-                            let winrateClass = 'low';
-                            if (winrate >= 0.6) winrateClass = 'high';
-                            else if (winrate >= 0.4) winrateClass = 'medium';
-
-                            const bestRound = player.best_round;
-                            const titles = player.titles;
-
-                            romeStats = `
-                                <div class="rome-stats">
-                                    <span class="best-round-badge ${getBestRoundClass(bestRound)}">
-                                        ${bestRoundLabels[bestRound] || bestRound}
-                                        ${formatTitles(titles)}
-                                    </span>
-                                    <span class="winrate-badge ${winrateClass}">${winratePct}%</span>
-                                    <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
-                                </div>`;
-                        } else {
-                            romeStats = `
-                                <div class="rome-stats">
-                                    <span class="no-data-badge">Rome Debut</span>
-                                </div>`;
-                        }
-
-                        let nameClass = '';
-                        if (!isValidPlayer) nameClass = 'placeholder';
-
-                        const winnerClass = isWinner ? 'winner' : '';
-                        const flagImg = isValidPlayer ? getFlagImg(player.iso2) : '';
-                        const rankDisplay = isValidPlayer ?
-                            `<span class="player-rank">#${player.ranking}</span>` : '';
-
-                        playersHTML += `
-                            <div class="player ${winnerClass}">
-                                <div class="player-info">
-                                    <div class="player-name ${nameClass}">
-                                        ${rankDisplay}
-                                        ${flagImg}
-                                        ${player.name}
-                                        <span class="seed">${seed}</span>
-                                        ${isWinner ? '<span class="winner-badge">W</span>' : ''}
-                                    </div>
-                                    ${romeStats}
-                                </div>
-                            </div>`;
-                    });
-
-                    matchDiv.innerHTML = playersHTML;
-                    matchWrapper.appendChild(matchDiv);
-                    matchesContainer.appendChild(matchWrapper);
-                });
-
-                roundColumn.appendChild(matchesContainer);
-                bracket.appendChild(roundColumn);
-            });
-
-            // 居中显示
-            bracket.style.justifyContent = 'center';
+            return `<div class="player ${winnerClass}">
+                <div class="player-info">
+                    <div class="player-name ${nameClass}">
+                        ${rankDisplay}${flagImg}${player.name}<span class="seed">${seed}</span>
+                        ${isWinner ? '<span class="winner-badge">W</span>' : ''}
+                    </div>
+                    ${romeStats}
+                </div>
+            </div>`;
         }
 
-        fetchAndRender();
+        function buildPlaceholderBlock() {
+            // A ghost block for rounds not yet played
+            const ghost = (name) => `<div class="player">
+                <div class="player-info">
+                    <div class="player-name placeholder">${name}</div>
+                    <div class="rome-stats" style="visibility:hidden;height:1.2em;">-</div>
+                </div>
+            </div>`;
+            return ghost('TBD') + ghost('TBD');
+        }
+
+        // ── Tennis bracket layout constants ───────────────────────────────────
+        const MATCH_H  = 100;   // height of one match card
+        const BLOCK_GAP = 12;   // visible gap between blocks in the same round
+        const MATCH_W  = 260;   // width of one match card
+        const SVG_W    = 56;    // width of the connector SVG column
+        const HEADER_H = 44;    // height of round title row
+        const MARGIN_TOP = 10;  // top padding inside match area
+
+        /**
+         * Compute layout parameters for a given number of blocks in the first (densest) round.
+         * spacing[r] = slot height per block in round r
+         * totalH = total height of the match area
+         */
+        function computeLayout(firstCount) {
+            // Slot = MATCH_H + BLOCK_GAP for first round, doubles each round
+            const firstSlot = MATCH_H + BLOCK_GAP;
+            // Total height = firstCount * firstSlot
+            const totalH = firstCount * firstSlot + MARGIN_TOP;
+            return { firstSlot, totalH };
+        }
+
+        /**
+         * Render a complete bracket into `containerEl`.
+         * roundsData: [{roundName, blocks: [...]}]
+         *   - blocks can contain real or placeholder blocks
+         */
+        function renderTennisBracket(containerEl, roundsData) {
+            containerEl.innerHTML = '';
+            if (roundsData.length === 0) return;
+
+            const blockCounts = roundsData.map(rd => rd.blocks.length);
+            const firstCount = blockCounts[0];
+            const { firstSlot, totalH } = computeLayout(firstCount);
+
+            // slot per block for each round (doubles as rounds halve)
+            const slots = blockCounts.map(c => (firstCount / c) * firstSlot);
+
+            roundsData.forEach((rd, colIdx) => {
+                const slot = slots[colIdx];
+                const count = rd.blocks.length;
+
+                // Column
+                const col = document.createElement('div');
+                col.className = 'round-col';
+                col.style.width = MATCH_W + 'px';
+
+                // Header
+                const hdr = document.createElement('div');
+                hdr.className = 'round-header';
+                hdr.textContent = rd.roundName;
+                hdr.style.width = MATCH_W + 'px';
+                col.appendChild(hdr);
+
+                // Match area
+                const area = document.createElement('div');
+                area.className = 'round-matches-area';
+                area.style.cssText = `width:${MATCH_W}px;height:${totalH}px;position:relative;`;
+
+                rd.blocks.forEach((block, bi) => {
+                    // Center of slot bi
+                    const slotCenter = MARGIN_TOP + bi * slot + slot / 2;
+                    const topOffset = slotCenter - MATCH_H / 2;
+
+                    const matchEl = document.createElement('div');
+                    matchEl.className = 'match' + (block.finished ? ' finished' : '') + (block.placeholder ? ' placeholder-block' : '');
+                    matchEl.style.cssText = `left:0;top:${topOffset}px;width:${MATCH_W}px;height:${MATCH_H}px;`;
+
+                    if (block.placeholder) {
+                        matchEl.innerHTML = buildPlaceholderBlock();
+                        matchEl.style.opacity = '0.45';
+                        matchEl.style.borderLeftColor = '#aaa';
+                    } else {
+                        matchEl.innerHTML = block.participants.map(buildPlayerHTML).join('');
+                    }
+                    area.appendChild(matchEl);
+                });
+
+                col.appendChild(area);
+                containerEl.appendChild(col);
+
+                // Connector SVG to next round
+                if (colIdx < roundsData.length - 1) {
+                    const nextSlot = slots[colIdx + 1];
+                    const nextCount = blockCounts[colIdx + 1];
+
+                    const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svgEl.setAttribute('width', SVG_W);
+                    svgEl.setAttribute('height', totalH + HEADER_H);
+                    svgEl.style.cssText = 'flex-shrink:0;display:block;';
+
+                    const stroke = 'rgba(55,148,96,0.75)';
+                    const sw = 1.5;
+
+                    for (let ni = 0; ni < nextCount; ni++) {
+                        const si1 = 2 * ni;
+                        const si2 = 2 * ni + 1;
+
+                        const y1   = HEADER_H + MARGIN_TOP + si1 * slot + slot / 2;
+                        const y2   = HEADER_H + MARGIN_TOP + si2 * slot + slot / 2;
+                        const yNext = HEADER_H + MARGIN_TOP + ni * nextSlot + nextSlot / 2;
+                        const yMid  = (y1 + y2) / 2;
+
+                        const xMid = SVG_W / 2;
+
+                        // Horizontal right from match1 and match2
+                        addLine(svgEl, 0, y1, xMid, y1, stroke, sw);
+                        addLine(svgEl, 0, y2, xMid, y2, stroke, sw);
+                        // Vertical bracket
+                        addLine(svgEl, xMid, y1, xMid, y2, stroke, sw);
+                        // Horizontal to next round at midpoint
+                        addLine(svgEl, xMid, yMid, SVG_W, yMid, stroke, sw);
+                        // If yMid ≠ yNext, connect vertically then horizontally
+                        if (Math.abs(yMid - yNext) > 1) {
+                            addLine(svgEl, SVG_W - 1, yMid, SVG_W - 1, yNext, stroke, sw);
+                        }
+                    }
+
+                    containerEl.appendChild(svgEl);
+                }
+            });
+        }
+
+        function addLine(svgEl, x1, y1, x2, y2, stroke, sw) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+            line.setAttribute('stroke', stroke);
+            line.setAttribute('stroke-width', sw);
+            svgEl.appendChild(line);
+        }
+
+        // ── Tab & render helpers ─────────────────────────────────────────────
+
+        let activeTabMode = 'all'; // 'all' | 1..8 | 'qf'
+
+        function setupTabs() {
+            const tabsContainer = document.getElementById('tabs');
+            tabsContainer.innerHTML = '';
+
+            const addTab = (label, onclick, id) => {
+                const btn = document.createElement('button');
+                btn.className = 'tab';
+                if (id) btn.id = id;
+                btn.textContent = label;
+                btn.onclick = onclick;
+                tabsContainer.appendChild(btn);
+                return btn;
+            };
+
+            addTab('全部签表', () => switchTab('all'), 'tab-all');
+            for (let i = 1; i <= 8; i++) {
+                addTab(`${i}/8 区`, () => switchTab(i), `tab-sec-${i}`);
+            }
+            addTab('🏅 八强', () => switchTab('qf'), 'tab-qf');
+
+            switchTab('all');
+        }
+
+        function switchTab(mode) {
+            activeTabMode = mode;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const idMap = { all: 'tab-all', qf: 'tab-qf' };
+            const targetId = typeof mode === 'number' ? `tab-sec-${mode}` : idMap[mode];
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) targetEl.classList.add('active');
+            renderBracket(window.drawData, mode);
+        }
+
+        /**
+         * Build roundsData array including placeholder blocks for future rounds.
+         * mode: 'all' | 1..8 | 'qf'
+         */
+        function buildRoundsData(data, mode) {
+            const currentRound = data.currentRound || 1;
+
+            let roundSlice, blocksPerSection;
+            if (mode === 'qf') {
+                // QF bracket: always show QF → Final (3 rounds), all as placeholders if needed
+                roundSlice = allRoundOrder.slice(4); // QF, SF, Final
+                blocksPerSection = [4, 2, 1];
+            } else if (mode === 'all') {
+                roundSlice = allRoundOrder.slice(0, Math.max(currentRound, 1));
+                blocksPerSection = fullBlocksPerRound.slice(0, roundSlice.length);
+            } else {
+                // 1/8 section: always show R128→R16 (4 rounds)
+                roundSlice = allRoundOrder.slice(0, 4);
+                blocksPerSection = [8, 4, 2, 1];
+            }
+
+            const roundsData = [];
+
+            roundSlice.forEach((roundName, ri) => {
+                const roundData = data.rounds.find(r => r.description === roundName);
+                const roundIndex = roundData ? data.rounds.indexOf(roundData) : -1;
+
+                let realBlocks = [];
+                if (roundData) {
+                    realBlocks = [...roundData.blocks].sort((a, b) => a.order - b.order);
+                    if (typeof mode === 'number') {
+                        realBlocks = realBlocks.filter(b => getR128Section(roundIndex, b.order) === mode);
+                    } else if (mode === 'qf') {
+                        // no section filter for qf
+                    }
+                }
+
+                const expectedCount = blocksPerSection[ri];
+                const blocks = [];
+
+                for (let i = 0; i < expectedCount; i++) {
+                    if (i < realBlocks.length) {
+                        blocks.push(realBlocks[i]);
+                    } else {
+                        blocks.push({ placeholder: true, order: i + 1, finished: false, participants: [] });
+                    }
+                }
+
+                if (blocks.length > 0) {
+                    roundsData.push({ roundName, blocks });
+                }
+            });
+
+            return roundsData;
+        }
+
+        function renderBracket(data, mode) {
+            const bracketEl = document.getElementById('bracket');
+            const roundsData = buildRoundsData(data, mode);
+            renderTennisBracket(bracketEl, roundsData);
+        }
+
         function fetchAndRender() {
-            fetch('../output/draw_rome_2026_with_history_stats.json')
-                .then(response => response.json())
+            fetch('../output/draw_rome_2026_with_history_stats.json?v=202605060813')
+                .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
                     window.currentRound = data.currentRound || 1;
                     setupTabs();
-                    showAll();
                     enableDragScroll();
                 });
         }
 
         function enableDragScroll() {
-            const container = document.querySelector('.bracket-container');
+            const container = document.getElementById('bracketContainer');
             if (!container) return;
-
-            let isDown = false;
-            let startX;
-            let startY;
-            let scrollLeft;
-            let scrollTop;
-
-            container.addEventListener('mousedown', (e) => {
-                isDown = true;
-                container.classList.add('dragging');
-                startX = e.pageX - container.offsetLeft;
-                startY = e.pageY - container.offsetTop;
-                scrollLeft = container.scrollLeft;
-                scrollTop = container.scrollTop;
+            let isDown = false, startX, startY, scrollLeft, scrollTop;
+            container.addEventListener('mousedown', e => {
+                isDown = true; container.classList.add('dragging');
+                startX = e.pageX - container.offsetLeft; startY = e.pageY - container.offsetTop;
+                scrollLeft = container.scrollLeft; scrollTop = container.scrollTop;
             });
-
-            container.addEventListener('mouseleave', () => {
-                isDown = false;
-                container.classList.remove('dragging');
+            container.addEventListener('mouseleave', () => { isDown = false; container.classList.remove('dragging'); });
+            container.addEventListener('mouseup', () => { isDown = false; container.classList.remove('dragging'); });
+            container.addEventListener('mousemove', e => {
+                if (!isDown) return; e.preventDefault();
+                container.scrollLeft = scrollLeft - (e.pageX - container.offsetLeft - startX) * 2;
+                container.scrollTop = scrollTop - (e.pageY - container.offsetTop - startY) * 2;
             });
-
-            container.addEventListener('mouseup', () => {
-                isDown = false;
-                container.classList.remove('dragging');
-            });
-
-            container.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - container.offsetLeft;
-                const y = e.pageY - container.offsetTop;
-                const walkX = (x - startX) * 2;
-                const walkY = (y - startY) * 2;
-                container.scrollLeft = scrollLeft - walkX;
-                container.scrollTop = scrollTop - walkY;
-            });
-
-            container.addEventListener('dragstart', (e) => {
-                e.preventDefault();
-            });
+            container.addEventListener('dragstart', e => e.preventDefault());
         }
+
+        fetchAndRender();
     </script>
 </body>
 
