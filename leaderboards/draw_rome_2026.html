@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.6, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=3.0, user-scalable=yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -58,6 +58,8 @@
         /* ── Bracket container ── */
         .bracket-container {
             overflow: auto;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
             padding: 20px 10px;
             cursor: grab;
             max-height: 85vh;
@@ -102,6 +104,7 @@
                 cursor: default;
                 max-height: 85vh;
                 padding: 20px 10px;
+                touch-action: pan-x pan-y;
                 -webkit-overflow-scrolling: touch;
             }
             .bracket-container.section-mode:active { cursor: default; }
@@ -596,7 +599,7 @@
         // ── Drag-to-scroll ──────────────────────────────────────────────────────
         function enableDragScroll() {
             const c = document.getElementById('bracketContainer');
-            if (!c) return;
+            if (!c || 'ontouchstart' in window) return;
             
             let down = false, startX, startY, sl, st;
             
