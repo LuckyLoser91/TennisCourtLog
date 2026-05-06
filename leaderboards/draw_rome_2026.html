@@ -58,7 +58,7 @@
         /* ── Bracket container ── */
         .bracket-container {
             overflow: auto;
-            padding: 20px 40px;
+            padding: 20px 10px;
             cursor: grab;
             max-height: 85vh;
             -webkit-overflow-scrolling: touch;
@@ -72,7 +72,7 @@
             overflow: visible;
             cursor: default;
             max-height: none;
-            padding: 20px 40px;
+            padding: 20px 10px;
         }
         
         /* Desktop: center the bracket in section mode with drag scroll and scrollbar */
@@ -84,7 +84,7 @@
                 overflow: auto;
                 cursor: grab;
                 max-height: 85vh;
-                padding: 20px 40px;
+                padding: 20px 10px;
                 -webkit-overflow-scrolling: touch;
             }
             .bracket-container.section-mode:active { cursor: grabbing; }
@@ -93,12 +93,15 @@
         
         /* Mobile: left-aligned with scrollbar */
         @media (max-width: 767px) {
+            body {
+                padding: 10px;
+            }
             .bracket-container.section-mode {
                 display: block;
                 overflow: auto;
                 cursor: default;
                 max-height: 85vh;
-                padding: 20px 40px;
+                padding: 20px 10px;
                 -webkit-overflow-scrolling: touch;
             }
             .bracket-container.section-mode:active { cursor: default; }
