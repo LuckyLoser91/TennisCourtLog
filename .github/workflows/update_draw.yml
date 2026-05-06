@@ -41,15 +41,15 @@ jobs:
       # 4. 运行第一个脚本：获取签表数据
       - name: 运行 get_draw_and_event.py
         run: python api_folder/get_draw_and_event.py
-        # 如果脚本需要 API Key，在这里注入环境变量，例如：
-        # env:
-        #   MY_API_KEY: ${{ secrets.MY_API_KEY }}
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
       # 5. 运行第二个脚本：更新签表
+      
       - name: 运行 update_draw.py
         run: python api_folder/update_draw.py
-        # env:
-        #   MY_API_KEY: ${{ secrets.MY_API_KEY }}
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
       # 6. 检查是否有文件变化，有的话才 commit
       - name: 检查文件变化并提交
