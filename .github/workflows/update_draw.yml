@@ -1,0 +1,66 @@
+name: 自动更新签表数据
+
+on:
+  schedule:
+    # 每小时整点运行（UTC 时间，北京时间 = UTC+8）
+    # 例如 UTC 01:00 = 北京 09:00
+    - cron: '0 * * * *'
+
+  # 允许手动在 Actions 页面点击触发
+  workflow_dispatch:
+
+jobs:
+  update-draw:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. 配置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. 安装依赖（自动读取 requirements.txt，如果没有则跳过）
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f api_folder/requirements.txt ]; then
+            pip install -r api_folder/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "未找到 requirements.txt，跳过安装"
+          fi
+
+      # 4. 运行第一个脚本：获取签表数据
+      - name: 运行 get_draw_and_event.py
+        run: python api_folder/get_draw_and_event.py
+        # 如果脚本需要 API Key，在这里注入环境变量，例如：
+        # env:
+        #   MY_API_KEY: ${{ secrets.MY_API_KEY }}
+
+      # 5. 运行第二个脚本：更新签表
+      - name: 运行 update_draw.py
+        run: python api_folder/update_draw.py
+        # env:
+        #   MY_API_KEY: ${{ secrets.MY_API_KEY }}
+
+      # 6. 检查是否有文件变化，有的话才 commit
+      - name: 检查文件变化并提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add output/
+          if git diff --cached --quiet; then
+            echo "✅ 签表数据无变化，跳过提交"
+          else
+            git commit -m "🎾 Auto-update draw data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push
+            echo "✅ 签表数据已更新并推送"
+          fi
