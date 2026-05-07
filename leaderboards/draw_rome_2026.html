@@ -676,12 +676,12 @@ function formatTimestamp(ts) {
             const nameRow = isWinner
                 ? `<div class="player-name-row">
                         ${rankDisplay}
-                        <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
+                        <span class="player-name ${nameClass}">${player.shortname}<span class="seed">${seed}</span></span>
                         <div class="player-name-right">${statsBadge}</div>
                    </div>`
                 : `<div class="player-name-row">
                         ${rankDisplay}
-                        <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
+                        <span class="player-name ${nameClass}">${player.shortname}<span class="seed">${seed}</span></span>
                    </div>`;
 
             return `<div class="player ${winnerClass}">
@@ -705,7 +705,7 @@ function formatTimestamp(ts) {
 
         const MATCH_H = 142;
         const BLOCK_GAP = 14;
-        const MATCH_W = 320;
+        const MATCH_W = 280;
         const SVG_W = 40;
         const HEADER_H = 44;
         const MARGIN_TOP = 10;

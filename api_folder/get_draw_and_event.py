@@ -100,13 +100,13 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
             if len(participants) == 0:
                 csv_rows.append({
                     'finished': finished, 'round': round_description,
-                    'block_order': block_order, 'name': 'TBD',
+                    'block_order': block_order, 'name': 'TBD','shortname': 'TBD',
                     'ranking': '', 'winner': '', 'teamSeed': '',
                     'team_id': '', 'event_id': event_id
                 })
                 csv_rows.append({
                     'finished': finished, 'round': round_description,
-                    'block_order': block_order, 'name': 'TBD',
+                    'block_order': block_order, 'name': 'TBD','shortname': 'TBD',
                     'ranking': '', 'winner': '', 'teamSeed': '',
                     'team_id': '', 'event_id': event_id
                 })
@@ -117,6 +117,7 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
                     'finished': finished, 'round': round_description,
                     'block_order': block_order,
                     'name': normalize_name(team.get('name', '')),
+                    'shortname': team.get('shortName', ''),
                     'ranking': team.get('ranking', ''),
                     'winner': player.get('winner', ''),
                     'teamSeed': player.get('teamSeed', ''),
@@ -125,7 +126,7 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
                 })
                 csv_rows.append({
                     'finished': finished, 'round': round_description,
-                    'block_order': block_order, 'name': 'Bye',
+                    'block_order': block_order, 'name': 'Bye','shortname':'Bye',
                     'ranking': '', 'winner': '', 'teamSeed': '',
                     'team_id': '', 'event_id': event_id
                 })
@@ -136,6 +137,7 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
                         'finished': finished, 'round': round_description,
                         'block_order': block_order,
                         'name': normalize_name(team.get('name', '')),
+                        'shortname': team.get('shortName', ''),
                         'ranking': team.get('ranking', ''),
                         'winner': player.get('winner', ''),
                         'teamSeed': player.get('teamSeed', ''),
@@ -146,7 +148,7 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
     csv_file_path = os.path.join(output_dir, 'draw.csv')
     with open(csv_file_path, 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ['finished', 'round', 'block_order', 'name', 'ranking', 'winner', 'teamSeed', 'team_id', 'event_id']
+        fieldnames = ['finished', 'round', 'block_order', 'name', 'shortname', 'ranking', 'winner', 'teamSeed', 'team_id', 'event_id']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(csv_rows)

@@ -309,7 +309,7 @@ def enhance_draw():
             if len(participants) == 0:
                 for _ in range(2):
                     enhanced_participants.append({
-                        'name': 'TBD', 'ranking': '', 'winner': '',
+                        'name': 'TBD', 'shortname': 'TBD','ranking': '', 'winner': '',
                         'teamSeed': '', 'team_id': '', 'event_id': event_id,
                         'sourceBlockId': '',
                         'blockId': '',
@@ -320,6 +320,7 @@ def enhance_draw():
                 player = participants[0]
                 team = player.get('team', {})
                 name = normalize_name(team.get('name', ''))
+                shortname = team.get('shortName', '')
                 team_id = team.get('id')
                 ranking = team.get('ranking', '')
                 stats = find_rome_stats(name, stats_map, not_found, ranking)
@@ -328,7 +329,7 @@ def enhance_draw():
                 rank_points, iso2 = get_rank_info(name, ranking, team_id, rankings_list)
 
                 enhanced_participants.append({
-                    'name': name, 'ranking': ranking,
+                    'name': name, 'shortname': shortname, 'ranking': ranking,
                     'winner': player.get('winner', ''),
                     'teamSeed': player.get('teamSeed', ''),
                     'team_id': team_id,
@@ -339,7 +340,7 @@ def enhance_draw():
                     **stats
                 })
                 enhanced_participants.append({
-                    'name': 'Bye', 'ranking': '', 'winner': '',
+                    'name': 'Bye', 'shortname':'Bye', 'ranking': '', 'winner': '',
                     'teamSeed': '', 'team_id': '', 'event_id': event_id,
                     'sourceBlockId': '',
                     'blockId': '',
@@ -350,6 +351,7 @@ def enhance_draw():
                 for player in participants:
                     team = player.get('team', {})
                     name = normalize_name(team.get('name', ''))
+                    shortname = team.get('shortName', '')
                     team_id = team.get('id')
                     ranking = team.get('ranking', '')
                     stats = find_rome_stats(name, stats_map, not_found, ranking)
@@ -358,7 +360,7 @@ def enhance_draw():
                     rank_points, iso2 = get_rank_info(name, ranking, team_id, rankings_list)
 
                     enhanced_participants.append({
-                        'name': name, 'ranking': ranking,
+                        'name': name, 'shortname': shortname, 'ranking': ranking,
                         'winner': player.get('winner', ''),
                         'teamSeed': player.get('teamSeed', ''),
                         'team_id': team_id,
