@@ -160,6 +160,13 @@
             gap: 5px;
             min-width: 0;
         }
+        .player-name-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
         .player-rank {
             font-size: 0.72em;
             color: #aaa;
@@ -246,180 +253,303 @@
             flex-shrink: 0;
             cursor: pointer;
             user-select: none;
-            letter-spacing: 0.02em;
-            transition: background 0.15s;
+            letter-spacing: 0.04em;
+            transition: background 0.15s, transform 0.1s;
         }
-        .stats-badge:hover { background: #0d47a1; }
+        .stats-badge:hover { background: #0d47a1; transform: scale(1.08); }
 
-        /* Modal overlay */
+        /* ── Modal overlay ── */
         .stats-modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.55);
+            background: rgba(0,0,0,0.6);
             z-index: 9999;
             align-items: center;
             justify-content: center;
+            padding: 12px;
         }
         .stats-modal-overlay.open { display: flex; }
         .stats-modal {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.35);
-            max-width: 600px;
-            width: 95vw;
-            max-height: 90vh;
+            background: #f4f6f8;
+            border-radius: 16px;
+            box-shadow: 0 12px 50px rgba(0,0,0,0.4);
+            max-width: 640px;
+            width: 100%;
+            max-height: 92vh;
             overflow-y: auto;
-            padding: 0;
             position: relative;
+            scrollbar-width: thin;
         }
+
+        /* ── Modal Header ── */
         .stats-modal-header {
-            background: linear-gradient(135deg, #19503b, #379460);
+            background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);
             color: white;
-            padding: 16px 20px 12px;
-            border-radius: 12px 12px 0 0;
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 10px;
+            padding: 0;
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            overflow: hidden;
         }
-        .stats-modal-title {
-            font-size: 1.05em;
-            font-weight: 700;
-            line-height: 1.35;
-        }
-        .stats-modal-subtitle {
-            font-size: 0.8em;
-            opacity: 0.85;
-            margin-top: 3px;
+        .stats-modal-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         .stats-modal-close {
-            background: rgba(255,255,255,0.25);
+            position: absolute;
+            top: 12px; right: 12px;
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            font-size: 1.2em;
-            width: 30px;
-            height: 30px;
+            font-size: 1em;
+            width: 28px; height: 28px;
             border-radius: 50%;
             cursor: pointer;
-            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 2;
+            transition: background 0.15s;
         }
         .stats-modal-close:hover { background: rgba(255,255,255,0.4); }
-        .stats-modal-body { padding: 16px 20px 20px; }
 
-        /* Score section */
-        .score-section {
+        /* ── VS Hero section ── */
+        .vs-hero {
             display: flex;
             align-items: stretch;
             gap: 0;
-            background: #f8f9fa;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 16px;
-            border: 1px solid #e0e0e0;
+            padding: 20px 16px 16px;
+            position: relative;
+            z-index: 1;
         }
-        .score-player {
+        .vs-player {
             flex: 1;
-            padding: 12px 14px;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 0 8px;
+        }
+        .vs-player.home { align-items: flex-start; }
+        .vs-player.away { align-items: flex-end; }
+        .vs-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+        }
+        .vs-avatar.winner-avatar { border-color: #ffd700; box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+        .vs-player-name {
+            font-weight: 800;
+            font-size: 0.92em;
+            color: white;
+            line-height: 1.2;
+            text-align: center;
+        }
+        .vs-player.home .vs-player-name { text-align: left; }
+        .vs-player.away .vs-player-name { text-align: right; }
+        .vs-player-meta {
+            font-size: 0.72em;
+            opacity: 0.75;
+            display: flex;
+            align-items: center;
             gap: 4px;
         }
-        .score-player.winner-side { background: linear-gradient(135deg, #e8f5e9, #f1faf2); }
-        .score-player-name {
-            font-weight: 700;
-            font-size: 0.95em;
-            color: #222;
+        .vs-flag {
+            font-size: 1.1em;
         }
-        .score-player.winner-side .score-player-name { color: #1b5e20; }
-        .score-player-country { font-size: 0.75em; color: #888; }
-        .score-sets {
+        .vs-rank { opacity: 0.8; }
+        .vs-winner-crown {
+            font-size: 0.7em;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+
+        /* Score bubble in center */
+        .vs-center {
             display: flex;
-            gap: 6px;
-            margin-top: 4px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 90px;
+            flex-shrink: 0;
         }
-        .set-score {
+        .vs-label {
+            font-size: 0.62em;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+            text-transform: uppercase;
+            color: white;
+        }
+        /* Set score: home col | dash | away col, each col is vertical stack */
+        .vs-sets-block {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .vs-sets-col {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            align-items: center;
+        }
+        .vs-sets-dash {
+            color: rgba(255,255,255,0.5);
+            font-size: 1.1em;
+            font-weight: 300;
+            padding: 0 2px;
+            align-self: center;
+        }
+        .vs-set-num {
             width: 26px;
             height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
-            font-weight: 700;
+            border-radius: 6px;
+            font-weight: 800;
             font-size: 0.9em;
-            background: #e0e0e0;
-            color: #555;
         }
-        .set-score.won { background: #2e7d32; color: white; }
-        .set-score.lost { background: #e0e0e0; color: #999; }
-        .score-divider {
-            width: 2px;
-            background: #e0e0e0;
-            align-self: stretch;
-        }
-        .score-winner-tag {
-            font-size: 0.68em;
-            background: #2e7d32;
-            color: white;
-            padding: 1px 6px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 4px;
-            width: fit-content;
+        .vs-set-num.won  { background: #ffd700; color: #1a1a1a; }
+        .vs-set-num.lost { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); }
+
+        /* Round info strip */
+        .stats-round-strip {
+            background: rgba(0,0,0,0.25);
+            text-align: center;
+            font-size: 0.72em;
+            color: rgba(255,255,255,0.7);
+            padding: 6px 16px;
+            letter-spacing: 0.04em;
         }
 
-        /* Stats section */
-        .stats-section-title {
-            font-size: 0.82em;
+        /* ── Modal Body ── */
+        .stats-modal-body { padding: 14px 14px 18px; }
+
+        /* ── Section card ── */
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        /* Section title — centered between two player columns */
+        .stats-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: linear-gradient(90deg, #19503b, #2d7a55);
+            padding: 0;
+        }
+        .stats-card-title-home,
+        .stats-card-title-away {
+            flex: 1;
+            padding: 7px 10px;
+            font-size: 0.75em;
             font-weight: 700;
+            color: rgba(255,255,255,0.75);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .stats-card-title-home { text-align: left; }
+        .stats-card-title-away { text-align: right; }
+        .stats-card-title-label {
+            flex-shrink: 0;
+            padding: 7px 14px;
+            font-size: 0.78em;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #19503b;
-            margin: 14px 0 8px;
-            padding-bottom: 4px;
-            border-bottom: 2px solid #c8e6c9;
+            background: rgba(0,0,0,0.15);
         }
-        .stats-table {
-            width: 100%;
-            border-collapse: collapse;
+
+        /* ── Confrontation row ── */
+        .conf-row {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            min-height: 38px;
+        }
+        .conf-row:last-child { border-bottom: none; }
+        .conf-row:nth-child(even) { background: #fafcfa; }
+        .conf-val {
+            flex: 1;
+            padding: 7px 12px;
             font-size: 0.82em;
-        }
-        .stats-table thead th {
-            padding: 5px 8px;
             font-weight: 700;
-            color: #fff;
-            background: #379460;
-            font-size: 0.9em;
-        }
-        .stats-table thead th:first-child { border-radius: 6px 0 0 0; }
-        .stats-table thead th:last-child  { border-radius: 0 6px 0 0; }
-        .stats-table tbody tr:nth-child(even) { background: #f5faf6; }
-        .stats-table tbody td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #e8f0e9;
             color: #333;
         }
-        .stats-table tbody td:first-child { font-weight: 600; color: #444; }
-        .stats-table tbody td:not(:first-child) { text-align: center; }
-        .stat-val.better { color: #2e7d32; font-weight: 700; }
-        .stat-val.worse  { color: #c62828; }
-        .dr-row td { background: #fff9e6 !important; font-weight: 700; }
-        .dr-row td:first-child { color: #e65100; }
+        .conf-val.home { text-align: left; }
+        .conf-val.away { text-align: right; }
+        .conf-val.better { color: #1b5e20; }
+        .conf-val.worse  { color: #b71c1c; }
+        .conf-val.neutral { color: #555; font-weight: 600; }
+        .conf-label {
+            flex: 0 0 auto;
+            width: 140px;
+            text-align: center;
+            font-size: 0.72em;
+            font-weight: 600;
+            color: #666;
+            padding: 4px 6px;
+            line-height: 1.3;
+        }
+
+        /* Bar inside conf row */
+        .conf-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .conf-bar-row {
+            display: flex;
+            align-items: center;
+            height: 5px;
+            gap: 2px;
+        }
+        .conf-bar {
+            height: 5px;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .conf-bar.home-bar { background: #2e7d32; }
+        .conf-bar.away-bar { background: #1565c0; }
+
+        /* DR special row */
+        .conf-row.dr-row { background: #fffbea; border-top: 2px solid #ffd700; }
+        .conf-row.dr-row .conf-val { color: #b45309; font-size: 1em; font-weight: 800; }
+        .conf-row.dr-row .conf-val.better { color: #15803d; }
+        .conf-row.dr-row .conf-val.worse  { color: #dc2626; }
+        .conf-row.dr-row .conf-label { color: #92400e; font-weight: 700; font-size: 0.75em; }
 
         .stats-loading {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             color: #888;
             font-size: 0.95em;
         }
         .stats-error {
             text-align: center;
-            padding: 20px;
+            padding: 24px;
             color: #c62828;
             font-size: 0.9em;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -434,16 +564,14 @@
     <!-- Stats Modal -->
     <div class="stats-modal-overlay" id="statsModalOverlay" onclick="closeStatsModal(event)">
         <div class="stats-modal" id="statsModal">
-            <div class="stats-modal-header">
-                <div>
-                    <div class="stats-modal-title" id="statsModalTitle">比赛数据</div>
-                    <div class="stats-modal-subtitle" id="statsModalSubtitle"></div>
-                </div>
+            <div class="stats-modal-header" id="statsModalHeader">
                 <button class="stats-modal-close" onclick="document.getElementById('statsModalOverlay').classList.remove('open')">✕</button>
+                <div class="vs-hero" id="statsVsHero">
+                    <div class="stats-loading" style="color:white;padding:30px 0;">⏳ 加载中…</div>
+                </div>
+                <div class="stats-round-strip" id="statsRoundStrip"></div>
             </div>
-            <div class="stats-modal-body" id="statsModalBody">
-                <div class="stats-loading">加载中…</div>
-            </div>
+            <div class="stats-modal-body" id="statsModalBody"></div>
         </div>
     </div>
 
@@ -490,9 +618,17 @@
             return startSection;
         }
         function buildPlayerHTML(player, block) {
-            const isWinner    = player.winner === true;
-            const seed        = player.teamSeed ? `[${player.teamSeed}]` : '';
-            const isValid     = hasValidRanking(player);
+            const isWinner = player.winner === true;
+            const seed     = player.teamSeed ? `[${player.teamSeed}]` : '';
+            const isValid  = hasValidRanking(player);
+
+            // STATS badge: winner row of finished match only, rightmost position
+            const eventId    = block && block.finished && block.event_id && isWinner ? block.event_id : null;
+            const statsBadge = eventId
+                ? `<span class="stats-badge" onclick="openStatsModal(${eventId}, event)" title="查看比赛数据">STATS</span>`
+                : '';
+
+            // rome-stats row (historical data only, no stats badge)
             let romeStats = '';
             if (!isValid) {
                 romeStats = '<div class="rome-stats" style="visibility:hidden;min-height:18px;">-</div>';
@@ -509,25 +645,27 @@
                 romeStats = `<div class="rome-stats"><span class="no-data-badge">Rome Debut</span></div>`;
             }
 
-            // Stats badge: only on winner row of finished match with event_id
-            const eventId = block && block.finished && block.event_id && isWinner ? block.event_id : null;
-            const statsBadge = eventId
-                ? `<span class="stats-badge" onclick="openStatsModal(${eventId}, event)" title="查看比赛数据">STATS</span>`
-                : '';
+            const winnerClass = isWinner ? 'winner' : '';
+            const avatarImg   = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
+            const rankDisplay = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
+            const nameClass   = !isValid ? 'placeholder' : '';
 
-            const winnerClass  = isWinner ? 'winner' : '';
-            const avatarImg    = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
-            const rankDisplay  = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
-            const nameClass    = !isValid ? 'placeholder' : '';
+            // Winner row: rank+name on left flex, W+STATS right-aligned together
+            const nameRow = isWinner
+                ? `<div class="player-name-row">
+                        ${rankDisplay}
+                        <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
+                        <div class="player-name-right"><span class="winner-badge">W</span>${statsBadge}</div>
+                   </div>`
+                : `<div class="player-name-row">
+                        ${rankDisplay}
+                        <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
+                   </div>`;
+
             return `<div class="player ${winnerClass}">
                 ${avatarImg}
                 <div class="player-info">
-                    <div class="player-name-row">
-                        ${rankDisplay}
-                        <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
-                        ${isWinner ? '<span class="winner-badge">W</span>' : ''}
-                        ${statsBadge}
-                    </div>
+                    ${nameRow}
                     ${romeStats}
                 </div>
             </div>`;
@@ -790,89 +928,154 @@
 
         // ── Stats Modal ──
         function closeStatsModal(e) {
-            if (e.target === document.getElementById('statsModalOverlay')) {
+            if (e.target === document.getElementById('statsModalOverlay'))
                 document.getElementById('statsModalOverlay').classList.remove('open');
-            }
         }
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') document.getElementById('statsModalOverlay').classList.remove('open');
         });
 
-        function fmt(val, total) {
-            if (total == null || total === '') return val;
-            const pct = total > 0 ? Math.round(val / total * 100) : 0;
+        function parseFraction(str) {
+            if (str == null || str === '—' || str === '') return { val: 0, total: null };
+            const m = String(str).match(/(\d+)\/(\d+)/);
+            if (m) return { val: parseInt(m[1]), total: parseInt(m[2]) };
+            const n = parseFloat(str);
+            return isNaN(n) ? { val: 0, total: null } : { val: n, total: null };
+        }
+
+        function fmtFrac(val, total) {
+            if (total == null || total === 0) return String(val);
+            const pct = Math.round(val / total * 100);
             return `${val}/${total} (${pct}%)`;
         }
 
-        function parseFraction(str) {
-            // e.g. "30/71 (42%)" or "28/46 (61%)"
-            if (!str) return { val: 0, total: 0 };
-            const m = String(str).match(/(\d+)\/(\d+)/);
-            if (m) return { val: parseInt(m[1]), total: parseInt(m[2]) };
-            return { val: parseInt(str) || 0, total: null };
+        function getModalAvatarUrl(teamId) {
+            if (!teamId) return null;
+            const imagePath = `https://img.sofascore.com/api/v1/team/${teamId}/image`;
+            return `https://betting.asdasddsgdfgfdsgfj.website/sofascore/image-proxy?imagePath=${encodeURIComponent(imagePath)}`;
         }
 
-        function cmp(hVal, aVal, higher = true) {
-            // returns css class for home/away
-            if (hVal === aVal) return ['', ''];
-            if (higher) return hVal > aVal ? ['better', 'worse'] : ['worse', 'better'];
-            return hVal < aVal ? ['better', 'worse'] : ['worse', 'better'];
+        function flagImg(iso2) {
+            if (!iso2) return '';
+            const lower = iso2.toLowerCase();
+            return `<img src="https://flagcdn.com/16x12/${lower}.png" alt="${iso2}" style="width:16px;height:12px;border-radius:1px;vertical-align:middle;margin-right:3px;" onerror="this.style.display='none'">`;
         }
 
-        function statRow(label, hStr, aStr, lowerBetter) {
-            const h = parseFraction(hStr);
-            const a = parseFraction(aStr);
-            const [hc, ac] = cmp(h.val / (h.total || 1), a.val / (a.total || 1), !lowerBetter);
-            const hDisp = h.total != null ? fmt(h.val, h.total) : hStr;
-            const aDisp = a.total != null ? fmt(a.val, a.total) : aStr;
-            return `<tr>
-                <td>${label}</td>
-                <td><span class="stat-val ${hc}">${hDisp}</span></td>
-                <td><span class="stat-val ${ac}">${aDisp}</span></td>
-            </tr>`;
-        }
-
-        function buildScoreSection(detail) {
-            const ev = detail.event;
-            const home = ev.homeTeam;
-            const away = ev.awayTeam;
-            const hs = ev.homeScore;
-            const as_ = ev.awayScore;
+        // Build VS hero: left player | vertical set scores | right player
+        function buildVsHero(detail) {
+            const ev     = detail.event;
+            const home   = ev.homeTeam;
+            const away   = ev.awayTeam;
+            const hs     = ev.homeScore;
+            const as_    = ev.awayScore;
             const homeWon = ev.winnerCode === 1;
 
             const sets = [];
             for (const p of ['period1','period2','period3','period4','period5']) {
-                if (hs[p] != null && as_[p] != null) {
-                    sets.push({ h: hs[p], a: as_[p] });
-                }
+                if (hs[p] != null && as_[p] != null) sets.push({ h: hs[p], a: as_[p] });
             }
 
-            const setsHtml = (isHome) => sets.map(s => {
-                const myScore = isHome ? s.h : s.a;
-                const opScore = isHome ? s.a : s.h;
-                const won = myScore > opScore;
-                return `<div class="set-score ${won ? 'won' : 'lost'}">${myScore}</div>`;
+            // Each set: home score on top row, away score on bottom row, both as columns
+            // Layout: [home scores col] - [away scores col], matching by set
+            const homeSetNums = sets.map(s => {
+                const won = s.h > s.a;
+                return `<div class="vs-set-num ${won ? 'won' : 'lost'}">${s.h}</div>`;
+            }).join('');
+            const awaySetNums = sets.map(s => {
+                const won = s.a > s.h;
+                return `<div class="vs-set-num ${won ? 'won' : 'lost'}">${s.a}</div>`;
             }).join('');
 
-            return `<div class="score-section">
-                <div class="score-player ${homeWon ? 'winner-side' : ''}">
-                    <div class="score-player-name">${home.fullName || home.name}</div>
-                    <div class="score-player-country">${home.country?.name || ''} · #${home.ranking || '-'}</div>
-                    <div class="score-sets">${setsHtml(true)}</div>
-                    ${homeWon ? '<div class="score-winner-tag">🏆 获胜</div>' : ''}
+            const setsHtml = `
+                <div class="vs-sets-block">
+                    <div class="vs-sets-col">${homeSetNums}</div>
+                    <div class="vs-sets-dash">–</div>
+                    <div class="vs-sets-col">${awaySetNums}</div>
+                </div>`;
+
+            const homeAvatarUrl = getModalAvatarUrl(home.id);
+            const awayAvatarUrl = getModalAvatarUrl(away.id);
+
+            const avatarTag = (src, won) => src
+                ? `<img class="vs-avatar ${won ? 'winner-avatar' : ''}" src="${src}" alt="avatar" onerror="this.style.opacity='0'">`
+                : `<div class="vs-avatar ${won ? 'winner-avatar' : ''}" style="display:flex;align-items:center;justify-content:center;font-size:1.5em;">🎾</div>`;
+
+            return `
+                <div class="vs-player home">
+                    ${avatarTag(homeAvatarUrl, homeWon)}
+                    <div class="vs-player-name">${home.fullName || home.name}</div>
+                    <div class="vs-player-meta">
+                        ${flagImg(home.country?.alpha2)}
+                        <span>${home.country?.name || ''}</span>
+                        <span class="vs-rank"> · #${home.ranking || '-'}</span>
+                    </div>
+                    ${homeWon ? '<div class="vs-winner-crown">🏆 WINNER</div>' : ''}
                 </div>
-                <div class="score-divider"></div>
-                <div class="score-player ${!homeWon ? 'winner-side' : ''}">
-                    <div class="score-player-name">${away.fullName || away.name}</div>
-                    <div class="score-player-country">${away.country?.name || ''} · #${away.ranking || '-'}</div>
-                    <div class="score-sets">${setsHtml(false)}</div>
-                    ${!homeWon ? '<div class="score-winner-tag">🏆 获胜</div>' : ''}
+                <div class="vs-center">
+                    <div class="vs-label">SCORE</div>
+                    ${setsHtml}
                 </div>
+                <div class="vs-player away">
+                    ${avatarTag(awayAvatarUrl, !homeWon)}
+                    <div class="vs-player-name">${away.fullName || away.name}</div>
+                    <div class="vs-player-meta">
+                        ${flagImg(away.country?.alpha2)}
+                        <span>${away.country?.name || ''}</span>
+                        <span class="vs-rank"> · #${away.ranking || '-'}</span>
+                    </div>
+                    ${!homeWon ? '<div class="vs-winner-crown">🏆 WINNER</div>' : ''}
+                </div>`;
+        }
+
+        // Confrontation row: home val LEFT | label CENTER | away val RIGHT
+        function confRow(label, hRaw, aRaw, lowerBetter, isDR) {
+            const h = parseFraction(hRaw);
+            const a = parseFraction(aRaw);
+            const hNum = h.total != null && h.total > 0 ? h.val / h.total : (typeof hRaw === 'number' ? hRaw : parseFloat(hRaw) || 0);
+            const aNum = a.total != null && a.total > 0 ? a.val / a.total : (typeof aRaw === 'number' ? aRaw : parseFloat(aRaw) || 0);
+            let hCls = 'neutral', aCls = 'neutral';
+            if (!isNaN(hNum) && !isNaN(aNum) && hNum !== aNum) {
+                const hBetter = lowerBetter ? hNum < aNum : hNum > aNum;
+                hCls = hBetter ? 'better' : 'worse';
+                aCls = hBetter ? 'worse' : 'better';
+            }
+            const hDisp = h.total != null ? fmtFrac(h.val, h.total) : (hRaw == null || hRaw === '—' ? '—' : String(hRaw));
+            const aDisp = a.total != null ? fmtFrac(a.val, a.total) : (aRaw == null || aRaw === '—' ? '—' : String(aRaw));
+
+            // Mini bars for fraction data
+            let barsHtml = '';
+            if (h.total != null && a.total != null) {
+                const sum = hNum + aNum || 1;
+                const hW  = Math.round(hNum / sum * 100);
+                const aW  = 100 - hW;
+                barsHtml = `<div class="conf-bar-row">
+                    <div style="flex:1;display:flex;justify-content:flex-end;"><div class="conf-bar home-bar" style="width:${hW}%"></div></div>
+                    <div style="width:3px;"></div>
+                    <div style="flex:1;"><div class="conf-bar away-bar" style="width:${aW}%"></div></div>
+                </div>`;
+            }
+
+            return `<div class="conf-row${isDR ? ' dr-row' : ''}">
+                <div class="conf-val home ${hCls}">${hDisp}</div>
+                <div class="conf-label">${label}${barsHtml}</div>
+                <div class="conf-val away ${aCls}">${aDisp}</div>
+            </div>`;
+        }
+
+        function sectionCard(titleLabel, homeName, awayName, rows) {
+            return `<div class="stats-card">
+                <div class="stats-card-title">
+                    <div class="stats-card-title-home">${homeName}</div>
+                    <div class="stats-card-title-label">${titleLabel}</div>
+                    <div class="stats-card-title-away">${awayName}</div>
+                </div>
+                ${rows}
             </div>`;
         }
 
         function buildStatsBody(detail, stats) {
-            const ev = detail.event;
+            const ev       = detail.event;
+            // participants[0] = home, participants[1] = away (confirmed)
             const homeName = ev.homeTeam.shortName || ev.homeTeam.name;
             const awayName = ev.awayTeam.shortName || ev.awayTeam.name;
 
@@ -881,139 +1084,122 @@
 
             const getGroup = name => allPeriod.groups.find(g => g.groupName === name);
             const getItem  = (grp, key) => grp?.statisticsItems.find(i => i.key === key);
-            const gv = (grp, key, side) => getItem(grp, key)?.[side] ?? '—';
+            const gv       = (grp, key, side) => getItem(grp, key)?.[side] ?? '—';
 
             const svc = getGroup('Service');
             const ret = getGroup('Return');
             const pts = getGroup('Points');
 
-            // DR = receiver_points_scored / (service_points - service_points_scored)
-            // = firstReturnPts + secondReturnPts wins / total service points by opponent
-            // Standard: receivePointsWon% / (1 - servePointsWon%)
-            // Data: servicePointsScored = points won while serving
-            //       receiverPointsScored = points won while receiving
-            //       pointsTotal = total points played
-            // DR = receiveRate / (1 - serveRate)  where rates are fractions of points on that side
-            // Let's compute from firstReturnPoints + secondReturnPoints vs opponent's service points
-            function calcDR(isHome) {
-                const side = isHome ? 'home' : 'away';
-                const oside = isHome ? 'away' : 'home';
-                // Return points won = firstReturn + secondReturn (already in Return group)
-                const fr = parseFraction(gv(ret, 'firstReturnPoints', side));
-                const sr = parseFraction(gv(ret, 'secondReturnPoints', side));
-                const retWon = fr.val + sr.val;
-                const retTotal = (fr.total || 0) + (sr.total || 0);
-                // Opponent's service points won
-                const oFsp = parseFraction(gv(svc, 'firstServePointsAccuracy', oside));
-                const oSsp = parseFraction(gv(svc, 'secondServePointsAccuracy', oside));
-                const svcWon = oFsp.val + oSsp.val;
-                const svcTotal = (oFsp.total || 0) + (oSsp.total || 0);
-                // receiveRate = retWon / retTotal
-                // serveRate (opponent) = svcWon / svcTotal
-                // DR = receiveRate / (1 - serveRate)
-                if (!retTotal || !svcTotal) return '—';
-                const receiveRate = retWon / retTotal;
-                const serveRate = svcWon / svcTotal;
-                const denom = 1 - serveRate;
-                if (denom <= 0) return '∞';
-                return (receiveRate / denom).toFixed(2);
+            // 发球得分率 = Σ(一发得分 + 二发得分) / Σ(一发总数 + 二发总数)
+            function calcServeWinRate(side) {
+                const f1 = parseFraction(gv(svc, 'firstServePointsAccuracy',  side));
+                const f2 = parseFraction(gv(svc, 'secondServePointsAccuracy', side));
+                const won   = f1.val + f2.val;
+                const total = (f1.total || 0) + (f2.total || 0);
+                return { val: won, total: total || null };
             }
 
-            const homeScore = buildScoreSection(detail);
-            const hDR = calcDR(true);
-            const aDR = calcDR(false);
-            const [hDRc, aDRc] = (() => {
-                const h = parseFloat(hDR), a = parseFloat(aDR);
-                if (isNaN(h) || isNaN(a) || h === a) return ['',''];
-                return h > a ? ['better','worse'] : ['worse','better'];
-            })();
+            // 接发得分率 = Σ(接一发得分 + 接二发得分) / Σ(对方一发总数 + 对方二发总数)
+            // 分母 = 对方的发球总数（一发 + 二发），即 Return group 里的 total
+            function calcReturnWinRate(side) {
+                const r1 = parseFraction(gv(ret, 'firstReturnPoints',  side));
+                const r2 = parseFraction(gv(ret, 'secondReturnPoints', side));
+                const won   = r1.val + r2.val;
+                const total = (r1.total || 0) + (r2.total || 0);
+                return { val: won, total: total || null };
+            }
 
-            return `
-                ${homeScore}
+            // DR = 己方接发得分率 / (1 - 己方发球得分率)
+            // 即：接发得分率 / 发球丢分率
+            function calcDR(side) {
+                const srv = calcServeWinRate(side);
+                const ret_ = calcReturnWinRate(side);
+                if (!srv.total || !ret_.total) return '—';
+                const serveWinRate   = srv.val  / srv.total;    // 己方发球得分率
+                const returnWinRate  = ret_.val / ret_.total;   // 己方接发得分率
+                const serveLoseRate  = 1 - serveWinRate;        // 己方发球丢分率
+                if (serveLoseRate <= 0) return '∞';
+                return (returnWinRate / serveLoseRate).toFixed(2);
+            }
 
-                <div class="stats-section-title">🎾 发球数据</div>
-                <table class="stats-table">
-                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
-                    <tbody>
-                        ${statRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
-                        ${statRow('双误 Double Faults', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
-                        ${statRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
-                        ${statRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
-                        ${statRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
-                        ${statRow('保发局数', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
-                    </tbody>
-                </table>
+            const hSrv = calcServeWinRate('home');
+            const aSrv = calcServeWinRate('away');
+            const hRet = calcReturnWinRate('home');
+            const aRet = calcReturnWinRate('away');
+            const hDR  = calcDR('home');
+            const aDR  = calcDR('away');
 
-                <div class="stats-section-title">🔄 接发数据</div>
-                <table class="stats-table">
-                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
-                    <tbody>
-                        ${statRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
-                        ${statRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
-                        ${statRow('破发次数', gv(ret,'breakPointsScored','home'), gv(ret,'breakPointsScored','away'))}
-                    </tbody>
-                </table>
+            const svcCard = sectionCard('🎾 发球', homeName, awayName, `
+                ${confRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
+                ${confRow('双误', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
+                ${confRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
+                ${confRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
+                ${confRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
+                ${confRow('保发率', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
+            `);
 
-                <div class="stats-section-title">📊 得分数据</div>
-                <table class="stats-table">
-                    <thead><tr><th>指标</th><th>${homeName}</th><th>${awayName}</th></tr></thead>
-                    <tbody>
-                        ${statRow('总得分', gv(pts,'pointsTotal','home'), gv(pts,'pointsTotal','away'))}
-                        ${statRow('发球得分', gv(pts,'servicePointsScored','home'), gv(pts,'servicePointsScored','away'))}
-                        ${statRow('接发得分', gv(pts,'receiverPointsScored','home'), gv(pts,'receiverPointsScored','away'))}
-                        <tr class="dr-row">
-                            <td>DR (Dominance Ratio)</td>
-                            <td><span class="stat-val ${hDRc}">${hDR}</span></td>
-                            <td><span class="stat-val ${aDRc}">${aDR}</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            `;
+            const retCard = sectionCard('🔄 接发', homeName, awayName, `
+                ${confRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
+                ${confRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
+                ${confRow('破发点转换率', gv(ret,'breakPointsScored','home'), gv(ret,'breakPointsScored','away'))}
+            `);
+
+            const ptsCard = sectionCard('📊 得分', homeName, awayName, `
+                ${confRow('总得分', gv(pts,'pointsTotal','home'), gv(pts,'pointsTotal','away'))}
+                ${confRow('发球得分率', fmtFrac(hSrv.val, hSrv.total), fmtFrac(aSrv.val, aSrv.total))}
+                ${confRow('接发得分率', fmtFrac(hRet.val, hRet.total), fmtFrac(aRet.val, aRet.total))}
+                ${confRow('DR (接发率/发球丢分率)', hDR, aDR, false, true)}
+            `);
+
+            return svcCard + retCard + ptsCard;
         }
 
         async function openStatsModal(eventId, e) {
             e && e.stopPropagation();
             const overlay = document.getElementById('statsModalOverlay');
+            const hero    = document.getElementById('statsVsHero');
+            const strip   = document.getElementById('statsRoundStrip');
             const body    = document.getElementById('statsModalBody');
-            const title   = document.getElementById('statsModalTitle');
-            const subtitle= document.getElementById('statsModalSubtitle');
 
-            title.textContent   = '比赛数据';
-            subtitle.textContent = `Event #${eventId}`;
-            body.innerHTML = '<div class="stats-loading">⏳ 加载中…</div>';
+            hero.innerHTML  = '<div class="stats-loading" style="color:white;padding:30px 0;width:100%;text-align:center;">⏳ 加载中…</div>';
+            strip.textContent = '';
+            body.innerHTML  = '';
             overlay.classList.add('open');
 
             try {
+                const ts       = Date.now();
+                const rnd      = Math.random().toString(36).slice(2);
                 const basePath = `../api_folder/data/rome_2026`;
+                const cacheBust = `?v=${ts}&r=${rnd}&nocache=1`;
                 const [detailRes, statsRes] = await Promise.all([
-                    fetch(`${basePath}/event_detail_${eventId}.json`),
-                    fetch(`${basePath}/event_statistics_${eventId}.json`)
+                    fetch(`${basePath}/event_detail_${eventId}.json${cacheBust}`,      { cache: 'no-store' }),
+                    fetch(`${basePath}/event_statistics_${eventId}.json${cacheBust}`,  { cache: 'no-store' })
                 ]);
                 if (!detailRes.ok || !statsRes.ok) throw new Error('数据文件未找到');
                 const [detail, stats] = await Promise.all([detailRes.json(), statsRes.json()]);
 
                 const ev = detail.event;
-                title.textContent    = `${ev.homeTeam.name} vs ${ev.awayTeam.name}`;
-                subtitle.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}`;
-                body.innerHTML = buildStatsBody(detail, stats);
+                hero.innerHTML    = buildVsHero(detail);
+                strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}`;
+                body.innerHTML    = buildStatsBody(detail, stats);
             } catch (err) {
-                body.innerHTML = `<div class="stats-error">❌ 无法加载数据：${err.message}<br><small>路径: ./api_folder/data/rome_2026/event_detail_${eventId}.json</small></div>`;
+                hero.innerHTML  = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
+                strip.textContent = `Event #${eventId}`;
+                body.innerHTML  = `<div class="stats-error">路径: ../api_folder/data/rome_2026/event_detail_${eventId}.json</div>`;
             }
         }
 
         // ── 启动 ──
-        // 使用更彻底的缓存破坏,强制刷新CDN
         function fetchAndRender() {
             const timestamp = Date.now();
-            const random = Math.random();
-            fetch(`../output/draw_rome_2026_with_history_stats.json?v=${timestamp}&r=${random}`)
+            const random    = Math.random().toString(36).slice(2);
+            fetch(`../output/draw_rome_2026_with_history_stats.json?v=${timestamp}&r=${random}&nocache=1`, { cache: 'no-store' })
                 .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
                     setupTabs();
                     enableDragScroll();
-                })
-                .catch(err => console.error('Fetch failed:', err));
+                });
         }
         fetchAndRender();
     </script>
