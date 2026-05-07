@@ -3,14 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <!-- 关键：不阻止缩放，但 JS 会接管移动端行为 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, shrink-to-fit=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>2026 Rome WTA 1000 - 签表</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ============================================================
+           1. RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,17 +26,25 @@
             color: #333;
         }
 
+        /* ============================================================
+           2. HEADER & TABS
+           ============================================================ */
         .header {
             text-align: center;
             color: white;
             margin-bottom: 20px;
         }
+
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        .header p { font-size: 1.2em; opacity: 0.9; }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
 
         .tabs {
             display: flex;
@@ -39,9 +53,10 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+
         .tab {
             padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
             border-radius: 5px;
@@ -50,29 +65,31 @@
             transition: all 0.3s;
             white-space: nowrap;
         }
-        .tab:hover, .tab.active {
-            background: rgba(255,255,255,0.4);
+
+        .tab:hover,
+        .tab.active {
+            background: rgba(255, 255, 255, 0.4);
             font-weight: bold;
         }
 
-        /* 基础容器样式 */
+        /* ============================================================
+           3. BRACKET CONTAINER
+           ============================================================ */
         .bracket-container {
             overflow: auto;
             touch-action: pan-x pan-y pinch-zoom;
             -webkit-overflow-scrolling: touch;
             padding: 20px 10px;
             max-height: 85vh;
-            width: 100%;               /* 确保容器占满宽度 */
+            width: 100%;
         }
 
-        /* 桌面端用 flex 居中，但仅当 JS 判断非移动设备时添加 class */
         .bracket-container.desktop-center {
             display: flex;
             justify-content: center;
             cursor: grab;
         }
 
-        /* 移动端强制左对齐 */
         .bracket-container.mobile-left {
             display: block;
             cursor: default;
@@ -84,7 +101,7 @@
 
         .bracket {
             display: inline-flex;
-            min-width: max-content;    /* 防止内容被压缩 */
+            min-width: max-content;
             gap: 0;
             align-items: flex-start;
         }
@@ -94,13 +111,14 @@
             flex-direction: column;
             flex-shrink: 0;
         }
+
         .round-header {
             text-align: center;
             color: white;
             font-weight: bold;
             font-size: 0.9em;
             padding: 6px 8px;
-            background: rgba(0,0,0,0.35);
+            background: rgba(0, 0, 0, 0.35);
             border-radius: 5px;
             text-transform: uppercase;
             height: 36px;
@@ -109,32 +127,54 @@
             justify-content: center;
             margin: 0 8px;
         }
-        .round-matches-area { position: relative; }
 
+        .round-matches-area {
+            position: relative;
+        }
+
+        /* ============================================================
+           4. MATCH CARDS
+           ============================================================ */
         .match {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.13);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
             overflow: hidden;
             border-left: 5px solid #379460;
             display: flex;
             flex-direction: column;
             position: absolute;
         }
-        .match:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.22); z-index: 10; }
-        .match.finished { border-left-color: #2196F3; }
+
+        .match:hover {
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22);
+            z-index: 10;
+        }
+
+        .match.finished {
+            border-left-color: #2196F3;
+        }
 
         .player {
             padding: 7px 10px 7px 8px;
             display: flex;
             align-items: center;
             flex: 1;
-            min-height: 0;
             gap: 8px;
         }
-        .player + .player { border-top: 1px solid #ececec; }
-        .player.winner { background: linear-gradient(90deg, #c8ead0 0%, #f0faf2 100%); }
-        .player.winner .player-name { color: #1b5e20; font-weight: 700; }
+
+        .player+.player {
+            border-top: 1px solid #ececec;
+        }
+
+        .player.winner {
+            background: linear-gradient(90deg, #c8ead0 0%, #f0faf2 100%);
+        }
+
+        .player.winner .player-name {
+            color: #1b5e20;
+            font-weight: 700;
+        }
 
         .player-avatar {
             width: 40px;
@@ -145,7 +185,10 @@
             border: 2px solid #e0e0e0;
             background: #f0f0f0;
         }
-        .player.winner .player-avatar { border-color: #81c784; }
+
+        .player.winner .player-avatar {
+            border-color: #81c784;
+        }
 
         .player-info {
             flex: 1;
@@ -154,12 +197,14 @@
             flex-direction: column;
             gap: 3px;
         }
+
         .player-name-row {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
             min-width: 0;
         }
+
         .player-name-right {
             display: flex;
             align-items: center;
@@ -167,13 +212,15 @@
             flex-shrink: 0;
             margin-left: auto;
         }
+
         .player-rank {
             font-size: 0.72em;
             color: #aaa;
             font-weight: 600;
             flex-shrink: 0;
-            min-width: 28px;
+            min-width: 25px;
         }
+
         .player-name {
             font-size: 0.92em;
             font-weight: 600;
@@ -184,29 +231,30 @@
             flex: 1;
             min-width: 0;
         }
+
         .player-name .seed {
             font-size: 0.82em;
             color: #379460;
             font-weight: 500;
             margin-left: 2px;
         }
-        .winner-badge {
-            display: inline-flex;
-            align-items: center;
-            background: #2e7d32;
-            color: white;
-            font-size: 0.65em;
-            font-weight: bold;
-            padding: 2px 7px;
-            border-radius: 10px;
-            flex-shrink: 0;
+
+        .placeholder {
+            color: #999;
+            font-style: italic;
         }
+
+        /* ============================================================
+           5. ROME HISTORICAL STATS (in cards)
+           ============================================================ */
         .rome-stats {
             display: flex;
             align-items: center;
             gap: 5px;
             flex-wrap: nowrap;
+            min-height: 20px;
         }
+
         .best-round-badge {
             padding: 2px 7px;
             border-radius: 10px;
@@ -215,6 +263,7 @@
             color: white;
             white-space: nowrap;
         }
+
         .best-round-R128 { background: #9e9e9e; }
         .best-round-R64  { background: #8d6e63; }
         .best-round-R32  { background: #5dade2; }
@@ -222,12 +271,25 @@
         .best-round-QF   { background: #7b1fa2; }
         .best-round-SF   { background: #f39c12; }
         .best-round-F    { background: #e74c3c; }
-        .best-round-W    { background: linear-gradient(135deg,#ffd700,#ff8c00); color:#333; }
-        .winrate-badge { padding: 2px 6px; border-radius: 8px; font-weight: bold; font-size: 0.75em; }
+        .best-round-W    { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #333; }
+
+        .winrate-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.75em;
+        }
+
         .winrate-badge.high   { background: #d5f5e3; color: #27ae60; }
         .winrate-badge.medium { background: #fef9e7; color: #f39c12; }
         .winrate-badge.low    { background: #fadbd8; color: #c0392b; }
-        .wl-record { font-size: 0.75em; color: #777; font-weight: 500; }
+
+        .wl-record {
+            font-size: 0.75em;
+            color: #777;
+            font-weight: 500;
+        }
+
         .no-data-badge {
             padding: 2px 7px;
             border-radius: 10px;
@@ -237,10 +299,15 @@
             font-style: italic;
             white-space: nowrap;
         }
-        .no-data-badge::before { content: '🌟 '; font-style: normal; }
-        .placeholder { color: #999; font-style: italic; }
 
-        /* Stats badge */
+        .no-data-badge::before {
+            content: '🌟 ';
+            font-style: normal;
+        }
+
+        /* ============================================================
+           6. STATS BADGE (in cards)
+           ============================================================ */
         .stats-badge {
             display: inline-flex;
             align-items: center;
@@ -256,24 +323,34 @@
             letter-spacing: 0.04em;
             transition: background 0.15s, transform 0.1s;
         }
-        .stats-badge:hover { background: #0d47a1; transform: scale(1.08); }
 
-        /* ── Modal overlay ── */
+        .stats-badge:hover {
+            background: #0d47a1;
+            transform: scale(1.08);
+        }
+
+        /* ============================================================
+           7. MODAL OVERLAY & FRAME
+           ============================================================ */
         .stats-modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9999;
             align-items: center;
             justify-content: center;
             padding: 12px;
         }
-        .stats-modal-overlay.open { display: flex; }
+
+        .stats-modal-overlay.open {
+            display: flex;
+        }
+
         .stats-modal {
             background: #f4f6f8;
             border-radius: 16px;
-            box-shadow: 0 12px 50px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.4);
             max-width: 640px;
             width: 100%;
             max-height: 92vh;
@@ -291,16 +368,18 @@
             position: relative;
             overflow: hidden;
         }
+
         .stats-modal-header::before {
             content: '';
             position: absolute;
             inset: 0;
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
+
         .stats-modal-close {
             position: absolute;
             top: 12px; right: 12px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             font-size: 1em;
@@ -313,9 +392,23 @@
             z-index: 2;
             transition: background 0.15s;
         }
-        .stats-modal-close:hover { background: rgba(255,255,255,0.4); }
 
-        /* ── VS Hero section ── */
+        .stats-modal-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .stats-round-strip {
+            background: rgba(0, 0, 0, 0.25);
+            text-align: center;
+            font-size: 0.72em;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 6px 16px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ============================================================
+           8. VS HERO (player info in modal header)
+           ============================================================ */
         .vs-hero {
             display: flex;
             align-items: stretch;
@@ -324,6 +417,7 @@
             position: relative;
             z-index: 1;
         }
+
         .vs-player {
             flex: 1;
             display: flex;
@@ -332,48 +426,81 @@
             gap: 8px;
             padding: 0 8px;
         }
+
         .vs-player.home { align-items: flex-start; }
         .vs-player.away { align-items: flex-end; }
+
         .vs-avatar {
             width: 56px;
             height: 56px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
-        .vs-avatar.winner-avatar { border-color: #ffd700; box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+
+        .vs-avatar.winner-avatar {
+            border-color: #ffd700;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        .vs-player-name-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .vs-rank-inline {
+            font-size: 0.78em;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.55);
+            margin-left: 2px;
+            letter-spacing: 0.03em;
+        }
+
         .vs-player-name {
             font-weight: 800;
             font-size: 0.92em;
             color: white;
             line-height: 1.2;
-            text-align: center;
         }
-        .vs-player.home .vs-player-name { text-align: left; }
-        .vs-player.away .vs-player-name { text-align: right; }
-        .vs-player-meta {
-            font-size: 0.72em;
-            opacity: 0.75;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .vs-flag {
-            font-size: 1.1em;
-        }
-        .vs-rank { opacity: 0.8; }
-        .vs-winner-crown {
-            font-size: 0.7em;
-            background: #ffd700;
-            color: #333;
-            padding: 2px 8px;
-            border-radius: 10px;
+
+        .seed-badge {
+            font-size: 0.8em;
             font-weight: 800;
+            color: #ffd700;
+            margin-left: 1px;
+            vertical-align: middle;
             letter-spacing: 0.03em;
         }
 
-        /* Score bubble in center */
+        .vs-player-info {
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+
+        /* alignment shared by home/away */
+        .vs-player.home .vs-player-name-row,
+        .vs-player.home .vs-player-info {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .vs-player.away .vs-player-name-row,
+        .vs-player.away .vs-player-info {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        /* ============================================================
+           9. SCORE DISPLAY (center of VS hero)
+           ============================================================ */
         .vs-center {
             display: flex;
             flex-direction: column;
@@ -383,6 +510,7 @@
             min-width: 90px;
             flex-shrink: 0;
         }
+
         .vs-label {
             font-size: 0.62em;
             font-weight: 700;
@@ -391,25 +519,28 @@
             text-transform: uppercase;
             color: white;
         }
-        /* Set score: home col | dash | away col, each col is vertical stack */
+
         .vs-sets-block {
             display: flex;
             align-items: center;
             gap: 4px;
         }
+
         .vs-sets-col {
             display: flex;
             flex-direction: column;
             gap: 3px;
             align-items: center;
         }
+
         .vs-sets-dash {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             font-size: 1.1em;
             font-weight: 300;
             padding: 0 2px;
             align-self: center;
         }
+
         .vs-set-num {
             width: 26px;
             height: 26px;
@@ -420,32 +551,25 @@
             font-weight: 800;
             font-size: 0.9em;
         }
-        .vs-set-num.won  { background: #ffd700; color: #1a1a1a; }
-        .vs-set-num.lost { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); }
 
-        /* Round info strip */
-        .stats-round-strip {
-            background: rgba(0,0,0,0.25);
-            text-align: center;
-            font-size: 0.72em;
-            color: rgba(255,255,255,0.7);
-            padding: 6px 16px;
-            letter-spacing: 0.04em;
+        .vs-set-num.won  { background: #ffd700; color: #1a1a1a; }
+        .vs-set-num.lost { background: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.55); }
+
+        /* ============================================================
+           10. STATS CARDS (modal body)
+           ============================================================ */
+        .stats-modal-body {
+            padding: 14px 14px 18px;
         }
 
-        /* ── Modal Body ── */
-        .stats-modal-body { padding: 14px 14px 18px; }
-
-        /* ── Section card ── */
         .stats-card {
             background: white;
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
         }
 
-        /* Section title — centered between two player columns */
         .stats-card-title {
             display: flex;
             align-items: center;
@@ -453,19 +577,22 @@
             background: linear-gradient(90deg, #19503b, #2d7a55);
             padding: 0;
         }
+
         .stats-card-title-home,
         .stats-card-title-away {
             flex: 1;
             padding: 7px 10px;
             font-size: 0.75em;
             font-weight: 700;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .stats-card-title-home { text-align: left; }
         .stats-card-title-away { text-align: right; }
+
         .stats-card-title-label {
             flex-shrink: 0;
             padding: 7px 14px;
@@ -476,7 +603,7 @@
             letter-spacing: 0.04em;
             white-space: nowrap;
             text-transform: uppercase;
-            background: rgba(0,0,0,0.15);
+            background: rgba(0, 0, 0, 0.15);
         }
 
         /* ── Confrontation row ── */
@@ -486,8 +613,10 @@
             border-bottom: 1px solid #f0f0f0;
             min-height: 38px;
         }
+
         .conf-row:last-child { border-bottom: none; }
         .conf-row:nth-child(even) { background: #fafcfa; }
+
         .conf-val {
             flex: 1;
             padding: 7px 12px;
@@ -495,11 +624,13 @@
             font-weight: 700;
             color: #333;
         }
+
         .conf-val.home { text-align: left; }
         .conf-val.away { text-align: right; }
         .conf-val.better { color: #1b5e20; }
         .conf-val.worse  { color: #b71c1c; }
         .conf-val.neutral { color: #555; font-weight: 600; }
+
         .conf-label {
             flex: 0 0 auto;
             width: 140px;
@@ -511,39 +642,55 @@
             line-height: 1.3;
         }
 
-        /* Bar inside conf row */
+        /* ── Bar inside conf row ── */
         .conf-bar-wrap {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
+
         .conf-bar-row {
             display: flex;
             align-items: center;
             height: 5px;
             gap: 2px;
         }
+
         .conf-bar {
             height: 5px;
             border-radius: 3px;
             transition: width 0.3s;
         }
+
         .conf-bar.home-bar { background: #2e7d32; }
         .conf-bar.away-bar { background: #1565c0; }
 
-        /* DR special row */
-        .conf-row.dr-row { background: #fffbea; border-top: 2px solid #ffd700; }
-        .conf-row.dr-row .conf-val { color: #b45309; font-size: 1em; font-weight: 800; }
+        /* ── DR special row ── */
+        .conf-row.dr-row {
+            background: #fffbea;
+            border-top: 2px solid #ffd700;
+        }
+
+        .conf-row.dr-row .conf-val {
+            color: #b45309;
+            font-size: 1em;
+            font-weight: 800;
+        }
+
         .conf-row.dr-row .conf-val.better { color: #15803d; }
         .conf-row.dr-row .conf-val.worse  { color: #dc2626; }
         .conf-row.dr-row .conf-label { color: #92400e; font-weight: 700; font-size: 0.75em; }
 
+        /* ============================================================
+           11. UTILITIES (loading / error)
+           ============================================================ */
         .stats-loading {
             text-align: center;
             padding: 40px;
             color: #888;
             font-size: 0.95em;
         }
+
         .stats-error {
             text-align: center;
             padding: 24px;
@@ -551,14 +698,6 @@
             font-size: 0.9em;
             line-height: 1.6;
         }
-.seed-badge {
-    font-size: 0.8em;
-    font-weight: 800;
-    color: #ffd700;
-    margin-left: 4px;
-    vertical-align: middle;
-    letter-spacing: 0.03em;
-}
     </style>
 </head>
 
@@ -573,7 +712,8 @@
     <div class="stats-modal-overlay" id="statsModalOverlay" onclick="closeStatsModal(event)">
         <div class="stats-modal" id="statsModal">
             <div class="stats-modal-header" id="statsModalHeader">
-                <button class="stats-modal-close" onclick="document.getElementById('statsModalOverlay').classList.remove('open')">✕</button>
+                <button class="stats-modal-close"
+                    onclick="document.getElementById('statsModalOverlay').classList.remove('open')">✕</button>
                 <div class="vs-hero" id="statsVsHero">
                     <div class="stats-loading" style="color:white;padding:30px 0;">⏳ 加载中…</div>
                 </div>
@@ -590,15 +730,25 @@
     </div>
 
     <script>
+        // ============================================================
+        // 1. CONSTANTS & UTILITY FUNCTIONS
+        // ============================================================
         const bestRoundLabels = {
-            'R128':'R128','R64':'R64','R32':'R32','R16':'R16',
-            'QF':'QF','SF':'SF','F':'F','W':'W'
+            'R128': 'R128', 'R64': 'R64', 'R32': 'R32', 'R16': 'R16',
+            'QF': 'QF', 'SF': 'SF', 'F': 'F', 'W': 'W'
         };
         const allRoundOrder = [
-            'Round of 128','Round of 64','Round of 32',
-            'Round of 16','Quarterfinal','Semifinal','Final'
+            'Round of 128', 'Round of 64', 'Round of 32',
+            'Round of 16', 'Quarterfinal', 'Semifinal', 'Final'
         ];
-        const fullBlocksPerRound = [64,32,16,8,4,2,1];
+        const fullBlocksPerRound = [64, 32, 16, 8, 4, 2, 1];
+
+        const MATCH_H = 142;
+        const BLOCK_GAP = 14;
+        const MATCH_W = 280;
+        const SVG_W = 40;
+        const HEADER_H = 44;
+        const MARGIN_TOP = 10;
 
         function getBestRoundClass(r) { return r ? 'best-round-' + r : ''; }
         function formatTitles(titles) {
@@ -615,64 +765,74 @@
         function hasValidRanking(player) {
             return player.ranking && player.ranking !== '-' && !isNaN(player.ranking) && parseInt(player.ranking) > 0;
         }
-function formatTimestamp(ts) {
-    if (!ts) return '';
-    const d = new Date(ts * 1000);
-    // 使用罗马时区格式化，输出格式：2026-05-03 17:36
-    return d.toLocaleString('zh-CN', {
-        timeZone: 'Europe/Rome',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }).replace(/\//g, '-').replace(',', '');
-}
+
+        function formatBirthDate(ts) {
+            if (!ts) return '';
+            const d = new Date(ts * 1000);
+            return d.getFullYear() + '/' +
+                String(d.getMonth() + 1).padStart(2, '0') + '/' +
+                String(d.getDate()).padStart(2, '0');
+        }
+
+        function formatTimestamp(ts) {
+            if (!ts) return '';
+            const d = new Date(ts * 1000);
+            return d.toLocaleString('zh-CN', {
+                timeZone: 'Europe/Rome',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }).replace(/\//g, '-').replace(',', '');
+        }
+
         function getR128Section(roundIndex, blockOrder) {
             if (roundIndex === 0) return Math.ceil(blockOrder / 8);
             const multiplier = Math.pow(2, roundIndex);
             const r128StartOrder = (blockOrder - 1) * multiplier + 1;
-            const r128EndOrder   = blockOrder * multiplier;
-            const startSection   = Math.ceil(r128StartOrder / 8);
-            const endSection     = Math.ceil(r128EndOrder / 8);
+            const r128EndOrder = blockOrder * multiplier;
+            const startSection = Math.ceil(r128StartOrder / 8);
+            const endSection = Math.ceil(r128EndOrder / 8);
             if (startSection !== endSection) return null;
             return startSection;
         }
+
+        // ============================================================
+        // 2. BRACKET HTML BUILDERS
+        // ============================================================
         function buildPlayerHTML(player, block) {
             const isWinner = player.winner === true;
-            const seed     = player.teamSeed ? `[${player.teamSeed}]` : '';
-            const isValid  = hasValidRanking(player);
+            const seed = player.teamSeed ? `[${player.teamSeed}]` : '';
+            const isValid = hasValidRanking(player);
 
-            // STATS badge: winner row of finished match only, rightmost position
-            const eventId    = block && block.finished && block.event_id && isWinner ? block.event_id : null;
+            const eventId = block && block.finished && block.event_id && isWinner ? block.event_id : null;
             const statsBadge = eventId
                 ? `<span class="stats-badge" onclick="openStatsModal(${eventId}, event)" title="查看比赛数据">STATS</span>`
                 : '';
 
-            // rome-stats row (historical data only, no stats badge)
             let romeStats = '';
             if (!isValid) {
                 romeStats = '<div class="rome-stats" style="visibility:hidden;min-height:18px;">-</div>';
             } else if (player.best_round && (player.W !== '' && player.W !== '0' || player.L !== '' && player.L !== '0')) {
-                const winrate    = parseFloat(player.winrate) || 0;
+                const winrate = parseFloat(player.winrate) || 0;
                 const winratePct = (winrate * 100).toFixed(0);
-                const wrClass    = winrate >= 0.6 ? 'high' : winrate >= 0.4 ? 'medium' : 'low';
+                const wrClass = winrate >= 0.6 ? 'high' : winrate >= 0.4 ? 'medium' : 'low';
                 romeStats = `<div class="rome-stats">
                     <span class="best-round-badge ${getBestRoundClass(player.best_round)}">${bestRoundLabels[player.best_round] || player.best_round}${formatTitles(player.titles)}</span>
                     <span class="winrate-badge ${wrClass}">${winratePct}%</span>
-                    <span class="wl-record">W-L: ${player.W||0}-${player.L||0}</span>
+                    <span class="wl-record">W-L: ${player.W || 0}-${player.L || 0}</span>
                 </div>`;
             } else {
                 romeStats = `<div class="rome-stats"><span class="no-data-badge">Rome Debut</span></div>`;
             }
 
             const winnerClass = isWinner ? 'winner' : '';
-            const avatarImg   = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
+            const avatarImg = isValid ? getAvatarImg(player.team_id) : '<div style="width:40px;height:40px;flex-shrink:0;"></div>';
             const rankDisplay = isValid ? `<span class="player-rank">#${player.ranking}</span>` : '';
-            const nameClass   = !isValid ? 'placeholder' : '';
+            const nameClass = !isValid ? 'placeholder' : '';
 
-            // Winner row: rank+name on left flex, W+STATS right-aligned together
             const nameRow = isWinner
                 ? `<div class="player-name-row">
                         ${rankDisplay}
@@ -692,6 +852,7 @@ function formatTimestamp(ts) {
                 </div>
             </div>`;
         }
+
         function buildPlaceholderBlock() {
             const ghost = (label) => `<div class="player">
                 <div style="width:40px;height:40px;border-radius:50%;background:#eee;flex-shrink:0;"></div>
@@ -703,30 +864,34 @@ function formatTimestamp(ts) {
             return ghost('TBD') + ghost('TBD');
         }
 
-        const MATCH_H = 142;
-        const BLOCK_GAP = 14;
-        const MATCH_W = 280;
-        const SVG_W = 40;
-        const HEADER_H = 44;
-        const MARGIN_TOP = 10;
-
+        // ============================================================
+        // 3. BRACKET RENDERING ENGINE
+        // ============================================================
         function computeLayout(firstCount) {
             const firstSlot = MATCH_H + BLOCK_GAP;
-            const totalH    = firstCount * firstSlot + MARGIN_TOP;
+            const totalH = firstCount * firstSlot + MARGIN_TOP;
             return { firstSlot, totalH };
         }
 
+        function addLine(svgEl, x1, y1, x2, y2, stroke, sw) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+            line.setAttribute('stroke', stroke);
+            line.setAttribute('stroke-width', sw);
+            svgEl.appendChild(line);
+        }
 
         function renderTennisBracket(containerEl, roundsData) {
             containerEl.innerHTML = '';
             if (!roundsData.length) return;
             const blockCounts = roundsData.map(rd => rd.blocks.length);
-            const firstCount  = blockCounts[0];
+            const firstCount = blockCounts[0];
             const { firstSlot, totalH } = computeLayout(firstCount);
             const slots = blockCounts.map(c => (firstCount / c) * firstSlot);
 
             roundsData.forEach((rd, colIdx) => {
-                const slot  = slots[colIdx];
+                const slot = slots[colIdx];
                 const col = document.createElement('div');
                 col.className = 'round-col';
                 col.style.width = MATCH_W + 'px';
@@ -743,7 +908,7 @@ function formatTimestamp(ts) {
 
                 rd.blocks.forEach((block, bi) => {
                     const slotCenter = MARGIN_TOP + bi * slot + slot / 2;
-                    const topOffset  = slotCenter - MATCH_H / 2;
+                    const topOffset = slotCenter - MATCH_H / 2;
                     const matchEl = document.createElement('div');
                     matchEl.className = 'match' + (block.finished ? ' finished' : '') + (block.placeholder ? ' placeholder-block' : '');
                     matchEl.style.cssText = `left:0;top:${topOffset}px;width:${MATCH_W}px;height:${MATCH_H}px;`;
@@ -771,7 +936,7 @@ function formatTimestamp(ts) {
                 containerEl.appendChild(col);
 
                 if (colIdx < roundsData.length - 1) {
-                    const nextSlot  = slots[colIdx + 1];
+                    const nextSlot = slots[colIdx + 1];
                     const nextCount = blockCounts[colIdx + 1];
                     const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                     svgEl.setAttribute('width', SVG_W);
@@ -780,11 +945,11 @@ function formatTimestamp(ts) {
                     const stroke = 'rgba(55,148,96,0.75)';
                     const sw = 1.5;
                     for (let ni = 0; ni < nextCount; ni++) {
-                        const si1  = 2 * ni;
-                        const si2  = 2 * ni + 1;
-                        const y1   = HEADER_H + MARGIN_TOP + si1 * slot + slot / 2;
-                        const y2   = HEADER_H + MARGIN_TOP + si2 * slot + slot / 2;
-                        const yNext= HEADER_H + MARGIN_TOP + ni * nextSlot + nextSlot / 2;
+                        const si1 = 2 * ni;
+                        const si2 = 2 * ni + 1;
+                        const y1 = HEADER_H + MARGIN_TOP + si1 * slot + slot / 2;
+                        const y2 = HEADER_H + MARGIN_TOP + si2 * slot + slot / 2;
+                        const yNext = HEADER_H + MARGIN_TOP + ni * nextSlot + nextSlot / 2;
                         const yMid = (y1 + y2) / 2;
                         const xMid = SVG_W / 2;
                         addLine(svgEl, 0, y1, xMid, y1, stroke, sw);
@@ -792,7 +957,7 @@ function formatTimestamp(ts) {
                         addLine(svgEl, xMid, y1, xMid, y2, stroke, sw);
                         addLine(svgEl, xMid, yMid, SVG_W, yMid, stroke, sw);
                         if (Math.abs(yMid - yNext) > 1) {
-                            addLine(svgEl, SVG_W-1, yMid, SVG_W-1, yNext, stroke, sw);
+                            addLine(svgEl, SVG_W - 1, yMid, SVG_W - 1, yNext, stroke, sw);
                         }
                     }
                     containerEl.appendChild(svgEl);
@@ -800,16 +965,9 @@ function formatTimestamp(ts) {
             });
         }
 
-        function addLine(svgEl, x1, y1, x2, y2, stroke, sw) {
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-            line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-            line.setAttribute('stroke', stroke);
-            line.setAttribute('stroke-width', sw);
-            svgEl.appendChild(line);
-        }
-
-        // ── 移动端判断（使用屏幕物理宽度，不受桌面模式请求影响）──
+        // ============================================================
+        // 4. MOBILE / DESKTOP ADAPTATION
+        // ============================================================
         function isMobileDevice() {
             return window.screen.width < 1024 || window.outerWidth < 1024;
         }
@@ -817,38 +975,52 @@ function formatTimestamp(ts) {
         function applyContainerMode(mode) {
             const c = document.getElementById('bracketContainer');
             const mobile = isMobileDevice();
-
             c.classList.remove('desktop-center', 'mobile-left');
-
             if (mode === 'all') {
                 c.classList.remove('section-mode');
-                if (mobile) {
-                    c.classList.add('mobile-left');
-                } else {
-                    c.classList.add('desktop-center');
-                }
+                c.classList.add(mobile ? 'mobile-left' : 'desktop-center');
             } else {
                 c.classList.add('section-mode');
-                if (mobile) {
-                    // 移动端强制左对齐，允许横向滚动
-                    c.classList.add('mobile-left');
-                } else {
-                    c.classList.add('desktop-center');
-                }
+                c.classList.add(mobile ? 'mobile-left' : 'desktop-center');
             }
-
-            // 统一设置 overflow 等
             c.style.overflow = 'auto';
             c.style.maxHeight = '85vh';
-            if (mobile) {
-                c.style.cursor = 'default';
-            } else {
-                c.style.cursor = 'grab';
-            }
+            c.style.cursor = mobile ? 'default' : 'grab';
         }
 
-        // ── Tab 和渲染 ──
+        function enableDragScroll() {
+            const c = document.getElementById('bracketContainer');
+            if (!c || isMobileDevice()) return;
+            let down = false, startX, startY, sl, st;
+            c.addEventListener('mousedown', e => {
+                down = true;
+                c.classList.add('dragging');
+                startX = e.clientX; startY = e.clientY;
+                sl = c.scrollLeft; st = c.scrollTop;
+                e.preventDefault();
+            });
+            document.addEventListener('mouseup', () => {
+                down = false;
+                c.classList.remove('dragging');
+            });
+            document.addEventListener('mousemove', e => {
+                if (!down) return;
+                c.scrollLeft = sl - (e.clientX - startX);
+                c.scrollTop = st - (e.clientY - startY);
+            });
+            c.addEventListener('dragstart', e => e.preventDefault());
+        }
+
+        window.addEventListener('resize', () => {
+            if (activeTabMode) applyContainerMode(activeTabMode);
+            enableDragScroll();
+        });
+
+        // ============================================================
+        // 5. TABS & DATA SLICING
+        // ============================================================
         let activeTabMode = 'all';
+
         function setupTabs() {
             const tabsEl = document.getElementById('tabs');
             tabsEl.innerHTML = '';
@@ -907,7 +1079,7 @@ function formatTimestamp(ts) {
                 for (let i = 0; i < expectedCount; i++) {
                     blocks.push(i < realBlocks.length
                         ? realBlocks[i]
-                        : { placeholder: true, order: i+1, finished: false, participants: [] }
+                        : { placeholder: true, order: i + 1, finished: false, participants: [] }
                     );
                 }
                 return { roundName, blocks };
@@ -918,38 +1090,9 @@ function formatTimestamp(ts) {
             renderTennisBracket(document.getElementById('bracket'), buildRoundsData(data, mode));
         }
 
-        // ── 桌面端鼠标拖拽滚动（移动端不启用）──
-        function enableDragScroll() {
-            const c = document.getElementById('bracketContainer');
-            if (!c || isMobileDevice()) return;
-
-            let down = false, startX, startY, sl, st;
-            c.addEventListener('mousedown', e => {
-                down = true;
-                c.classList.add('dragging');
-                startX = e.clientX; startY = e.clientY;
-                sl = c.scrollLeft; st = c.scrollTop;
-                e.preventDefault();
-            });
-            document.addEventListener('mouseup', () => {
-                down = false;
-                c.classList.remove('dragging');
-            });
-            document.addEventListener('mousemove', e => {
-                if (!down) return;
-                c.scrollLeft = sl - (e.clientX - startX);
-                c.scrollTop = st - (e.clientY - startY);
-            });
-            c.addEventListener('dragstart', e => e.preventDefault());
-        }
-
-        // 监听窗口大小变化，重新应用容器样式（以防横屏等）
-        window.addEventListener('resize', () => {
-            if (activeTabMode) applyContainerMode(activeTabMode);
-            enableDragScroll();
-        });
-
-        // ── Stats Modal ──
+        // ============================================================
+        // 6. STATS MODAL — UTILITIES
+        // ============================================================
         function closeStatsModal(e) {
             if (e.target === document.getElementById('statsModalOverlay'))
                 document.getElementById('statsModalOverlay').classList.remove('open');
@@ -984,22 +1127,22 @@ function formatTimestamp(ts) {
             return `<img src="https://flagcdn.com/16x12/${lower}.png" alt="${iso2}" style="width:16px;height:12px;border-radius:1px;vertical-align:middle;margin-right:3px;" onerror="this.style.display='none'">`;
         }
 
-        // Build VS hero: left player | vertical set scores | right player
+        // ============================================================
+        // 7. STATS MODAL — CONTENT BUILDERS
+        // ============================================================
         function buildVsHero(detail, seeds = { home: '', away: '' }) {
-            const ev     = detail.event;
-            const home   = ev.homeTeam;
-            const away   = ev.awayTeam;
-            const hs     = ev.homeScore;
-            const as_    = ev.awayScore;
+            const ev = detail.event;
+            const home = ev.homeTeam;
+            const away = ev.awayTeam;
+            const hs = ev.homeScore;
+            const as_ = ev.awayScore;
             const homeWon = ev.winnerCode === 1;
 
             const sets = [];
-            for (const p of ['period1','period2','period3','period4','period5']) {
+            for (const p of ['period1', 'period2', 'period3', 'period4', 'period5']) {
                 if (hs[p] != null && as_[p] != null) sets.push({ h: hs[p], a: as_[p] });
             }
 
-            // Each set: home score on top row, away score on bottom row, both as columns
-            // Layout: [home scores col] - [away scores col], matching by set
             const homeSetNums = sets.map(s => {
                 const won = s.h > s.a;
                 return `<div class="vs-set-num ${won ? 'won' : 'lost'}">${s.h}</div>`;
@@ -1024,39 +1167,40 @@ function formatTimestamp(ts) {
                 : `<div class="vs-avatar ${won ? 'winner-avatar' : ''}" style="display:flex;align-items:center;justify-content:center;font-size:1.5em;">🎾</div>`;
 
             return `
-                <div class="vs-player home">
+               <div class="vs-player home">
                     ${avatarTag(homeAvatarUrl, homeWon)}
-                    <div class="vs-player-name">
-  ${home.fullName || home.name}
-  ${seeds.home ? `<span class="seed-badge">[${seeds.home}]</span>` : ''}
-</div>
-                    <div class="vs-player-meta">
+                    <div class="vs-player-name-row">
+                        <span class="vs-rank-inline">#${home.ranking || '-'}</span>
+                        <span class="vs-player-name">${home.fullName || home.name}</span>
+                        ${seeds.home ? `<span class="seed-badge">[${seeds.home}]</span>` : ''}
+                    </div>
+                    <div class="vs-player-info">
                         ${flagImg(home.country?.alpha2)}
                         <span>${home.country?.name || ''}</span>
-                        <span class="vs-rank"> · #${home.ranking || '-'}</span>
+                        ${home.playerTeamInfo?.birthDateTimestamp ? `<span> · ${formatBirthDate(home.playerTeamInfo.birthDateTimestamp)}</span>` : ''}
+                        ${home.playerTeamInfo?.height ? `<span> · ${home.playerTeamInfo.height}m</span>` : ''}
                     </div>
-                    ${homeWon ? '<div class="vs-winner-crown">🏆 WINNER</div>' : ''}
                 </div>
                 <div class="vs-center">
                     <div class="vs-label">SCORE</div>
                     ${setsHtml}
                 </div>
-                <div class="vs-player away">
+               <div class="vs-player away">
                     ${avatarTag(awayAvatarUrl, !homeWon)}
-                    <div class="vs-player-name">
-  ${away.fullName || away.name}
-  ${seeds.away ? `<span class="seed-badge">[${seeds.away}]</span>` : ''}
-</div>
-                    <div class="vs-player-meta">
+                    <div class="vs-player-name-row">
+                        <span class="vs-rank-inline">#${away.ranking || '-'}</span>
+                        <span class="vs-player-name">${away.fullName || away.name}</span>
+                        ${seeds.away ? `<span class="seed-badge">[${seeds.away}]</span>` : ''}
+                    </div>
+                    <div class="vs-player-info">
                         ${flagImg(away.country?.alpha2)}
                         <span>${away.country?.name || ''}</span>
-                        <span class="vs-rank"> · #${away.ranking || '-'}</span>
+                        ${away.playerTeamInfo?.birthDateTimestamp ? `<span> · ${formatBirthDate(away.playerTeamInfo.birthDateTimestamp)}</span>` : ''}
+                        ${away.playerTeamInfo?.height ? `<span> · ${away.playerTeamInfo.height}m</span>` : ''}
                     </div>
-                    ${!homeWon ? '<div class="vs-winner-crown">🏆 WINNER</div>' : ''}
                 </div>`;
         }
 
-        // Confrontation row: home val LEFT | label CENTER | away val RIGHT
         function confRow(label, hRaw, aRaw, lowerBetter, isDR) {
             const h = parseFraction(hRaw);
             const a = parseFraction(aRaw);
@@ -1071,12 +1215,11 @@ function formatTimestamp(ts) {
             const hDisp = h.total != null ? fmtFrac(h.val, h.total) : (hRaw == null || hRaw === '—' ? '—' : String(hRaw));
             const aDisp = a.total != null ? fmtFrac(a.val, a.total) : (aRaw == null || aRaw === '—' ? '—' : String(aRaw));
 
-            // Mini bars for fraction data
             let barsHtml = '';
             if (h.total != null && a.total != null) {
                 const sum = hNum + aNum || 1;
-                const hW  = Math.round(hNum / sum * 100);
-                const aW  = 100 - hW;
+                const hW = Math.round(hNum / sum * 100);
+                const aW = 100 - hW;
                 barsHtml = `<div class="conf-bar-row">
                     <div style="flex:1;display:flex;justify-content:flex-end;"><div class="conf-bar home-bar" style="width:${hW}%"></div></div>
                     <div style="width:3px;"></div>
@@ -1103,8 +1246,7 @@ function formatTimestamp(ts) {
         }
 
         function buildStatsBody(detail, stats) {
-            const ev       = detail.event;
-            // participants[0] = home, participants[1] = away (confirmed)
+            const ev = detail.event;
             const homeName = ev.homeTeam.shortName || ev.homeTeam.name;
             const awayName = ev.awayTeam.shortName || ev.awayTeam.name;
 
@@ -1112,41 +1254,36 @@ function formatTimestamp(ts) {
             if (!allPeriod) return '<div class="stats-error">无统计数据</div>';
 
             const getGroup = name => allPeriod.groups.find(g => g.groupName === name);
-            const getItem  = (grp, key) => grp?.statisticsItems.find(i => i.key === key);
-            const gv       = (grp, key, side) => getItem(grp, key)?.[side] ?? '—';
+            const getItem = (grp, key) => grp?.statisticsItems.find(i => i.key === key);
+            const gv = (grp, key, side) => getItem(grp, key)?.[side] ?? '—';
 
             const svc = getGroup('Service');
             const ret = getGroup('Return');
             const pts = getGroup('Points');
 
-            // 发球得分率 = Σ(一发得分 + 二发得分) / Σ(一发总数 + 二发总数)
             function calcServeWinRate(side) {
-                const f1 = parseFraction(gv(svc, 'firstServePointsAccuracy',  side));
+                const f1 = parseFraction(gv(svc, 'firstServePointsAccuracy', side));
                 const f2 = parseFraction(gv(svc, 'secondServePointsAccuracy', side));
-                const won   = f1.val + f2.val;
+                const won = f1.val + f2.val;
                 const total = (f1.total || 0) + (f2.total || 0);
                 return { val: won, total: total || null };
             }
 
-            // 接发得分率 = Σ(接一发得分 + 接二发得分) / Σ(对方一发总数 + 对方二发总数)
-            // 分母 = 对方的发球总数（一发 + 二发），即 Return group 里的 total
             function calcReturnWinRate(side) {
-                const r1 = parseFraction(gv(ret, 'firstReturnPoints',  side));
+                const r1 = parseFraction(gv(ret, 'firstReturnPoints', side));
                 const r2 = parseFraction(gv(ret, 'secondReturnPoints', side));
-                const won   = r1.val + r2.val;
+                const won = r1.val + r2.val;
                 const total = (r1.total || 0) + (r2.total || 0);
                 return { val: won, total: total || null };
             }
 
-            // DR = 己方接发得分率 / (1 - 己方发球得分率)
-            // 即：接发得分率 / 发球丢分率
             function calcDR(side) {
                 const srv = calcServeWinRate(side);
                 const ret_ = calcReturnWinRate(side);
                 if (!srv.total || !ret_.total) return '—';
-                const serveWinRate   = srv.val  / srv.total;    // 己方发球得分率
-                const returnWinRate  = ret_.val / ret_.total;   // 己方接发得分率
-                const serveLoseRate  = 1 - serveWinRate;        // 己方发球丢分率
+                const serveWinRate = srv.val / srv.total;
+                const returnWinRate = ret_.val / ret_.total;
+                const serveLoseRate = 1 - serveWinRate;
                 if (serveLoseRate <= 0) return '∞';
                 return (returnWinRate / serveLoseRate).toFixed(2);
             }
@@ -1155,47 +1292,43 @@ function formatTimestamp(ts) {
             const aSrv = calcServeWinRate('away');
             const hRet = calcReturnWinRate('home');
             const aRet = calcReturnWinRate('away');
-            const hDR  = calcDR('home');
-            const aDR  = calcDR('away');
+            const hDR = calcDR('home');
+            const aDR = calcDR('away');
 
-            // 先获取 Games 组数据，用于计算真正的保发率
-const games = getGroup('Games');
-const homeSGW = gv(games,'serviceGamesWon','home');
-const awaySGW = gv(games,'serviceGamesWon','away');
-const homeSGT = gv(svc,'serviceGamesTotal','home');
-const awaySGT = gv(svc,'serviceGamesTotal','away');
-const homeServeStr = (homeSGW !== '—' && homeSGT !== '—') ? homeSGW + '/' + homeSGT : '—';
-const awayServeStr = (awaySGW !== '—' && awaySGT !== '—') ? awaySGW + '/' + awaySGT : '—';
+            const games = getGroup('Games');
+            const homeSGW = gv(games, 'serviceGamesWon', 'home');
+            const awaySGW = gv(games, 'serviceGamesWon', 'away');
+            const homeSGT = gv(svc, 'serviceGamesTotal', 'home');
+            const awaySGT = gv(svc, 'serviceGamesTotal', 'away');
+            const homeServeStr = (homeSGW !== '—' && homeSGT !== '—') ? homeSGW + '/' + homeSGT : '—';
+            const awayServeStr = (awaySGW !== '—' && awaySGT !== '—') ? awaySGW + '/' + awaySGT : '—';
 
-const svcCard = sectionCard('🎾 发球', homeName, awayName, `
-    ${confRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
-    ${confRow('双误', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
-    ${confRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
-    ${confRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
-    ${confRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
-    ${confRow('破发点挽救率', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
+            const svcCard = sectionCard('🎾 发球', homeName, awayName, `
+    ${confRow('Aces', gv(svc, 'aces', 'home'), gv(svc, 'aces', 'away'))}
+    ${confRow('双误', gv(svc, 'doubleFaults', 'home'), gv(svc, 'doubleFaults', 'away'), true)}
+    ${confRow('一发进球率', gv(svc, 'firstServeAccuracy', 'home'), gv(svc, 'firstServeAccuracy', 'away'))}
+    ${confRow('一发得分率', gv(svc, 'firstServePointsAccuracy', 'home'), gv(svc, 'firstServePointsAccuracy', 'away'))}
+    ${confRow('二发得分率', gv(svc, 'secondServePointsAccuracy', 'home'), gv(svc, 'secondServePointsAccuracy', 'away'))}
+    ${confRow('破发点挽救率', gv(svc, 'breakPointsSaved', 'home'), gv(svc, 'breakPointsSaved', 'away'))}
     ${confRow('保发率', homeServeStr, awayServeStr)}
 `);
 
-            // 从 Service 组的 breakPointsSaved 计算破发点转换率
-const bpSavedItem = allPeriod.groups.find(g => g.groupName === 'Service').statisticsItems.find(i => i.key === 'breakPointsSaved');
-const bpHomeValue = bpSavedItem ? bpSavedItem.homeValue : 0;
-const bpAwayValue = bpSavedItem ? bpSavedItem.awayValue : 0;
-const bpHomeTotal = bpSavedItem ? bpSavedItem.homeTotal : 0;
-const bpAwayTotal = bpSavedItem ? bpSavedItem.awayTotal : 0;
-// home 的破发转换率 = (away 破发点总数 - away 挽救破发点数) / away 破发点总数
-const homeBpConv = bpAwayTotal ? (bpAwayTotal - bpAwayValue) + '/' + bpAwayTotal : '—';
-// away 的破发转换率 = (home 破发点总数 - home 挽救破发点数) / home 破发点总数
-const awayBpConv = bpHomeTotal ? (bpHomeTotal - bpHomeValue) + '/' + bpHomeTotal : '—';
+            const bpSavedItem = allPeriod.groups.find(g => g.groupName === 'Service').statisticsItems.find(i => i.key === 'breakPointsSaved');
+            const bpHomeValue = bpSavedItem ? bpSavedItem.homeValue : 0;
+            const bpAwayValue = bpSavedItem ? bpSavedItem.awayValue : 0;
+            const bpHomeTotal = bpSavedItem ? bpSavedItem.homeTotal : 0;
+            const bpAwayTotal = bpSavedItem ? bpSavedItem.awayTotal : 0;
+            const homeBpConv = bpAwayTotal ? (bpAwayTotal - bpAwayValue) + '/' + bpAwayTotal : '—';
+            const awayBpConv = bpHomeTotal ? (bpHomeTotal - bpHomeValue) + '/' + bpHomeTotal : '—';
 
-const retCard = sectionCard('🔄 接发', homeName, awayName, `
-    ${confRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
-    ${confRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
+            const retCard = sectionCard('🔄 接发', homeName, awayName, `
+    ${confRow('接一发得分率', gv(ret, 'firstReturnPoints', 'home'), gv(ret, 'firstReturnPoints', 'away'))}
+    ${confRow('接二发得分率', gv(ret, 'secondReturnPoints', 'home'), gv(ret, 'secondReturnPoints', 'away'))}
     ${confRow('破发点转换率', homeBpConv, awayBpConv)}
 `);
 
             const ptsCard = sectionCard('📊 得分', homeName, awayName, `
-                ${confRow('总得分', gv(pts,'pointsTotal','home'), gv(pts,'pointsTotal','away'))}
+                ${confRow('总得分', gv(pts, 'pointsTotal', 'home'), gv(pts, 'pointsTotal', 'away'))}
                 ${confRow('发球得分率', fmtFrac(hSrv.val, hSrv.total), fmtFrac(aSrv.val, aSrv.total))}
                 ${confRow('接发得分率', fmtFrac(hRet.val, hRet.total), fmtFrac(aRet.val, aRet.total))}
                 ${confRow('DR', hDR, aDR, false, true)}
@@ -1204,67 +1337,71 @@ const retCard = sectionCard('🔄 接发', homeName, awayName, `
             return svcCard + retCard + ptsCard;
         }
 
+        // ============================================================
+        // 8. STATS MODAL — OPEN
+        // ============================================================
         async function openStatsModal(eventId, e) {
             e && e.stopPropagation();
             const overlay = document.getElementById('statsModalOverlay');
-            const hero    = document.getElementById('statsVsHero');
-            const strip   = document.getElementById('statsRoundStrip');
-            const body    = document.getElementById('statsModalBody');
+            const hero = document.getElementById('statsVsHero');
+            const strip = document.getElementById('statsRoundStrip');
+            const body = document.getElementById('statsModalBody');
 
-            hero.innerHTML  = '<div class="stats-loading" style="color:white;padding:30px 0;width:100%;text-align:center;">⏳ 加载中…</div>';
+            hero.innerHTML = '<div class="stats-loading" style="color:white;padding:30px 0;width:100%;text-align:center;">⏳ 加载中…</div>';
             strip.textContent = '';
-            body.innerHTML  = '';
+            body.innerHTML = '';
             overlay.classList.add('open');
 
             try {
-                const ts       = Date.now();
-                const rnd      = Math.random().toString(36).slice(2);
+                const ts = Date.now();
+                const rnd = Math.random().toString(36).slice(2);
                 const basePath = `../api_folder/data/rome_2026`;
                 const cacheBust = `?v=${ts}&r=${rnd}&nocache=1`;
                 const [detailRes, statsRes] = await Promise.all([
-                    fetch(`${basePath}/event_detail_${eventId}.json${cacheBust}`,      { cache: 'no-store' }),
-                    fetch(`${basePath}/event_statistics_${eventId}.json${cacheBust}`,  { cache: 'no-store' })
+                    fetch(`${basePath}/event_detail_${eventId}.json${cacheBust}`, { cache: 'no-store' }),
+                    fetch(`${basePath}/event_statistics_${eventId}.json${cacheBust}`, { cache: 'no-store' })
                 ]);
                 if (!detailRes.ok || !statsRes.ok) throw new Error('数据文件未找到');
                 const [detail, stats] = await Promise.all([detailRes.json(), statsRes.json()]);
 
                 const ev = detail.event;
                 const seeds = window.eventSeedMap ? (window.eventSeedMap[eventId] || { home: '', away: '' }) : { home: '', away: '' };
-hero.innerHTML    = buildVsHero(detail, seeds);
+                hero.innerHTML = buildVsHero(detail, seeds);
                 const eventTime = formatTimestamp(ev.changes?.changeTimestamp);
-strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}` + 
+                strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}` +
                     (eventTime ? ` · ${eventTime}` : '');
-                body.innerHTML    = buildStatsBody(detail, stats);
+                body.innerHTML = buildStatsBody(detail, stats);
             } catch (err) {
-                hero.innerHTML  = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
+                hero.innerHTML = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
                 strip.textContent = `Event #${eventId}`;
-                body.innerHTML  = `<div class="stats-error">比赛数据还未更新，请稍后再试。</div>`;
+                body.innerHTML = `<div class="stats-error">比赛数据还未更新，请稍后再试。</div>`;
             }
         }
 
-        // ── 启动 ──
+        // ============================================================
+        // 9. INITIALIZATION
+        // ============================================================
         function fetchAndRender() {
             const timestamp = Date.now();
-            const random    = Math.random().toString(36).slice(2);
+            const random = Math.random().toString(36).slice(2);
             fetch(`../output/draw_rome_2026_with_history_stats.json?v=${timestamp}&r=${random}&nocache=1`, { cache: 'no-store' })
                 .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
-                    // 构建 event_id -> { home: seed, away: seed } 的映射
-window.eventSeedMap = {};
-data.rounds.forEach(round => {
-    round.blocks.forEach(block => {
-        if (block.finished && block.event_id) {
-            const parts = block.participants || [];
-            if (parts.length === 2) {
-                window.eventSeedMap[block.event_id] = {
-                    home: parts[0].teamSeed || '',
-                    away: parts[1].teamSeed || ''
-                };
-            }
-        }
-    });
-});
+                    window.eventSeedMap = {};
+                    data.rounds.forEach(round => {
+                        round.blocks.forEach(block => {
+                            if (block.finished && block.event_id) {
+                                const parts = block.participants || [];
+                                if (parts.length === 2) {
+                                    window.eventSeedMap[block.event_id] = {
+                                        home: parts[0].teamSeed || '',
+                                        away: parts[1].teamSeed || ''
+                                    };
+                                }
+                            }
+                        });
+                    });
                     setupTabs();
                     enableDragScroll();
                 });
@@ -1272,4 +1409,5 @@ data.rounds.forEach(round => {
         fetchAndRender();
     </script>
 </body>
+
 </html>
