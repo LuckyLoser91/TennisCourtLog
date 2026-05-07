@@ -551,6 +551,14 @@
             font-size: 0.9em;
             line-height: 1.6;
         }
+.seed-badge {
+    font-size: 0.8em;
+    font-weight: 800;
+    color: #ffd700;
+    margin-left: 4px;
+    vertical-align: middle;
+    letter-spacing: 0.03em;
+}
     </style>
 </head>
 
@@ -655,7 +663,7 @@
                 ? `<div class="player-name-row">
                         ${rankDisplay}
                         <span class="player-name ${nameClass}">${player.name}<span class="seed">${seed}</span></span>
-                        <div class="player-name-right"><span class="winner-badge">W</span>${statsBadge}</div>
+                        <div class="player-name-right">${statsBadge}</div>
                    </div>`
                 : `<div class="player-name-row">
                         ${rankDisplay}
@@ -962,7 +970,7 @@
         }
 
         // Build VS hero: left player | vertical set scores | right player
-        function buildVsHero(detail) {
+        function buildVsHero(detail, seeds = { home: '', away: '' }) {
             const ev     = detail.event;
             const home   = ev.homeTeam;
             const away   = ev.awayTeam;
@@ -989,7 +997,7 @@
             const setsHtml = `
                 <div class="vs-sets-block">
                     <div class="vs-sets-col">${homeSetNums}</div>
-                    <div class="vs-sets-dash">–</div>
+                    <div class="vs-sets-dash"> </div>
                     <div class="vs-sets-col">${awaySetNums}</div>
                 </div>`;
 
@@ -1003,7 +1011,10 @@
             return `
                 <div class="vs-player home">
                     ${avatarTag(homeAvatarUrl, homeWon)}
-                    <div class="vs-player-name">${home.fullName || home.name}</div>
+                    <div class="vs-player-name">
+  ${home.fullName || home.name}
+  ${seeds.home ? `<span class="seed-badge">[${seeds.home}]</span>` : ''}
+</div>
                     <div class="vs-player-meta">
                         ${flagImg(home.country?.alpha2)}
                         <span>${home.country?.name || ''}</span>
@@ -1017,7 +1028,10 @@
                 </div>
                 <div class="vs-player away">
                     ${avatarTag(awayAvatarUrl, !homeWon)}
-                    <div class="vs-player-name">${away.fullName || away.name}</div>
+                    <div class="vs-player-name">
+  ${away.fullName || away.name}
+  ${seeds.away ? `<span class="seed-badge">[${seeds.away}]</span>` : ''}
+</div>
                     <div class="vs-player-meta">
                         ${flagImg(away.country?.alpha2)}
                         <span>${away.country?.name || ''}</span>
@@ -1129,26 +1143,47 @@
             const hDR  = calcDR('home');
             const aDR  = calcDR('away');
 
-            const svcCard = sectionCard('🎾 发球', homeName, awayName, `
-                ${confRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
-                ${confRow('双误', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
-                ${confRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
-                ${confRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
-                ${confRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
-                ${confRow('保发率', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
-            `);
+            // 先获取 Games 组数据，用于计算真正的保发率
+const games = getGroup('Games');
+const homeSGW = gv(games,'serviceGamesWon','home');
+const awaySGW = gv(games,'serviceGamesWon','away');
+const homeSGT = gv(svc,'serviceGamesTotal','home');
+const awaySGT = gv(svc,'serviceGamesTotal','away');
+const homeServeStr = (homeSGW !== '—' && homeSGT !== '—') ? homeSGW + '/' + homeSGT : '—';
+const awayServeStr = (awaySGW !== '—' && awaySGT !== '—') ? awaySGW + '/' + awaySGT : '—';
 
-            const retCard = sectionCard('🔄 接发', homeName, awayName, `
-                ${confRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
-                ${confRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
-                ${confRow('破发点转换率', gv(ret,'breakPointsScored','home'), gv(ret,'breakPointsScored','away'))}
-            `);
+const svcCard = sectionCard('🎾 发球', homeName, awayName, `
+    ${confRow('Aces', gv(svc,'aces','home'), gv(svc,'aces','away'))}
+    ${confRow('双误', gv(svc,'doubleFaults','home'), gv(svc,'doubleFaults','away'), true)}
+    ${confRow('一发进球率', gv(svc,'firstServeAccuracy','home'), gv(svc,'firstServeAccuracy','away'))}
+    ${confRow('一发得分率', gv(svc,'firstServePointsAccuracy','home'), gv(svc,'firstServePointsAccuracy','away'))}
+    ${confRow('二发得分率', gv(svc,'secondServePointsAccuracy','home'), gv(svc,'secondServePointsAccuracy','away'))}
+    ${confRow('破发点挽救率', gv(svc,'breakPointsSaved','home'), gv(svc,'breakPointsSaved','away'))}
+    ${confRow('保发率', homeServeStr, awayServeStr)}
+`);
+
+            // 从 Service 组的 breakPointsSaved 计算破发点转换率
+const bpSavedItem = allPeriod.groups.find(g => g.groupName === 'Service').statisticsItems.find(i => i.key === 'breakPointsSaved');
+const bpHomeValue = bpSavedItem ? bpSavedItem.homeValue : 0;
+const bpAwayValue = bpSavedItem ? bpSavedItem.awayValue : 0;
+const bpHomeTotal = bpSavedItem ? bpSavedItem.homeTotal : 0;
+const bpAwayTotal = bpSavedItem ? bpSavedItem.awayTotal : 0;
+// home 的破发转换率 = (away 破发点总数 - away 挽救破发点数) / away 破发点总数
+const homeBpConv = bpAwayTotal ? (bpAwayTotal - bpAwayValue) + '/' + bpAwayTotal : '—';
+// away 的破发转换率 = (home 破发点总数 - home 挽救破发点数) / home 破发点总数
+const awayBpConv = bpHomeTotal ? (bpHomeTotal - bpHomeValue) + '/' + bpHomeTotal : '—';
+
+const retCard = sectionCard('🔄 接发', homeName, awayName, `
+    ${confRow('接一发得分率', gv(ret,'firstReturnPoints','home'), gv(ret,'firstReturnPoints','away'))}
+    ${confRow('接二发得分率', gv(ret,'secondReturnPoints','home'), gv(ret,'secondReturnPoints','away'))}
+    ${confRow('破发点转换率', homeBpConv, awayBpConv)}
+`);
 
             const ptsCard = sectionCard('📊 得分', homeName, awayName, `
                 ${confRow('总得分', gv(pts,'pointsTotal','home'), gv(pts,'pointsTotal','away'))}
                 ${confRow('发球得分率', fmtFrac(hSrv.val, hSrv.total), fmtFrac(aSrv.val, aSrv.total))}
                 ${confRow('接发得分率', fmtFrac(hRet.val, hRet.total), fmtFrac(aRet.val, aRet.total))}
-                ${confRow('DR (接发率/发球丢分率)', hDR, aDR, false, true)}
+                ${confRow('DR', hDR, aDR, false, true)}
             `);
 
             return svcCard + retCard + ptsCard;
@@ -1179,13 +1214,14 @@
                 const [detail, stats] = await Promise.all([detailRes.json(), statsRes.json()]);
 
                 const ev = detail.event;
-                hero.innerHTML    = buildVsHero(detail);
+                const seeds = window.eventSeedMap ? (window.eventSeedMap[eventId] || { home: '', away: '' }) : { home: '', away: '' };
+hero.innerHTML    = buildVsHero(detail, seeds);
                 strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}`;
                 body.innerHTML    = buildStatsBody(detail, stats);
             } catch (err) {
                 hero.innerHTML  = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
                 strip.textContent = `Event #${eventId}`;
-                body.innerHTML  = `<div class="stats-error">路径: ../api_folder/data/rome_2026/event_detail_${eventId}.json</div>`;
+                body.innerHTML  = `<div class="stats-error">比赛数据还未更新，请稍后再试。</div>`;
             }
         }
 
@@ -1197,6 +1233,21 @@
                 .then(r => r.json())
                 .then(data => {
                     window.drawData = data;
+                    // 构建 event_id -> { home: seed, away: seed } 的映射
+window.eventSeedMap = {};
+data.rounds.forEach(round => {
+    round.blocks.forEach(block => {
+        if (block.finished && block.event_id) {
+            const parts = block.participants || [];
+            if (parts.length === 2) {
+                window.eventSeedMap[block.event_id] = {
+                    home: parts[0].teamSeed || '',
+                    away: parts[1].teamSeed || ''
+                };
+            }
+        }
+    });
+});
                     setupTabs();
                     enableDragScroll();
                 });
