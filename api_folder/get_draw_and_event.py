@@ -2,11 +2,12 @@ import json
 import csv
 import os
 import unicodedata
-import pandas as pd
-from typing import Dict, List, Set, Optional
 from tennis_api import TennisApi
 import time
 
+DATA_DIR = "api_folder/data/rome_2026"
+UNIQUE_TOURNAMENT_ID = 2569 # Rome
+SEASON_ID = 85600 # 2026
 
 
 def correct_player_names(draw_file_path: str):
@@ -156,15 +157,10 @@ def parse_draw_to_csv(draw_file_path: str, output_dir: str):
     print(f"CSV 文件已保存到: {csv_file_path}")
     print(f"共提取 {len(csv_rows)} 行数据")
 
-
-
-
-
 def fetch_completed_events_from_json():
     """直接从 draw.json 中提取正赛已完成比赛的 event_id，并获取 statistics 和 detail 数据"""
-    draw_json_path = "api_folder/data/rome_2026/draw.json"
-    output_dir = "api_folder/data/rome_2026"
-    os.makedirs(output_dir, exist_ok=True)
+    draw_json_path = f"{DATA_DIR}/draw.json"
+    os.makedirs(DATA_DIR, exist_ok=True)
 
     # 读取 draw.json
     with open(draw_json_path, 'r', encoding='utf-8') as f:
@@ -207,10 +203,11 @@ def fetch_completed_events_from_json():
             continue
 
         # 1. 获取 statistics（如果文件已存在则跳过）
-        stats_path = os.path.join(output_dir, f"event_statistics_{eid_int}.json")
+        stats_path = os.path.join(DATA_DIR, f"event_statistics_{eid_int}.json")
         if not os.path.exists(stats_path):
 
             try:
+                print(f"-------------处理 event_id: {eid_int}------------")
                 api.request_event_statistics(event_id=eid_int, save_path=stats_path)
 
             except Exception as e:
@@ -219,7 +216,7 @@ def fetch_completed_events_from_json():
             print(f"  statistics 已存在，跳过: {stats_path}")
 
         # 2. 获取 detail（如果文件已存在则跳过）
-        detail_path = os.path.join(output_dir, f"event_detail_{eid_int}.json")
+        detail_path = os.path.join(DATA_DIR, f"event_detail_{eid_int}.json")
         if not os.path.exists(detail_path):
 
             try:
@@ -236,18 +233,17 @@ if __name__ == "__main__":
     tennis_api = TennisApi()
 
     draw_data = tennis_api.request_draw(
-        season_id=85600, 
-        unique_tournament_id=2569, 
-        save_path="api_folder/data/rome_2026/draw.json"
+        season_id=SEASON_ID, 
+        unique_tournament_id=UNIQUE_TOURNAMENT_ID, 
+        save_path=f"{DATA_DIR}/draw.json"
     )
 
-    correct_player_names("api_folder/data/rome_2026/draw.json")
+    correct_player_names(f"{DATA_DIR}/draw.json")
     # 第二步：解析 draw.json 生成 CSV
     parse_draw_to_csv(
-        draw_file_path="api_folder/data/rome_2026/draw.json",
-        output_dir="api_folder/data/rome_2026/"
+        draw_file_path=f"{DATA_DIR}/draw.json",
+        output_dir=DATA_DIR
     )
-
 
     # 第四步： 抓取已完成比赛的 statistics 和 detail
     fetch_completed_events_from_json()

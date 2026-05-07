@@ -1,3 +1,4 @@
+from pathlib import Path
 import requests
 import json
 import os
@@ -5,8 +6,13 @@ from typing import Optional, Dict, Any
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
-# 从 config 子目录加载 .env 文件
-load_dotenv(os.path.join(os.path.dirname(__file__), 'config', '.env'))
+
+# 获取项目根目录（TennisCourtLog/）
+project_root = Path(__file__).parent.parent
+
+# 指定 .vscode 文件夹下的 .env
+env_path = project_root / '.vscode' / '.env'
+load_dotenv(env_path)
 
 
 class TennisApi:
