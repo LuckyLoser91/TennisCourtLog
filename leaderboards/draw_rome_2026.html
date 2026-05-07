@@ -615,6 +615,20 @@
         function hasValidRanking(player) {
             return player.ranking && player.ranking !== '-' && !isNaN(player.ranking) && parseInt(player.ranking) > 0;
         }
+function formatTimestamp(ts) {
+    if (!ts) return '';
+    const d = new Date(ts * 1000);
+    // 使用罗马时区格式化，输出格式：2026-05-03 17:36
+    return d.toLocaleString('zh-CN', {
+        timeZone: 'Europe/Rome',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).replace(/\//g, '-').replace(',', '');
+}
         function getR128Section(roundIndex, blockOrder) {
             if (roundIndex === 0) return Math.ceil(blockOrder / 8);
             const multiplier = Math.pow(2, roundIndex);
@@ -701,6 +715,7 @@
             const totalH    = firstCount * firstSlot + MARGIN_TOP;
             return { firstSlot, totalH };
         }
+
 
         function renderTennisBracket(containerEl, roundsData) {
             containerEl.innerHTML = '';
@@ -1216,7 +1231,9 @@ const retCard = sectionCard('🔄 接发', homeName, awayName, `
                 const ev = detail.event;
                 const seeds = window.eventSeedMap ? (window.eventSeedMap[eventId] || { home: '', away: '' }) : { home: '', away: '' };
 hero.innerHTML    = buildVsHero(detail, seeds);
-                strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}`;
+                const eventTime = formatTimestamp(ev.changes?.changeTimestamp);
+strip.textContent = `${ev.tournament?.name || 'WTA 1000 Rome'} · ${ev.roundInfo?.name || ''}` + 
+                    (eventTime ? ` · ${eventTime}` : '');
                 body.innerHTML    = buildStatsBody(detail, stats);
             } catch (err) {
                 hero.innerHTML  = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
