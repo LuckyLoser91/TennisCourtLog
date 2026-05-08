@@ -60,7 +60,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-            git add output/
+            git add output/ api_folder/data/rome_2026/
             if git diff --cached --quiet; then
             echo "✅ 签表数据无变化，跳过提交"
             else
