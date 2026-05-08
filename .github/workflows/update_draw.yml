@@ -65,6 +65,6 @@ jobs:
             echo "✅ 签表数据无变化，跳过提交"
             else
             git commit -m "🎾 Auto-update draw data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
-            git push
+            git push --force origin HEAD:main
             echo "✅ 签表数据已更新并推送"
             fi
