@@ -100,7 +100,6 @@ class TennisApi:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
         data = response.json()
-        
         if save_path is not None:
             self._save_to_file(data, save_path)
         
