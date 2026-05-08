@@ -1,3 +1,4 @@
+import argparse
 import glob
 import json
 import os
@@ -6,11 +7,7 @@ from typing import Dict, List
 from get_draw_and_event import normalize_name
 
 
-TOURNEY_NAME = "Rome" #需要和tennis-wta的csv文件里的名字一致
-DATA_DIR = "api_folder/data/rome_2026"
-# 战绩缓存文件路径
-STATS_CACHE_PATH = "api_folder/data/rome_2026/tournament_stats_cache.json"
-TOURNEY_JSON_PATH = "./output/draw_rome_2026_with_history_stats.json"
+
 
 # 轮次排序（用于判断最佳轮次）
 ROUND_ORDER = {
@@ -48,12 +45,12 @@ def load_historical_calendar(calendar_path: str) -> Dict[tuple, str]:
         mapping[key] = level
     return mapping
 
-def load_stats_cache() -> Dict[str, Dict]:
+def load_stats_cache(stats_cache_path) -> Dict[str, Dict]:
     """
     加载罗马战绩缓存文件
     """
-    if os.path.exists(STATS_CACHE_PATH):
-        with open(STATS_CACHE_PATH, 'r', encoding='utf-8') as f:
+    if os.path.exists(stats_cache_path):
+        with open(stats_cache_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     return {}
 
@@ -83,38 +80,12 @@ def find_tourney_stats(name: str, stats_map: Dict, not_found: List, ranking: str
         not_found.append({'name': name, 'ranking': ranking})
         return {'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''}
 
-def get_rank_info(name, ranking, team_id, rankings_list):
-    """
-    根据排名索引获取球员的积分和国籍代码。
-    如果排名不在有效范围内或 ID 不匹配，打印警告并返回空字符串。
-    """
-    rank_points = ''
-    iso2 = ''
-    if name in ('Bye', 'TBD'):
-        return rank_points, iso2
-    if ranking == '':
-        return rank_points, iso2
-    try:
-        rank_idx = int(ranking) - 1
-        if rank_idx < 0 or rank_idx >= len(rankings_list):
-            print(f"  ⚠ {name} (Rank: {ranking}) 排名超出范围（最大 {len(rankings_list)}）")
-        else:
-            entry = rankings_list[rank_idx]
-            entry_team = entry.get("team", {})
-            if entry_team.get("id") == team_id:
-                rank_points = entry.get("points", "")
-                iso2 = entry_team.get("country", {}).get("alpha2", "")
-            else:
-                print(f"  ⚠ {name} (Rank: {ranking}) team.id 不匹配: draw={team_id}, rank={entry_team.get('id')}")
-    except ValueError:
-        print(f"  ⚠ {name} 排名非数字: {ranking}")
-    return rank_points, iso2
-
 def get_tourney_stats_for_players(
-    player_names: List[str],
-    matches_dir: str = "tennis_wta",
-    historical_calendar_path: str = "output/wta_calendar_champs_start_2009.json",
-    target_tourney: str = "Rome"
+    player_names,
+    matches_dir,
+    historical_calendar_path,
+    target_tourney,
+    stats_cache_path
 ) -> Dict[str, Dict]:
     """
     从 tennis_wta 文件夹的历年 CSV 中提取指定球员在赛事的历史统计数据。
@@ -130,7 +101,7 @@ def get_tourney_stats_for_players(
         {player_name: {best_round, W, L, winrate, titles}} 的字典
     """
     # 加载现有缓存
-    cache = load_stats_cache()
+    cache = load_stats_cache(stats_cache_path)
     
     # 分离已缓存和未缓存的球员
     cached_players = {name: cache[name] for name in player_names if name in cache}
@@ -240,22 +211,15 @@ def get_tourney_stats_for_players(
     result = {**cached_players, **new_entries}
     return result
 
-def enhance_draw():
+def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_path):
     """为 draw.json 添加赛事历史统计和排名数据，生成结构化的 JSON"""
 
-    draw_json_path = f"{DATA_DIR}/draw.json"
-    rank_files = sorted(glob.glob("api_folder/data/wta_rank_*.json"))
-    rank_json_path = rank_files[-1]
+    draw_json_path = f"{data_dir}/draw.json"
 
     # 读取原始 draw.json
     with open(draw_json_path, 'r', encoding='utf-8') as f:
         draw_data = json.load(f)
 
-    # 读取排名 JSON
-    with open(rank_json_path, 'r', encoding='utf-8') as f:
-        rank_json = json.load(f)
-    rankings_list = rank_json.get("rankings", [])
-    print(f"已加载排名数据，共 {len(rankings_list)} 名球员")
 
     # 获取正赛签表，收集所有球员名（用于历史统计）
     main_draw = draw_data['cupTrees'][0]
@@ -278,9 +242,10 @@ def enhance_draw():
         player_names=list(all_player_names),
         matches_dir="tennis_wta",
         historical_calendar_path="output/wta_calendar_champs_start_2009.json",
-        target_tourney=TOURNEY_NAME
+        target_tourney=tourney_name,
+        stats_cache_path=stats_cache_path
     )
-    print(f"成功获取 {len(stats_map)} 名球员的{TOURNEY_NAME}历史数据")
+    print(f"成功获取 {len(stats_map)} 名球员的{tourney_name}历史数据")
 
     current_round = main_draw.get('currentRound', 1)
     not_found = []  # 未找到历史数据的球员
@@ -312,7 +277,6 @@ def enhance_draw():
                         'teamSeed': '', 'team_id': '', 'event_id': event_id,
                         'sourceBlockId': '',
                         'blockId': '',
-                        'rank_points': '', 'iso2': '',
                         'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''
                     })
             elif len(participants) == 1:
@@ -324,9 +288,6 @@ def enhance_draw():
                 ranking = team.get('ranking', '')
                 stats = find_tourney_stats(name, stats_map, not_found, ranking)
 
-                # 匹配排名数据
-                rank_points, iso2 = get_rank_info(name, ranking, team_id, rankings_list)
-
                 enhanced_participants.append({
                     'name': name, 'shortname': shortname, 'ranking': ranking,
                     'winner': player.get('winner', ''),
@@ -335,7 +296,6 @@ def enhance_draw():
                     'event_id': event_id,
                     'sourceBlockId': player.get('sourceBlockId', ''),
                     'blockId': block_id,
-                    'rank_points': rank_points, 'iso2': iso2,
                     **stats
                 })
                 enhanced_participants.append({
@@ -343,7 +303,6 @@ def enhance_draw():
                     'teamSeed': '', 'team_id': '', 'event_id': event_id,
                     'sourceBlockId': '',
                     'blockId': '',
-                    'rank_points': '', 'iso2': '',
                     'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''
                 })
             else:
@@ -355,8 +314,6 @@ def enhance_draw():
                     ranking = team.get('ranking', '')
                     stats = find_tourney_stats(name, stats_map, not_found, ranking)
 
-                    # 匹配排名数据
-                    rank_points, iso2 = get_rank_info(name, ranking, team_id, rankings_list)
 
                     enhanced_participants.append({
                         'name': name, 'shortname': shortname, 'ranking': ranking,
@@ -366,7 +323,6 @@ def enhance_draw():
                         'event_id': event_id,
                         'sourceBlockId': player.get('sourceBlockId', ''),
                         'block_id': block_id,
-                        'rank_points': rank_points, 'iso2': iso2,
                         **stats
                     })
 
@@ -390,19 +346,50 @@ def enhance_draw():
     }
 
     # 保存 JSON
-    with open(TOURNEY_JSON_PATH, 'w', encoding='utf-8') as f:
+    with open(tourney_json_path, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
     # 打印未找到历史数据的球员（仅打印有排名的）
     if len(not_found) > 0:
-        print(f"\n以下球员未找到{TOURNEY_NAME}赛事历史数据：")
+        print(f"\n以下球员未找到{tourney_name}赛事历史数据：")
         for player in not_found:
             if player['ranking'] != '':
                 print(f"  - {player['name']} (Rank: {player['ranking']})")
 
-    print(f"\n增强数据已保存：{TOURNEY_JSON_PATH}")
+    print(f"\n增强数据已保存：{tourney_json_path}")
     print(f"当前轮次: Round {current_round}")
 
 
 if __name__ == "__main__":
-    enhance_draw()
+    parser = argparse.ArgumentParser(description='获取网球赛事数据')
+    parser.add_argument('--tourney-name', type=str, default='Rome',
+                        help='赛事名称 (默认: Rome)')
+    parser.add_argument('--season', type=int, default=2026,
+                        help='赛季年份 (默认: 2026)')
+    
+    args = parser.parse_args()
+    
+    # 从参数生成所有需要的变量
+    TOURNEY_NAME = args.tourney_name
+    SEASON = args.season
+    
+    # 自动生成路径（组合 lowercase name 和 season）
+    tourney_lower = TOURNEY_NAME.lower().replace(' ', '_')
+    # map Roland Garros into roland_garros
+    DATA_DIR = f"api_folder/data/{tourney_lower}_{SEASON}"
+    STATS_CACHE_PATH = f"{DATA_DIR}/tournament_stats_cache.json"
+    TOURNEY_JSON_PATH = f"./output/draw_{tourney_lower}_{SEASON}_with_history_stats.json"
+    
+    print(f"配置信息:")
+    print(f"  赛事名称: {TOURNEY_NAME}")
+    print(f"  赛季: {SEASON}")
+    print(f"  数据目录: {DATA_DIR}")
+    print(f"  缓存路径: {STATS_CACHE_PATH}")
+    print(f"  输出路径: {TOURNEY_JSON_PATH}")
+
+    enhance_draw(
+        tourney_name=TOURNEY_NAME, 
+        season=SEASON, 
+        data_dir=DATA_DIR,
+        stats_cache_path=STATS_CACHE_PATH,
+        tourney_json_path=TOURNEY_JSON_PATH)
