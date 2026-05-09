@@ -207,22 +207,24 @@ def fetch_completed_events_from_json(data_dir):
             try:
                 print(f"-------------处理 event_id: {eid_int}------------")
                 api.request_event_statistics(event_id=eid_int, save_path=stats_path)
+                time.sleep(0.2)  # 避免请求过快导致服务器拒绝
 
             except Exception as e:
                 print(f"  statistics 请求失败: {e}")
 
         # 2. 获取 detail（如果文件已存在则跳过）
-        time.sleep(0.2)  # 避免请求过快导致服务器拒绝
+    
         detail_path = os.path.join(data_dir, f"event_detail_{eid_int}.json")
         if not os.path.exists(detail_path):
 
             try:
                 api.request_event_detail(event_id=eid_int, save_path=detail_path)
+                time.sleep(0.2)
 
             except Exception as e:
                 print(f"  detail 请求失败: {e}")
 
-        time.sleep(0.2)
+        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="获取网球赛事数据")

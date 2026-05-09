@@ -220,22 +220,35 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
     with open(draw_json_path, 'r', encoding='utf-8') as f:
         draw_data = json.load(f)
 
-
-    # 获取正赛签表，收集所有球员名（用于历史统计）
+    # 获取正赛签表
     main_draw = draw_data['cupTrees'][0]
+    
+    # ============ 优化：只遍历 Round of 128，同时收集球员名和种子信息 ============
     all_player_names = set()
-    for round_data in main_draw['rounds']:
-        for block in round_data['blocks']:
+    player_seed_map = {}  # {player_name: seed_number}
+    
+    # 找到第一轮（Round of 128）
+    round_128 = next((r for r in main_draw['rounds'] if r['description'] == 'Round of 128'), None)
+    
+    if round_128:
+        for block in round_128['blocks']:
             for player in block.get('participants', []):
                 team = player.get('team', {})
                 name = normalize_name(team.get('name', ''))
-                if name and name not in ['Bye', 'TBD', '']:
-                    if not (name.startswith('R64P') or name.startswith('R32P') or
-                            name.startswith('R16P') or name.startswith('Qf') or
-                            name.startswith('Wqf') or name.startswith('Wsf')):
-                        all_player_names.add(name)
-
-    print(f"共找到 {len(all_player_names)} 名球员")
+                
+                # 跳过无效球员
+                if not name or name in ['Bye', 'TBD', '']:
+                    continue
+                
+                # 收集球员名
+                all_player_names.add(name)
+                
+                # 收集种子信息（如果有的话）
+                team_seed = player.get('teamSeed', '')
+                if team_seed:
+                    player_seed_map[name] = team_seed
+    
+    print(f"共找到 {len(all_player_names)} 名球员，其中 {len(player_seed_map)} 名有种子信息")
     
     # 使用缓存机制获取历史统计
     stats_map = get_tourney_stats_for_players(
@@ -287,11 +300,14 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                 team_id = team.get('id')
                 ranking = team.get('ranking', '')
                 stats = find_tourney_stats(name, stats_map, not_found, ranking)
+                
+                # 从映射表获取种子信息
+                team_seed = player_seed_map.get(name, player.get('teamSeed', ''))
 
                 enhanced_participants.append({
                     'name': name, 'shortname': shortname, 'ranking': ranking,
                     'winner': player.get('winner', ''),
-                    'teamSeed': player.get('teamSeed', ''),
+                    'teamSeed': team_seed,
                     'team_id': team_id,
                     'event_id': event_id,
                     'sourceBlockId': player.get('sourceBlockId', ''),
@@ -313,12 +329,14 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                     team_id = team.get('id')
                     ranking = team.get('ranking', '')
                     stats = find_tourney_stats(name, stats_map, not_found, ranking)
-
+                        
+                    # 从映射表获取种子信息
+                    team_seed = player_seed_map.get(name, player.get('teamSeed', ''))
 
                     enhanced_participants.append({
                         'name': name, 'shortname': shortname, 'ranking': ranking,
                         'winner': player.get('winner', ''),
-                        'teamSeed': player.get('teamSeed', ''),
+                        'teamSeed': team_seed,
                         'team_id': team_id,
                         'event_id': event_id,
                         'sourceBlockId': player.get('sourceBlockId', ''),
