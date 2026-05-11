@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -12,7 +12,7 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>2026 Rome WTA 1000 - 签表</title>
+    <title>2026 Rome WTA 1000 - Draw</title>
     <style>
       /* ============================================================
            1. RESET & BASE
@@ -807,7 +807,7 @@
       <h1>🏆 2026 Rome, Italy</h1>
       <p>WTA 1000 | Internazionali BNL d'Italia</p>
       <p style="font-size: 0.9em; margin-top: 5px; opacity: 0.8">
-        球员在罗马赛事的历史战绩
+        Draw & Player performance history at Rome
       </p>
     </div>
 
@@ -831,7 +831,7 @@
           </button>
           <div class="vs-hero" id="statsVsHero">
             <div class="stats-loading" style="color: white; padding: 30px 0">
-              ⏳ 加载中…
+              ⏳ Loading...
             </div>
           </div>
           <div class="stats-round-strip" id="statsRoundStrip"></div>
@@ -1206,10 +1206,10 @@
           btn.onclick = onclick;
           tabsEl.appendChild(btn);
         };
-        addTab("完整签表", () => switchTab("all"), "tab-all");
-        addTab("🏅 八强", () => switchTab("qf"), "tab-qf");
+        addTab("Full Draw", () => switchTab("all"), "tab-all");
+        addTab("🏅 Quarterfinals", () => switchTab("qf"), "tab-qf");
         for (let i = 1; i <= 8; i++) {
-          addTab(`${i}/8 区`, () => switchTab(i), `tab-sec-${i}`);
+          addTab(`Section ${i}/8`, () => switchTab(i), `tab-sec-${i}`);
         }
         switchTab("all");
       }
@@ -1494,7 +1494,7 @@
         const awayName = ev.awayTeam.shortName || ev.awayTeam.name;
 
         const allPeriod = stats.statistics.find((s) => s.period === "ALL");
-        if (!allPeriod) return '<div class="stats-error">无统计数据</div>';
+        if (!allPeriod) return '<div class="stats-error">No statistics available</div>';
 
         const getGroup = (name) =>
           allPeriod.groups.find((g) => g.groupName === name);
@@ -1551,17 +1551,17 @@
           awaySGW !== "—" && awaySGT !== "—" ? awaySGW + "/" + awaySGT : "—";
 
         const svcCard = sectionCard(
-          "🎾 发球",
+          "🎾 Service",
           homeName,
           awayName,
           `
     ${confRow("Aces", gv(svc, "aces", "home"), gv(svc, "aces", "away"))}
-    ${confRow("双误", gv(svc, "doubleFaults", "home"), gv(svc, "doubleFaults", "away"), true)}
-    ${confRow("一发进球率", gv(svc, "firstServeAccuracy", "home"), gv(svc, "firstServeAccuracy", "away"))}
-    ${confRow("一发得分率", gv(svc, "firstServePointsAccuracy", "home"), gv(svc, "firstServePointsAccuracy", "away"))}
-    ${confRow("二发得分率", gv(svc, "secondServePointsAccuracy", "home"), gv(svc, "secondServePointsAccuracy", "away"))}
-    ${confRow("破发点挽救率", gv(svc, "breakPointsSaved", "home"), gv(svc, "breakPointsSaved", "away"))}
-    ${confRow("保发率", homeServeStr, awayServeStr)}
+    ${confRow("Double Faults", gv(svc, "doubleFaults", "home"), gv(svc, "doubleFaults", "away"), true)}
+    ${confRow("1st Serve In", gv(svc, "firstServeAccuracy", "home"), gv(svc, "firstServeAccuracy", "away"))}
+    ${confRow("1st Serve Won", gv(svc, "firstServePointsAccuracy", "home"), gv(svc, "firstServePointsAccuracy", "away"))}
+    ${confRow("2nd Serve Won", gv(svc, "secondServePointsAccuracy", "home"), gv(svc, "secondServePointsAccuracy", "away"))}
+    ${confRow("Bread Points Saved", gv(svc, "breakPointsSaved", "home"), gv(svc, "breakPointsSaved", "away"))}
+    ${confRow("Service Games Won", homeServeStr, awayServeStr)}
 `,
         );
 
@@ -1580,25 +1580,25 @@
           : "—";
 
         const retCard = sectionCard(
-          "🔄 接发",
+          "🔄 Return",
           homeName,
           awayName,
           `
-    ${confRow("接一发得分率", gv(ret, "firstReturnPoints", "home"), gv(ret, "firstReturnPoints", "away"))}
-    ${confRow("接二发得分率", gv(ret, "secondReturnPoints", "home"), gv(ret, "secondReturnPoints", "away"))}
-    ${confRow("破发点转换率", homeBpConv, awayBpConv)}
+    ${confRow("1st Return Won", gv(ret, "firstReturnPoints", "home"), gv(ret, "firstReturnPoints", "away"))}
+    ${confRow("2nd Return Won", gv(ret, "secondReturnPoints", "home"), gv(ret, "secondReturnPoints", "away"))}
+    ${confRow("Break Point Converted", homeBpConv, awayBpConv)}
 `,
         );
 
         const ptsCard = sectionCard(
-          "📊 得分",
+          "📊 Points",
           homeName,
           awayName,
           `
-                ${confRow("总得分", gv(pts, "pointsTotal", "home"), gv(pts, "pointsTotal", "away"))}
-                ${confRow("发球得分率", fmtFrac(hSrv.val, hSrv.total), fmtFrac(aSrv.val, aSrv.total))}
-                ${confRow("接发得分率", fmtFrac(hRet.val, hRet.total), fmtFrac(aRet.val, aRet.total))}
-                ${confRow("DR", hDR, aDR, false, true)}
+                ${confRow("Total Points", gv(pts, "pointsTotal", "home"), gv(pts, "pointsTotal", "away"))}
+                ${confRow("Serve Point Won", fmtFrac(hSrv.val, hSrv.total), fmtFrac(aSrv.val, aSrv.total))}
+                ${confRow("Return Point Won", fmtFrac(hRet.val, hRet.total), fmtFrac(aRet.val, aRet.total))}
+                ${confRow("Dominance Ratio", hDR, aDR, false, true)}
             `,
         );
 
@@ -1616,7 +1616,7 @@
         const body = document.getElementById("statsModalBody");
 
         hero.innerHTML =
-          '<div class="stats-loading" style="color:white;padding:30px 0;width:100%;text-align:center;">⏳ 加载中…</div>';
+          '<div class="stats-loading" style="color:white;padding:30px 0;width:100%;text-align:center;">⏳ Loading...</div>';
         strip.textContent = "";
         body.innerHTML = "";
         overlay.classList.add("open");
@@ -1634,7 +1634,7 @@
               cache: "no-store",
             }),
           ]);
-          if (!detailRes.ok || !statsRes.ok) throw new Error("数据文件未找到");
+          if (!detailRes.ok || !statsRes.ok) throw new Error("Data file not found");
           const [detail, stats] = await Promise.all([
             detailRes.json(),
             statsRes.json(),
@@ -1668,7 +1668,7 @@
         } catch (err) {
           hero.innerHTML = `<div class="stats-error" style="color:rgba(255,255,255,0.85);padding:20px;width:100%;text-align:center;">❌ ${err.message}</div>`;
           strip.textContent = `Event #${eventId}`;
-          body.innerHTML = `<div class="stats-error">比赛数据还未更新，请稍后再试。</div>`;
+          body.innerHTML = `<div class="stats-error">Match data is not updated yet. Please try again later.</div>`;
         }
       }
 
