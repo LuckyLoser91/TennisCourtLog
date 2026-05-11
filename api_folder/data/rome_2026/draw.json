@@ -10248,9 +10248,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 8,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -10327,7 +10330,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2580300,
                   "order": 2,
                   "teamSeed": "2",
@@ -10335,7 +10338,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3016177,
               "events": [
                 16160007
@@ -10548,72 +10551,100 @@
             },
             {
               "finished": false,
-              "matchesInRound": 0,
+              "matchesInRound": 1,
               "order": 3,
               "participants": [
                 {
                   "team": {
-                    "name": "Qf5",
-                    "slug": "qf5",
-                    "shortName": "Qf5",
+                    "name": "Jessica Pegula",
+                    "slug": "pegula-jessica",
+                    "shortName": "J. Pegula",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 11,
-                    "nameCode": "QF5",
-                    "disabled": true,
+                    "userCount": 22500,
+                    "nameCode": "PEG",
+                    "ranking": 5,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393296,
+                    "id": 44834,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "جيسيكا بيغولا",
+                        "ru": "Пегула, Джессика"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ج. بيغولا",
+                        "bn": "জে. পেগুলা",
+                        "hi": "जे. पेगुला"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2580310,
                   "order": 1,
+                  "teamSeed": "5",
                   "id": 5373557
                 },
                 {
                   "team": {
-                    "name": "Qf6",
-                    "slug": "qf6",
-                    "shortName": "Qf6",
+                    "name": "Iga Swiatek",
+                    "slug": "swiatek-iga",
+                    "shortName": "I. Swiatek",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 6,
-                    "nameCode": "QF6",
-                    "disabled": true,
+                    "userCount": 78367,
+                    "nameCode": "SWI",
+                    "ranking": 3,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393297,
+                    "id": 228272,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "إيغا سوياتيك",
+                        "ru": "Святек, Ига"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "إ. سوياتيك",
+                        "bn": "আই সুইটেক",
+                        "hi": "आई. स्वियाटेक"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2580312,
                   "order": 2,
+                  "teamSeed": "4",
                   "id": 5373558
                 }
               ],
               "hasNextRoundLink": true,
               "eventInProgress": false,
               "id": 3016147,
-              "events": [],
+              "events": [
+                16166335
+              ],
               "blockId": 2580322,
-              "seriesStartDateTimestamp": 1778576400,
+              "seriesStartDateTimestamp": 1778670000,
               "automaticProgression": false
             },
             {
