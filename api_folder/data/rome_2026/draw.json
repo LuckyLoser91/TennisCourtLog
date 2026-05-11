@@ -807,7 +807,6 @@
                   },
                   "winner": true,
                   "order": 2,
-                  "teamSeed": "WC",
                   "id": 5373783
                 }
               ],
@@ -1159,7 +1158,6 @@
                   },
                   "winner": false,
                   "order": 1,
-                  "teamSeed": "WC",
                   "id": 5373792
                 },
                 {
@@ -4834,7 +4832,6 @@
                   "winner": true,
                   "sourceBlockId": 2580078,
                   "order": 1,
-                  "teamSeed": "1",
                   "id": 5373487
                 },
                 {
@@ -4974,7 +4971,6 @@
                   "winner": true,
                   "sourceBlockId": 2580084,
                   "order": 2,
-                  "teamSeed": "26",
                   "id": 5373490
                 }
               ],
@@ -5032,7 +5028,6 @@
                   "winner": false,
                   "sourceBlockId": 2580086,
                   "order": 1,
-                  "teamSeed": "18",
                   "id": 5373493
                 },
                 {
@@ -5168,7 +5163,6 @@
                   "winner": true,
                   "sourceBlockId": 2580092,
                   "order": 2,
-                  "teamSeed": "13",
                   "id": 5373496
                 }
               ],
@@ -5228,7 +5222,6 @@
                   "winner": true,
                   "sourceBlockId": 2580094,
                   "order": 1,
-                  "teamSeed": "12",
                   "id": 5373501
                 },
                 {
@@ -5269,7 +5262,6 @@
                   "winner": false,
                   "sourceBlockId": 2580096,
                   "order": 2,
-                  "teamSeed": "WC",
                   "id": 5373502
                 }
               ],
@@ -5369,7 +5361,6 @@
                   "winner": true,
                   "sourceBlockId": 2580100,
                   "order": 2,
-                  "teamSeed": "22",
                   "id": 5373504
                 }
               ],
@@ -5429,7 +5420,6 @@
                   "winner": false,
                   "sourceBlockId": 2580102,
                   "order": 1,
-                  "teamSeed": "30",
                   "id": 5373507
                 },
                 {
@@ -5568,7 +5558,6 @@
                   "winner": false,
                   "sourceBlockId": 2580108,
                   "order": 2,
-                  "teamSeed": "LL",
                   "id": 5373510
                 }
               ],
@@ -7999,7 +7988,6 @@
                   "winner": false,
                   "sourceBlockId": 2580206,
                   "order": 1,
-                  "teamSeed": "1",
                   "id": 5373491
                 },
                 {
@@ -8040,7 +8028,6 @@
                   "winner": true,
                   "sourceBlockId": 2580208,
                   "order": 2,
-                  "teamSeed": "26",
                   "id": 5373492
                 }
               ],
@@ -8137,7 +8124,6 @@
                   "winner": true,
                   "sourceBlockId": 2580212,
                   "order": 2,
-                  "teamSeed": "13",
                   "id": 5373498
                 }
               ],
@@ -8197,7 +8183,6 @@
                   "winner": false,
                   "sourceBlockId": 2580214,
                   "order": 1,
-                  "teamSeed": "12",
                   "id": 5373505
                 },
                 {
@@ -8238,7 +8223,6 @@
                   "winner": true,
                   "sourceBlockId": 2580216,
                   "order": 2,
-                  "teamSeed": "22",
                   "id": 5373506
                 }
               ],
@@ -9550,9 +9534,12 @@
           "description": "Round of 16",
           "blocks": [
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 1,
+              "result": "2:0",
+              "homeTeamScore": "2",
+              "awayTeamScore": "0",
               "participants": [
                 {
                   "team": {
@@ -9589,10 +9576,9 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2580270,
                   "order": 1,
-                  "teamSeed": "26",
                   "id": 5373499
                 },
                 {
@@ -9633,7 +9619,6 @@
                   "winner": false,
                   "sourceBlockId": 2580272,
                   "order": 2,
-                  "teamSeed": "13",
                   "id": 5373500
                 }
               ],
@@ -9648,9 +9633,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 2,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -9690,7 +9678,6 @@
                   "winner": false,
                   "sourceBlockId": 2580274,
                   "order": 1,
-                  "teamSeed": "22",
                   "id": 5373513
                 },
                 {
@@ -9728,7 +9715,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2580276,
                   "order": 2,
                   "id": 5373514
@@ -9745,7 +9732,7 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 3,
               "participants": [
@@ -9835,11 +9822,11 @@
                 16156820
               ],
               "blockId": 2580306,
-              "seriesStartDateTimestamp": 1778495400,
+              "seriesStartDateTimestamp": 1778496600,
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 4,
               "participants": [
@@ -9932,7 +9919,7 @@
                 16155398
               ],
               "blockId": 2580308,
-              "seriesStartDateTimestamp": 1778498400,
+              "seriesStartDateTimestamp": 1778502900,
               "automaticProgression": false
             },
             {
@@ -10030,7 +10017,7 @@
                 16159253
               ],
               "blockId": 2580310,
-              "seriesStartDateTimestamp": 1778505600,
+              "seriesStartDateTimestamp": 1778508000,
               "automaticProgression": false
             },
             {
@@ -10217,13 +10204,13 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": false,
+              "eventInProgress": true,
               "id": 3016162,
               "events": [
                 16158786
               ],
               "blockId": 2580314,
-              "seriesStartDateTimestamp": 1778504400,
+              "seriesStartDateTimestamp": 1778507100,
               "automaticProgression": false
             },
             {
@@ -12006,6 +11993,7 @@
                     },
                     "userCount": 134,
                     "nameCode": "LOM",
+                    "ranking": 899,
                     "national": false,
                     "type": 1,
                     "id": 555377,
