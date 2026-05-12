@@ -763,11 +763,38 @@ body > .row .d-flex.gap-2 {
     // 启动
     loadData();
     
-    // 设置更新时间
-    const updateEl = document.getElementById('last-updated');
-    if (updateEl) {
-      updateEl.textContent = 'Last updated: 2026-05-04';
+    // 设置更新时间 - 显示上周一的日期
+function getLastMonday() {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ...
+    
+    // 计算到本周一的天数差
+    let daysToThisMonday;
+    if (dayOfWeek === 0) {
+        daysToThisMonday = 6; // 周日到本周一：6天前
+    } else {
+        daysToThisMonday = dayOfWeek - 1; // 周一到周六
     }
+    
+    // 本周一
+    const thisMonday = new Date(today);
+    thisMonday.setDate(today.getDate() - daysToThisMonday);
+    
+    // 上周一 = 本周一 - 7天
+    const lastMonday = new Date(thisMonday);
+    lastMonday.setDate(thisMonday.getDate() - 7);
+    
+    // 格式化为 YYYY-MM-DD
+    const year = lastMonday.getFullYear();
+    const month = String(lastMonday.getMonth() + 1).padStart(2, '0');
+    const day = String(lastMonday.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+const updateEl = document.getElementById('last-updated');
+if (updateEl) {
+    updateEl.textContent = `Last updated: ${getLastMonday()}`;
+}
   </script>
 </body>
 
