@@ -51,6 +51,13 @@
         opacity: 0.9;
       }
 
+      .last-updated {
+        font-size: 0.7em;
+        opacity: 0.8;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+      }
+
       .tabs {
         display: flex;
         justify-content: center;
@@ -805,7 +812,7 @@
   <body>
     <div class="header">
       <h1>🏆 2026 Rome, Italy</h1>
-      <p>WTA 1000 | Internazionali BNL d'Italia</p>
+      <p>WTA 1000 | Internazionali BNL d'Italia | <span id="lastUpdated">Last updated: --</span></p>
       <!-- <p style="font-size: 0.9em; margin-top: 5px; opacity: 0.8">
         Draw & Player performance history at Rome
       </p> -->
@@ -1682,7 +1689,20 @@
           `../output/draw_rome_2026_with_history_stats.json?v=${timestamp}&r=${random}&nocache=1`,
           { cache: "no-store" },
         )
-          .then((r) => r.json())
+          .then((response) => {
+              const lastModified = response.headers.get("Last-Modified");
+              const updateEl = document.getElementById("lastUpdated");
+              if (updateEl && lastModified) {
+                const date = new Date(lastModified);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+                updateEl.textContent = `📅 Last updated: ${year}-${month}-${day} ${hours}:${minutes}`;
+              }
+              return response.json();
+            })
           .then((data) => {
             window.drawData = data;
             window.eventSeedMap = {};

@@ -664,6 +664,20 @@ body > .row .col-12 > .d-flex.gap-2 {
             const response = await fetch(JSON_URL);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             allData = await response.json();
+
+            // 设置更新时间 - 直接从响应头获取
+            const updateEl = document.getElementById("last-updated");
+            if (updateEl) {
+                const lastModified = response.headers.get('Last-Modified');
+                if (lastModified) {
+                    const date = new Date(lastModified);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    updateEl.textContent = `Last updated: ${year}-${month}-${day}`;
+                }
+            }
+
             const allYears = allData.map((d) => d.year).filter((y) => y);
             const allLevels = allData
               .map((d) => d.tourney_level)
@@ -707,38 +721,6 @@ body > .row .col-12 > .d-flex.gap-2 {
         // }
 
       })();
-// 设置更新时间 - 显示上周一的日期
-function getLastMonday() {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ...
-    
-    // 计算到本周一的天数差
-    let daysToThisMonday;
-    if (dayOfWeek === 0) {
-        daysToThisMonday = 6; // 周日到本周一：6天前
-    } else {
-        daysToThisMonday = dayOfWeek - 1; // 周一到周六
-    }
-    
-    // 本周一
-    const thisMonday = new Date(today);
-    thisMonday.setDate(today.getDate() - daysToThisMonday);
-    
-    // 上周一 = 本周一 - 7天
-    const lastMonday = new Date(thisMonday);
-    lastMonday.setDate(thisMonday.getDate() - 7);
-    
-    // 格式化为 YYYY-MM-DD
-    const year = lastMonday.getFullYear();
-    const month = String(lastMonday.getMonth() + 1).padStart(2, '0');
-    const day = String(lastMonday.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-const updateEl = document.getElementById('last-updated');
-if (updateEl) {
-    updateEl.textContent = `Last updated: ${getLastMonday()}`;
-}
     </script>
   </body>
 </html>
