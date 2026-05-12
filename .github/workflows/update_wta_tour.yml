@@ -3,7 +3,7 @@ name: 自动更新 WTA 赛事日历
 on:
   schedule:
     # 每周二 UTC 时间 00:00 运行（北京时间 = UTC+8，即周一 08:00）
-    - cron: '0 4 * * 2'
+    - cron: '0 17 * * 2'
 
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
