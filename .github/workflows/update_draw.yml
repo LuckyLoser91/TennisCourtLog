@@ -1,0 +1,102 @@
+name: 自动更新签表数据
+
+on:
+  # schedule:
+  #   # 每小时整点运行（UTC 时间，北京时间 = UTC+8）
+  #   - cron: '0 * * * *' 
+
+  # 允许手动在 Actions 页面点击触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  
+jobs:
+  update-draw:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
+
+      # 2. 配置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. 安装依赖（自动读取 requirements.txt，如果没有则跳过）
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f api_folder/requirements.txt ]; then
+            pip install -r api_folder/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "未找到 requirements.txt，跳过安装"
+          fi
+
+      # 4. 运行第一个脚本：获取签表数据
+      - name: 运行 get_draw_and_event.py
+        run: python api_folder/get_draw_and_event.py --data-dir api_folder/data/wimbledon_2026 --tournament-id 2600 --season-id 85945
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+
+      # 5. 运行第二个脚本：更新签表
+      
+      - name: 运行 update_draw.py
+        run: python api_folder/update_draw.py --tourney-name Wimbledon --season 2026
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+
+       # 6. 屏蔽时间戳字段后，检查业务数据是否有变化
+      - name: 检查业务数据是否有变化
+        id: check_changes
+        run: |
+          # 列出需要检查的 JSON 文件（可根据实际情况增减）
+          FILES=(
+            "output/draw/draw_wimbledon_2026_with_history_stats.json"
+            # 如果有其他需要忽略 last_updated 的 JSON，在这里添加
+          )
+          
+          CHANGED=false
+          
+          for FILE in "${FILES[@]}"; do
+            if [ -f "$FILE" ]; then
+              # 生成一份不带 last_updated 的缓存版
+              jq 'del(.last_updated)' "$FILE" > "/tmp/staged_$(basename $FILE)"
+              # 从 Git 仓库里取出旧版本，同样去掉 last_updated
+              git show HEAD:"$FILE" | jq 'del(.last_updated)' > "/tmp/head_$(basename $FILE)" 2>/dev/null || true
+              
+              if ! diff -q "/tmp/staged_$(basename $FILE)" "/tmp/head_$(basename $FILE)" > /dev/null 2>&1; then
+                echo "文件 $FILE 业务数据有变化"
+                CHANGED=true
+                break
+              fi
+            fi
+          done
+          
+          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
+
+      # 7. 只有业务数据真正变化时才提交
+      - name: 提交并推送（如有真实变化）
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          
+          git add output/ api_folder/data/
+          
+          git commit -m "🎾 Auto-update draw data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          git push --force origin HEAD:main
+          echo "✅ 签表数据已更新并推送"
+      # 8. 无变化 → 仅输出提示
+      - name: 签表数据无变化
+        if: steps.check_changes.outputs.changed == 'false'
+        run: echo "⏭️ 签表数据无变化，跳过提交"

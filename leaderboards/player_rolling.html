@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200, initial-scale=1.0" />
+  <title>球员生涯滚动胜率</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0b1020;
+      color: white;
+      font-family: Inter, system-ui, sans-serif;
+      padding: 40px;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff, #facc15);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: #94a3b8;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controls input {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      padding: 10px 16px;
+      width: 280px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .controls input:focus {
+      border-color: #facc15;
+    }
+
+    .controls input::placeholder {
+      color: #64748b;
+    }
+
+    .control-label {
+      color: #94a3b8;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    select {
+      background: #1e2a3a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+
+    select option {
+      background: #1e2a3a;
+      color: white;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      color: #0b1020;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-size: 13px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-reset.visible {
+      display: inline-block;
+    }
+
+    .status {
+      color: #94a3b8;
+      font-size: 14px;
+      min-height: 20px;
+      margin-bottom: 12px;
+    }
+
+    .status.error {
+      color: #f87171;
+    }
+
+    .chart-wrapper {
+      position: relative;
+    }
+
+    .chart-top-bar {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .zoom-hint {
+      color: #475569;
+      font-size: 12px;
+      background: rgba(11, 16, 32, 0.7);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    #chart {
+      width: 100%;
+      height: 620px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    #timeline {
+      width: 100%;
+      height: 80px;
+      margin-top: 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .footer {
+      margin-top: 16px;
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="title">球员生涯滚动胜率</div>
+    <div class="subtitle">输入球员姓名查看生涯滚动胜率曲线，红点为负场，双击图表可展开查看某年详情</div>
+  </div>
+
+  <div class="controls">
+    <input id="playerInput" type="text" placeholder="输入球员姓名，如 Iga Swiatek" />
+    <span class="control-label">滚动窗口</span>
+    <select id="windowSelect">
+      <option value="10">10场</option>
+      <option value="20" selected>20场</option>
+      <option value="30">30场</option>
+      <option value="50">50场</option>
+    </select>
+    <button class="btn" id="searchBtn" onclick="search()">查询</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="chart-wrapper">
+    <div class="chart-top-bar">
+      <span class="zoom-hint" id="zoomHint" style="display:none">双击展开年份 · 再次双击或点重置还原</span>
+      <button class="btn-reset" id="resetBtn" onclick="resetZoom()">↺ 重置视图</button>
+    </div>
+    <div id="chart"></div>
+  </div>
+  <div id="timeline"></div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#facc15"></div>滚动胜率曲线
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#f87171"></div>负场
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#FFD966"></div>大满贯夺冠
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#3b82f6"></div>大满贯出局
+    </div>
+    <div class="legend-item" style="color:#22c55e">— 85% 统治线</div>
+    <div class="legend-item" style="color:#f97316">— 65% 低谷线</div>
+  </div>
+
+  <div class="footer">数据来源：TennisCourtLog · WTA 1968–2026</div>
+
+  <script>
+    const chart = echarts.init(document.getElementById('chart'));
+    const timeline = echarts.init(document.getElementById('timeline'));
+
+    let allMatches = [];
+    let currentWindow = 20;
+    let isZoomed = false;
+    let fullDateRange = [null, null]; // [minTs, maxTs]
+
+    document.getElementById('playerInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') search();
+    });
+
+    function slamAbbr(name) {
+      if (!name) return 'GS';
+      const n = name.toLowerCase();
+      if (n.includes('australian')) return 'AO';
+      if (n.includes('roland') || n.includes('french')) return 'RG';
+      if (n.includes('wimbledon')) return 'W';
+      if (n.includes('us open')) return 'US';
+      return 'GS';
+    }
+
+    async function search() {
+      const player = document.getElementById('playerInput').value.trim();
+      const win = parseInt(document.getElementById('windowSelect').value);
+      const statusEl = document.getElementById('status');
+      const btn = document.getElementById('searchBtn');
+
+      if (!player) {
+        statusEl.textContent = '请输入球员姓名';
+        statusEl.className = 'status error';
+        return;
+      }
+
+      currentWindow = win;
+      statusEl.textContent = '加载中...';
+      statusEl.className = 'status';
+      btn.disabled = true;
+      isZoomed = false;
+      document.getElementById('resetBtn').classList.remove('visible');
+      document.getElementById('zoomHint').style.display = 'none';
+
+      chart.showLoading({
+        text: '数据加载中', textColor: '#94a3b8',
+        maskColor: 'rgba(11,16,32,0.8)', color: '#facc15'
+      });
+
+      try {
+        const url = `/api/player_stats?player=${encodeURIComponent(player)}&window=${win}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.error) {
+          statusEl.textContent = `未找到球员：${player}，请检查拼写（英文全名）`;
+          statusEl.className = 'status error';
+          chart.hideLoading();
+          return;
+        }
+
+        allMatches = data.matches;
+        statusEl.textContent = `${data.player} · 共 ${data.total_matches} 场比赛 · 滚动窗口 ${data.window} 场`;
+        statusEl.className = 'status';
+        renderChart();
+        document.getElementById('zoomHint').style.display = 'inline-block';
+
+      } catch (e) {
+        statusEl.textContent = '请求失败，请稍后重试';
+        statusEl.className = 'status error';
+        chart.hideLoading();
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function computeRolling(matches, win) {
+      const results = matches.map(m => m.result);
+      return matches.map((m, i) => {
+        const start = Math.max(0, i - win + 1);
+        const slice = results.slice(start, i + 1);
+        if (slice.length < Math.min(win, matches.length)) return { ...m, rolling_win_rate: null };
+        const rate = slice.reduce((a, b) => a + b, 0) / slice.length;
+        return { ...m, rolling_win_rate: Math.round(rate * 10000) / 10000 };
+      });
+    }
+
+    function getGrandSlamNodes(matches) {
+      const slamMatches = matches.filter(m => m.level === 'Grand Slam');
+      const groups = {};
+      slamMatches.forEach(m => {
+        const year = m.date.slice(0, 4);
+        const key = `${year}_${m.tournament}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(m);
+      });
+
+      const roundOrder = ['R128', 'R64', 'R32', 'R16', 'QF', 'SF', 'F'];
+      const nodes = [];
+      Object.values(groups).forEach(group => {
+        group.sort((a, b) => roundOrder.indexOf(a.round) - roundOrder.indexOf(b.round));
+        const last = group[group.length - 1];
+        if (last && last.rolling_win_rate !== null) {
+          nodes.push({ ...last, isChampion: last.result === 1 && last.round === 'F' });
+        }
+      });
+      return nodes;
+    }
+
+    function renderChart(zoomStart, zoomEnd) {
+      const computed = computeRolling(allMatches, currentWindow);
+      const slamNodes = getGrandSlamNodes(computed);
+
+      const lineData = computed
+        .filter(m => m.rolling_win_rate !== null)
+        .map(m => [m.date, m.rolling_win_rate, m]);
+
+      const lossData = computed
+        .filter(m => m.result === 0 && m.rolling_win_rate !== null)
+        .map(m => [m.date, m.rolling_win_rate, m]);
+
+      const slamWinData = slamNodes
+        .filter(m => m.isChampion)
+        .map(m => [m.date, m.rolling_win_rate, m]);
+
+      const slamLossData = slamNodes
+        .filter(m => !m.isChampion)
+        .map(m => [m.date, m.rolling_win_rate, m]);
+
+      // 全局时间范围
+      if (lineData.length > 0) {
+        fullDateRange = [
+          new Date(lineData[0][0]).getTime(),
+          new Date(lineData[lineData.length - 1][0]).getTime()
+        ];
+      }
+
+      const years = [...new Set(computed.map(m => m.date.slice(0, 4)))];
+      const markLines = years.map(y => ({
+        xAxis: `${y}-01-01`,
+        label: {
+          show: true, formatter: y, position: 'start',
+          offset: [0, -16], color: '#cbd5e6', fontSize: 11,
+          fontWeight: '500',
+          backgroundColor: 'rgba(15,25,45,0.8)',
+          padding: [2, 8, 2, 8], borderRadius: 14
+        },
+        lineStyle: { color: 'rgba(148,163,184,0.35)', width: 1, type: 'dashed' },
+        symbol: 'none',
+      }));
+
+      const tooltipFn = (params) => {
+        const m = params.data[2];
+        if (!m) return '';
+        const winRate = m.rolling_win_rate !== null ? (m.rolling_win_rate * 100).toFixed(1) + '%' : 'N/A';
+        const resultText = m.result === 1
+          ? `<span style="color:#4ade80">✓ 胜利</span>`
+          : `<span style="color:#f87171">✗ 失利</span>`;
+        const slamBadge = m.level === 'Grand Slam'
+          ? ` <span style="color:#facc15">★ Grand Slam</span>` : '';
+        const opponentStr = m.opponent_rank
+          ? `${m.opponent} (排名 ${m.opponent_rank})`
+          : m.opponent;
+        return `
+        <div style="font-size:13px;line-height:2;min-width:210px">
+          <div style="font-weight:700;font-size:14px;margin-bottom:6px">${m.isChampion ? '🏆 <span style="color:#FFD966">★ 最终夺冠大满贯 ★</span>'
+            : m.result === 1 ? '<span style="color:#4ade80">✓ 胜利</span>'
+              : '<span style="color:#f87171">✗ 失利</span>'
+          }</div>
+          <div>📅 日期：${m.date}</div>
+          <div>👤 对手：${opponentStr}</div>
+          <div>🏆 赛事：${m.tournament}</div>
+          <div>🎾 轮次：${m.round}</div>
+          <div>🏟️ 场地：${m.surface}</div>
+          <div>📊 比分：${m.score}</div>
+          <div style="margin-top:6px;color:#facc15;font-weight:700;font-size:14px">📈 当时滚动胜率：${winRate}</div>
+        </div>`;
+      };
+      // dataZoom 范围（百分比）
+      let dzStart = 0, dzEnd = 100;
+      if (zoomStart !== undefined && zoomEnd !== undefined && fullDateRange[0] && fullDateRange[1]) {
+        const total = fullDateRange[1] - fullDateRange[0];
+        dzStart = Math.max(0, (zoomStart - fullDateRange[0]) / total * 100);
+        dzEnd = Math.min(100, (zoomEnd - fullDateRange[0]) / total * 100);
+      }
+
+      chart.hideLoading();
+      chart.setOption({
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(15,25,50,0.95)',
+          borderColor: 'rgba(250,204,21,0.5)',
+          borderWidth: 1,
+          padding: 14,
+          textStyle: { color: '#e2e8f0' },
+          formatter: tooltipFn,
+        },
+        grid: { top: 50, right: 40, bottom: 20, left: 70 },
+        xAxis: {
+          type: 'time',
+          axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+          axisLabel: { color: '#94a3b8', fontSize: 12, hideOverlap: true },
+          splitLine: { show: false },
+        },
+        yAxis: {
+          type: 'value', min: 0.3, max: 1,
+          axisLabel: {
+            color: '#94a3b8', fontSize: 12,
+            formatter: v => (v * 100).toFixed(0) + '%'
+          },
+          splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
+          axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            xAxisIndex: [0],
+            start: dzStart, end: dzEnd,
+            zoomOnMouseWheel: true,
+            moveOnMouseMove: false,
+          }
+        ],
+        series: [
+          {
+            name: '滚动胜率',
+            type: 'line',
+            data: lineData,
+            smooth: 0.2,
+            symbol: 'circle', symbolSize: 5,
+            lineStyle: { color: '#facc15', width: 2.5 },
+            itemStyle: { color: '#facc15' },
+            areaStyle: {
+              color: {
+                type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                  { offset: 0, color: 'rgba(250,204,21,0.18)' },
+                  { offset: 1, color: 'rgba(250,204,21,0)' }
+                ]
+              }
+            },
+            markLine: {
+              silent: true,
+              data: [
+                ...markLines,
+                {
+                  yAxis: 0.85,
+                  label: { show: true, formatter: '85%', position: 'insideEndTop', color: '#22c55e', fontSize: 11 },
+                  lineStyle: { color: '#22c55e', width: 1.5, type: 'dashed', opacity: 0.7 },
+                  symbol: 'none',
+                },
+                {
+                  yAxis: 0.65,
+                  label: { show: true, formatter: '65%', position: 'insideEndTop', color: '#f97316', fontSize: 11 },
+                  lineStyle: { color: '#f97316', width: 1.5, type: 'dashed', opacity: 0.7 },
+                  symbol: 'none',
+                },
+              ],
+              animation: false,
+            },
+            tooltip: { show: true },
+            z: 3,
+          },
+          {
+            name: '负场',
+            type: 'scatter',
+            data: lossData,
+            symbolSize: 8,
+            itemStyle: { color: '#f87171', borderColor: 'rgba(255,255,255,0.6)', borderWidth: 1 },
+            tooltip: { show: true },
+            z: 5,
+          },
+          {
+            name: '大满贯夺冠',
+            type: 'scatter',
+            data: slamWinData,
+            symbol: 'circle',
+            symbolSize: 26,
+            itemStyle: { color: '#FFD966', borderColor: '#ffffff', borderWidth: 2.5, shadowBlur: 22, shadowColor: '#FFBF00' },
+            label: {
+              show: true,
+              formatter: (p) => slamAbbr(p.data[2].tournament),
+              position: 'inside',
+              color: '#111827', fontWeight: 'bold', fontSize: 11,
+            },
+            tooltip: { show: true },
+            z: 8,
+          },
+          {
+            name: '大满贯出局',
+            type: 'scatter',
+            data: slamLossData,
+            symbol: 'circle',
+            symbolSize: 26,
+            itemStyle: { color: '#3b82f6', borderColor: '#ffffff', borderWidth: 2.5, shadowBlur: 20, shadowColor: '#3b82f6cc' },
+            label: {
+              show: true,
+              formatter: (p) => slamAbbr(p.data[2].tournament),
+              position: 'inside',
+              color: '#ffffff', fontWeight: 'bold', fontSize: 11,
+            },
+            tooltip: { show: true },
+            z: 7,
+          },
+        ]
+      }, true);
+
+      // 时间轴缩略图
+      const timelineData = lineData.map(d => [d[0], d[1]]);
+      timeline.setOption({
+        backgroundColor: 'transparent',
+        tooltip: { show: false },
+        grid: { top: 8, right: 40, bottom: 24, left: 70 },
+        xAxis: {
+          type: 'time',
+          axisLabel: { color: '#64748b', fontSize: 10 },
+          axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+          splitLine: { show: false },
+        },
+        yAxis: { type: 'value', show: false, min: 0, max: 1 },
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0],
+            start: dzStart, end: dzEnd,
+            height: 24, bottom: 0,
+            borderColor: 'rgba(255,255,255,0.1)',
+            fillerColor: 'rgba(250,204,21,0.15)',
+            handleStyle: { color: '#facc15' },
+            textStyle: { color: '#94a3b8', fontSize: 10 },
+            dataBackground: {
+              lineStyle: { color: 'rgba(250,204,21,0.3)' },
+              areaStyle: { color: 'rgba(250,204,21,0.05)' }
+            },
+          }
+        ],
+        series: [{
+          type: 'line',
+          data: timelineData,
+          smooth: 0.2,
+          symbol: 'none',
+          lineStyle: { color: 'rgba(250,204,21,0.5)', width: 1.5 },
+          areaStyle: { color: 'rgba(250,204,21,0.06)' },
+        }]
+      }, true);
+
+      // 时间轴联动主图
+      timeline.off('datazoom');
+      timeline.on('datazoom', () => {
+        const opt = timeline.getOption();
+        const dz = opt.dataZoom[0];
+        chart.dispatchAction({ type: 'dataZoom', dataZoomIndex: 0, start: dz.start, end: dz.end });
+        isZoomed = dz.start > 1 || dz.end < 99;
+        document.getElementById('resetBtn').classList.toggle('visible', isZoomed);
+      });
+    }
+
+    // 双击展开前后各一年
+    chart.on('dblclick', (params) => {
+      if (!fullDateRange[0] || allMatches.length === 0) return;
+
+      // 拿到双击位置的时间戳
+      const xVal = params.value ? new Date(params.value[0]).getTime()
+        : (params.event ? chart.convertFromPixel({ seriesIndex: 0 }, [params.event.offsetX, params.event.offsetY])[0] : null);
+      if (!xVal) return;
+
+      // 如果已经是缩放状态，双击再次则复原
+      if (isZoomed) {
+        resetZoom();
+        return;
+      }
+
+      const clickedDate = new Date(xVal);
+      const year = clickedDate.getFullYear();
+      const zoomStart = new Date(`${year - 1}-01-01`).getTime();
+      const zoomEnd = new Date(`${year + 1}-12-31`).getTime();
+
+      isZoomed = true;
+      document.getElementById('resetBtn').classList.add('visible');
+      renderChart(zoomStart, zoomEnd);
+
+      // 同步时间轴
+      const total = fullDateRange[1] - fullDateRange[0];
+      const s = Math.max(0, (zoomStart - fullDateRange[0]) / total * 100);
+      const e = Math.min(100, (zoomEnd - fullDateRange[0]) / total * 100);
+      timeline.dispatchAction({ type: 'dataZoom', dataZoomIndex: 0, start: s, end: e });
+    });
+
+    function resetZoom() {
+      isZoomed = false;
+      document.getElementById('resetBtn').classList.remove('visible');
+      renderChart();
+      timeline.dispatchAction({ type: 'dataZoom', dataZoomIndex: 0, start: 0, end: 100 });
+    }
+
+    window.addEventListener('resize', () => {
+      chart.resize();
+      timeline.resize();
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-C15B9S69WR");
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes" />
+  <title>Grand Slam Champions · WTA · ATP · Age Cutoff</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751" />
+  <script src="../common/js/i18n.js"></script>
+
+  <style>
+    /* ===== 页面宽度限制：手机到宽屏都合适 ===== */
+    body {
+  margin: 0 auto;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+    /* ===== 表格整体 ===== */
+    .table {
+      min-width: 1050px;
+      /* 保证内容不压缩 */
+      table-layout: fixed;
+      /* 各列宽度可控 */
+      border-collapse: collapse;
+      background: var(--bg-card) !important;
+      font-size: 12.5px;
+      margin-bottom: 0;
+    }
+
+    /* ===== 列宽分配（合计 ≈ 900px，紧凑均衡）===== */
+    col.c-no {
+      width: 40px;
+    }
+
+    col.c-player {
+      width: 190px;
+    }
+
+    col.c-first {
+      width: 50px;
+    }
+
+    col.c-agefirst {
+      width: 60px;
+    }
+
+    col.c-last {
+      width: 50px;
+    }
+
+    col.c-agelast {
+      width: 60px;
+    }
+
+    col.c-span {
+      width: 45px;
+    }
+
+    col.c-titles {
+      width: 70px;
+    }
+
+    col.c-ao,
+    col.c-rg,
+    col.c-wim,
+    col.c-uso {
+      width: 58px;
+    }
+
+    col.c-w {
+      width: 50px;
+    }
+
+    col.c-l {
+      width: 50px;
+    }
+
+    col.c-agg {
+      width: 65px;
+    }
+
+    col.c-h {
+      width: 65px;
+    }
+
+    col.c-c {
+      width: 65px;
+    }
+
+    col.c-g {
+      width: 65px;
+    }
+
+    col.c-t8w {
+      width: 60px;
+    }
+
+    col.c-t8l {
+      width: 60px;
+    }
+
+    /* ===== 表头 ===== */
+    .table thead th {
+      padding: 10px 6px;
+    }
+
+    .table thead tr:first-child th {
+      border-bottom: none !important;
+      padding-bottom: 3px;
+      font-size: 10px !important;
+      letter-spacing: 0.1em;
+      color: #a78b5e;
+    }
+
+    /* ===== 表格行 ===== */
+    .table td {
+      padding: 9px 6px;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      background: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .table tbody tr:nth-child(odd) td {
+      background: var(--bg-card);
+    }
+
+    .table tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    .table tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    /* ===== 选手列：左对齐 ===== */
+    #table-body td:nth-child(2) {
+      text-align: left !important;
+      padding-left: 12px !important;
+      font-weight: 600;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 大满贯明细子列（AO/RG/WIM/USO）复用全站统一的 .slam-cell / .result-W / .result-F / .result-SF / .result-QF / .result-other 配色（定义于 styles.css），此处无需重复定义 */
+
+    /* ===== 序号列 ===== */
+    .col-no {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* ===== SPAN 列高亮 ===== */
+    .span-val {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ===== W / L 列 ===== */
+    .col-w {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .col-l {
+      color: var(--text-muted);
+    }
+
+    .wr-cell {
+      border-radius: 5px;
+      padding: 3px 4px;
+      display: block;
+      text-align: center;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+
+    .titles-cell {
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 3px 0;
+      display: block;
+      text-align: center;
+    }
+
+    /* ===== 语言切换按钮 ===== */
+
+    .legend-dot {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+    .active-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+  </style>
+</head>
+
+<body>
+  <div style="padding:16px 16px;">
+    <!-- 表格（caption 内含标题行和筛选控件，天然与表格等宽）-->
+    <table class="table table-hover table-sm mb-0">
+      <caption style="caption-side:top;padding:0 0 12px 0;text-align:left;color:inherit;">
+        <!-- 第一行：标题 + HOME + 语言切换 -->
+        <div class="d-flex align-items-center mb-2">
+          <div>
+            <h1 class="mb-0" data-i18n="gsChampions_title">🏆 Grand Slam Singles · Champions Leaderboard</h1>
+          </div>
+          <div class="ms-auto d-flex gap-2 align-items-center">
+            <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+            <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+          </div>
+        </div>
+        <!-- 第二行：统计信息 + 筛选控件 -->
+        <div class="d-flex align-items-center">
+          <div>
+            <span class="top-meta">
+              <span id="champion-count" class="count-label">0 champions</span>
+              &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click headers to sort</span> &nbsp;|&nbsp;
+              <span data-i18n="last_updated">Last updated:</span> <span id="last-updated"></span>
+            </span>
+          </div>
+          <div class="ms-auto">
+            <div class="d-flex gap-2 align-items-center">
+              <div class="d-flex align-items-center gap-1">
+                <label for="tourSelect" class="form-label mb-0 text-nowrap" data-i18n="label_tour">TOUR:</label>
+                <select id="tourSelect" class="form-select form-select-sm">
+                  <option value="wta" selected>WTA</option>
+                  <option value="atp">ATP</option>
+                </select>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <label for="ageSelect" class="form-label mb-0 text-nowrap" data-i18n="gsChampions_label_cutoff">CUTOFF
+                  AGE:</label>
+                <select id="ageSelect" class="form-select form-select-sm">
+                  <option value="career" selected data-i18n-opt="opt_career">Career (All ages)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </caption>
+      <colgroup>
+        <col class="c-no" />
+        <col class="c-player" />
+        <col class="c-first" />
+        <col class="c-agefirst" />
+        <col class="c-last" />
+        <col class="c-agelast" />
+        <col class="c-span" />
+        <col class="c-titles" />
+        <col class="c-ao" />
+        <col class="c-rg" />
+        <col class="c-wim" />
+        <col class="c-uso" />
+        <col class="c-w" />
+        <col class="c-l" />
+        <col class="c-agg" />
+        <col class="c-h" />
+        <col class="c-c" />
+        <col class="c-g" />
+        <col class="c-t8w" />
+        <col class="c-t8l" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th colspan="8"></th>
+          <th colspan="4"
+            style="text-align:center;border-bottom:none;padding-bottom:3px;font-size:10px!important;letter-spacing:0.1em;color:#a78b5e;"
+            data-i18n="gsChampions_th_breakdown">BREAKDOWN</th>
+          <th colspan="2"></th>
+          <th colspan="2"
+            style="text-align:center;border-bottom:none;padding-bottom:3px;font-size:10px!important;letter-spacing:0.1em;color:#a78b5e;"
+            data-i18n="gsChampions_th_top8">VS TOP 8</th>
+          <th colspan="4" style="text-align: center; border-bottom: none; padding-bottom: 3px"
+            data-i18n="gsChampions_th_winrate">WINRATE</th>
+        </tr>
+        <tr>
+          <th data-i18n="th_no">#</th>
+          <th class="sortable" data-col="player" data-i18n="th_player">PLAYER</th>
+          <th class="sortable" data-col="firstYear" data-i18n="gsChampions_th_first">1ST</th>
+          <th class="sortable" data-col="ageFirst" data-i18n="gsChampions_th_agefirst">AGE 1ST</th>
+          <th class="sortable" data-col="lastYear" data-i18n="gsChampions_th_last">LAST</th>
+          <th class="sortable" data-col="ageLast" data-i18n="gsChampions_th_agelast">AGE LAST</th>
+          <th class="sortable" data-col="span" data-i18n="gsChampions_th_span">SPAN</th>
+          <th class="sortable" data-col="titles" data-i18n="th_titles">TITLES</th>
+          <th class="sortable" data-col="ao" style="border-left:1px solid var(--border-light);">AO</th>
+          <th class="sortable" data-col="rg">RG</th>
+          <th class="sortable" data-col="wim">WIM</th>
+          <th class="sortable" data-col="uso">USO</th>
+          <th class="sortable" data-col="W" style="border-left:1px solid var(--border-light);" data-i18n="th_w">W</th>
+          <th class="sortable" data-col="L" data-i18n="th_l">L</th>
+          <th class="sortable" data-col="h2h_top8_w" style="border-left:1px solid var(--border-light);"
+            data-i18n="gsChampions_th_top8w">TOP 8 W</th>
+          <th class="sortable" data-col="h2h_top8_l" data-i18n="gsChampions_th_top8l">TOP 8 L</th>
+          <th class="sortable" data-col="agg" style="border-left: 1px solid var(--border-main)" data-i18n="th_agg">AGG
+          </th>
+          <th class="sortable" data-col="hard" data-i18n="gsChampions_th_h">H</th>
+          <th class="sortable" data-col="clay" data-i18n="gsChampions_th_c">C</th>
+          <th class="sortable" data-col="grass" data-i18n="gsChampions_th_g">G</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+      <tfoot>
+        <tr class="table-footer-row">
+          <td colspan="20" id="table-footer"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <script type="module">
+      import {
+        getFlagImg,
+        fmtAge,
+        fmtWinrate,
+      } from "../common/js/utils.js?v=202606170751";
+
+      let dataMap = {};
+      let currentTour = "wta";
+      let currentAge = null;
+      let minAge = 18,
+        maxAge = 45;
+      let countryChampionCount = new Map();
+      let countryTotalTitles = new Map();
+
+      /* ---- 新 TITLES 配色 ---- */
+      function titlesCls(n) {
+        if (n >= 10) return "titles-cell titles-10";
+        if (n >= 5) return "titles-cell titles-5";
+        if (n >= 2) return "titles-cell titles-2";
+        return "titles-cell titles-1";
+      }
+
+      // 与 utils.js 的 fmtRound/fmtBestRound 保持一致的轮次→等级映射
+      const RANK_LABEL_JS = { 1: "R128", 2: "R64", 3: "R32", 4: "R16", 5: "QF", 6: "SF", 7: "F", 8: "W" };
+
+      /* ---- 大满贯明细子列（AO/RG/WIM/USO）单元格：复用全站统一的 result-W/F/SF/QF 配色 ---- */
+      function slamCellHtml(pd, slam) {
+        const entry = pd && pd.slam_breakdown ? pd.slam_breakdown[slam] : null;
+        if (!entry || !entry.rank) {
+          return `<span class="result-other">—</span>`;
+        }
+        const label = RANK_LABEL_JS[entry.rank];
+        if (label === "W") return `<span class="slam-cell result-W">${entry.display}</span>`;
+        if (label === "F") return `<span class="slam-cell result-F">${entry.display}</span>`;
+        if (label === "SF") return `<span class="slam-cell result-SF">${entry.display}</span>`;
+        if (label === "QF") return `<span class="slam-cell result-QF">${entry.display}</span>`;
+        // R16 及以下：普通样式，不特殊着色
+        return `<span class="result-other">${entry.display}</span>`;
+      }
+
+      /* ---- 新 WINRATE 配色 ---- */
+      function aggCls(pct) {
+        if (pct == null) return "wr-cell agg-no";
+        if (pct >= 90) return "wr-cell agg-90";
+        if (pct >= 85) return "wr-cell agg-85";
+        if (pct >= 80) return "wr-cell agg-80";
+        if (pct >= 75) return "wr-cell agg-75";
+        if (pct >= 70) return "wr-cell agg-70";
+        return "wr-cell agg-no";
+      }
+      function surfCls(pct) {
+        if (pct == null) return "wr-cell surf-no";
+        if (pct >= 90) return "wr-cell surf-90";
+        if (pct >= 85) return "wr-cell surf-85";
+        if (pct >= 80) return "wr-cell surf-80";
+        if (pct >= 75) return "wr-cell surf-75";
+        if (pct >= 70) return "wr-cell surf-70";
+        return "wr-cell surf-no";
+      }
+
+      /* ---- 脚注图例 ---- */
+      function buildFooterLegend() {
+        const dots = [
+          ["#1e3a8a", "#dbeafe", "≥2"],
+          ["#3f6212", "#ecfccb", "≥5"],
+          ["#92400e", "#fef3c7", "≥10"],
+        ];
+        const wrDots = [
+          ["#ca8a04", "≥70%"],
+          ["#65a30d", "≥75%"],
+          ["#16a34a", "≥80%"],
+          ["#0d9488", "≥85%"],
+          ["#0f766e", "≥90%"],
+        ];
+        const titlesHtml = dots
+          .map(([bg, fg, label]) =>
+            `${label}<span class="legend-dot" style="background:${bg};"></span>`)
+          .join(" ");
+        const wrHtml = wrDots
+          .map(([bg, label]) =>
+            `${label}<span class="legend-dot" style="background:${bg};"></span>`)
+          .join(" ");
+        return `
+          <span>${t("gsChampions_footer_titles_lbl")}</span> ${titlesHtml} &nbsp;·&nbsp;
+          <span>${t("gsChampions_footer_wr_lbl")}</span> ${wrHtml}
+        `;
+      }
+
+      function buildFooterPrefix() {
+        return `
+        ${t("gsChampions_footer_1st")} &nbsp;·&nbsp;
+        ${t("gsChampions_footer_age")} &nbsp;·&nbsp;
+        ${t("gsChampions_footer_span")}
+        <br>
+        ${t("gsChampions_footer_slams")}
+        <br>
+        ${t("gsChampions_footer_agg")} &nbsp;·&nbsp;
+        ${t("gsChampions_footer_hcg")} &nbsp;·&nbsp;
+        ${t("gsChampions_footer_top8")}
+        <br>
+      `;
+      }
+
+      /* ---- 数据加载 ---- */
+      async function loadData() {
+        try {
+          const res = await fetch("../output/tour_gs_champions.json");
+          const data = await res.json();
+          dataMap = data;
+          if (data.meta) {
+            minAge = data.meta.min_age;
+            maxAge = data.meta.max_age;
+          }
+          initAgeSelector();
+          resetToDefault();
+          renderTable();
+        } catch (err) {
+          console.error("❌ 数据加载失败：", err);
+          document.getElementById("table-body").innerHTML =
+            `<tr><td colspan="20" style="padding:40px;text-align:center;color:#b91c1c;">${t("load_fail")}</td></tr>`;
+        }
+      }
+
+      function initAgeSelector() {
+        const select = document.getElementById("ageSelect");
+        if (!select) return;
+        // 翻译 Career 选项
+        if (select.options[0]) select.options[0].textContent = t("gsChampions_opt_career");
+        while (select.options.length > 1) select.remove(1);
+        for (let age = minAge; age <= maxAge; age++) {
+          const opt = document.createElement("option");
+          opt.value = age;
+          opt.textContent = age;
+          select.appendChild(opt);
+        }
+        select.addEventListener("change", (e) => {
+          currentAge =
+            e.target.value === "career" ? null : parseInt(e.target.value);
+          resetToDefault();
+          renderTable();
+        });
+      }
+
+      function getPlayerDataByAge(player, age) {
+        if (age === null) return player;
+        if (player.age_entries && Array.isArray(player.age_entries)) {
+          const entry = player.age_entries.find((e) => e.age === age);
+          if (entry) return entry;
+          return player.age_entries[player.age_entries.length - 1];
+        }
+        return player;
+      }
+
+      /* ---- 排序 ---- */
+      let sortState = [];
+      let userSorted = false;
+
+      function slamSortVal(pd, slam) {
+        const entry = pd && pd.slam_breakdown ? pd.slam_breakdown[slam] : null;
+        if (!entry || !entry.rank) return 0;
+        return entry.rank * 1000 + entry.count;
+      }
+
+      function getValueByCol(pd, col) {
+        if (!pd) return null;
+        const map = {
+          player: pd.player,
+          firstYear: pd.first_year,
+          ageFirst: pd.age_first,
+          lastYear: pd.last_year,
+          ageLast: pd.age_last,
+          span: pd.span,
+          titles: pd.titles,
+          ao: slamSortVal(pd, "AO"),
+          rg: slamSortVal(pd, "RG"),
+          wim: slamSortVal(pd, "WIM"),
+          uso: slamSortVal(pd, "USO"),
+          W: pd.W,
+          L: pd.L,
+          agg: pd.agg,
+          hard: pd.win_h,
+          clay: pd.win_c,
+          grass: pd.win_g,
+          h2h_top8_w: pd.h2h_top8_W,
+          h2h_top8_l: pd.h2h_top8_L,
+          h2h_top8_m: pd.h2h_top8_W != null && pd.h2h_top8_L != null ? pd.h2h_top8_W + pd.h2h_top8_L : null,
+        };
+        return map[col] ?? null;
+      }
+
+      function compareValues(a, b, col, order) {
+        if (col !== "player") {
+          const dataA = getPlayerDataByAge(a, currentAge);
+          const dataB = getPlayerDataByAge(b, currentAge);
+          let valA = getValueByCol(dataA, col);
+          let valB = getValueByCol(dataB, col);
+          const nullA = valA == null,
+            nullB = valB == null;
+          if (nullA && nullB) return 0;
+          if (nullA) return 1;
+          if (nullB) return -1;
+          valA = Number(valA);
+          valB = Number(valB);
+          if (valA < valB) return order === "asc" ? -1 : 1;
+          if (valA > valB) return order === "asc" ? 1 : -1;
+          return 0;
+        } else {
+          const iocA = a.ioc || "",
+            iocB = b.ioc || "";
+          const ccA = countryChampionCount.get(iocA) || 0;
+          const ccB = countryChampionCount.get(iocB) || 0;
+          if (ccA !== ccB) return order === "asc" ? ccA - ccB : ccB - ccA;
+          const ttA = countryTotalTitles.get(iocA) || 0;
+          const ttB = countryTotalTitles.get(iocB) || 0;
+          if (ttA !== ttB) return order === "asc" ? ttA - ttB : ttB - ttA;
+          if (iocA < iocB) return order === "asc" ? -1 : 1;
+          if (iocA > iocB) return order === "asc" ? 1 : -1;
+          return 0;
+        }
+      }
+
+      function sortRows(rows) {
+        if (!sortState.length) return rows;
+        return [...rows].sort((a, b) => {
+          for (let rule of sortState) {
+            const cmp = compareValues(a, b, rule.col, rule.order);
+            if (cmp !== 0) return cmp;
+          }
+          return 0;
+        });
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll(".sortable").forEach((th) => {
+          const ind = th.querySelector(".sort-indicator");
+          if (ind) ind.remove();
+        });
+        if (!userSorted || !sortState.length) return;
+        const primary = sortState[0];
+        const th = document.querySelector(`th[data-col="${primary.col}"]`);
+        if (th) {
+          const span = document.createElement("span");
+          span.className = "sort-indicator";
+          span.textContent = " " + (primary.order === "asc" ? "▲" : "▼");
+          th.appendChild(span);
+        }
+      }
+
+      function resetToDefault() {
+        sortState = [
+          { col: "titles", order: "desc" },
+          { col: "firstYear", order: "asc" },
+          { col: "W", order: "desc" },
+        ];
+        userSorted = false;
+      }
+
+      function handleSortClick(e) {
+        const col = e.currentTarget.getAttribute("data-col");
+        if (!col) return;
+        userSorted = true;
+        const idx = sortState.findIndex((s) => s.col === col);
+        const newOrder =
+          idx !== -1 && sortState[idx].order === "desc" ? "asc" : "desc";
+        if (idx !== -1) sortState.splice(idx, 1);
+        sortState.unshift({ col, order: newOrder });
+        renderTable();
+      }
+
+      /* ---- 渲染 ---- */
+      function renderTable() {
+        const players = dataMap[currentTour] || [];
+
+        countryChampionCount.clear();
+        countryTotalTitles.clear();
+        for (const p of players) {
+          const ioc = p.ioc || "";
+          countryChampionCount.set(
+            ioc,
+            (countryChampionCount.get(ioc) || 0) + 1,
+          );
+          countryTotalTitles.set(
+            ioc,
+            (countryTotalTitles.get(ioc) || 0) + (p.titles || 0),
+          );
+        }
+
+        const sorted = sortRows(players);
+        document.getElementById("champion-count").textContent =
+          t("gsChampions_champions_count", sorted.length);
+        document.getElementById("table-footer").innerHTML =
+          buildFooterPrefix() + buildFooterLegend();
+
+        let html = "";
+        sorted.forEach((player, idx) => {
+          const pd = getPlayerDataByAge(player, currentAge);
+          const titlesNum = pd.titles ?? 0;
+          const careerTitles = player.titles ?? 0;
+          const titleDisplay =
+            currentAge === null
+              ? careerTitles
+              : `${titlesNum} / ${careerTitles}`;
+
+          html += `<tr>
+            <td class="col-no">${idx + 1}</td>
+            <td class="player-name">
+  ${getFlagImg(player.ioc)} ${player.player}${player.active ? '<span class="active-dot" title="Active"></span>' : ''}
+  <br><span class="player-dob">(${player.dob}${player.height ? ` · ${player.height}cm` : ''})</span>
+</td>
+            <td>${pd.first_year ?? "—"}</td>
+            <td>${pd.age_first != null ? pd.age_first.toFixed(2) : '—'}</td>
+            <td>${pd.last_year ?? "—"}</td>
+            <td>${pd.age_last != null ? pd.age_last.toFixed(2) : '—'}</td>
+            <td><span class="span-val">${pd.span ?? 0}</span></td>
+            <td><span class="${titlesCls(titlesNum)}">${titleDisplay}</span></td>
+            <td style="border-left:1px solid var(--border-light);">${slamCellHtml(pd, "AO")}</td>
+            <td>${slamCellHtml(pd, "RG")}</td>
+            <td>${slamCellHtml(pd, "WIM")}</td>
+            <td>${slamCellHtml(pd, "USO")}</td>
+            <td class="col-w" style="border-left:1px solid var(--border-light);">${pd.W ?? 0}</td>
+            <td class="col-l">${pd.L ?? 0}</td>
+            <td class="col-w" style="border-left:1px solid var(--border-light);">${pd.h2h_top8_W ?? '—'}</td>
+            <td class="col-l">${pd.h2h_top8_L ?? '—'}</td>
+            <td style="border-left:1px solid var(--border-light);"><span class="${aggCls(pd.agg)}">${fmtWinrate(pd.agg)}</span></td>
+            <td><span class="${surfCls(pd.win_h)}">${fmtWinrate(pd.win_h)}</span></td>
+            <td><span class="${surfCls(pd.win_c)}">${fmtWinrate(pd.win_c)}</span></td>
+            <td><span class="${surfCls(pd.win_g)}">${fmtWinrate(pd.win_g)}</span></td>
+          </tr>`;
+        });
+
+        document.getElementById("table-body").innerHTML =
+          html ||
+          `<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--text-muted);">${t("gsChampions_no_data")}</td></tr>`;
+        updateSortIndicators();
+      }
+
+      document.querySelectorAll(".sortable").forEach((th) => {
+        th.addEventListener("click", handleSortClick);
+      });
+      document.getElementById("tourSelect")?.addEventListener("change", (e) => {
+        currentTour = e.target.value;
+        resetToDefault();
+        renderTable();
+      });
+
+      loadData();
+
+      const updateEl = document.getElementById("last-updated");
+      if (updateEl) updateEl.textContent = "2026-07-13";
+
+      // 监听语言切换事件，重新渲染动态内容
+      document.addEventListener("langchange", () => {
+        // 重新翻译 Career 选项
+        const ageSelect = document.getElementById("ageSelect");
+        if (ageSelect?.options[0]) ageSelect.options[0].textContent = t("gsChampions_opt_career");
+        // 重新渲染表格（更新图例、冠军计数、无数据提示等）
+        renderTable();
+      });
+
+      // 页面初始化时应用语言
+      applyLang(currentLang);
+    </script>
+  </div> <!-- /container-fluid -->
+</body>
+
+</html>

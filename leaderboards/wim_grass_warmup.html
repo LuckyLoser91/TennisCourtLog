@@ -1,0 +1,5799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wimbledon Champions - Grass Warm-up (2000–2025)</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 2rem;
+        background: #f5f5f5;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    .filter-bar {
+        text-align: center;
+        margin: 1.5rem 0;
+    }
+    .filter-bar button {
+        padding: 0.6rem 2rem;
+        margin: 0 0.5rem;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        background: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .filter-bar button:hover {
+        border-color: #3498db;
+    }
+    .filter-bar button.active {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+    }
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin: 1.5rem 0;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+    .card.hidden {
+        display: none;
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        font-size: 1.2rem;
+    }
+    .card-header .year {
+        font-weight: bold;
+        font-size: 1.5rem;
+        background: rgba(255,255,255,0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+    }
+    .card-header .sex {
+        font-weight: bold;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+    }
+    .atp { background: #e67e22; color: white; }
+    .wta { background: #9b59b6; color: white; }
+    .card-header .name {
+        font-weight: 600;
+    }
+    .record {
+        margin-left: auto;
+        background: rgba(255,255,255,0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+    }
+    .card-body {
+        padding: 1rem 1.5rem;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+    }
+    th {
+        text-align: left;
+        background: #ecf0f1;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    td {
+        padding: 0.4rem 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    .win td.result {
+        color: #27ae60;
+        font-weight: bold;
+    }
+    .loss td.result {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    .win {
+        border-left: 4px solid #27ae60;
+    }
+    .loss {
+        border-left: 4px solid #e74c3c;
+    }
+    .no-data {
+        font-style: italic;
+        color: #777;
+        padding: 0.5rem;
+    }
+    footer {
+        text-align: center;
+        margin-top: 3rem;
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+<body>
+    <h1>Wimbledon Champions - Grass Warm-up <small>(2000–2025)</small></h1>
+    <div class="filter-bar">
+        <button id="btn-all" class="active" onclick="filter('all')">All</button>
+        <button id="btn-atp" onclick="filter('ATP')">ATP</button>
+        <button id="btn-wta" onclick="filter('WTA')">WTA</button>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2025</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Jannik Sinner</span>
+            <span class="record">8W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2025-07-13</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Carlos Alcaraz</td>
+        <td class="result">Win</td>
+        <td>4-6 6-4 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-11</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-09</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Ben Shelton</td>
+        <td class="result">Win</td>
+        <td>7-6 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-07</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Grigor Dimitrov</td>
+        <td class="result">Win</td>
+        <td>3-6 5-7 2-2 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-05</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Pedro Martinez</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Aleksandar Vukic</td>
+        <td class="result">Win</td>
+        <td>6-1 6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Luca Nardi</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3 6-0</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2025-06-19</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Alexander Bublik</td>
+        <td class="result">Loss</td>
+        <td>3-6 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-06-17</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Yannick Hanfmann</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2025</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Iga Swiatek</span>
+            <span class="record">10W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2025-07-12</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Amanda Anisimova</td>
+        <td class="result">Win</td>
+        <td>6-0 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-10</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Belinda Bencic</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-09</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Liudmila Samsonova</td>
+        <td class="result">Win</td>
+        <td>6-2 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-07</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Clara Tauson</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-05</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Danielle Collins</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Caty Mcnally</td>
+        <td class="result">Win</td>
+        <td>5-7 6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Polina Kudermetova</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2025-06-28</td>
+        <td>Bad Homburg</td>
+        <td>F</td>
+        <td>Jessica Pegula</td>
+        <td class="result">Loss</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-06-27</td>
+        <td>Bad Homburg</td>
+        <td>SF</td>
+        <td>Jasmine Paolini</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-06-26</td>
+        <td>Bad Homburg</td>
+        <td>QF</td>
+        <td>Ekaterina Alexandrova</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2025-06-24</td>
+        <td>Bad Homburg</td>
+        <td>R16</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2024</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Carlos Alcaraz</span>
+            <span class="record">8W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Daniil Medvedev</td>
+        <td class="result">Win</td>
+        <td>6-7(1) 6-3 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Tommy Paul</td>
+        <td class="result">Win</td>
+        <td>5-7 6-4 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Ugo Humbert</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 1-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Frances Tiafoe</td>
+        <td class="result">Win</td>
+        <td>5-7 6-2 4-6 7-6(2) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Aleksandar Vukic</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Mark Lajal</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 7-5 6-2</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2024-06-17</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Jack Draper</td>
+        <td class="result">Loss</td>
+        <td>7-6(3) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-06-17</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Francisco Cerundolo</td>
+        <td class="result">Win</td>
+        <td>6-1 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2024</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Barbora Krejcikova</span>
+            <span class="record">9W / 2L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Jasmine Paolini</td>
+        <td class="result">Win</td>
+        <td>6-2 2-6 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elena Rybakina</td>
+        <td class="result">Win</td>
+        <td>3-6 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jelena Ostapenko</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Danielle Collins</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Jessica Bouzas Maneiro</td>
+        <td class="result">Win</td>
+        <td>6-0 4-3 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Katie Volynets</td>
+        <td class="result">Win</td>
+        <td>7-6(6) 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Veronika Kudermetova</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-7(1) 7-5</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2024-06-24</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Leylah Fernandez</td>
+        <td class="result">Loss</td>
+        <td>6-2 3-6 6-2</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2024-06-17</td>
+        <td>Birmingham</td>
+        <td>QF</td>
+        <td>Anastasia Potapova</td>
+        <td class="result">Loss</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-06-17</td>
+        <td>Birmingham</td>
+        <td>R16</td>
+        <td>Harriet Dart</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2024-06-17</td>
+        <td>Birmingham</td>
+        <td>R32</td>
+        <td>Daria Saville</td>
+        <td class="result">Win</td>
+        <td>6-1 7-6(5)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2023</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Carlos Alcaraz</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>1-6 7-6(6) 6-1 3-6 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Daniil Medvedev</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Holger Rune</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Matteo Berrettini</td>
+        <td class="result">Win</td>
+        <td>3-6 6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nicolas Jarry</td>
+        <td class="result">Win</td>
+        <td>6-3 6-7(6) 6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Alexandre Muller</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(2) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jeremy Chardy</td>
+        <td class="result">Win</td>
+        <td>6-0 6-2 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Alex De Minaur</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Sebastian Korda</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Grigor Dimitrov</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Jiri Lehecka</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Arthur Rinderknech</td>
+        <td class="result">Win</td>
+        <td>4-6 7-5 7-6(3)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2023</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Marketa Vondrousova</span>
+            <span class="record">9W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Ons Jabeur</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elina Svitolina</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jessica Pegula</td>
+        <td class="result">Win</td>
+        <td>6-4 2-6 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Marie Bouzkova</td>
+        <td class="result">Win</td>
+        <td>2-6 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Donna Vekic</td>
+        <td class="result">Win</td>
+        <td>6-1 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Veronika Kudermetova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-07-03</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Peyton Stearns</td>
+        <td class="result">Win</td>
+        <td>6-2 7-5</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2023-06-19</td>
+        <td>Berlin</td>
+        <td>QF</td>
+        <td>Maria Sakkari</td>
+        <td class="result">Loss</td>
+        <td>7-6(7) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Berlin</td>
+        <td>R16</td>
+        <td>Jule Niemeier</td>
+        <td class="result">Win</td>
+        <td>6-3 6-5 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2023-06-19</td>
+        <td>Berlin</td>
+        <td>R32</td>
+        <td>Bianca Andreescu</td>
+        <td class="result">Win</td>
+        <td>7-6(0) 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2022</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Nick Kyrgios</td>
+        <td class="result">Win</td>
+        <td>4-6 6-3 6-4 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Cameron Norrie</td>
+        <td class="result">Win</td>
+        <td>2-6 6-3 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jannik Sinner</td>
+        <td class="result">Win</td>
+        <td>5-7 2-6 6-3 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Tim Van Rijthoven</td>
+        <td class="result">Win</td>
+        <td>6-2 4-6 6-1 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Miomir Kecmanovic</td>
+        <td class="result">Win</td>
+        <td>6-0 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Thanasi Kokkinakis</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Soon Woo Kwon</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-3 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2022</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Elena Rybakina</span>
+            <span class="record">8W / 2L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Ons Jabeur</td>
+        <td class="result">Win</td>
+        <td>3-6 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Simona Halep</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Ajla Tomljanovic</td>
+        <td class="result">Win</td>
+        <td>4-6 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Petra Martic</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Qinwen Zheng</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Bianca Andreescu</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-27</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Coco Vandeweghe</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 7-5</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2022-06-20</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Lesia Tsurenko</td>
+        <td class="result">Loss</td>
+        <td>1-6 7-5 6-3</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2022-06-06</td>
+        <td>s Hertogenbosch</td>
+        <td>R16</td>
+        <td>Shelby Rogers</td>
+        <td class="result">Loss</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2022-06-06</td>
+        <td>s Hertogenbosch</td>
+        <td>R32</td>
+        <td>Jamie Loeb</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2021</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Matteo Berrettini</td>
+        <td class="result">Win</td>
+        <td>6-7(4) 6-4 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Denis Shapovalov</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 7-5 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Marton Fucsovics</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Cristian Garin</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Denis Kudla</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3 7-6(7)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Kevin Anderson</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jack Draper</td>
+        <td class="result">Win</td>
+        <td>4-6 6-1 6-2 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2021</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Ashleigh Barty</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Karolina Pliskova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-7(4) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Angelique Kerber</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Ajla Tomljanovic</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Barbora Krejcikova</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Katerina Siniakova</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Anna Blinkova</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2021-06-28</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Carla Suarez Navarro</td>
+        <td class="result">Win</td>
+        <td>6-1 6-7(1) 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2019</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Roger Federer</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 1-6 7-6(4) 4-6 13-12(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Roberto Bautista Agut</td>
+        <td class="result">Win</td>
+        <td>6-2 4-6 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>David Goffin</td>
+        <td class="result">Win</td>
+        <td>6-4 6-0 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Ugo Humbert</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Hubert Hurkacz</td>
+        <td class="result">Win</td>
+        <td>7-5 6-7(5) 6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Denis Kudla</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Philipp Kohlschreiber</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2019</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Simona Halep</span>
+            <span class="record">9W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Serena Williams</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elina Svitolina</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Shuai Zhang</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Coco Gauff</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Mihaela Buzarnescu</td>
+        <td class="result">Win</td>
+        <td>6-3 4-6 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-07-01</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Aliaksandra Sasnovich</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2019-06-24</td>
+        <td>Eastbourne</td>
+        <td>QF</td>
+        <td>Angelique Kerber</td>
+        <td class="result">Loss</td>
+        <td>6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-06-24</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Polona Hercog</td>
+        <td class="result">Win</td>
+        <td>6-1 4-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2019-06-24</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Su Wei Hsieh</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2018</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">11W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Kevin Anderson</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Rafael Nadal</td>
+        <td class="result">Win</td>
+        <td>6-4 3-6 7-6(9) 3-6 10-8</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Kei Nishikori</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Karen Khachanov</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Kyle Edmund</td>
+        <td class="result">Win</td>
+        <td>4-6 6-3 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Horacio Zeballos</td>
+        <td class="result">Win</td>
+        <td>6-1 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Tennys Sandgren</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1 6-2</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2018-06-18</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Marin Cilic</td>
+        <td class="result">Loss</td>
+        <td>5-7 7-6(4) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-18</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Jeremy Chardy</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-18</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Adrian Mannarino</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-18</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Grigor Dimitrov</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-18</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>John Millman</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2018</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Angelique Kerber</span>
+            <span class="record">10W / 2L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Serena Williams</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Jelena Ostapenko</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Daria Kasatkina</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Belinda Bencic</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Naomi Osaka</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Claire Liu</td>
+        <td class="result">Win</td>
+        <td>3-6 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-07-02</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Vera Zvonareva</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2018-06-25</td>
+        <td>Eastbourne</td>
+        <td>SF</td>
+        <td>Caroline Wozniacki</td>
+        <td class="result">Loss</td>
+        <td>2-6 7-6(4) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-25</td>
+        <td>Eastbourne</td>
+        <td>QF</td>
+        <td>Daria Kasatkina</td>
+        <td class="result">Win</td>
+        <td>6-1 6-7(3) 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-25</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Danielle Collins</td>
+        <td class="result">Win</td>
+        <td>6-1 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2018-06-25</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Dominika Cibulkova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2018-06-18</td>
+        <td>Mallorca</td>
+        <td>R32</td>
+        <td>Alison Riske Amritraj</td>
+        <td class="result">Loss</td>
+        <td>5-7 6-2 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2017</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">12W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Marin Cilic</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Tomas Berdych</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 7-6(4) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Milos Raonic</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Grigor Dimitrov</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Mischa Zverev</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Dusan Lajovic</td>
+        <td class="result">Win</td>
+        <td>7-6(0) 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Alexandr Dolgopolov</td>
+        <td class="result">Win</td>
+        <td>6-3 3-0 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Alexander Zverev</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Karen Khachanov</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Florian Mayer</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Mischa Zverev</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Yuichi Sugita</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2017-06-12</td>
+        <td>Stuttgart</td>
+        <td>R16</td>
+        <td>Tommy Haas</td>
+        <td class="result">Loss</td>
+        <td>2-6 7-6(8) 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2017</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Garbine Muguruza</span>
+            <span class="record">10W / 2L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>7-5 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Magdalena Rybarikova</td>
+        <td class="result">Win</td>
+        <td>6-1 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Svetlana Kuznetsova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Angelique Kerber</td>
+        <td class="result">Win</td>
+        <td>4-6 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Sorana Cirstea</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Yanina Wickmayer</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-07-03</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Ekaterina Alexandrova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2017-06-26</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Barbora Strycova</td>
+        <td class="result">Loss</td>
+        <td>6-1 6-0</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2017-06-19</td>
+        <td>Birmingham</td>
+        <td>SF</td>
+        <td>Ashleigh Barty</td>
+        <td class="result">Loss</td>
+        <td>3-6 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Birmingham</td>
+        <td>QF</td>
+        <td>Coco Vandeweghe</td>
+        <td class="result">Win</td>
+        <td>4-6 6-4 0-0 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Birmingham</td>
+        <td>R16</td>
+        <td>Alison Riske Amritraj</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2017-06-19</td>
+        <td>Birmingham</td>
+        <td>R32</td>
+        <td>Elizaveta Kulichkova</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2016</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Andy Murray</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Milos Raonic</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(3) 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Tomas Berdych</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jo-Wilfried Tsonga</td>
+        <td class="result">Win</td>
+        <td>7-6(10) 6-1 3-6 4-6 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Nick Kyrgios</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>John Millman</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Yen Hsun Lu</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Liam Broady</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-13</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Milos Raonic</td>
+        <td class="result">Win</td>
+        <td>6-7(5) 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-13</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Marin Cilic</td>
+        <td class="result">Win</td>
+        <td>6-3 4-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-13</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Kyle Edmund</td>
+        <td class="result">Win</td>
+        <td>6-4 3-6 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-13</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Aljaz Bedene</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-13</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Nicolas Mahut</td>
+        <td class="result">Win</td>
+        <td>7-6(8) 7-6(1)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2016</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Angelique Kerber</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elena Vesnina</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Anastasia Pavlyuchenkova</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Svetlana Kuznetsova</td>
+        <td class="result">Win</td>
+        <td>7-5 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Annika Beck</td>
+        <td class="result">Win</td>
+        <td>6-3 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Christina Mchale</td>
+        <td class="result">Win</td>
+        <td>6-7(7) 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2016-06-27</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Amra Sadikovic</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2015</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Roger Federer</td>
+        <td class="result">Win</td>
+        <td>7-6(1) 6-7(10) 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Richard Gasquet</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Marin Cilic</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Kevin Anderson</td>
+        <td class="result">Win</td>
+        <td>6-7(6) 6-7(6) 6-1 6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Bernard Tomic</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Jarkko Nieminen</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Philipp Kohlschreiber</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2015</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Garbine Muguruza</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>3-6 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Heather Watson</td>
+        <td class="result">Win</td>
+        <td>6-2 4-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Timea Babos</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2015-06-29</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Margarita Gasparyan</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2014</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Roger Federer</td>
+        <td class="result">Win</td>
+        <td>6-7(7) 6-4 7-6(4) 5-7 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Grigor Dimitrov</td>
+        <td class="result">Win</td>
+        <td>6-4 3-6 7-6(2) 7-6(7)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Marin Cilic</td>
+        <td class="result">Win</td>
+        <td>6-1 3-6 6-7(4) 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Jo-Wilfried Tsonga</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Gilles Simon</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Radek Stepanek</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3 6-7(5) 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Andrey Golubev</td>
+        <td class="result">Win</td>
+        <td>6-0 6-1 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2014</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Petra Kvitova</span>
+            <span class="record">9W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Eugenie Bouchard</td>
+        <td class="result">Win</td>
+        <td>6-3 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Lucie Safarova</td>
+        <td class="result">Win</td>
+        <td>7-6(6) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Barbora Strycova</td>
+        <td class="result">Win</td>
+        <td>6-1 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Shuai Peng</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>5-7 7-6(2) 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Mona Barthel</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Andrea Hlavackova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-0</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2014-06-16</td>
+        <td>Eastbourne</td>
+        <td>QF</td>
+        <td>Heather Watson</td>
+        <td class="result">Loss</td>
+        <td>DEF</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-16</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Varvara Lepchenko</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2014-06-16</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Lucie Safarova</td>
+        <td class="result">Win</td>
+        <td>6-1 5-7 7-6(4)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2013</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Andy Murray</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Jerzy Janowicz</td>
+        <td class="result">Win</td>
+        <td>6-7(2) 6-4 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Fernando Verdasco</td>
+        <td class="result">Win</td>
+        <td>4-6 3-6 6-1 6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(5) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Tommy Robredo</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Yen Hsun Lu</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Benjamin Becker</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-10</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Marin Cilic</td>
+        <td class="result">Win</td>
+        <td>5-7 7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-10</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Jo-Wilfried Tsonga</td>
+        <td class="result">Win</td>
+        <td>4-6 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-10</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Benjamin Becker</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-10</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Marinko Matosevic</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-10</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Nicolas Mahut</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(4)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2013</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Marion Bartoli</span>
+            <span class="record">8W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Sabine Lisicki</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Kirsten Flipkens</td>
+        <td class="result">Win</td>
+        <td>6-1 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Sloane Stephens</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Karin Knapp</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Camila Giorgi</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Christina Mchale</td>
+        <td class="result">Win</td>
+        <td>7-5 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-24</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Elina Svitolina</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2013-06-17</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Na Li</td>
+        <td class="result">Loss</td>
+        <td>W/O</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2013-06-17</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Flavia Pennetta</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2012</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">10W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Andy Murray</td>
+        <td class="result">Win</td>
+        <td>4-6 7-5 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-1 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Xavier Malisse</td>
+        <td class="result">Win</td>
+        <td>7-6(1) 6-1 4-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Julien Benneteau</td>
+        <td class="result">Win</td>
+        <td>4-6 6-7(3) 6-2 7-6(6) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Fabio Fognini</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Albert Ramos</td>
+        <td class="result">Win</td>
+        <td>6-1 6-1 6-1</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2012-06-11</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Tommy Haas</td>
+        <td class="result">Loss</td>
+        <td>7-6(5) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-11</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-11</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Milos Raonic</td>
+        <td class="result">Win</td>
+        <td>6-7(4) 6-4 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-11</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Florian Mayer</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2012</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Agnieszka Radwanska</td>
+        <td class="result">Win</td>
+        <td>6-1 5-7 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(6)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Petra Kvitova</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Yaroslava Shvedova</td>
+        <td class="result">Win</td>
+        <td>6-1 2-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Jie Zheng</td>
+        <td class="result">Win</td>
+        <td>6-7(5) 6-2 9-7</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Melinda Czink</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2012-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Barbora Strycova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2011</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Novak Djokovic</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Rafael Nadal</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1 1-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Jo-Wilfried Tsonga</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-2 6-7(9) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Bernard Tomic</td>
+        <td class="result">Win</td>
+        <td>6-2 3-6 6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Michael Llodra</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Marcos Baghdatis</td>
+        <td class="result">Win</td>
+        <td>6-4 4-6 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Kevin Anderson</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jeremy Chardy</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2011</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Petra Kvitova</span>
+            <span class="record">11W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>6-1 3-6 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Tsvetana Pironkova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-7(5) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Yanina Wickmayer</td>
+        <td class="result">Win</td>
+        <td>6-0 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Roberta Vinci</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Anne Keothavong</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-20</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Alexa Glatch</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2011-06-13</td>
+        <td>Eastbourne</td>
+        <td>F</td>
+        <td>Marion Bartoli</td>
+        <td class="result">Loss</td>
+        <td>6-1 4-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-13</td>
+        <td>Eastbourne</td>
+        <td>SF</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>7-6(9) 4-2 RET</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-13</td>
+        <td>Eastbourne</td>
+        <td>QF</td>
+        <td>Agnieszka Radwanska</td>
+        <td class="result">Win</td>
+        <td>1-6 6-2 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-13</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Kate Makarova</td>
+        <td class="result">Win</td>
+        <td>7-6(8) 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2011-06-13</td>
+        <td>Eastbourne</td>
+        <td>R32</td>
+        <td>Anastasija Sevastova</td>
+        <td class="result">Win</td>
+        <td>5-7 6-1 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2010</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Rafael Nadal</span>
+            <span class="record">9W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Tomas Berdych</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Andy Murray</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(6) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Robin Soderling</td>
+        <td class="result">Win</td>
+        <td>3-6 6-3 7-6(4) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Paul Henri Mathieu</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Philipp Petzschner</td>
+        <td class="result">Win</td>
+        <td>6-4 4-6 6-7(5) 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Robin Haase</td>
+        <td class="result">Win</td>
+        <td>5-7 6-2 3-6 6-0 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Kei Nishikori</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4 6-4</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2010-06-07</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Feliciano Lopez</td>
+        <td class="result">Loss</td>
+        <td>7-6(5) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-07</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Denis Istomin</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 4-6 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-07</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Marcos Daniel</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2010</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Vera Zvonareva</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Petra Kvitova</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Na Li</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>7-6(9) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Dominika Cibulkova</td>
+        <td class="result">Win</td>
+        <td>6-0 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Anna Chakvetadze</td>
+        <td class="result">Win</td>
+        <td>6-0 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2010-06-21</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Michelle Larcher De Brito</td>
+        <td class="result">Win</td>
+        <td>6-0 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2009</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>5-7 7-6(6) 7-6(5) 3-6 16-14</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Tommy Haas</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Ivo Karlovic</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Robin Soderling</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(5) 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Philipp Kohlschreiber</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-7(5) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Guillermo Garcia Lopez</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Yen Hsun Lu</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2009</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elena Dementieva</td>
+        <td class="result">Win</td>
+        <td>6-7(4) 7-5 8-6</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Victoria Azarenka</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Roberta Vinci</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Jarmila Gajdosova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2009-06-22</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Neuza Silva</td>
+        <td class="result">Win</td>
+        <td>6-1 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2008</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Rafael Nadal</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Roger Federer</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-7(5) 6-7(8) 9-7</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Rainer Schuettler</td>
+        <td class="result">Win</td>
+        <td>6-1 7-6(3) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Andy Murray</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nicolas Kiefer</td>
+        <td class="result">Win</td>
+        <td>7-6(3) 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Ernests Gulbis</td>
+        <td class="result">Win</td>
+        <td>5-7 6-2 7-6(2) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Andreas Beck</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 7-6(0)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-09</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Novak Djokovic</td>
+        <td class="result">Win</td>
+        <td>7-6(6) 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-09</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>7-5 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-09</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Ivo Karlovic</td>
+        <td class="result">Win</td>
+        <td>6-7(5) 7-6(5) 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-09</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Kei Nishikori</td>
+        <td class="result">Win</td>
+        <td>6-4 3-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-09</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Jonas Bjorkman</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2008</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Venus Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Serena Williams</td>
+        <td class="result">Win</td>
+        <td>7-5 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Elena Dementieva</td>
+        <td class="result">Win</td>
+        <td>6-1 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Tamarine Tanasugarn</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Alisa Kleybanova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Maria Jose Martinez Sanchez</td>
+        <td class="result">Win</td>
+        <td>6-1 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Anne Keothavong</td>
+        <td class="result">Win</td>
+        <td>7-5 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2008-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Naomi Cavaday</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2007</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Rafael Nadal</td>
+        <td class="result">Win</td>
+        <td>7-6(7) 4-6 7-6(3) 2-6 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Richard Gasquet</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Juan Carlos Ferrero</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 3-6 6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Tommy Haas</td>
+        <td class="result">Win</td>
+        <td>W/O</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Marat Safin</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Juan Martin Del Potro</td>
+        <td class="result">Win</td>
+        <td>6-2 7-5 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Teymuraz Gabashvili</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2007</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Venus Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Marion Bartoli</td>
+        <td class="result">Win</td>
+        <td>6-4 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Ana Ivanovic</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Svetlana Kuznetsova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Akiko Morigami</td>
+        <td class="result">Win</td>
+        <td>6-2 3-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Hana Sromova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2007-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Alla Kudryavtseva</td>
+        <td class="result">Win</td>
+        <td>2-6 6-3 7-5</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2006</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Rafael Nadal</td>
+        <td class="result">Win</td>
+        <td>6-0 7-6(5) 6-7(2) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Jonas Bjorkman</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Mario Ancic</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Tomas Berdych</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nicolas Mahut</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(2) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Tim Henman</td>
+        <td class="result">Win</td>
+        <td>6-4 6-0 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Richard Gasquet</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-12</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Tomas Berdych</td>
+        <td class="result">Win</td>
+        <td>6-0 6-7(4) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-12</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Tommy Haas</td>
+        <td class="result">Win</td>
+        <td>6-4 6-7(4) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-12</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Olivier Rochus</td>
+        <td class="result">Win</td>
+        <td>6-7(2) 7-6(9) 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-12</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Richard Gasquet</td>
+        <td class="result">Win</td>
+        <td>7-6(7) 6-7(7) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-12</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Rohan Bopanna</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2006</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Amelie Mauresmo</span>
+            <span class="record">7W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Justine Henin</td>
+        <td class="result">Win</td>
+        <td>2-6 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Anastasia Myskina</td>
+        <td class="result">Win</td>
+        <td>6-1 3-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Ana Ivanovic</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nicole Pratt</td>
+        <td class="result">Win</td>
+        <td>6-1 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Samantha Stosur</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2006-06-26</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Ivana Abramovic</td>
+        <td class="result">Win</td>
+        <td>6-0 6-0</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2006-06-19</td>
+        <td>Eastbourne</td>
+        <td>R16</td>
+        <td>Nathalie Dechy</td>
+        <td class="result">Loss</td>
+        <td>3-6 6-2 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2005</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>6-2 7-6(2) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Lleyton Hewitt</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Fernando Gonzalez</td>
+        <td class="result">Win</td>
+        <td>7-5 6-2 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Juan Carlos Ferrero</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 7-6(6)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nicolas Kiefer</td>
+        <td class="result">Win</td>
+        <td>6-2 6-7(5) 6-1 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Ivo Minar</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Paul Henri Mathieu</td>
+        <td class="result">Win</td>
+        <td>6-4 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-06</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Marat Safin</td>
+        <td class="result">Win</td>
+        <td>6-4 6-7(6) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-06</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Tommy Haas</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(9)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-06</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Philipp Kohlschreiber</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-06</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Florian Mayer</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-06</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Robin Soderling</td>
+        <td class="result">Win</td>
+        <td>6-7(5) 7-6(6) 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2005</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Venus Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Lindsay Davenport</td>
+        <td class="result">Win</td>
+        <td>4-6 7-6(4) 9-7</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Maria Sharapova</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Mary Pierce</td>
+        <td class="result">Win</td>
+        <td>6-0 7-6(10)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Jill Craybas</td>
+        <td class="result">Win</td>
+        <td>6-0 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Nicole Pratt</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2005-06-20</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Eva Birnerova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2004</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>4-6 7-5 7-6(3) 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Sebastien Grosjean</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3 7-6(6)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Lleyton Hewitt</td>
+        <td class="result">Win</td>
+        <td>6-1 6-7(1) 6-0 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Ivo Karlovic</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6(3) 7-6(5)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Thomas Johansson</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Alejandro Falla</td>
+        <td class="result">Win</td>
+        <td>6-1 6-2 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Alex Bogdanovic</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Mardy Fish</td>
+        <td class="result">Win</td>
+        <td>6-0 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Jiri Novak</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Arnaud Clement</td>
+        <td class="result">Win</td>
+        <td>6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Thomas Johansson</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2004</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Maria Sharapova</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Serena Williams</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Lindsay Davenport</td>
+        <td class="result">Win</td>
+        <td>2-6 7-6(5) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Ai Sugiyama</td>
+        <td class="result">Win</td>
+        <td>5-7 7-5 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Amy Frazier</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Anne Keothavong</td>
+        <td class="result">Win</td>
+        <td>6-4 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-21</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Yuliya Beygelzimer</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Birmingham</td>
+        <td>F</td>
+        <td>Tatiana Golovin</td>
+        <td class="result">Win</td>
+        <td>4-6 6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Birmingham</td>
+        <td>SF</td>
+        <td>Patty Schnyder</td>
+        <td class="result">Win</td>
+        <td>6-1 6-7(3) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Birmingham</td>
+        <td>QF</td>
+        <td>Alicia Molik</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Birmingham</td>
+        <td>R16</td>
+        <td>Samantha Stosur</td>
+        <td class="result">Win</td>
+        <td>6-4 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2004-06-07</td>
+        <td>Birmingham</td>
+        <td>R32</td>
+        <td>Jamea Jackson</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2003</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Roger Federer</span>
+            <span class="record">12W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Mark Philippoussis</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-2 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>7-6(6) 6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Sjeng Schalken</td>
+        <td class="result">Win</td>
+        <td>6-3 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Feliciano Lopez</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Mardy Fish</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1 4-6 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Stefan Koubek</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Hyung Taik Lee</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-09</td>
+        <td>Halle</td>
+        <td>F</td>
+        <td>Nicolas Kiefer</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-09</td>
+        <td>Halle</td>
+        <td>SF</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>4-6 7-6(4) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-09</td>
+        <td>Halle</td>
+        <td>QF</td>
+        <td>Younes El Aynaoui</td>
+        <td class="result">Win</td>
+        <td>7-5 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-09</td>
+        <td>Halle</td>
+        <td>R16</td>
+        <td>Fernando Vicente</td>
+        <td class="result">Win</td>
+        <td>4-6 6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-09</td>
+        <td>Halle</td>
+        <td>R32</td>
+        <td>Sargis Sargsian</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2003</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>4-6 6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Justine Henin</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jennifer Capriati</td>
+        <td class="result">Win</td>
+        <td>2-6 6-2 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Elena Dementieva</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Laura Granville</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Els Callens</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2003-06-23</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jill Craybas</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2002</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Lleyton Hewitt</span>
+            <span class="record">14W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>David Nalbandian</td>
+        <td class="result">Win</td>
+        <td>6-1 6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Tim Henman</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Sjeng Schalken</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2 6-7(5) 1-6 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Julian Knowle</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Gregory Carraz</td>
+        <td class="result">Win</td>
+        <td>6-4 7-6(5) 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jonas Bjorkman</td>
+        <td class="result">Win</td>
+        <td>6-4 7-5 6-1</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2002-06-17</td>
+        <td>s Hertogenbosch</td>
+        <td>QF</td>
+        <td>Arnaud Clement</td>
+        <td class="result">Loss</td>
+        <td>W/O</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-17</td>
+        <td>s Hertogenbosch</td>
+        <td>R16</td>
+        <td>Mikhail Youzhny</td>
+        <td class="result">Win</td>
+        <td>6-4 5-7 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-17</td>
+        <td>s Hertogenbosch</td>
+        <td>R32</td>
+        <td>Michael Chang</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-10</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Tim Henman</td>
+        <td class="result">Win</td>
+        <td>4-6 6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-10</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Sjeng Schalken</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-10</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Todd Martin</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-10</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Olivier Rochus</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-10</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Mardy Fish</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2002</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Serena Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Venus Williams</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Amelie Mauresmo</td>
+        <td class="result">Win</td>
+        <td>6-2 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Chanda Rubin</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Els Callens</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Francesca Schiavone</td>
+        <td class="result">Win</td>
+        <td>6-3 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2002-06-24</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Evie Dominikovic</td>
+        <td class="result">Win</td>
+        <td>6-1 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2001</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Goran Ivanisevic</span>
+            <span class="record">8W / 2L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Patrick Rafter</td>
+        <td class="result">Win</td>
+        <td>6-3 3-6 6-3 2-6 9-7</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Tim Henman</td>
+        <td class="result">Win</td>
+        <td>7-5 6-7(6) 0-6 7-6(5) 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Marat Safin</td>
+        <td class="result">Win</td>
+        <td>7-6(2) 7-5 3-6 7-6(3)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Greg Rusedski</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Andy Roddick</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 7-5 3-6 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Carlos Moya</td>
+        <td class="result">Win</td>
+        <td>6-7(6) 6-3 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Fredrik Jonsson</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-4</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2001-06-18</td>
+        <td>s Hertogenbosch</td>
+        <td>R16</td>
+        <td>Lleyton Hewitt</td>
+        <td class="result">Loss</td>
+        <td>6-4 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-18</td>
+        <td>s Hertogenbosch</td>
+        <td>R32</td>
+        <td>Max Mirnyi</td>
+        <td class="result">Win</td>
+        <td>7-6(5) 7-6(3)</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2001-06-11</td>
+        <td>Queen's Club</td>
+        <td>R64</td>
+        <td>Cristiano Caratti</td>
+        <td class="result">Loss</td>
+        <td>6-3 6-4</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2001</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Venus Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Justine Henin</td>
+        <td class="result">Win</td>
+        <td>6-1 3-6 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Lindsay Davenport</td>
+        <td class="result">Win</td>
+        <td>6-2 6-7(1) 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Nathalie Tauziat</td>
+        <td class="result">Win</td>
+        <td>7-5 6-1</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Nadia Petrova</td>
+        <td class="result">Win</td>
+        <td>6-2 6-0</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Elena Likhovtseva</td>
+        <td class="result">Win</td>
+        <td>6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Daniela Hantuchova</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2001-06-25</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Shinobu Asagoe</td>
+        <td class="result">Win</td>
+        <td>6-2 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="ATP">
+        <div class="card-header">
+            <span class="year">2000</span>
+            <span class="sex atp">ATP</span>
+            <span class="name">Pete Sampras</span>
+            <span class="record">11W / 1L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Patrick Rafter</td>
+        <td class="result">Win</td>
+        <td>6-7(10) 7-6(5) 6-4 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Vladimir Voltchkov</td>
+        <td class="result">Win</td>
+        <td>7-6(4) 6-2 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Jan Michael Gambill</td>
+        <td class="result">Win</td>
+        <td>6-4 6-7(4) 6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Jonas Bjorkman</td>
+        <td class="result">Win</td>
+        <td>6-3 6-2 7-5</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Justin Gimelstob</td>
+        <td class="result">Win</td>
+        <td>2-6 6-4 6-2 6-2</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Karol Kucera</td>
+        <td class="result">Win</td>
+        <td>7-6(9) 3-6 6-3 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Jiri Vanek</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4 6-2</td>
+    </tr>
+    
+    <tr class="loss">
+        <td>2000-06-12</td>
+        <td>Queen's Club</td>
+        <td>F</td>
+        <td>Lleyton Hewitt</td>
+        <td class="result">Loss</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-12</td>
+        <td>Queen's Club</td>
+        <td>SF</td>
+        <td>Davide Sanguinetti</td>
+        <td class="result">Win</td>
+        <td>7-5 6-3</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-12</td>
+        <td>Queen's Club</td>
+        <td>QF</td>
+        <td>Bob Bryan</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-12</td>
+        <td>Queen's Club</td>
+        <td>R16</td>
+        <td>Michael Llodra</td>
+        <td class="result">Win</td>
+        <td>6-1 7-6(2)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-12</td>
+        <td>Queen's Club</td>
+        <td>R32</td>
+        <td>Arvind Parmar</td>
+        <td class="result">Win</td>
+        <td>6-7(8) 6-4 6-3</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <div class="card" data-sex="WTA">
+        <div class="card-header">
+            <span class="year">2000</span>
+            <span class="sex wta">WTA</span>
+            <span class="name">Venus Williams</span>
+            <span class="record">7W / 0L</span>
+        </div>
+        <div class="card-body">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Round</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>F</td>
+        <td>Lindsay Davenport</td>
+        <td class="result">Win</td>
+        <td>6-3 7-6</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>SF</td>
+        <td>Serena Williams</td>
+        <td class="result">Win</td>
+        <td>6-2 7-6</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>QF</td>
+        <td>Martina Hingis</td>
+        <td class="result">Win</td>
+        <td>6-3 4-6 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R16</td>
+        <td>Sabine Appelmans</td>
+        <td class="result">Win</td>
+        <td>6-4 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R32</td>
+        <td>Nathalie Dechy</td>
+        <td class="result">Win</td>
+        <td>6-0 7-6(4)</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R64</td>
+        <td>Ai Sugiyama</td>
+        <td class="result">Win</td>
+        <td>6-1 6-4</td>
+    </tr>
+    
+    <tr class="win">
+        <td>2000-06-26</td>
+        <td>Wimbledon</td>
+        <td>R128</td>
+        <td>Kveta Peschke</td>
+        <td class="result">Win</td>
+        <td>6-3 6-1</td>
+    </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    <footer>Generated on 2026-06-19 · Data source: TennisCourtLog</footer>
+    <script>
+        function filter(sex) {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                if (sex === 'all' || card.dataset.sex === sex) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            // 更新按钮状态
+            document.querySelectorAll('.filter-bar button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + sex).classList.add('active');
+        }
+    </script>
+</body>
+</html>

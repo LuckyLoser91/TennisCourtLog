@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-C15B9S69WR");
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>WTA Champions Archive · Year, Level & Tournament Filter</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751">
+  <style>
+    body {
+      min-width: 1000px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .text-muted {
+      color: var(--text-muted) !important;
+    }
+
+    .text-warning {
+      color: var(--accent) !important;
+      font-weight: 600;
+    }
+
+    .btn-outline-warning {
+      color: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .btn-outline-warning:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-outline-warning:focus {
+      box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+    }
+
+    /* 控制 placeholder 的透明度和颜色 */
+    .form-control::placeholder {
+      color: var(--text-hint) !important;
+      /* 使用 CSS 变量中的 hint 颜色 */
+      opacity: 0.7 !important;
+      /* 调整透明度，1 = 完全不透明，0 = 完全透明 */
+    }
+
+    /* 针对不同浏览器引擎的兼容写法 */
+    .form-control::-webkit-input-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .form-control::-moz-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .form-control:-ms-input-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    /* 表格容器 */
+    .table-responsive {
+      border-radius: 8px;
+      border: 1px solid var(--border-main);
+    }
+
+    .table {
+      background: var(--bg-card) !important;
+      border-collapse: collapse;
+      font-size: 13px;
+      width: 100%;
+      min-width: 950px;
+      table-layout: fixed;
+      margin-bottom: 0;
+    }
+
+    .table thead th {
+      background: var(--bg-header) !important;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    th.sortable:hover {
+      background: var(--bg-hover) !important;
+      color: var(--accent);
+    }
+
+    th .sort-indicator {
+      margin-left: 4px;
+      font-size: 10px;
+      display: inline-block;
+      vertical-align: middle;
+      color: var(--accent) !important;
+      opacity: 1 !important;
+    }
+
+    .table td {
+      padding: 8px 8px;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 13px;
+      background: transparent;
+    }
+
+    .table tbody tr:nth-child(odd) td {
+      background: var(--bg-card);
+    }
+
+    .table tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    .table-hover tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    .table> :not(caption)>*>* {
+      border-bottom-color: var(--border-light);
+    }
+
+
+    /* 冠军列左对齐 */
+    .champion-col {
+      text-align: left !important;
+      padding-left: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .winner-cell {
+      display: inline-flex;
+      align-items: center;
+      padding-left: 4px;
+      max-width: 100%;
+    }
+
+    .loading,
+    .no-data {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .seed-suffix {
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    .dob-cell,
+    .winner-age {
+      background: var(--bg-header);
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: inline-block;
+      border: 1px solid var(--border-light);
+    }
+
+    /* 脚注 */
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-main);
+    }
+
+    .footer-note small {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .footer-note a {
+      color: var(--text-hint);
+      text-decoration: underline;
+    }
+
+    /* 强制顶部行不换行，无视小屏断点 */
+    body>.row {
+      flex-wrap: nowrap !important;
+    }
+
+    body>.row>.col {
+      flex: 1 1 auto !important;
+      max-width: none !important;
+      width: auto !important;
+    }
+
+    body>.row>.col-auto {
+      flex: 0 0 auto !important;
+    }
+
+    body>.row .d-flex.gap-2 {
+      flex-wrap: nowrap !important;
+    }
+
+    /* 搜索行也保持不换行 */
+    body>.row .col-12>.d-flex.gap-2 {
+      flex-wrap: nowrap !important;
+    }
+  </style>
+  <script src="../common/js/i18n.js"></script>
+</head>
+
+<body>
+  <!-- 标题行 -->
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <h1 class="mb-0" data-i18n="wtaCalendar_title">🎾 WTA Champions · Singles (Since 2009)</h1>
+    </div>
+    <div class="col-auto d-flex gap-2 align-items-center">
+      <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+      <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+    </div>
+  </div>
+
+  <!-- ========== 第二行：统计数据 + 赛季/级别筛选 ========== -->
+  <div class="row align-items-center mb-2">
+    <div class="col">
+      <small class="text-muted">
+        <span id="recordCount" class="fw text-warning">0 tournaments</span>
+        &nbsp;|&nbsp;
+        <span id="championCount" class="fw text-warning">— champions</span>
+        &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click header to sort</span> &nbsp;|&nbsp;
+        <span id="last-updated"></span>
+      </small>
+    </div>
+    <div class="col-auto">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex align-items-center gap-1">
+          <label for="yearSelect" class="form-label mb-0 text-nowrap" data-i18n="wtaCalendar_label_season">📅
+            Season</label>
+          <select id="yearSelect" class="form-select form-select-sm" style="width: 120px;"></select>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <label for="levelSelect" class="form-label mb-0 text-nowrap" data-i18n="wtaCalendar_label_level">🏆
+            Level</label>
+          <select id="levelSelect" class="form-select form-select-sm" style="width: 150px;">
+            <option value="">All Levels</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第三行：搜索框 ========== -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="input-group input-group-sm" style="width: 280px;">
+          <span class="input-group-text" data-i18n="wtaCalendar_label_champion">🔍 CHAMPION</span>
+          <input type="text" id="searchInput" class="form-control" placeholder="e.g. Iga Swiatek..." />
+        </div>
+
+        <div class="input-group input-group-sm" style="width: 320px;">
+          <span class="input-group-text" data-i18n="wtaCalendar_label_tournament">🏟️ TOURNAMENT</span>
+          <input type="text" id="tournamentSearchInput" class="form-control" placeholder="e.g. Australian Open..." />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第三行：表格 ========== -->
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm mb-0">
+          <colgroup>
+            <col style="width: 38px;">
+            <col style="width: 55px;">
+            <col style="width: 100px;">
+            <col style="width: 65px;">
+            <col style="width: 150px;">
+            <col style="width: 90px;">
+            <col style="width: 100px;">
+            <col style="width: 180px;">
+            <col style="width: 95px;">
+            <col style="width: 70px;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Season</th>
+              <th class="sortable" data-sort="startDate" data-i18n="wtaCalendar_th_start_date">Start Date<span
+                  class="sort-indicator"></span></th>
+              <th data-i18n="wtaCalendar_th_drawsize">Drawsize</th>
+              <th data-i18n="wtaCalendar_th_tournament">Tournament</th>
+              <th data-i18n="wtaCalendar_th_level">Level</th>
+              <th data-i18n="wtaCalendar_th_surface">Surface</th>
+              <th data-i18n="wtaCalendar_th_champion">Champion</th>
+              <th class="sortable" data-sort="dob" data-i18n="th_dob">Date of Birth<span class="sort-indicator"></span>
+              </th>
+              <th class="sortable" data-sort="age" data-i18n="wtaCalendar_th_age">Age<span
+                  class="sort-indicator"></span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="10" class="loading">Loading champion data…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第四行：脚注 ========== -->
+  <div class="row">
+    <div class="col-12">
+      <div class="footer-note">
+        <small>
+          * Data sourced from
+          <a href="https://www.wtatennis.com/tournaments" target="_blank">
+            wtatennis.com
+          </a>
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getFlagImg } from "../common/js/utils.js?v=202606170751";
+
+    (function () {
+      const JSON_URL = "../output/wta_calendar_champs_start_2009.json";
+      let allData = [];
+      let currentYear = "";
+      let currentLevel = "";
+      let championSearchTerm = "";
+      let tournamentSearchTerm = "";
+
+      // 排序状态
+      let currentSort = {
+        column: "startDate",
+        direction: "desc",
+      };
+
+      const searchInput = document.getElementById("searchInput");
+      const tournamentSearchInput = document.getElementById(
+        "tournamentSearchInput",
+      );
+      const yearSelect = document.getElementById("yearSelect");
+      const levelSelect = document.getElementById("levelSelect");
+      const tableBody = document.getElementById("tableBody");
+      const recordCountSpan = document.getElementById("recordCount");
+      const championCountSpan = document.getElementById("championCount");
+
+      const sortableHeaders = document.querySelectorAll("th.sortable");
+
+      function updateSortIndicator() {
+        sortableHeaders.forEach((th) => {
+          const indicator = th.querySelector('.sort-indicator');
+          if (indicator) {
+            indicator.textContent = '';
+          }
+        });
+
+        const activeHeader = Array.from(sortableHeaders).find(
+          (th) => th.dataset.sort === currentSort.column,
+        );
+        if (activeHeader) {
+          const indicator = activeHeader.querySelector('.sort-indicator');
+          if (indicator) {
+            indicator.textContent = currentSort.direction === "asc" ? " ▲" : " ▼";
+          }
+        }
+      }
+
+      function formatVenue(surface, inOutdoor) {
+        if (!surface) return "";
+        const s = surface.trim();
+        let venue = s;
+        if (inOutdoor === "I") venue += " (Indoor)";
+        else if (inOutdoor === "O") venue += " (Outdoor)";
+        return venue;
+      }
+
+      function getSurfaceClass(surface) {
+        if (!surface) return "";
+        const s = surface.trim();
+        if (s === "Hard") return "surface-Hard";
+        if (s === "Clay") return "surface-Clay";
+        if (s === "Grass") return "surface-Grass";
+        if (s === "Carpet") return "surface-Carpet";
+        return "";
+      }
+
+      function getSeedNumber(seed) {
+        if (!seed || seed === "Non-seed") return null;
+        const num = parseFloat(seed);
+        if (!isNaN(num)) return Math.floor(num);
+        return null;
+      }
+
+      function getLevelClass(level) {
+        if (!level) return "level-other";
+        if (level === "Grand Slam") return "level-GrandSlam";
+        if (level === "Finals") return "level-Finals";
+        if (level === "WTA 1000") return "level-WTA1000";
+        if (level === "WTA 500" || level === "Premier")
+          return "level-WTA500Premier";
+        if (level === "WTA 250" || level === "International")
+          return "level-WTA250International";
+        return "level-other";
+      }
+
+      function filterData() {
+        if (!allData.length) return [];
+        return allData.filter((item) => {
+          if (!item.winner || item.winner.trim() === "") return false;
+          if (currentYear && String(item.year) !== currentYear) return false;
+          if (currentLevel && item.tourney_level !== currentLevel)
+            return false;
+
+          if (
+            championSearchTerm &&
+            !item.winner
+              .toLowerCase()
+              .includes(championSearchTerm.toLowerCase())
+          )
+            return false;
+
+          if (tournamentSearchTerm) {
+            const tourney = item.tourney_name || "";
+            if (
+              !tourney
+                .toLowerCase()
+                .includes(tournamentSearchTerm.toLowerCase())
+            )
+              return false;
+          }
+
+          return true;
+        });
+      }
+
+      function sortData(data) {
+        if (!data.length) return data;
+
+        const sorted = [...data];
+        const column = currentSort.column;
+        const direction = currentSort.direction;
+
+        sorted.sort((a, b) => {
+          let valA, valB;
+
+          if (column === "startDate") {
+            valA = a.tourney_start_date || "";
+            valB = b.tourney_start_date || "";
+            return direction === "asc"
+              ? valA.localeCompare(valB)
+              : valB.localeCompare(valA);
+          } else if (column === "age") {
+            valA = a.winner_age ? parseFloat(a.winner_age) : -Infinity;
+            valB = b.winner_age ? parseFloat(b.winner_age) : -Infinity;
+            return direction === "asc" ? valA - valB : valB - valA;
+          } else if (column === "dob") {
+            valA = a.dob || "";
+            valB = b.dob || "";
+            if (!valA && !valB) return 0;
+            if (!valA) return 1;
+            if (!valB) return -1;
+
+            return direction === "asc"
+              ? valA.localeCompare(valB)
+              : valB.localeCompare(valA);
+          }
+          return 0;
+        });
+
+        return sorted;
+      }
+
+      function renderTable(data) {
+        if (!data || data.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="10" class="no-data">${t('wtaCalendar_no_data')}</td></tr>`;
+          recordCountSpan.textContent = t('wtaCalendar_record_count', 0);
+          championCountSpan.textContent = t('wtaCalendar_champ_count', 0);
+          return;
+        }
+
+        const sorted = sortData(data);
+        const uniqueChampions = new Set();
+
+        let html = "";
+        sorted.forEach((item, idx) => {
+          const startDate = item.tourney_start_date || "";
+          const tourneyName = item.tourney_name || "";
+          const level = item.tourney_level || "";
+          const levelClass = getLevelClass(level);
+          const surface = item.surface || "";
+          const inOut = item.inOutdoor || "";
+          const venueDisplay = formatVenue(surface, inOut);
+          const surfaceClass = getSurfaceClass(surface);
+
+          const winner = item.winner || "";
+          const ioc = item.ioc || "";
+          const flagHtml = getFlagImg(ioc);
+          const seedNumber = getSeedNumber(item.seed);
+          const seedSuffix = seedNumber
+            ? ` <span class="seed-suffix">(${seedNumber})</span>`
+            : "";
+          const winnerDisplay = flagHtml
+            ? `${flagHtml} ${winner}${seedSuffix}`
+            : `${winner}${seedSuffix}`;
+
+          const dob = item.dob || "—";
+          const age = item.winner_age
+            ? parseFloat(item.winner_age).toFixed(2)
+            : "—";
+          const year = item.year;
+          const drawsize = item.drawsize;
+
+          uniqueChampions.add(`${winner}|${ioc}`);
+
+          html += `<tr>
+              <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
+              <td>${year}</td>
+              <td>${startDate}</td>
+              <td>${drawsize}</td>
+              <td style="font-weight:600;">${tourneyName}</td>
+              <td><span class="badge-level ${levelClass}">${level}</span></td>
+              <td><span class="surface-badge ${surfaceClass}">${venueDisplay}</span></td>
+              <td class="champion-col"><span class="winner-cell">${winnerDisplay}</span></td>
+              <td>${dob}</td>
+              <td>${age}</td>
+            </tr>`;
+        });
+
+        tableBody.innerHTML = html;
+        const displayedRows = sorted.length;
+        recordCountSpan.textContent = t('wtaCalendar_record_count', displayedRows);
+        championCountSpan.textContent = t('wtaCalendar_champ_count', uniqueChampions.size);
+
+        updateSortIndicator();
+      }
+
+      function updateView() {
+        const filtered = filterData();
+        renderTable(filtered);
+      }
+
+      function handleSortClick(e) {
+        const th = e.currentTarget;
+        const column = th.dataset.sort;
+
+        if (currentSort.column === column) {
+          currentSort.direction =
+            currentSort.direction === "asc" ? "desc" : "asc";
+        } else {
+          currentSort.column = column;
+          currentSort.direction = "desc";
+        }
+
+        updateView();
+      }
+
+      sortableHeaders.forEach((th) => {
+        th.addEventListener("click", handleSortClick);
+      });
+
+      function initYearSelect(years) {
+        const uniqueYears = [...new Set(years)].sort(
+          (a, b) => parseInt(b) - parseInt(a),
+        );
+        yearSelect.innerHTML = `<option value="">${t('wtaCalendar_opt_all_years')}</option>`;
+        uniqueYears.forEach((y) => {
+          const option = document.createElement("option");
+          option.value = y;
+          option.textContent = y;
+          yearSelect.appendChild(option);
+        });
+        yearSelect.value = "";
+        currentYear = "";
+        yearSelect.addEventListener("change", (e) => {
+          currentYear = e.target.value;
+          updateView();
+        });
+      }
+
+      function initLevelSelect(levels) {
+        const levelOrder = [
+          "Grand Slam",
+          "Finals",
+          "WTA 1000",
+          "WTA 500",
+          "Premier",
+          "WTA 250",
+          "International",
+        ];
+        const existingLevels = [...new Set(levels)].filter((l) => l);
+        levelSelect.innerHTML = `<option value="">${t('wtaCalendar_opt_all_levels')}</option>`;
+        levelOrder.forEach((lv) => {
+          if (existingLevels.includes(lv)) {
+            const option = document.createElement("option");
+            option.value = lv;
+            option.textContent = lv;
+            levelSelect.appendChild(option);
+          }
+        });
+        existingLevels.forEach((lv) => {
+          if (!levelOrder.includes(lv)) {
+            const option = document.createElement("option");
+            option.value = lv;
+            option.textContent = lv;
+            levelSelect.appendChild(option);
+          }
+        });
+        levelSelect.value = "";
+        currentLevel = "";
+        levelSelect.addEventListener("change", (e) => {
+          currentLevel = e.target.value;
+          updateView();
+        });
+      }
+
+      async function loadData() {
+        try {
+          tableBody.innerHTML = `<tr><td colspan="10" class="loading">⏳ Fetching champion data…</td></tr>`;
+          const response = await fetch(JSON_URL);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const json = await response.json();
+          allData = json.data || json;
+
+          // 设置更新时间 - 从 JSON 中读取时间戳并转换为浏览器本地时间
+          const updateEl = document.getElementById("last-updated");
+          if (updateEl && json.last_updated) {
+            const date = new Date(json.last_updated * 1000);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            updateEl.textContent = `${t('last_updated')} ${year}-${month}-${day}`;
+          }
+
+          const allYears = allData.map((d) => d.year).filter((y) => y);
+          const allLevels = allData
+            .map((d) => d.tourney_level)
+            .filter((l) => l);
+          initYearSelect(allYears);
+          initLevelSelect(allLevels);
+
+          searchInput.addEventListener("input", (e) => {
+            championSearchTerm = e.target.value.trim();
+            updateView();
+          });
+
+          tournamentSearchInput.addEventListener("input", (e) => {
+            tournamentSearchTerm = e.target.value.trim();
+            updateView();
+          });
+
+          currentSort = { column: "startDate", direction: "desc" };
+          if (allYears.length > 0) {
+            const latestYear = Math.max(
+              ...allYears.map((y) => parseInt(y)),
+            ).toString();
+            yearSelect.value = latestYear;
+            currentYear = latestYear;
+          }
+          updateView();
+        } catch (err) {
+          console.error(err);
+          tableBody.innerHTML = `<tr><td colspan="10" class="no-data">${t('load_fail')}</td></tr>`;
+          recordCountSpan.textContent = "Error";
+          championCountSpan.textContent = "—";
+          yearSelect.innerHTML = '<option value="">All Years</option>';
+        }
+      }
+
+      loadData();
+
+      // 语言切换时重新渲染动态内容
+      document.addEventListener('langchange', () => {
+        document.title = t('wtaCalendar_page_title');
+        const ySel = document.getElementById('yearSelect');
+        if (ySel && ySel.options[0]) ySel.options[0].textContent = t('wtaCalendar_opt_all_years');
+        const lSel = document.getElementById('levelSelect');
+        if (lSel && lSel.options[0]) lSel.options[0].textContent = t('wtaCalendar_opt_all_levels');
+        updateView();
+      });
+
+    })();
+  </script>
+</body>
+
+</html>

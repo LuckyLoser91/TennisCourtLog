@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-C15B9S69WR");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>WTA No.1 Club · Historical Leaderboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606290001" />
+  <script src="../common/js/i18n.js"></script>
+
+  <style>
+    body {
+      margin: 0 auto;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
+    .table {
+      min-width: 1050px;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: var(--bg-card) !important;
+      font-size: 12.5px;
+      margin-bottom: 0;
+    }
+
+    col.c-no       { width: 36px; }
+    col.c-player   { width: 100px; }
+    col.c-yr       { width: 62px; }
+    col.c-1st-age  { width: 48px; }
+    col.c-last-yr  { width: 62px; }
+    col.c-last-age { width: 48px; }
+    col.c-weeks    { width: 42px; }
+    col.c-cons     { width: 42px; }
+    col.c-gs       { width: 42px; }
+    col.c-1000     { width: 42px; }
+    col.c-overall  { width: 50px; }
+    col.c-hard     { width: 50px; }
+    col.c-clay     { width: 50px; }
+    col.c-grass    { width: 50px; }
+
+    /* 双行表头：分组行 */
+    .table thead tr:first-child th {
+      border-bottom: none !important;
+      padding-bottom: 3px;
+      font-size: 10px !important;
+      letter-spacing: 0.1em;
+      color: #a78b5e;
+    }
+    .table thead th {
+      padding: 10px 6px;
+    }
+    .table td {
+      padding: 7px 6px;
+    }
+
+    /* 球员列 */
+    .td-player {
+      text-align: left !important;
+      padding-left: 10px !important;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .player-dob {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* 在役绿点 */
+    .active-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    /* 胜率格 */
+    .wr-cell {
+      display: inline-block;
+      border-radius: 5px;
+      padding: 3px 6px;
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 46px;
+      text-align: center;
+    }
+
+    /* 脚注图例 */
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    /* 分隔线 */
+    .surf-sep {
+      border-left: 1px solid var(--border-main) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="padding:16px 24px;">
+    <table class="table table-hover table-sm mb-0">
+      <caption style="caption-side:top;padding:0 0 12px 0;text-align:left;color:inherit;">
+        <!-- 标题行 -->
+        <div class="d-flex align-items-center mb-2">
+          <h1 class="mb-0" data-i18n="no1Club_title">👑 WTA No.1 Club · Historical Leaderboard</h1>
+          <div class="ms-auto d-flex gap-2 align-items-center">
+            <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+            <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+          </div>
+        </div>
+        <!-- 统计栏 -->
+        <div class="d-flex align-items-center">
+          <span class="top-meta">
+            <span id="player-count" class="count-label">29 players</span>
+            &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click headers to sort</span>
+            &nbsp;|&nbsp; <span data-i18n="last_updated">Last updated:</span>
+            <span id="last-updated">—</span>
+          </span>
+        </div>
+      </caption>
+
+      <colgroup>
+        <col class="c-no" />
+        <col class="c-player" />
+        <col class="c-yr" />
+        <col class="c-1st-age" />
+        <col class="c-last-yr" />
+        <col class="c-last-age" />
+        <col class="c-weeks" />
+        <col class="c-cons" />
+        <col class="c-gs" />
+        <col class="c-1000" />
+        <col class="c-overall" />
+        <col class="c-hard" />
+        <col class="c-clay" />
+        <col class="c-grass" />
+      </colgroup>
+
+      <thead>
+        <!-- 分组标签行 -->
+        <tr>
+          <th colspan="2"></th>
+          <th colspan="6" style="text-align:center;border-left:1px solid var(--border-main);"
+            data-i18n="no1Club_th_group_no1">NO.1</th>
+          <th colspan="2" style="text-align:center;border-left:1px solid var(--border-main);"
+            data-i18n="no1Club_th_group_titles">TITLES</th>
+          <th colspan="4" style="text-align:center;border-left:1px solid var(--border-main);"
+            data-i18n="no1Club_th_group_winrate">WIN RATE</th>
+        </tr>
+        <!-- 字段行 -->
+        <tr>
+          <th class="sortable" data-col="idx" data-i18n="th_no">#</th>
+          <th class="sortable" data-col="player" style="text-align:left;padding-left:10px;"
+            data-i18n="th_player">PLAYER</th>
+          <th class="sortable surf-sep" data-col="first_no1_date" data-i18n="no1Club_th_first_date">1ST DATE</th>
+          <th class="sortable" data-col="1st_age" data-i18n="no1Club_th_1st_age">1ST AGE</th>
+          <th class="sortable" data-col="last_no1_date" data-i18n="no1Club_th_last_date">LAST DATE</th>
+          <th class="sortable" data-col="last_age" data-i18n="no1Club_th_last_age">LAST AGE</th>
+          <th class="sortable" data-col="weeks_total" data-i18n="no1Club_th_weeks">WEEKS</th>
+          <th class="sortable" data-col="weeks_consecutive" data-i18n="no1Club_th_consec">CONSEC.</th>
+          <th class="sortable surf-sep" data-col="gs" data-i18n="no1Club_th_gs">GS</th>
+          <th class="sortable" data-col="wta1000" data-i18n="no1Club_th_1000">1000</th>
+          <th class="sortable surf-sep" data-col="win_rate_overall" data-i18n="no1Club_th_overall">OVERALL</th>
+          <th class="sortable surf-sep"
+            style="background:var(--surface-hard-bg);color:var(--surface-hard-text);"
+            data-col="hard_wr" data-i18n="no1Club_th_hard">H</th>
+          <th class="sortable surf-sep"
+            style="background:var(--surface-clay-bg);color:var(--surface-clay-text);"
+            data-col="clay_wr" data-i18n="no1Club_th_clay">C</th>
+          <th class="sortable surf-sep"
+            style="background:var(--surface-grass-bg);color:var(--surface-grass-text);"
+            data-col="grass_wr" data-i18n="no1Club_th_grass">G</th>
+        </tr>
+      </thead>
+
+      <tbody id="table-body">
+        <tr><td colspan="14" class="loading" data-i18n="load_fail">Loading...</td></tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td colspan="14" class="table-footer-row">
+            <div id="table-footer" style="margin-bottom:4px;"></div>
+            <div>
+              <span data-i18n="no1Club_footer_cols"></span>
+            </div>
+            <div style="margin-top:2px;">
+              <span data-i18n="no1Club_footer_gs_note"></span>
+              &nbsp;·&nbsp;
+              <span data-i18n="no1Club_footer_1000_note"></span>
+              &nbsp;·&nbsp;
+              <span style="display:inline-flex;align-items:center;gap:4px;vertical-align:middle;">
+                <span class="active-dot"></span>
+                <span data-i18n="no1Club_footer_active"></span>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <script type="module">
+    import { getFlagImg } from "../common/js/utils.js";
+
+    let allData = [];
+    let sortState = [{ col: "first_no1_date", order: "asc" }];
+    let userSorted = false;
+
+    /* ---- 首次登顶年龄计算 ---- */
+    function calcAge(dob, date) {
+      if (!dob || !date) return null;
+      const diff = (new Date(date) - new Date(dob)) / (1000 * 60 * 60 * 24 * 365.25);
+      return Math.round(diff * 100) / 100;
+    }
+
+    /* ---- 胜率配色（沿用 gradientWr 绿色系） ---- */
+    function gradientWr(pct) {
+      if (pct == null) return { bg: "transparent", fc: "var(--text-muted)" };
+      if (pct >= 80) return { bg: "#14532d", fc: "#bbf7d0" };
+      if (pct >= 70) return { bg: "#16a34a", fc: "#ffffff" };
+      if (pct >= 60) return { bg: "#fef08a", fc: "#713f12" };
+      if (pct >= 50) return { bg: "#fcd34d", fc: "#78350f" };
+      return { bg: "#fecaca", fc: "#991b1b" };
+    }
+
+    function wrCell(pct) {
+      const { bg, fc } = gradientWr(pct);
+      const txt = pct != null ? pct + "%" : "—";
+      return `<span class="wr-cell" style="background:${bg};color:${fc};">${txt}</span>`;
+    }
+
+    function numCell(v) {
+      if (v == null) return `<span style="color:var(--text-muted);">—</span>`;
+      return `<strong>${v}</strong>`;
+    }
+
+    /* ---- 排序 ---- */
+    function getSortVal(p, col) {
+      switch (col) {
+        case "idx":              return p._idx;
+        case "player":           return p.player;
+        case "first_no1_date":   return p.first_no1_date ?? "9999-99-99";
+        case "1st_age":         return calcAge(p.dob, p.first_no1_date) ?? 999;
+        case "last_no1_date":   return p.last_no1_date ?? "9999-99-99";
+        case "last_age":        return calcAge(p.dob, p.last_no1_date) ?? 999;
+        case "weeks_total":      return p.weeks_total ?? -1;
+        case "weeks_consecutive":return p.weeks_consecutive ?? -1;
+        case "gs":               return p.gs ?? -1;
+        case "wta1000":          return p.wta1000 ?? -1;
+        case "win_rate_overall": return p.win_rate_overall ?? -1;
+        case "hard_wr":          return p.hard?.win_rate ?? -1;
+        case "clay_wr":          return p.clay?.win_rate ?? -1;
+        case "grass_wr":         return p.grass?.win_rate ?? -1;
+        default: return null;
+      }
+    }
+
+    function sortData(data) {
+      return [...data].sort((a, b) => {
+        for (const { col, order } of sortState) {
+          let va = getSortVal(a, col), vb = getSortVal(b, col);
+          if (va == null && vb == null) continue;
+          if (va == null) return 1;
+          if (vb == null) return -1;
+          if (typeof va === "string") {
+            const c = va.localeCompare(vb);
+            if (c !== 0) return order === "asc" ? c : -c;
+          } else {
+            if (va < vb) return order === "asc" ? -1 : 1;
+            if (va > vb) return order === "asc" ? 1 : -1;
+          }
+        }
+        return 0;
+      });
+    }
+
+    function updateSortIndicators() {
+      document.querySelectorAll(".sortable").forEach(th => {
+        th.querySelector(".sort-indicator")?.remove();
+        th.classList.remove("sort-asc", "sort-desc");
+      });
+      if (!userSorted || !sortState.length) return;
+      const { col, order } = sortState[0];
+      const th = document.querySelector(`th[data-col="${col}"]`);
+      if (th) {
+        th.classList.add(order === "asc" ? "sort-asc" : "sort-desc");
+        const sp = document.createElement("span");
+        sp.className = "sort-indicator";
+        th.appendChild(sp);
+      }
+    }
+
+    document.querySelectorAll(".sortable").forEach(th => {
+      th.addEventListener("click", () => {
+        const col = th.getAttribute("data-col");
+        userSorted = true;
+        const idx = sortState.findIndex(s => s.col === col);
+        const newOrder = idx !== -1 && sortState[idx].order === "desc" ? "asc" : "desc";
+        if (idx !== -1) sortState.splice(idx, 1);
+        sortState.unshift({ col, order: newOrder });
+        renderTable();
+      });
+    });
+
+    /* ---- 渲染 ---- */
+    function renderTable() {
+      const sorted = sortData(allData);
+      document.getElementById("player-count").textContent =
+        t("no1Club_player_count", sorted.length);
+
+      let html = "";
+      sorted.forEach((p, i) => {
+        const dob    = p.dob    ?? "—";
+        const height = p.height ? ` · ${p.height}cm` : "";
+        const dot    = p.active
+          ? `<span class="active-dot" title="${t("no1Club_footer_active")}"></span>`
+          : "";
+
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td class="td-player">
+            ${getFlagImg(p.ioc)}${p.player}${dot}
+            <br><span class="player-dob">(${dob}${height})</span>
+          </td>
+          <td class="surf-sep">${p.first_no1_date ?? "—"}</td>
+          <td>${(() => { const a = calcAge(p.dob, p.first_no1_date); return a != null ? a.toFixed(2) : "—"; })()}</td>
+          <td>${p.last_no1_date ?? "—"}</td>
+          <td>${(() => { const a = calcAge(p.dob, p.last_no1_date); return a != null ? a.toFixed(2) : "—"; })()}</td>
+          <td><strong>${p.weeks_total ?? "—"}</strong></td>
+          <td>${p.weeks_consecutive ?? "—"}</td>
+          <td class="surf-sep">${numCell(p.gs)}</td>
+          <td>${numCell(p.wta1000)}</td>
+          <td class="surf-sep">${wrCell(p.win_rate_overall)}</td>
+          <td class="surf-sep">${wrCell(p.hard?.win_rate)}</td>
+          <td class="surf-sep">${wrCell(p.clay?.win_rate)}</td>
+          <td class="surf-sep">${wrCell(p.grass?.win_rate)}</td>
+        </tr>`;
+      });
+
+      document.getElementById("table-body").innerHTML = html ||
+        `<tr><td colspan="14" style="padding:40px;text-align:center;color:var(--text-muted);">${t("no1Club_no_data")}</td></tr>`;
+
+      updateSortIndicators();
+      renderFooter();
+    }
+
+    /* ---- 脚注 ---- */
+    function renderFooter() {
+      const wrDots = [
+        ["#14532d", "#bbf7d0", "≥80%"],
+        ["#16a34a", "#ffffff", "≥70%"],
+        ["#fef08a", "#713f12", "≥60%"],
+        ["#fcd34d", "#78350f", "≥50%"],
+        ["#fecaca", "#991b1b", "<50%"],
+      ];
+      const wrHtml = wrDots.map(([bg, fc, lbl]) =>
+        `<span style="display:inline-flex;align-items:center;gap:3px;margin-right:6px;">` +
+        `<span class="legend-dot" style="background:${bg};"></span>${lbl}</span>`
+      ).join("");
+      document.getElementById("table-footer").innerHTML =
+        `<span>${t("no1Club_footer_wr_lbl")}</span> ${wrHtml}`;
+    }
+
+    /* ---- 加载数据 ---- */
+    async function loadData() {
+      try {
+        const res = await fetch("../output/wta_no1_players.json");
+        const json = await res.json();
+        allData = json.players.map((p, i) => ({ ...p, _idx: i }));
+        document.getElementById("last-updated").textContent =
+          json.meta?.last_updated ?? "—";
+        renderTable();
+      } catch (err) {
+        console.error("Load failed:", err);
+        document.getElementById("table-body").innerHTML =
+          `<tr><td colspan="14" style="padding:40px;text-align:center;color:#b91c1c;">${t("load_fail")}</td></tr>`;
+      }
+    }
+
+    loadData();
+
+    document.addEventListener("langchange", () => renderTable());
+    applyLang(currentLang);
+  </script>
+</body>
+
+</html>

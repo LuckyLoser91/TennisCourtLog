@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-C15B9S69WR");
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>WTA Top 100 · Surface Win Rate & Titles</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751" />
+
+  <script src="../common/js/i18n.js"></script>
+
+  <style>
+    body {
+      margin: 0 auto;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
+    .table {
+      min-width: 1378px;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: var(--bg-card) !important;
+      font-size: 12.5px;
+      margin-bottom: 0;
+    }
+
+    /* 列宽 */
+    col.c-no {
+      width: 36px;
+    }
+
+    col.c-player {
+      width: 155px;
+    }
+
+    col.c-dob {
+      width: 118px;
+    }
+
+    col.c-titles {
+      width: 54px;
+    }
+
+    col.c-agg {
+      width: 70px;
+    }
+
+    col.c-vs8 {
+      width: 78px;
+    }
+
+    col.c-hard {
+      width: 70px;
+    }
+
+    col.c-hard-t {
+      width: 230px;
+    }
+
+    col.c-clay {
+      width: 70px;
+    }
+
+    col.c-clay-t {
+      width: 150px;
+    }
+
+    col.c-grass {
+      width: 70px;
+    }
+
+    col.c-grass-t {
+      width: 130px;
+    }
+
+    /* 双行表头：分组行 */
+    .table thead tr:first-child th {
+      border-bottom: none !important;
+      padding-bottom: 3px;
+      font-size: 10px !important;
+      letter-spacing: 0.1em;
+      color: #a78b5e;
+    }
+
+    .table thead th {
+      padding: 10px 6px;
+    }
+
+    /* 行样式 */
+    .table td {
+      padding: 8px 6px;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      background: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .table tbody tr:nth-child(odd) td {
+      background: var(--bg-card);
+    }
+
+    .table tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    .table tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    /* 球员列左对齐 */
+    td.td-player {
+      text-align: left !important;
+      padding-left: 10px !important;
+      font-weight: 600;
+    }
+
+    /* 明细列左对齐 */
+    td.td-breakdown {
+      text-align: left !important;
+      padding-left: 8px !important;
+      color: var(--text-muted);
+      font-size: 11.5px !important;
+    }
+
+    .col-no {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .col-rank {
+      display: inline-block;
+      min-width: 22px;
+      font-size: 11px;
+      color: var(--text-hint);
+      font-weight: 400;
+      margin-right: 2px;
+    }
+
+    /* 胜率单元格 */
+    .wr-cell {
+      border-radius: 5px;
+      padding: 3px 5px;
+      display: block;
+      text-align: center;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .wr-sub {
+      font-size: 10.5px;
+      font-weight: 400;
+      opacity: 0.82;
+    }
+
+    /* 冠军数单元格 */
+    .titles-cell {
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 3px 0;
+      display: block;
+      text-align: center;
+    }
+
+    /* 场地分隔线 */
+    th.surf-sep,
+    td.surf-sep {
+      border-left: 1px solid var(--border-main) !important;
+    }
+
+
+    .legend-dot {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    /* 明细 tag */
+    .t-tag {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 2px;
+      white-space: nowrap;
+    }
+
+    .t-gs {
+      background: var(--level-gs-bg);
+      color: var(--level-gs-color);
+    }
+
+    .t-1000 {
+      background: var(--level-1000-bg);
+      color: var(--level-1000-color);
+    }
+
+    .t-500 {
+      background: var(--level-500-bg);
+      color: var(--level-500-color);
+    }
+
+    .t-250 {
+      background: var(--level-250-bg);
+      color: var(--level-250-color);
+    }
+
+    .t-finals {
+      background: var(--level-finals-bg);
+      color: var(--level-finals-color);
+    }
+
+    .t-elite {
+      background: var(--level-other-bg);
+      color: var(--level-other-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div style="padding:16px 24px;">
+    <table class="table table-hover table-sm mb-0">
+      <caption style="caption-side:top;padding:0 0 12px 0;text-align:left;color:inherit;">
+        <!-- 标题行 -->
+        <div class="d-flex align-items-center mb-2">
+          <h1 class="mb-0" data-i18n="top100Surface_title">🎾 WTA Top 100 · Surface Win Rate &amp; Titles</h1>
+          <div class="ms-auto d-flex gap-2 align-items-center">
+            <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+            <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+          </div>
+        </div>
+        <!-- 统计栏 -->
+        <div class="d-flex align-items-center">
+          <span class="top-meta">
+            <span id="player-count" class="count-label">100 players</span>
+            &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click headers to sort</span>
+            &nbsp;|&nbsp; <span data-i18n="last_updated">Last updated:</span>
+            <span id="last-updated"></span>
+          </span>
+        </div>
+      </caption>
+
+      <colgroup>
+        <col class="c-no" />
+        <col class="c-player" />
+        <col class="c-dob" />
+        <col class="c-titles" />
+        <col class="c-agg" />
+        <col class="c-vs8" />
+        <col class="c-hard" />
+        <col class="c-hard-t" />
+        <col class="c-clay" />
+        <col class="c-clay-t" />
+        <col class="c-grass" />
+        <col class="c-grass-t" />
+      </colgroup>
+
+      <thead>
+        <!-- 分组标签行 -->
+        <tr>
+          <th colspan="4"></th>
+          <th colspan="2" style="text-align:center;border-left:1px solid var(--border-main);"
+            data-i18n="top100Surface_th_winrate">WIN RATE</th>
+          <th colspan="2"
+            style="text-align:center;border-left:1px solid var(--border-main);background:var(--surface-hard-bg);color:var(--surface-hard-text);"
+            data-i18n="top100Surface_th_hard">HARD</th>
+          <th colspan="2"
+            style="text-align:center;border-left:1px solid var(--border-main);background:var(--surface-clay-bg);color:var(--surface-clay-text);"
+            data-i18n="top100Surface_th_clay">CLAY</th>
+          <th colspan="2"
+            style="text-align:center;border-left:1px solid var(--border-main);background:var(--surface-grass-bg);color:var(--surface-grass-text);"
+            data-i18n="top100Surface_th_grass">GRASS</th>
+        </tr>
+        <!-- 具体列标题行 -->
+        <tr>
+          <th data-i18n="th_no">#</th>
+          <th class="sortable" data-col="name" data-i18n="th_player">PLAYER</th>
+          <th class="sortable" data-col="dob" data-i18n="th_dob">DOB</th>
+          <th class="sortable" data-col="titles" data-i18n="th_titles">TITLES</th>
+
+          <th class="sortable surf-sep" data-col="agg" data-i18n="th_agg">AGG</th>
+
+          <th class="sortable" data-col="vs8" data-i18n="top100Surface_th_vstop8">VS TOP8</th>
+
+          <th class="sortable surf-sep" data-col="hard_pct" data-i18n="top100Surface_th_winrate">WIN RATE</th>
+          <th data-i18n="top100Surface_th_breakdown">BREAKDOWN</th>
+
+          <th class="sortable surf-sep" data-col="clay_pct" data-i18n="top100Surface_th_winrate">WIN RATE</th>
+          <th data-i18n="top100Surface_th_breakdown">BREAKDOWN</th>
+
+          <th class="sortable surf-sep" data-col="grass_pct" data-i18n="top100Surface_th_winrate">WIN RATE</th>
+          <th data-i18n="top100Surface_th_breakdown">BREAKDOWN</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr>
+          <td colspan="12" class="loading">Loading…</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="table-footer-row">
+          <td colspan="12" id="table-footer"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <script type="module">
+    import { getFlagImg, fmtWinrate, aggBg, aggColor, surfBg, surfColor, titlesBg, titlesFc } from "../common/js/utils.js?v=202606170751";
+
+    let allData = [];
+    let refDate = null; // 最近更新日期，用作年龄计算基准
+
+    /* ---- 年龄计算 ---- */
+    function calcAge(dob) {
+      if (!dob || !refDate) return null;
+      const d1 = new Date(dob);
+      if (isNaN(d1.getTime())) return null;
+      const ageYears = (refDate - d1) / (1000 * 60 * 60 * 24 * 365.25);
+      return ageYears.toFixed(2);
+    }
+
+    /* ---- 明细标签 ---- */
+    function buildBreakdown(titles) {
+      if (!titles) return "—";
+      const parts = [];
+      if (titles.grandSlam) parts.push(`<span class="t-tag t-gs">GS×${titles.grandSlam}</span>`);
+      if (titles.yearEndFinals) parts.push(`<span class="t-tag t-finals">Finals×${titles.yearEndFinals}</span>`);
+      if (titles.wta1000) parts.push(`<span class="t-tag t-1000">1000×${titles.wta1000}</span>`);
+      if (titles.wta500) parts.push(`<span class="t-tag t-500">500×${titles.wta500}</span>`);
+      if (titles.wta250) parts.push(`<span class="t-tag t-250">250×${titles.wta250}</span>`);
+      if (titles.finals) parts.push(`<span class="t-tag t-elite">Elite×${titles.finals}</span>`);
+      return parts.length ? parts.join(" ") : "—";
+    }
+
+    /* ---- 胜率分档配色（清晰易读）---- */
+    function gradientWr(pct) {
+      if (pct == null) return { bg: "transparent", fc: "var(--text-muted)" };
+      if (pct >= 80) return { bg: "#14532d", fc: "#bbf7d0" };
+      if (pct >= 70) return { bg: "#16a34a", fc: "#ffffff" };
+      if (pct >= 60) return { bg: "#fef08a", fc: "#713f12" };
+      if (pct >= 50) return { bg: "#fcd34d", fc: "#78350f" };
+      return { bg: "#fecaca", fc: "#991b1b" };
+    }
+
+    /* ---- 胜率单元格 ---- */
+    function wrCell(surf) {
+      const pct = surf.pct;
+      const c = gradientWr(pct);
+      const pctTxt = pct != null ? pct + "%" : "—";
+      const wlTxt = surf.total > 0 ? `${surf.w}-${surf.l}` : "";
+      return `<span style="display:inline-block;border-radius:5px;padding:3px 8px;background:${c.bg};color:${c.fc};font-weight:600;font-size:13px;min-width:48px;text-align:center;">
+          ${pctTxt}${wlTxt ? `<br><span style="font-size:10.5px;opacity:0.8;">${wlTxt}</span>` : ""}
+        </span>`;
+    }
+    /* ---- 冠军数配色 ---- */
+    function titlesCell(n) {
+      return `<span class="titles-cell" style="background:${titlesBg(n)};color:${titlesFc(n)};">${n}</span>`;
+    }
+
+    /* ---- 排序 ---- */
+    let sortState = [{ col: "rank", order: "asc" }];
+    let userSorted = false;
+
+    function getSortVal(p, col) {
+      switch (col) {
+        case "rank": return p.rank;
+        case "name": return p.rank;   // player列点击按rank排序
+        case "dob": return p.dateOfBirth ?? "";
+        case "titles": return p.titles.total;
+        case "agg": return p.overall.pct ?? -1;
+        case "vs8": return p.vsTop8?.pct ?? -1;
+        case "hard_pct": return p.surface.Hard.pct ?? -1;
+        case "clay_pct": return p.surface.Clay.pct ?? -1;
+        case "grass_pct": return p.surface.Grass.pct ?? -1;
+        default: return null;
+      }
+    }
+
+    function sortData(data) {
+      return [...data].sort((a, b) => {
+        for (const { col, order } of sortState) {
+          let va = getSortVal(a, col), vb = getSortVal(b, col);
+          if (va == null && vb == null) continue;
+          if (va == null) return 1;
+          if (vb == null) return -1;
+          if (typeof va === "string") {
+            const c = va.localeCompare(vb);
+            if (c !== 0) return order === "asc" ? c : -c;
+          } else {
+            if (va < vb) return order === "asc" ? -1 : 1;
+            if (va > vb) return order === "asc" ? 1 : -1;
+          }
+        }
+        return 0;
+      });
+    }
+
+    function updateSortIndicators() {
+      document.querySelectorAll(".sortable").forEach(th => {
+        th.querySelector(".sort-indicator")?.remove();
+      });
+      if (!userSorted || !sortState.length) return;
+      const { col, order } = sortState[0];
+      const th = document.querySelector(`th[data-col="${col}"]`);
+      if (th) {
+        const sp = document.createElement("span");
+        sp.className = "sort-indicator";
+        sp.textContent = " " + (order === "asc" ? "▲" : "▼");
+        th.appendChild(sp);
+      }
+    }
+
+    document.querySelectorAll(".sortable").forEach(th => {
+      th.addEventListener("click", () => {
+        const col = th.getAttribute("data-col");
+        userSorted = true;
+        const idx = sortState.findIndex(s => s.col === col);
+        const newOrder = idx !== -1 && sortState[idx].order === "desc" ? "asc" : "desc";
+        if (idx !== -1) sortState.splice(idx, 1);
+        sortState.unshift({ col, order: newOrder });
+        renderTable();
+      });
+    });
+
+    /* ---- 渲染 ---- */
+    function renderTable() {
+      const sorted = sortData(allData);
+      document.getElementById("player-count").textContent = t("top100Surface_player_count", sorted.length);
+
+      let html = "";
+      sorted.forEach((p, idx) => {
+        const hard = p.surface.Hard;
+        const clay = p.surface.Clay;
+        const grass = p.surface.Grass;
+        html += `<tr>
+            <td class="col-no">${idx + 1}</td>
+            <td class="td-player">
+              ${getFlagImg(p.countryCode)}<span class="col-rank">#${p.rank}</span> ${p.fullName}
+            </td>
+            <td style="color:var(--text-primary);font-size:12.5px;white-space:nowrap;">
+              ${p.dateOfBirth ?? "—"}${calcAge(p.dateOfBirth) !== null ? ` (${calcAge(p.dateOfBirth)})` : ""}
+            </td>
+            <td style="font-weight:600; text-align:center;">${p.titles.total || 0}</td>
+
+            <td class="surf-sep">${wrCell({ pct: p.overall.pct, w: p.overall.w, l: p.overall.l, total: p.overall.total })}</td>
+
+            <td>${p.vsTop8 && p.vsTop8.total > 0 ? wrCell(p.vsTop8) : `<span style="color:var(--text-muted);">—</span>`}</td>
+
+            <td class="surf-sep">${wrCell(hard)}</td>
+            <td class="td-breakdown">${buildBreakdown(hard.titles)}</td>
+
+            <td class="surf-sep">${wrCell(clay)}</td>
+            <td class="td-breakdown">${buildBreakdown(clay.titles)}</td>
+
+            <td class="surf-sep">${wrCell(grass)}</td>
+            <td class="td-breakdown">${buildBreakdown(grass.titles)}</td>
+          </tr>`;
+      });
+
+      document.getElementById("table-body").innerHTML = html ||
+        `<tr><td colspan="12" style="padding:40px;text-align:center;color:var(--text-muted);">${t("top100Surface_no_data")}</td></tr>`;
+      updateSortIndicators();
+      renderFooter();
+    }
+
+    /* ---- 脚注 ---- */
+    function renderFooter() {
+      const wrDots = [
+        ["#14532d", "#bbf7d0", "≥80%"],
+        ["#16a34a", "#ffffff", "≥70%"],
+        ["#fef08a", "#713f12", "≥60%"],
+        ["#fcd34d", "#78350f", "≥50%"],
+        ["#fecaca", "#991b1b", "<50%"],
+      ];
+      const wrHtml = wrDots.map(([bg, fc, lbl]) =>
+        `<span style="display:inline-flex;align-items:center;gap:3px;margin-right:6px;">` +
+        `<span class="legend-dot" style="background:${bg};"></span>${lbl}</span>`
+      ).join("");
+      document.getElementById("table-footer").innerHTML =
+        `<span>${t("top100Surface_footer_wr_lbl")}</span> ${wrHtml}`;
+    }
+
+    /* ---- 加载数据 ---- */
+    async function loadData() {
+      try {
+        const res = await fetch("../output/wta_top100_surface_stats.json");
+        const json = await res.json();
+        allData = json.data;
+        const ts = json.generated_at;
+        const dt = new Date(ts * 1000);
+        refDate = dt;
+        document.getElementById("last-updated").textContent =
+          dt.toISOString().slice(0, 10);
+        renderTable();
+      } catch (err) {
+        console.error("Load failed:", err);
+        document.getElementById("table-body").innerHTML =
+          `<tr><td colspan="12" style="padding:40px;text-align:center;color:#b91c1c;">${t("load_fail")}</td></tr>`;
+      }
+    }
+
+    loadData();
+
+    document.addEventListener("langchange", () => renderTable());
+    applyLang(currentLang);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-C15B9S69WR');
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Grand Slam · At Age (by Birth Year)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751">
+  <style>
+    body {
+      padding: 28px 24px 64px;
+      max-width: 1280px;
+      min-width: 820px;
+    }
+
+    h1 {
+      font-size: 21px !important;
+    }
+
+    .table {
+      width: 100%;
+      table-layout: fixed;
+      margin-bottom: 0;
+      font-size: 13px;
+    }
+
+    /* 第二列左对齐 */
+    #table-body td:nth-child(2) {
+      text-align: left !important;
+      padding-left: 12px !important;
+      font-weight: 600;
+    }
+
+    /* 分组表头行去掉下边框 */
+    .table thead tr:first-child th {
+      border-bottom: none !important;
+      font-size: 10px !important;
+      color: #a78b5e;
+      padding-bottom: 2px;
+    }
+
+    /* Titles 色块 */
+    .titles-cell {
+      border-radius: 5px;
+      padding: 3px 6px;
+      display: inline-block;
+      font-weight: 700;
+      font-size: 12px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .t1 {
+      background: var(--titles-1-bg);
+      color: var(--titles-1-color);
+    }
+
+    .t2 {
+      background: var(--titles-2-bg);
+      color: var(--titles-2-color);
+    }
+
+    .t5 {
+      background: var(--titles-5-bg);
+      color: var(--titles-5-color);
+    }
+
+    .t10 {
+      background: var(--titles-10-bg);
+      color: var(--titles-10-color);
+    }
+
+    .year-badge {
+      background: var(--bg-header);
+      border: 1px solid var(--border-main);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .dob-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    body>.row {
+      flex-wrap: nowrap !important;
+    }
+
+    body>.row>.col {
+      flex: 1 1 auto !important;
+      max-width: none !important;
+      width: auto !important;
+    }
+
+    body>.row>.col-auto {
+      flex: 0 0 auto !important;
+    }
+
+    body>.row .d-flex.gap-2 {
+      flex-wrap: nowrap !important;
+    }
+
+    #ageSelect {
+      width: 85px;
+    }
+  </style>
+  <script src="../common/js/i18n.js"></script>
+</head>
+
+<body>
+
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <h1 class="mb-0" data-i18n="gsAtAge_title">🏆 Grand Slam · Performance at Age (based on Birth Year)</h1>
+    </div>
+    <div class="col-auto d-flex gap-2 align-items-center">
+      <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+      <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+    </div>
+  </div>
+
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <small class="text-muted">
+        <span id="player-count" class="fw-bold text-warning">0 players</span>
+        &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click headers to sort</span>
+        &nbsp;|&nbsp; <span data-i18n="last_updated">Last updated:</span> <span id="last-updated"></span>
+      </small>
+    </div>
+    <div class="col-auto">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex align-items-center gap-1">
+          <label for="tourSelect" class="form-label mb-0 text-nowrap" data-i18n="label_tour">TOUR:</label>
+          <select id="tourSelect" class="form-select form-select-sm">
+            <option value="wta" selected>WTA</option>
+            <option value="atp">ATP</option>
+          </select>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <label for="ageSelect" class="form-label mb-0 text-nowrap" data-i18n="gsAtAge_label_age">AGE:</label>
+          <select id="ageSelect" class="form-select form-select-sm"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover table-sm mb-0">
+    <colgroup>
+      <col style="width: 40px;">
+      <col style="width: 200px;">
+      <col style="width: 55px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 50px;">
+      <col style="width: 40px;">
+      <col style="width: 40px;">
+      <col style="width: 88px;">
+      <col style="width: 65px;">
+    </colgroup>
+    <thead>
+      <tr>
+        <th colspan="3"></th>
+        <th colspan="4" style="text-align:center; padding-bottom:2px;" data-i18n="gsAtAge_th_gs_result">GRAND SLAM
+          RESULT</th>
+        <th colspan="4"></th>
+      </tr>
+      <tr>
+        <th data-i18n="th_no">#</th>
+        <th style="text-align:left; padding-left:12px;" data-i18n="th_player">PLAYER</th>
+        <th data-i18n="gsAtAge_th_year">YEAR</th>
+        <th>AO</th>
+        <th>RG</th>
+        <th>WIM</th>
+        <th>USO</th>
+        <th class="sortable" data-col="W" data-i18n="th_w">W<span class="sort-indicator"></span></th>
+        <th data-i18n="th_l">L</th>
+        <th class="sortable" data-col="ageTitles" data-i18n="gsAtAge_th_cum_titles">CUM. TITLES<span
+            class="sort-indicator"></span></th>
+        <th class="sortable" data-col="careerTitles" data-i18n="gsAtAge_th_career">CAREER<span
+            class="sort-indicator"></span></th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+
+  <script type="module">
+    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "../common/js/utils.js?v=202606170751";
+
+    (function () {
+      let fullData = { atp: [], wta: [], meta: {} };
+      let currentTour = 'wta';
+      let currentAge = null;
+      let sortState = { col: 'ageTitles', order: 'desc' };
+      const secondarySort = [
+        { col: 'W', order: 'desc' },
+        { col: 'careerTitles', order: 'desc' }
+      ];
+
+      function titlesCls(n) {
+        if (n >= 10) return 'titles-cell t10';
+        if (n >= 5) return 'titles-cell t5';
+        if (n >= 2) return 'titles-cell t2';
+        if (n >= 1) return 'titles-cell t1';
+        return 'titles-cell';
+      }
+
+      function getSortValue(player, entry, col) {
+        if (col === 'W') return entry.W;
+        if (col === 'ageTitles') return entry.titles;
+        if (col === 'careerTitles') return player.career_titles;
+        return 0;
+      }
+
+      function sortPlayers(players, entriesMap) {
+        return players.sort((a, b) => {
+          const eA = entriesMap.get(a.name);
+          const eB = entriesMap.get(b.name);
+          if (!eA || !eB) return 0;
+          let valA = getSortValue(a, eA, sortState.col);
+          let valB = getSortValue(b, eB, sortState.col);
+          if (valA !== valB) return sortState.order === 'desc' ? valB - valA : valA - valB;
+          for (let sec of secondarySort) {
+            valA = getSortValue(a, eA, sec.col);
+            valB = getSortValue(b, eB, sec.col);
+            if (valA !== valB) return sec.order === 'desc' ? valB - valA : valA - valB;
+          }
+          return a.name.localeCompare(b.name);
+        });
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll('.sortable').forEach(th => {
+          const ind = th.querySelector('.sort-indicator');
+          if (ind) ind.textContent = th.dataset.col === sortState.col
+            ? (sortState.order === 'desc' ? ' ▼' : ' ▲') : '';
+        });
+      }
+
+      function render() {
+        const players = fullData[currentTour] || [];
+        const entriesMap = new Map();
+        const valid = players.filter(p => {
+          const e = p.age_entries.find(e => e.age === currentAge);
+          if (e) { entriesMap.set(p.name, e); return true; }
+          return false;
+        });
+        document.getElementById('player-count').textContent = t('gsAtAge_player_count', valid.length);
+        sortPlayers(valid, entriesMap);
+        updateSortIndicators();
+
+        let html = '';
+        valid.forEach((player, idx) => {
+          const e = entriesMap.get(player.name);
+          const career = player.career_titles || 0;
+          html += `<tr>
+            <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
+            <td style="text-align:left;padding-left:12px;font-weight:600;color:var(--text-primary);">
+              ${getFlagImg(player.ioc)} ${player.name}
+              <span class="dob-text">(${player.dob || '—'})</span>
+            </td>
+            <td>${e.year ? `<span class="year-badge">${e.year}</span>` : '—'}</td>
+            <td>${fmtRound(e.AO)}</td>
+            <td>${fmtRound(e.RG)}</td>
+            <td>${fmtRound(e.WIM)}</td>
+            <td>${fmtRound(e.USO)}</td>
+            <td style="color:var(--text-secondary);font-weight:600;">${e.W}</td>
+            <td style="color:var(--text-muted);">${e.L}</td>
+            <td style="text-align:center;">
+              <span class="${titlesCls(e.titles)}">${e.titles}/${e.cumulative_titles}</span>
+            </td>
+            <td style="text-align:center;">
+              <span class="${titlesCls(career)}">${career}</span>
+            </td>
+          </tr>`;
+        });
+        document.getElementById('table-body').innerHTML = html ||
+          `<tr><td colspan="11" style="padding:40px;color:var(--text-muted);text-align:center;">${t('gsAtAge_no_data')}</td></tr>`;
+      }
+
+      function initAgeSelect() {
+        const sel = document.getElementById('ageSelect');
+        const meta = fullData.meta;
+        for (let age = meta.min_age; age <= meta.max_age; age++) {
+          const o = document.createElement('option');
+          o.value = age; o.textContent = age;
+          sel.appendChild(o);
+        }
+        currentAge = meta.min_age;
+        sel.value = currentAge;
+        sel.addEventListener('change', e => { currentAge = parseInt(e.target.value); render(); });
+      }
+
+      function bindSort() {
+        document.querySelectorAll('.sortable').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (!col) return;
+            if (sortState.col === col) sortState.order = sortState.order === 'desc' ? 'asc' : 'desc';
+            else { sortState.col = col; sortState.order = 'desc'; }
+            render();
+          });
+        });
+      }
+
+      async function loadData() {
+        try {
+          const res = await fetch('../output/gs_champions_by_age_year.json');
+          fullData = await res.json();
+          initAgeSelect();
+          bindSort();
+          render();
+        } catch (err) {
+          document.getElementById('table-body').innerHTML =
+            `<tr><td colspan="11" style="padding:40px;color:#b91c1c;text-align:center;">${t('load_fail')}</td></tr>`;
+        }
+      }
+
+      document.getElementById('tourSelect').addEventListener('change', e => {
+        currentTour = e.target.value; render();
+      });
+
+      loadData();
+      const el = document.getElementById('last-updated');
+      if (el) el.textContent = '2026-07-13';
+
+      document.addEventListener('langchange', () => {
+        document.title = t('gsAtAge_page_title');
+        render();
+      });
+    })();
+  </script>
+</body>
+
+</html>

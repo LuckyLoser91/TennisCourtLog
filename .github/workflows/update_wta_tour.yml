@@ -1,0 +1,71 @@
+name: 自动更新 WTA 赛事日历
+
+on:
+  schedule:
+    # 每周一 UTC 时间 20:00（北京时间 4:00）执行一次
+    - cron: '0 20 * * 1'
+
+  # 允许手动在 Actions 页面点击触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-wta-calendar:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
+
+      # 2. 配置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas numpy unidecode openpyxl
+
+      # 4. 运行 WTA 日历更新脚本
+      - name: 运行 update_wta_tour_champs.py
+        run: python updates/update_wta_tour_champs.py
+      
+      # 5. 运行 WTA & ATP 最新matches更新脚本
+      - name: 运行 update_tour_matches_uk.py
+        run: python updates/update_tour_matches_uk.py
+
+      # 6. 统计 Top N 球员大赛数据
+      - name: 运行 update_big_tournament_stats.py
+        run: python updates/update_big_tournament_stats.py
+      
+      # 7. 运行 update_top100_surface_stats.py 更新 WTA Top 100 场地表现数据
+      - name: 运行 update_top100_surface_stats.py
+        run: python updates/update_top100_surface_stats.py
+      
+      # 8. 运行 update_no1_weekly.py 更新 WTA 世界第一球员数据
+      - name: 运行 update_no1_weekly.py
+        run: python updates/update_no1_weekly.py
+
+      # 9. 检查文件变化并提交
+      - name: 检查文件变化并提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git add output/ tennis_wta/ tennis_atp/
+          if git diff --cached --quiet; then
+            echo "✅ WTA 数据无变化，跳过提交"
+          else
+            git commit -m "🎾 Auto-update WTA calendar [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push --force origin HEAD:main
+            echo "✅ WTA 日历数据已更新并推送"
+          fi

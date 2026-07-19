@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-C15B9S69WR');
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <script src="../common/js/i18n.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title> WTA Top 100 · Big Tournament Stats</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751" />
+  <style>
+    body {
+      min-width: 680px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .text-muted {
+      color: var(--text-muted) !important;
+    }
+
+    .text-warning {
+      color: var(--accent) !important;
+      font-weight: 600;
+    }
+
+    .btn-outline-warning {
+      color: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .btn-outline-warning:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-outline-warning:focus {
+      box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+    }
+
+    .sort-indicator {
+      color: var(--accent) !important;
+      font-size: 10px !important;
+      opacity: 1 !important;
+    }
+
+    .text-left {
+      text-align: left !important;
+      padding-left: 15px !important;
+    }
+
+
+    /* ===== 表格整体 ===== */
+    #stats-table {
+      min-width: 520px;
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: var(--bg-card) !important;
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    /* ===== 列宽分配 ===== */
+    /* Player View 列宽 */
+    .player-view col.c-no {
+      width: 40px;
+    }
+
+    .player-view col.c-tournament {
+      width: 160px;
+    }
+
+    .player-view col.c-level {
+      width: 90px;
+    }
+
+    .player-view col.c-surface {
+      width: 120px;
+    }
+
+    .player-view col.c-best {
+      width: 90px;
+    }
+
+    .player-view col.c-w {
+      width: 48px;
+    }
+
+    .player-view col.c-l {
+      width: 48px;
+    }
+
+    .player-view col.c-wr {
+      width: 55px;
+    }
+
+    /* Tournament View 列宽 */
+    .tournament-view col.c-no {
+      width: 38px;
+    }
+
+    .tournament-view col.c-player {
+      width: 195px;
+    }
+
+    .tournament-view col.c-dob {
+      width: 90px;
+    }
+
+    .tournament-view col.c-best {
+      width: 75px;
+    }
+
+    .tournament-view col.c-w {
+      width: 48px;
+    }
+
+    .tournament-view col.c-l {
+      width: 48px;
+    }
+
+    .tournament-view col.c-wr {
+      width: 55px;
+    }
+
+    /* ===== 表头 ===== */
+    #stats-table thead th {
+      background: var(--bg-header) !important;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 10px 6px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    #stats-table th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    #stats-table th.sortable:hover {
+      background: var(--bg-hover) !important;
+      color: var(--accent);
+    }
+
+    #stats-table th .sort-indicator {
+      margin-left: 4px;
+      font-size: 10px;
+      display: inline-block;
+      vertical-align: middle;
+      color: var(--accent) !important;
+      opacity: 1 !important;
+    }
+
+    /* ===== 表格行 ===== */
+    #stats-table td {
+      padding: 9px 6px;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 13px;
+      background: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 选手列左对齐 */
+    #stats-table td.player-cell {
+      text-align: left !important;
+      padding-left: 12px !important;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* 赛事列居中 */
+    #stats-table td.tournament-cell {
+      text-align: center !important;
+      padding-left: 12px !important;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* 序号列 */
+    .col-no {
+      color: var(--text-hint);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .form-select,
+    .form-control {
+      font-size: 13px !important;
+      padding: 6px 12px !important;
+      background-color: var(--bg-input) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--border-input) !important;
+      -webkit-text-fill-color: var(--text-primary) !important;
+      min-width: 150px;
+    }
+
+    .form-select:hover,
+    .form-control:hover {
+      border-color: var(--accent) !important;
+    }
+
+    .form-select:focus,
+    .form-control:focus {
+      background-color: var(--bg-input) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1) !important;
+    }
+
+    #player-select {
+      min-width: 200px;
+    }
+
+    #tourney-select {
+      min-width: 140px;
+    }
+
+    .form-label {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 0;
+    }
+
+    .summary-row td {
+      background: var(--bg-hover) !important;
+      font-weight: 700;
+      border-top: 2px solid var(--accent) !important;
+      border-bottom: 2px solid var(--accent) !important;
+      color: var(--text-primary);
+    }
+
+    /* 强制顶部行不换行，无视小屏断点 */
+    body>.row {
+      flex-wrap: nowrap !important;
+    }
+
+    body>.row>.col {
+      flex: 1 1 auto !important;
+      max-width: none !important;
+      width: auto !important;
+    }
+
+    body>.row>.col-auto {
+      flex: 0 0 auto !important;
+    }
+
+    body>.row .d-flex.gap-2 {
+      flex-wrap: nowrap !important;
+    }
+
+    /* 表格隔行交替色 */
+    #stats-table tbody tr:nth-child(odd) td {
+      background: var(--bg-card);
+    }
+
+    #stats-table tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    #stats-table tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    /* ===== 历史成绩 Modal ===== */
+    #hist-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 25, 23, 0.45);
+      z-index: 1050;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #hist-modal-backdrop.open {
+      display: flex;
+    }
+
+    #hist-modal {
+      background: #ffffff;
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 550px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    #hist-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-main);
+      background: var(--bg-header);
+      flex-shrink: 0;
+    }
+
+    #hist-modal-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    #hist-modal-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    #hist-modal-close {
+      background: none;
+      border: 1px solid var(--border-input);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    #hist-modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    #hist-modal-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    #hist-modal-footer {
+      padding: 11px 20px;
+      border-top: 1px solid var(--border-main);
+      text-align: right;
+      background: var(--bg-page);
+      flex-shrink: 0;
+    }
+
+    #hist-modal-footer button {
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    #hist-modal-footer button:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .hist-yr-block {
+      margin-bottom: 20px;
+    }
+
+    .hist-yr-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .hist-yr-hdr {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 7px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .hist-yr-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .hist-yr-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-header);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 2px 9px;
+    }
+
+    .hist-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .hist-tbl thead td {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 3px 6px 7px 6px;
+      text-align: center;
+      background: var(--bg-header);
+    }
+
+    .hist-tbl thead td.tleft {
+      text-align: left;
+    }
+    .hist-tbl td:nth-child(2) { width: 200px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+.hist-tbl td:nth-child(3) { width: 200px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+
+    .hist-tbl tbody tr {
+      border-top: 1px solid var(--border-light);
+    }
+
+    .hist-tbl tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    .hist-tbl tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    .hist-tbl td {
+      padding: 8px 6px;
+      color: var(--text-primary);
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      background: var(--bg-card);
+    }
+
+    .hist-tbl td.tleft {
+      text-align: left;
+    }
+
+    .hist-tbl td.muted {
+      color: var(--text-muted);
+    }
+
+    .hist-tbl td.bold {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hist-rd {
+      display: inline-block;
+      background: var(--bg-header);
+      border: 1px solid var(--border-main);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+    }
+
+    .hist-score {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .hist-badge-w {
+      background: var(--badge-W-bg);
+      color: var(--badge-W-color);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .hist-badge-l {
+      background: var(--bg-header);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
+      border: 1px solid var(--border-main);
+    }
+
+    #hist-no-data {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .hist-yr-row td {
+  background: var(--bg-page) !important;
+  padding: 0 6px;
+}
+
+    /* 可点击行 */
+    #stats-table tbody tr.clickable {
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+
+
+<!-- ========== 第一行：标题 + HOME 按钮 ========== -->
+<div class="row align-items-center mb-3">
+  <div class="col">
+    <h1 class="mb-0" data-i18n="bigTournament_title">📊 WTA Top 100 · Elite Event History</h1>
+  </div>
+  <div class="col-auto d-flex gap-2 align-items-center">
+    <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+    <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+  </div>
+</div>
+
+<!-- ========== 第二行：左侧文字 + 右侧筛选控件 ========== -->
+<!-- ========== 第二行：左侧文字 + 右侧筛选控件 ========== -->
+<div class="row align-items-center mb-4">
+  <div class="col">
+    <small class="text-muted">
+      <span class="text-warning" data-i18n="bigTournament_dblclick_hint"></span>
+      &nbsp;|&nbsp;<span id="last-updated"></span>
+    </small>
+  </div>
+  <div class="col-auto">
+    <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex align-items-center">
+        <label for="view-select" class="form-label mb-0 me-1 small text-nowrap"
+          data-i18n="bigTournament_label_view">View mode</label>
+        <select id="view-select" class="form-select form-select-sm">
+          <option value="tournament" selected data-i18n="bigTournament_opt_by_tourney">🏟️ By Tournament</option>
+          <option value="player" data-i18n="bigTournament_opt_by_player">🎾 By Player</option>
+        </select>
+      </div>
+      <div class="d-flex align-items-center" id="selector-container">
+        <!-- JS 动态填充第二个选择框 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 第三行：表格 ========== -->
+<div class="row">
+  <div class="col-12">
+
+    <table id="stats-table" class="table table-hover table-sm mb-0"></table>
+
+  </div>
+</div>
+
+<script type="module">
+  import { getFlagImg, fmtBestRound, fmtWinrate } from "../common/js/utils.js?v=202606170751";
+
+  // ---------- 辅助函数 ----------
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  }
+
+  // ---------- 常量 ----------
+  const ROUND_ORDER = {
+    'W': 8,
+    'F': 7,
+    'SF': 6,
+    'QF': 5,
+    'R16': 4,
+    'R32': 3,
+    'R64': 2,
+    'R128': 1
+  };
+
+  const LEVEL_ORDER = {
+    'Grand Slam': 1,
+    'WTA1000': 2
+  };
+
+  function normalizeLevel(level) {
+    if (!level) return '';
+    const trimmed = level.trim();
+    if (trimmed === 'WTA 1000' || trimmed === 'WTA1000') return 'WTA1000';
+    return trimmed;
+  }
+
+  function isBigLevel(level) {
+    const norm = normalizeLevel(level);
+    return norm === 'Grand Slam' || norm === 'WTA1000';
+  }
+
+  // ---------- 全局变量 ----------
+  let fullData = [];
+  let calendarData = [];
+  let currentView = 'tournament';
+  let currentSelected = null;
+  let currentSort = { column: null, direction: 'desc' };
+
+  const viewSelect = document.getElementById('view-select');
+  const selectorContainer = document.getElementById('selector-container');
+  const tableContainer = document.getElementById('stats-table');
+
+  // ---------- 加载数据 ----------
+  async function loadData() {
+    try {
+      const [statsRes, calendarRes] = await Promise.all([
+        fetch('../output/top100_big_tournament_stats.json'),
+        fetch('../output/calendar-2026.json')
+      ]);
+      const statsJson = await statsRes.json();
+      fullData = statsJson.data || statsJson;
+      const cal = await calendarRes.json();
+      calendarData = cal.content || [];
+      console.log(`✅ 加载 ${fullData.length} 名球员，${calendarData.length} 个赛事`);
+
+      // 设置更新时间 - 从 JSON 中读取时间戳并转换为浏览器本地时间
+      const updateEl = document.getElementById('last-updated');
+      if (updateEl && statsJson.last_updated) {
+        const date = new Date(statsJson.last_updated * 1000);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        updateEl.textContent = `${t('last_updated')} ${year}-${month}-${day}`;
+      }
+
+      initView();
+    } catch (err) {
+      console.error('❌ 加载失败:', err);
+      tableContainer.innerHTML = `<tr><td colspan="8" style="color:#b91c1c; padding:40px; text-align:center;">${t('load_fail')}</td></tr>`;
+    }
+  }
+
+  // ---------- 初始化 ----------
+  function initView() {
+    const tourneyList = getSortedTourneyList();
+    currentSelected = tourneyList[0]?.name || '';
+    currentView = 'tournament';
+    viewSelect.value = 'tournament';
+    currentSort = { column: null, direction: 'desc' };
+    renderSelector();
+    renderTable();
+  }
+
+  function buildTourneyInfoMap() {
+    const map = new Map();
+    calendarData.forEach(t => {
+      const group = t.tournamentGroup || {};
+      const rawName = group.name;
+      if (!rawName) return;
+      const name = toTitleCase(rawName);
+
+      const level = normalizeLevel(t.level);
+      if (!isBigLevel(level)) return;
+
+      const start = t.startDate || '';
+      const end = t.endDate || '';
+      const surface = t.surface || '';
+      const inOut = t.inOutdoor || '';
+      const surfaceFull = surface ? `${surface} (${inOut === 'O' ? 'Outdoor' : (inOut === 'I' ? 'Indoor' : '')})` : '';
+
+      if (!map.has(name)) {
+        map.set(name, { level, startDate: start, endDate: end, surface: surfaceFull });
+      }
+    });
+    return map;
+  }
+
+  function getSortedTourneyList() {
+    const infoMap = buildTourneyInfoMap();
+    const list = [];
+    for (let [name, info] of infoMap.entries()) {
+      list.push({ name, ...info });
+    }
+    list.sort((a, b) => {
+      const la = LEVEL_ORDER[a.level] || 99;
+      const lb = LEVEL_ORDER[b.level] || 99;
+      if (la !== lb) return la - lb;
+      return (a.startDate || '').localeCompare(b.startDate || '');
+    });
+    return list;
+  }
+
+  function renderSelector() {
+    let html = '';
+    if (currentView === 'player') {
+      const sorted = [...fullData].sort((a, b) => a.rank - b.rank);
+      html = `
+          <label for="player-select" class="form-label mb-0 me-1 small text-nowrap">${t("bigTournament_label_player")}</label>
+          <select id="player-select" class="form-select form-select-sm">
+            ${sorted.map(p => {
+        const sel = p.player_name === currentSelected ? 'selected' : '';
+        return `<option value="${p.player_name}" ${sel}>#${p.rank} ${p.player_name}</option>`;
+      }).join('')}
+          </select>
+        `;
+    } else {
+      const tourneyList = getSortedTourneyList();
+      if (!currentSelected || !tourneyList.some(t => t.name === currentSelected)) {
+        currentSelected = tourneyList[0]?.name || '';
+      }
+      html = `
+          <label for="tourney-select" class="form-label mb-0 me-1 small text-nowrap">${t("bigTournament_label_tournament")}</label>
+          <select id="tourney-select" class="form-select form-select-sm">
+            ${tourneyList.map(t => {
+        const sel = t.name === currentSelected ? 'selected' : '';
+        return `<option value="${t.name}" ${sel}>${t.name}</option>`;
+      }).join('')}
+          </select>
+        `;
+    }
+    selectorContainer.innerHTML = html;
+
+    const selectEl = currentView === 'player'
+      ? document.getElementById('player-select')
+      : document.getElementById('tourney-select');
+
+    if (selectEl) {
+      selectEl.addEventListener('change', (e) => {
+        currentSelected = e.target.value;
+        currentSort = { column: null, direction: 'desc' };
+        renderTable();
+      });
+    }
+  }
+
+  function renderTable() {
+    if (currentView === 'player') {
+      renderPlayerView();
+    } else {
+      renderTournamentView();
+    }
+    bindSortEvents();
+  }
+
+  function sortPlayerTournamentsDefault(tournaments) {
+    return [...tournaments].sort((a, b) => {
+      const la = LEVEL_ORDER[a.level] || 99;
+      const lb = LEVEL_ORDER[b.level] || 99;
+      if (la !== lb) return la - lb;
+      return (a.startDate || '').localeCompare(b.startDate || '');
+    });
+  }
+
+  function sortTournamentPlayersDefault(players) {
+    return [...players].sort((a, b) => a.rank - b.rank);
+  }
+
+  function renderPlayerView() {
+    const player = fullData.find(p => p.player_name === currentSelected);
+    if (!player) return;
+
+    const infoMap = buildTourneyInfoMap();
+    const tournaments = player.tournaments
+      .filter(t => isBigLevel(t.level))
+      .map(t => {
+        const calInfo = infoMap.get(t.tourney_name) || {};
+        const notPlayed = t.best_round == null;
+        return {
+          ...t,
+          level: normalizeLevel(t.level),
+          startDate: calInfo.startDate || '',
+          endDate: calInfo.endDate || '',
+          surface: calInfo.surface || '',
+          W: notPlayed ? -1 : t.W,
+          L: notPlayed ? -1 : t.L,
+          winrate: notPlayed ? -1 : t.winrate,
+          titles: t.titles || (t.best_round === 'W' ? 1 : 0)
+        };
+      });
+
+    let rows = tournaments;
+    if (currentSort.column && currentSort.column !== 'tournament') {
+      rows = sortRows(rows, currentSort.column, currentSort.direction);
+    } else {
+      rows = sortPlayerTournamentsDefault(rows);
+    }
+
+    // 添加 colgroup 用于列宽控制
+    let html = `
+        <colgroup class="player-view">
+          <col class="c-no">
+          <col class="c-tournament">
+          <col class="c-level">
+          <col class="c-surface">
+          <col class="c-best">
+          <col class="c-w">
+          <col class="c-l">
+          <col class="c-wr">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>${t("th_no")}</th>
+            <th class="sortable" data-column="tournament">${t("bigTournament_th_tournament")} <span class="sort-indicator"></span></th>
+            <th>${t("bigTournament_th_level")}</th>
+            <th>${t("bigTournament_th_surface")}</th>
+            <th class="sortable" data-column="best_round">${t("bigTournament_th_best_round")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="W">${t("th_w")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="L">${t("th_l")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="winrate">${t("bigTournament_th_win_pct")} <span class="sort-indicator"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+    rows.forEach((t, idx) => {
+      const notPlayed = t.best_round == null;
+      const titles = t.titles || 1;
+      let bestRoundDisplay;
+      if (notPlayed) {
+        bestRoundDisplay = '—';
+      } else {
+        bestRoundDisplay = fmtBestRound(t.best_round, titles);
+      }
+
+      const wDisplay = notPlayed ? '—' : t.W;
+      const lDisplay = notPlayed ? '—' : t.L;
+      const wrDisplay = notPlayed ? '—' : fmtWinrate((t.winrate * 100).toFixed(1));
+      html += `
+          <tr class=\"clickable\" data-player="${currentSelected.replace(/"/g, '&quot;')}" data-tournament="${t.tourney_name.replace(/"/g, '&quot;')}">
+            <td class="col-no">${idx + 1}</td>
+            <td class="tournament-cell">${t.tourney_name}</td>
+            <td>${t.level}</td>
+            <td>${t.surface || '—'}</td>
+            <td>${bestRoundDisplay}</td>
+            <td>${wDisplay}</td>
+            <td>${lDisplay}</td>
+            <td>${wrDisplay}</td>
+          </tr>`;
+    });
+
+    // ========== 汇总行 ==========
+    const allEvents = player.tournaments.filter(t => isBigLevel(t.level));
+    const totalEvents = allEvents.length;
+    let totalW = 0, totalL = 0, championCount = 0;
+    allEvents.forEach(t => {
+      if (t.best_round != null) {
+        totalW += t.W;
+        totalL += t.L;
+        if (t.best_round === 'W') championCount++;
+      }
+    });
+    const totalWR = (totalW + totalL) > 0
+      ? (totalW / (totalW + totalL) * 100).toFixed(1)
+      : null;
+
+    html += `<tr class="summary-row">
+        <td></td>
+        <td></td>
+        <td colspan="2" style="text-align:right;">
+  ${player.player_name}
+  <span style="font-weight:400; color:var(--text-muted); font-size:11px;">(${player.dob || '—'})</span>
+</td>
+        <td>${championCount}/${totalEvents}</td>
+        <td>${totalW}</td>
+        <td>${totalL}</td>
+        <td>${totalWR !== null ? fmtWinrate(totalWR) : '—'}</td>
+      </tr>`;
+
+    html += `</tbody>`;
+    tableContainer.innerHTML = html;
+    highlightSortIndicator();
+  }
+
+  function renderTournamentView() {
+    const tournamentName = currentSelected;
+    const participants = [];
+
+    fullData.forEach(player => {
+      const t = player.tournaments.find(t =>
+        t.tourney_name === tournamentName && isBigLevel(t.level)
+      );
+      if (t) {
+        const notPlayed = t.best_round == null;
+        participants.push({
+          rank: player.rank,
+          player_name: player.player_name,
+          ioc: player.ioc,
+          dob: player.dob || '—',
+          best_round: t.best_round,
+          W: notPlayed ? -1 : t.W,
+          L: notPlayed ? -1 : t.L,
+          winrate: notPlayed ? -1 : t.winrate,
+          titles: t.titles || (t.best_round === 'W' ? 1 : 0)
+        });
+      }
+    });
+
+    let rows = participants;
+
+    if (currentSort.column && currentSort.column !== 'player') {
+      rows = sortRows(rows, currentSort.column, currentSort.direction);
+    } else {
+      rows = sortTournamentPlayersDefault(rows);
+    }
+
+    // 添加 colgroup 用于列宽控制
+    let html = `
+        <colgroup class="tournament-view">
+          <col class="c-no">
+          <col class="c-player">
+          <col class="c-dob">
+          <col class="c-best">
+          <col class="c-w">
+          <col class="c-l">
+          <col class="c-wr">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>${t("th_no")}</th>
+            <th class="sortable" data-column="player">${t("th_player")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="dob">${t("th_dob")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="best_round">${t("bigTournament_th_best_round")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="W">${t("th_w")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="L">${t("th_l")} <span class="sort-indicator"></span></th>
+            <th class="sortable" data-column="winrate">${t("bigTournament_th_win_pct")} <span class="sort-indicator"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+    rows.forEach((p, idx) => {
+      const notPlayed = p.best_round == null;
+      let bestRoundDisplay;
+      if (notPlayed) {
+        bestRoundDisplay = '—';
+      } else {
+        const titles = p.titles || 1;
+        bestRoundDisplay = fmtBestRound(p.best_round, p.titles);
+      }
+      const wDisplay = notPlayed ? '—' : p.W;
+      const lDisplay = notPlayed ? '—' : p.L;
+      const wrDisplay = notPlayed ? '—' : fmtWinrate((p.winrate * 100).toFixed(1));
+      html += `
+          
+            <tr class=\"clickable\" data-player="${p.player_name.replace(/"/g, '&quot;')}" data-tournament="${currentSelected.replace(/"/g, '&quot;')}">
+            <td class="col-no">${idx + 1}</td>
+            <td class="player-cell">${getFlagImg(p.ioc)} #${p.rank} ${p.player_name}</td>
+            <td>${p.dob}</td>
+            <td>${bestRoundDisplay}</td>
+            <td>${wDisplay}</td>
+            <td>${lDisplay}</td>
+            <td>${wrDisplay}</td>
+          </tr>`;
+    });
+
+    if (rows.length === 0) {
+      html += `<tr><td colspan="7" style="padding:20px; text-align:center; color:var(--text-muted);">${t("bigTournament_no_players")}</td></tr>`;
+    }
+
+    html += `</tbody>`;
+    tableContainer.innerHTML = html;
+    highlightSortIndicator();
+  }
+
+  function sortRows(rows, column, direction) {
+    const sorted = [...rows];
+    sorted.sort((a, b) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      if (column === 'best_round') {
+        const orderA = ROUND_ORDER[valA] || 0;
+        const orderB = ROUND_ORDER[valB] || 0;
+        if (orderA !== orderB) {
+          return direction === 'asc' ? orderA - orderB : orderB - orderA;
+        }
+        const titlesA = a.titles || 0;
+        const titlesB = b.titles || 0;
+        if (titlesA !== titlesB) {
+          return direction === 'asc' ? titlesA - titlesB : titlesB - titlesA;
+        }
+        const wrA = a.winrate ?? -1;
+        const wrB = b.winrate ?? -1;
+        return wrB - wrA;
+      }
+
+      if (typeof valA === 'number' && typeof valB === 'number') {
+        return direction === 'asc' ? valA - valB : valB - valA;
+      }
+
+      const strA = String(valA || '');
+      const strB = String(valB || '');
+      return direction === 'asc'
+        ? strA.localeCompare(strB)
+        : strB.localeCompare(strA);
+    });
+    return sorted;
+  }
+
+  function bindSortEvents() {
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', (e) => {
+        const column = th.dataset.column;
+        if (!column) return;
+
+        if (column === 'tournament' || column === 'player') {
+          currentSort = { column: null, direction: 'desc' };
+        } else {
+          if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+          } else {
+            currentSort.column = column;
+            currentSort.direction = 'desc';
+          }
+        }
+        renderTable();
+      });
+    });
+  }
+
+  function highlightSortIndicator() {
+    document.querySelectorAll('th.sortable').forEach(th => {
+      const span = th.querySelector('.sort-indicator');
+      if (!span) return;
+      const col = th.dataset.column;
+      if (currentSort.column && currentSort.column === col && col !== 'tournament' && col !== 'player') {
+        span.textContent = currentSort.direction === 'asc' ? ' ▲' : ' ▼';
+      } else {
+        span.textContent = '';
+      }
+    });
+  }
+
+  // ---------- 切换视图 ----------
+  viewSelect.addEventListener('change', (e) => {
+    currentView = e.target.value;
+    currentSort = { column: null, direction: 'desc' };
+    if (currentView === 'player') {
+      const sorted = [...fullData].sort((a, b) => a.rank - b.rank);
+      currentSelected = sorted[0]?.player_name || '';
+    } else {
+      const list = getSortedTourneyList();
+      currentSelected = list[0]?.name || '';
+    }
+    renderSelector();
+    renderTable();
+  });
+
+  // 启动
+  loadData();
+
+  // 语言切换时重新渲染表格（表头在 JS 模板里，需重渲）
+  document.addEventListener('langchange', () => {
+    document.title = t('bigTournament_page_title');
+    renderSelector();
+    if (currentView === 'player') renderPlayerView();
+    else renderTournamentView();
+  });
+  // ===== 历史成绩 Modal =====
+
+  const HIST_ROUND_ORDER = ['F', 'SF', 'QF', 'R16', 'R32', 'R64', 'R128'];
+
+  function openHistModal(player, tournament) {
+    const backdrop = document.getElementById('hist-modal-backdrop');
+    const titleEl = document.getElementById('hist-modal-title');
+    const subEl = document.getElementById('hist-modal-sub');
+    const contentEl = document.getElementById('hist-content');
+    const noDataEl = document.getElementById('hist-no-data');
+    const closeBtnEl = document.getElementById('hist-modal-close-btn');
+
+    titleEl.textContent = `${player} · ${tournament} ${window.t('bigTournament_modal_title_suffix')}`;
+    subEl.textContent = window.t('bigTournament_modal_loading');
+    contentEl.innerHTML = '';
+    noDataEl.style.display = 'none';
+    closeBtnEl.textContent = window.t('bigTournament_modal_close');
+    backdrop.classList.add('open');
+
+    fetch(`/api/player_tournament_history?player=${encodeURIComponent(player)}&tournament=${encodeURIComponent(tournament)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.error || !data.matches || data.matches.length === 0) {
+          noDataEl.textContent = window.t('bigTournament_modal_no_data');
+          noDataEl.style.display = 'block';
+          subEl.textContent = '';
+          return;
+        }
+
+        const matches = data.matches;
+        const wins = matches.filter(m => m.result === 'W').length;
+        const losses = matches.filter(m => m.result === 'L').length;
+        const years = [...new Set(matches.map(m => m.year))];
+        const yearMin = Math.min(...years);
+        const yearMax = Math.max(...years);
+        const winRate = (wins + losses) > 0 ? (wins / (wins + losses) * 100).toFixed(1) : '0.0';
+subEl.textContent = `${matches.length} ${window.t('bigTournament_modal_matches')} · ${window.t('modal_winrate')} ${winRate}% (${wins}${window.t('th_w')} ${losses}${window.t('th_l')}) · ${yearMin}–${yearMax}`;
+
+        // 按年份分组
+        const byYear = {};
+        matches.forEach(m => {
+          if (!byYear[m.year]) byYear[m.year] = [];
+          byYear[m.year].push(m);
+        });
+
+        // 每年内按轮次深→浅排列
+        Object.values(byYear).forEach(group => {
+          group.sort((a, b) => HIST_ROUND_ORDER.indexOf(a.round) - HIST_ROUND_ORDER.indexOf(b.round));
+        });
+
+        // 年份降序
+        const sortedYears = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+
+        let html = `<table class="hist-tbl" style="table-layout:fixed;width:100%">
+  <colgroup>
+    <col style="width:48px">
+    <col style="width:40px">
+    <col>
+    <col style="width:100px">
+  </colgroup>
+  <thead>
+    <tr>
+      <td class="tleft">${window.t('bigTournament_modal_round')}</td>
+      <td style="text-align:center">${window.t('bigTournament_modal_result')}</td>
+      <td class="tleft">${window.t('bigTournament_modal_opponent')}</td>
+      <td style="text-align:center">${window.t('bigTournament_modal_score')}</td>
+    </tr>
+  </thead>`;
+
+sortedYears.forEach(year => {
+  const group = byYear[year];
+  const fm = group[0];
+  const rankEntry = group.find(m => m.winner_name === player || m.loser_name === player);
+  const playerRankThisYear = rankEntry
+    ? (rankEntry.winner_name === player ? rankEntry.winner_rank : rankEntry.loser_rank)
+    : null;
+  const rankTag = playerRankThisYear ? `#${playerRankThisYear} ${player}` : player;
+
+  html += `<tbody>
+    <tr class="hist-yr-row">
+      <td colspan="4">
+        <div class="hist-yr-hdr" style="margin:0;padding:8px 0 6px 0">
+          <span class="hist-yr-label">${year}</span>
+          <span class="hist-yr-meta">${rankTag}</span>
+        </div>
+      </td>
+    </tr>`;
+
+  group.forEach(m => {
+    const isWin = m.result === 'W';
+    const opponent = m.winner_name === player ? m.loser_name : m.winner_name;
+    const oppRank = m.winner_name === player ? m.loser_rank : m.winner_rank;
+    const oppStr = oppRank ? `#${oppRank} ${opponent}` : opponent;
+
+    html += `<tr>
+      <td class="tleft"><span class="hist-rd">${m.round}</span></td>
+      <td style="text-align:center"><span class="${isWin ? 'hist-badge-w' : 'hist-badge-l'}">${m.result}</span></td>
+      <td class="tleft bold" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${oppStr}</td>
+      <td class="hist-score" style="text-align:center">${m.score || '—'}</td>
+    </tr>`;
+  });
+
+  html += `</tbody>`;
+});
+
+html += `</table>`;
+contentEl.innerHTML = html;
+      })
+      .catch(() => {
+        noDataEl.textContent = window.t('bigTournament_modal_no_data');
+        noDataEl.style.display = 'block';
+        subEl.textContent = '';
+      });
+  }
+
+  // 关闭 Modal
+  function closeHistModal() {
+    document.getElementById('hist-modal-backdrop').classList.remove('open');
+  }
+  document.getElementById('hist-modal-close').addEventListener('click', closeHistModal);
+  document.getElementById('hist-modal-close-btn').addEventListener('click', closeHistModal);
+  document.getElementById('hist-modal-backdrop').addEventListener('click', function (e) {
+    if (e.target === this) closeHistModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeHistModal();
+  });
+  // 表格行双击事件委托
+document.getElementById('stats-table').addEventListener('dblclick', function(e) {
+  const tr = e.target.closest('tr.clickable');
+  if (!tr) return;
+  const player = tr.dataset.player;
+  const tournament = tr.dataset.tournament;
+  if (player && tournament) openHistModal(player, tournament);
+});
+
+
+
+</script>
+
+<!-- 历史成绩 Modal -->
+<div id="hist-modal-backdrop">
+  <div id="hist-modal">
+    <div id="hist-modal-header">
+      <div>
+        <div id="hist-modal-title"></div>
+        <div id="hist-modal-sub"></div>
+      </div>
+      <button id="hist-modal-close">✕</button>
+    </div>
+    <div id="hist-modal-body">
+      <div id="hist-no-data" style="display:none"></div>
+      <div id="hist-content"></div>
+    </div>
+    <div id="hist-modal-footer">
+      <button id="hist-modal-close-btn"></button>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

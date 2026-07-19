@@ -1,0 +1,27 @@
+{
+  "request_draw": {
+    "api": "tennisapi1",
+    "endpoint_template": "tournament/{unique_tournament_id}/season/{season_id}/cup-trees/old",
+    "required_params": ["season_id", "unique_tournament_id"]
+  },
+  "event_statistics": {
+    "api": "allsports",
+    "endpoint_template": "event/{event_id}/statistics",
+    "required_params": ["event_id"]
+  },
+  "rankings_wta": {
+    "api": "allsports",
+    "endpoint_template": "rankings/wta",
+    "required_params": []
+  },
+  "event_detail": {
+      "api": "allsports",
+      "endpoint_template": "event/{event_id}",
+      "required_params": ["event_id"]
+  },
+  "player_previous_match": {
+    "api": "allsports",
+    "endpoint_template": "team/{team_id}/events/previous/{page}",
+    "required_params": ["team_id", "page"]
+  }
+}
