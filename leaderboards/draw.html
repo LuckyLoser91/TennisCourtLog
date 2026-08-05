@@ -9,11 +9,11 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script src="../../common/js/i18n.js"></script>
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="MyWebSite" />
-<link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=1200, initial-scale=1.0, user-scalable=yes, shrink-to-fit=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -213,7 +213,7 @@
     }
 
     /* ============================================================
-           4. MATCH CARDS
+           4. MATCH CARDS (with header)
            ============================================================ */
     .match {
       background: white;
@@ -235,6 +235,49 @@
       border-left-color: #2196f3;
     }
 
+    /* ── 卡片头部 ── */
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.03);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 8px 8px 0 0;
+      min-height: 28px;
+      flex-shrink: 0;
+    }
+
+    .match-meta {
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      letter-spacing: 0.03em;
+    }
+
+    .h2h-btn {
+      background: #f39c12;
+      border: none;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      line-height: 1.5;
+    }
+
+    .h2h-btn:hover:not(:disabled) {
+      background: #d68910;
+    }
+
+    .h2h-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    /* ── 选手样式 ── */
     .player {
       padding: 7px 10px 7px 8px;
       display: flex;
@@ -347,31 +390,24 @@
     .best-round-R128 {
       background: #9e9e9e;
     }
-
     .best-round-R64 {
       background: #8d6e63;
     }
-
     .best-round-R32 {
       background: #5dade2;
     }
-
     .best-round-R16 {
       background: #4db6ac;
     }
-
     .best-round-QF {
       background: #7b1fa2;
     }
-
     .best-round-SF {
       background: #f39c12;
     }
-
     .best-round-F {
       background: #e74c3c;
     }
-
     .best-round-W {
       background: linear-gradient(135deg, #ffd700, #ff8c00);
       color: #333;
@@ -388,12 +424,10 @@
       background: #d5f5e3;
       color: #27ae60;
     }
-
     .winrate-badge.medium {
       background: #fef9e7;
       color: #f39c12;
     }
-
     .winrate-badge.low {
       background: #fadbd8;
       color: #c0392b;
@@ -436,9 +470,7 @@
       cursor: pointer;
       user-select: none;
       letter-spacing: 0.04em;
-      transition:
-        background 0.15s,
-        transform 0.1s;
+      transition: background 0.15s, transform 0.1s;
     }
 
     .stats-badge:hover {
@@ -488,7 +520,7 @@
       margin: -2px;
     }
     .sb-scores-clickable:hover {
-      background: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.3);
     }
 
     /* ============================================================
@@ -1144,182 +1176,442 @@
        历史成绩 Modal (浅色风格，和 stats modal 一致)
        ============================================================ */
     .hist-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); z-index: 10000;
-      align-items: center; justify-content: center; padding: 12px;
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
     }
-    .hist-overlay.open { display: flex; }
+    .hist-overlay.open {
+      display: flex;
+    }
     .hist-box {
       background: #f4f6f8;
       border-radius: 16px;
-      box-shadow: 0 12px 50px rgba(0,0,0,0.4);
-      max-width: 550px; width: 100%;
-      max-height: 92vh; overflow-y: auto;
-      position: relative; scrollbar-width: thin;
-      display: flex; flex-direction: column;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.4);
+      max-width: 550px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      position: relative;
+      scrollbar-width: thin;
+      display: flex;
+      flex-direction: column;
     }
     .hist-box-hdr {
       background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);
-      color: white; padding: 0;
+      color: white;
+      padding: 0;
       border-radius: 16px 16px 0 0;
-      position: relative; overflow: hidden; flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
     }
     .hist-box-hdr::before {
       content: "";
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    .hist-box-hdr-inner { padding: 20px 20px 16px; position: relative; z-index: 1; }
-    .hist-box-title { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
-    .hist-box-sub { font-size: 12px; font-weight: 600; color: #ffd700; margin-top: 4px; }
-    .hist-box-close {
-      position: absolute; top: 12px; right: 12px;
-      background: rgba(255,255,255,0.2); border: none;
-      color: white; font-size: 1em; width: 28px; height: 28px;
-      border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2; transition: background 0.15s;
+    .hist-box-hdr-inner {
+      padding: 20px 20px 16px;
+      position: relative;
+      z-index: 1;
     }
-    .hist-box-close:hover { background: rgba(255,255,255,0.4); }
-    .hist-box-body { padding: 16px 20px; overflow-y: auto; flex: 1; background: #f4f6f8; }
+    .hist-box-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .hist-box-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffd700;
+      margin-top: 4px;
+    }
+    .hist-box-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1em;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: background 0.15s;
+    }
+    .hist-box-close:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .hist-box-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+      background: #f4f6f8;
+    }
     .hist-box-ftr {
-      padding: 10px 20px; border-top: 1px solid #e0e0e0;
-      text-align: right; flex-shrink: 0; background: #f4f6f8;
+      padding: 10px 20px;
+      border-top: 1px solid #e0e0e0;
+      text-align: right;
+      flex-shrink: 0;
+      background: #f4f6f8;
       border-radius: 0 0 16px 16px;
     }
     .hist-box-ftr button {
-      background: transparent; border: 1px solid #19503b;
-      border-radius: 6px; color: #19503b;
-      font-size: 12px; font-weight: 600; padding: 5px 16px;
-      cursor: pointer; transition: all 0.15s;
+      background: transparent;
+      border: 1px solid #19503b;
+      border-radius: 6px;
+      color: #19503b;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .hist-box-ftr button:hover { background: #19503b; color: #fff; }
+    .hist-box-ftr button:hover {
+      background: #19503b;
+      color: #fff;
+    }
     .hyr-hdr {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 6px 6px; border-bottom: 2px solid #19503b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 6px 6px;
+      border-bottom: 2px solid #19503b;
       margin-bottom: 2px;
     }
-    .hyr-label { font-size: 13px; font-weight: 800; color: #19503b; }
-    .hyr-meta {
-      font-size: 11px; color: #666;
-      background: #e8f0ec; border: 1px solid #c8dcd0;
-      border-radius: 20px; padding: 2px 9px;
+    .hyr-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #19503b;
     }
-    .htbl { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; background: #fff; }
-    .htbl colgroup col:nth-child(1) { width: 56px; }
-    .htbl colgroup col:nth-child(2) { width: 180px; }
-    .htbl colgroup col:nth-child(3) { width: 180px; }
-    .htbl colgroup col:nth-child(4) { width: 110px; }
-    .htbl colgroup col:nth-child(5) { width: 40px; }
+    .hyr-meta {
+      font-size: 11px;
+      color: #666;
+      background: #e8f0ec;
+      border: 1px solid #c8dcd0;
+      border-radius: 20px;
+      padding: 2px 9px;
+    }
+    .htbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      table-layout: fixed;
+      background: #fff;
+    }
+    .htbl colgroup col:nth-child(1) {
+      width: 56px;
+    }
+    .htbl colgroup col:nth-child(2) {
+      width: 180px;
+    }
+    .htbl colgroup col:nth-child(3) {
+      width: 180px;
+    }
+    .htbl colgroup col:nth-child(4) {
+      width: 110px;
+    }
+    .htbl colgroup col:nth-child(5) {
+      width: 40px;
+    }
     .htbl thead td {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
-      text-transform: uppercase; color: #888;
-      padding: 4px 6px 8px; text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #888;
+      padding: 4px 6px 8px;
+      text-align: center;
       background: #eef2f0;
     }
-    .htbl tbody tr { border-top: 1px solid #ececec; }
-    .htbl tbody tr:hover td { background: #e8f0ec !important; }
-    .htbl tbody tr:nth-child(even) td { background: #f9fafb; }
+    .htbl tbody tr {
+      border-top: 1px solid #ececec;
+    }
+    .htbl tbody tr:hover td {
+      background: #e8f0ec !important;
+    }
+    .htbl tbody tr:nth-child(even) td {
+      background: #f9fafb;
+    }
     .htbl td {
-      padding: 8px 6px; color: #333;
-      text-align: center; vertical-align: middle;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      padding: 8px 6px;
+      color: #333;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .htbl td.tleft { text-align: left; }
-    .htbl td.muted { color: #aaa; }
-    .htbl td.bold { font-weight: 700; color: #111; }
+    .htbl td.tleft {
+      text-align: left;
+    }
+    .htbl td.muted {
+      color: #aaa;
+    }
+    .htbl td.bold {
+      font-weight: 700;
+      color: #111;
+    }
     .h-rd {
-      display: inline-block; background: #eef2f0;
-      border: 1px solid #c8dcd0; border-radius: 4px;
-      padding: 2px 7px; font-size: 11px; font-weight: 700; color: #19503b;
+      display: inline-block;
+      background: #eef2f0;
+      border: 1px solid #c8dcd0;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #19503b;
     }
-    .h-score { font-family: monospace; font-size: 12px; color: #666; }
+    .h-score {
+      font-family: monospace;
+      font-size: 12px;
+      color: #666;
+    }
     .h-badge-w {
-      background: #d4a017; color: #fff; font-size: 11px; font-weight: 700;
-      padding: 3px 8px; border-radius: 4px;
-      display: inline-block; min-width: 28px; text-align: center;
+      background: #d4a017;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
     }
     .h-badge-l {
-      background: #e8e8e8; color: #888; font-size: 11px; font-weight: 700;
-      padding: 3px 8px; border-radius: 4px;
-      display: inline-block; min-width: 28px; text-align: center;
+      background: #e8e8e8;
+      color: #888;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
       border: 1px solid #d0d0d0;
     }
-    .h-no-data { text-align: center; padding: 40px; color: #999; font-size: 13px; }
+    .h-no-data {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 13px;
+    }
     /* ── Modal tabs ── */
     .hist-tabs {
-      display: flex; gap: 0;
+      display: flex;
+      gap: 0;
       border-bottom: 2px solid #e0e8e4;
-      padding: 0 20px; background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);
-      position: relative; z-index: 2;
+      padding: 0 20px;
+      background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);
+      position: relative;
+      z-index: 2;
     }
     .hist-tab {
-      font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
-      color: rgba(255,255,255,0.55); padding: 10px 16px;
-      border: none; background: none; cursor: pointer;
-      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.55);
+      padding: 10px 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
       transition: color 0.15s, border-color 0.15s;
     }
-    .hist-tab:hover { color: rgba(255,255,255,0.85); }
-    .hist-tab.active { color: #fff; border-bottom-color: #ffd700; }
-    .hist-tab-panel { display: none; }
-    .hist-tab-panel.active { display: block; }
+    .hist-tab:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .hist-tab.active {
+      color: #fff;
+      border-bottom-color: #ffd700;
+    }
+    .hist-tab-panel {
+      display: none;
+    }
+    .hist-tab-panel.active {
+      display: block;
+    }
     /* ── Season table ── */
-    .stbl { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; background: #fff; }
-    .stbl colgroup col:nth-child(1) { width: 48px; }
-    .stbl colgroup col:nth-child(2) { width: 36px; }
-    .stbl colgroup col:nth-child(3) { }
-    .stbl colgroup col:nth-child(4) { width: 90px; }
-    .stbl colgroup col:nth-child(5) { width: 140px; }
+    .stbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      table-layout: fixed;
+      background: #fff;
+    }
+    .stbl colgroup col:nth-child(1) {
+      width: 48px;
+    }
+    .stbl colgroup col:nth-child(2) {
+      width: 36px;
+    }
+    .stbl colgroup col:nth-child(3) {
+    }
+    .stbl colgroup col:nth-child(4) {
+      width: 90px;
+    }
+    .stbl colgroup col:nth-child(5) {
+      width: 140px;
+    }
     .stbl thead td {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
-      text-transform: uppercase; color: #888;
-      padding: 4px 6px 8px; text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #888;
+      padding: 4px 6px 8px;
+      text-align: center;
       background: #eef2f0;
     }
-    .stbl thead td.tleft { text-align: left; }
-    .stbl thead td.tright { text-align: right; }
-    .stbl tbody tr { border-top: 1px solid #ececec; }
-    .stbl tbody tr:hover td { background: #e8f0ec !important; }
-    .stbl tbody tr:nth-child(even) td { background: #f9fafb; }
-    .stbl td {
-      padding: 8px 6px; color: #333;
-      text-align: center; vertical-align: middle;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .stbl thead td.tleft {
+      text-align: left;
     }
-    .stbl td.tleft { text-align: left; }
-    .stbl td.tright { text-align: right; }
-    .s-tourney-meta { font-size: 11px; color: #888; }
+    .stbl thead td.tright {
+      text-align: right;
+    }
+    .stbl tbody tr {
+      border-top: 1px solid #ececec;
+    }
+    .stbl tbody tr:hover td {
+      background: #e8f0ec !important;
+    }
+    .stbl tbody tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+    .stbl td {
+      padding: 8px 6px;
+      color: #333;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stbl td.tleft {
+      text-align: left;
+    }
+    .stbl td.tright {
+      text-align: right;
+    }
+    .s-tourney-meta {
+      font-size: 11px;
+      color: #888;
+    }
     /* ── Level / Surface badges (参照 styles.css 配色) ── */
-    .hyr-badge-group { display: inline-flex; gap: 4px; align-items: center; flex-shrink: 0; }
+    .hyr-badge-group {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      flex-shrink: 0;
+    }
     .badge-level {
-      padding: 3px 8px; border-radius: 20px;
-      font-weight: 700; font-size: 9px;
-      text-align: center; letter-spacing: 0.03em; white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 9px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
     }
     .surface-badge {
-      padding: 3px 8px; border-radius: 20px;
-      font-size: 10px; font-weight: 600; white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
     }
-    .level-GrandSlam            { background: #b45309; color: #ffffff; }
-    .level-Finals               { background: #92400e; color: #fef3c7; }
-    .level-WTA1000              { background: #d97706; color: #ffffff; }
-    .level-WTA500Premier        { background: #2d6a4f; color: #d1fae5; }
-    .level-WTA250International  { background: #3b5998; color: #dbeafe; }
-    .level-other                { background: #a8a29e; color: #ffffff; }
-    .surface-Hard   { background: #dbeafe; color: #1e3a8a; }
-    .surface-Clay   { background: #fef3c7; color: #78350f; }
-    .surface-Grass  { background: #d1fae5; color: #065f46; }
-    .surface-Carpet { background: #f1f5f9; color: #334155; }
-    .player-avatar-wrap { position: relative; display: inline-block; cursor: pointer; }
+    .level-GrandSlam {
+      background: #b45309;
+      color: #ffffff;
+    }
+    .level-Finals {
+      background: #92400e;
+      color: #fef3c7;
+    }
+    .level-WTA1000 {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .level-WTA500Premier {
+      background: #2d6a4f;
+      color: #d1fae5;
+    }
+    .level-WTA250International {
+      background: #3b5998;
+      color: #dbeafe;
+    }
+    .level-other {
+      background: #a8a29e;
+      color: #ffffff;
+    }
+    .surface-Hard {
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+    .surface-Clay {
+      background: #fef3c7;
+      color: #78350f;
+    }
+    .surface-Grass {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .surface-Carpet {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .player-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
     .player-avatar-wrap .hist-hint {
-      display: none; position: absolute; bottom: calc(100% + 5px); left: 50%;
-      transform: translateX(-50%); background: #1c1c1c; color: #fff;
-      font-size: 0.72em; padding: 3px 8px; border-radius: 5px;
-      white-space: nowrap; pointer-events: none; z-index: 300;
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 5px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1c1c1c;
+      color: #fff;
+      font-size: 0.72em;
+      padding: 3px 8px;
+      border-radius: 5px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 300;
     }
-    .player-avatar-wrap:hover .hist-hint { display: block; }
+    .player-avatar-wrap:hover .hist-hint {
+      display: block;
+    }
 
+    /* H2H 模态框内细调 */
+    .h2h-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+    }
+    .h2h-list li {
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9em;
+      color: #333;
+    }
+    .h2h-list li:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 
@@ -1361,7 +1653,7 @@
     </div>
   </div>
 
-  <!-- Stats Modal -->
+  <!-- Stats Modal (比赛统计) -->
   <div class="stats-modal-overlay" id="statsModalOverlay" onclick="closeStatsModal(event)">
     <div class="stats-modal" id="statsModal">
       <div class="stats-modal-header" id="statsModalHeader">
@@ -1380,6 +1672,22 @@
         <div class="stats-round-strip" id="statsRoundStrip"></div>
       </div>
       <div class="stats-modal-body" id="statsModalBody"></div>
+    </div>
+  </div>
+
+  <!-- H2H Modal (新增) -->
+  <div class="stats-modal-overlay" id="h2hModalOverlay" onclick="closeH2HModal(event)">
+    <div class="stats-modal" id="h2hModal">
+      <div class="stats-modal-header" style="background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);">
+        <button class="stats-modal-close" onclick="closeH2HModal()">✕</button>
+        <div style="padding: 20px 16px 16px; color: white; position: relative; z-index: 1;">
+          <div style="font-size: 1.2em; font-weight: 700; letter-spacing: 0.02em;">⚔️ Head‑to‑Head</div>
+          <div id="h2hSub" style="font-size: 0.85em; opacity: 0.8; margin-top: 4px;"></div>
+        </div>
+      </div>
+      <div class="stats-modal-body" id="h2hBody">
+        <div style="text-align:center; padding: 30px 0; color: #666;">Loading H2H data...</div>
+      </div>
     </div>
   </div>
 
@@ -1441,35 +1749,20 @@
     const fullBlocksPerRound = [64, 32, 16, 8, 4, 2, 1];
 
     // ── Derived from actual JSON rounds (set in fetchAndRender) ──
-    // drawStartIndex : index into allRoundOrder where this draw begins
-    //   R128-draw → 0,  R64-draw → 1
-    // drawRoundOrder : the slice of allRoundOrder that applies
-    // drawBlocksPerRound : corresponding block counts
-    // drawSectionCount   : number of sections in the first round
-    //   R128-draw → 8,  R64-draw → 4
-    // drawBlocksPerSection : blocks-per-section in first round
-    //   R128-draw → 8,  R64-draw → 8  (always 8 matches per section)
     let drawStartIndex = 0;
     let drawRoundOrder = allRoundOrder;
     let drawBlocksPerRound = fullBlocksPerRound;
     let drawSectionCount = 8;
 
     function initDrawSize(data) {
-      // Find the first round that actually appears in the data
       const descriptions = new Set(data.rounds.map(r => r.description));
       drawStartIndex = allRoundOrder.findIndex(r => descriptions.has(r));
       if (drawStartIndex < 0) drawStartIndex = 0;
       drawRoundOrder = allRoundOrder.slice(drawStartIndex);
       drawBlocksPerRound = fullBlocksPerRound.slice(drawStartIndex);
-      // Always 8 sections regardless of draw size.
-      // R128: 64 blocks in R1 → 8 blocks/section
-      // R64:  32 blocks in R1 → 4 blocks/section
       drawSectionCount = 8;
     }
 
-    // Maps a block's order (within its round) → which section (1–8) it belongs to.
-    // totalBlocksInRound: actual block count of this round (64/32/16/8...).
-    // Always divides evenly into 8 sections regardless of draw size.
     function getSectionForBlock(totalBlocksInRound, blockOrder) {
       const blocksPerSection = totalBlocksInRound / 8;
       const section = Math.ceil(blockOrder / blocksPerSection);
@@ -1477,7 +1770,8 @@
       return section;
     }
 
-    const MATCH_H = 142;
+    // 卡片高度增加以容纳头部
+    const MATCH_H = 170;          // 原 142，增加头部空间
     const BLOCK_GAP = 14;
     const MATCH_W = 330;
     const SVG_W = 40;
@@ -1501,7 +1795,6 @@
       return `<div class="player-avatar-wrap" title="${(playerName||"")}"><img class="player-avatar" src="${proxied}" alt="avatar" onerror="this.style.visibility='hidden'" onclick="event.stopPropagation();openHistModalByName('${safeName}')" /><span class="hist-hint"></span></div>`;
     }
     function hasValidRanking(player) {
-      // 加上一个或的条件，player.L字段不等于""，对于保护排名且没有实时排名的人处理，依旧有小bug存在正赛首秀但发生的概率会很低
       return (
         ((player.ranking &&
           player.ranking !== "-" &&
@@ -1526,7 +1819,7 @@
     function formatTimestamp(ts) {
       if (!ts) return "";
       const d = new Date(ts * 1000);
-      const tz = window.tournamentTimezone || 'Europe/Rome';   // 动态时区
+      const tz = window.tournamentTimezone || 'Europe/Rome';
       return d
         .toLocaleString("zh-CN", {
           timeZone: tz,
@@ -1540,7 +1833,6 @@
         .replace(/\//g, "-")
         .replace(",", "");
     }
-
 
     // ============================================================
     // 2. BRACKET HTML BUILDERS
@@ -1704,15 +1996,49 @@
             (block.finished ? " finished" : "") +
             (block.placeholder ? " placeholder-block" : "");
           matchEl.style.cssText = `left:0;top:${topOffset}px;width:${MATCH_W}px;height:${MATCH_H}px;`;
+
+        // ---- 构建卡片内容（头部 + 选手） ----
+        const roundName = rd.roundName;
+        const matchNumber = block.order || (bi + 1);
+        const parts = block.participants || [];
+
+        const hasTwoPlayers = parts.length >= 2 && parts[0].team_id && parts[1].team_id;
+        const isFinished = block.finished === true;
+        const eventId = block.event_id || null;
+        const p1Name = parts[0]?.name || '';
+        const p2Name = parts[1]?.name || '';
+
+        // -------- 新增：构建按钮文本（包含H2H） ----------
+                // -------- 构建按钮文本（包含H2H） ----------
+        let btnText = '⚔️ H2H';
+        if (block.h2h && block.h2h.player1_wins !== undefined && block.h2h.player2_wins !== undefined) {
+          const p1W = block.h2h.player1_wins;
+          const p2W = block.h2h.player2_wins;
+          btnText = `⚔️ H2H: ${p1W}–${p2W}`;
+        }
+        // -------- 按钮可用条件：只要有两位有效球员且有 h2h 数据（即使0-0也算有） ----------
+        const h2hEnabled = hasTwoPlayers && block.h2h && (block.h2h.player1_wins !== undefined);
+
+        // -------- 构建按钮（仅当 h2hEnabled 为 true） ----------
+        let btnHtml = '';
+        if (h2hEnabled) {
+          btnHtml = `<button class="h2h-btn" onclick="openH2HModal(${eventId || 'null'}, '${p1Name.replace(/'/g, "\\'")}', '${p2Name.replace(/'/g, "\\'")}', ${JSON.stringify(block.h2h || null)})">${btnText}</button>`;
+        }
+
+        let headerHtml = `<div class="match-header">
+          <span class="match-meta">${roundName} · Match ${matchNumber}</span>
+          ${btnHtml}
+        </div>`;
+
+          let bodyHtml = '';
           if (block.placeholder) {
-            matchEl.innerHTML = buildPlaceholderBlock();
+            bodyHtml = buildPlaceholderBlock();
             matchEl.style.opacity = "0.45";
             matchEl.style.borderLeftColor = "#aaa";
           } else {
-            const parts = block.participants || [];
-            let html = parts.map((p, i) => buildPlayerHTML(p, block, i)).join("");
+            bodyHtml = parts.map((p, i) => buildPlayerHTML(p, block, i)).join('');
             if (parts.length === 1) {
-              html += `<div class="player" style="flex:1;opacity:0.35;">
+              bodyHtml += `<div class="player" style="flex:1;opacity:0.35;">
                                 <div style="width:40px;height:40px;border-radius:50%;background:#eee;flex-shrink:0;"></div>
                                 <div class="player-info">
                                     <div class="player-name-row"><span class="player-name placeholder">Bye</span></div>
@@ -1720,13 +2046,16 @@
                                 </div>
                             </div>`;
             }
-            matchEl.innerHTML = html;
           }
+
+          matchEl.innerHTML = headerHtml + bodyHtml;
           area.appendChild(matchEl);
         });
+
         col.appendChild(area);
         containerEl.appendChild(col);
 
+        // 绘制连线
         if (colIdx < roundsData.length - 1) {
           const nextSlot = slots[colIdx + 1];
           const nextCount = blockCounts[colIdx + 1];
@@ -1788,10 +2117,7 @@
       const c = document.getElementById("bracketContainer");
       if (!c || isMobileDevice()) return;
       let down = false,
-        startX,
-        startY,
-        sl,
-        st;
+        startX, startY, sl, st;
       c.addEventListener("mousedown", (e) => {
         down = true;
         c.classList.add("dragging");
@@ -1867,7 +2193,6 @@
     let activeSection = 0;   // 0 = All, 1-8 = specific section
     let activePlayerKey = "";  // normalised search string, "" = none
 
-    // Normalise: strip diacritics + lowercase
     function normalise(str) {
       return (str || "")
         .normalize("NFD")
@@ -1876,7 +2201,6 @@
         .trim();
     }
 
-    // Build sorted unique player list from round 0 of JSON
     function buildPlayerList(data) {
       const seen = new Set();
       const list = [];
@@ -1894,9 +2218,8 @@
       return list;
     }
 
-    let playerList = [];   // populated in setupTabs
+    let playerList = [];
 
-    // ── Section selector ─────────────────────────────────────────
     function initSectionSelect() {
       const sel = document.getElementById("sectionSelect");
       if (!sel) return;
@@ -1917,19 +2240,16 @@
       if (activeSection > 0) scrollToSection(activeSection);
     }
 
-    // Scroll bracketContainer so the first match of this section is visible
     function scrollToSection(section) {
       const container = document.getElementById("bracketContainer");
       const target = container.querySelector(`[data-section="${section}"]`);
       if (!target) return;
-      // scroll the container vertically to bring target into view
       const containerRect = container.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
       const offset = targetRect.top - containerRect.top + container.scrollTop - 20;
       container.scrollTo({ top: offset, behavior: "smooth" });
     }
 
-    // ── Player search ─────────────────────────────────────────────
     let searchDropdownIndex = -1;
 
     function onPlayerSearch() {
@@ -1947,14 +2267,13 @@
         return;
       }
 
-      // Filter player list
       const matches = playerList.filter(p => p.key.includes(q)).slice(0, 10);
       searchDropdownIndex = -1;
 
       if (matches.length === 0) {
         dropdown.innerHTML = '<div class="search-dropdown-empty">No players found</div>';
         dropdown.style.display = "block";
-        activePlayerKey = q;   // still dim non-matching
+        activePlayerKey = q;
         applyDimming();
         return;
       }
@@ -1970,7 +2289,6 @@
       applyDimming();
     }
 
-    // Scroll bracketContainer to first match containing this player
     function scrollToPlayer(key) {
       if (!key) return;
       const container = document.getElementById("bracketContainer");
@@ -2010,7 +2328,6 @@
       applyDimming();
     }
 
-    // Close dropdown when clicking outside; auto-scroll if player key is set
     document.addEventListener("click", (e) => {
       const wrap = document.getElementById("playerSearchInput");
       const dd = document.getElementById("searchDropdown");
@@ -2020,7 +2337,6 @@
       }
     });
 
-    // Keyboard navigation inside dropdown
     document.addEventListener("keydown", (e) => {
       const dropdown = document.getElementById("searchDropdown");
       const input = document.getElementById("playerSearchInput");
@@ -2030,7 +2346,6 @@
         e.preventDefault();
         if (dropdown && dropdown.style.display !== "none") {
           const items = dropdown.querySelectorAll(".search-dropdown-item");
-          // If a specific item is highlighted pick it, otherwise pick the first
           const idx = searchDropdownIndex >= 0 ? searchDropdownIndex : 0;
           const target = items[idx];
           if (target) {
@@ -2038,7 +2353,6 @@
             return;
           }
         }
-        // No dropdown open — just scroll to current activePlayerKey
         if (activePlayerKey) scrollToPlayer(activePlayerKey);
         return;
       }
@@ -2057,10 +2371,6 @@
       }
     });
 
-    // ── Dimming logic ─────────────────────────────────────────────
-    // A block is "highlighted" if it passes both filters.
-    // section filter: block's data-section matches activeSection (or activeSection===0)
-    // player filter:  any participant's normalised name contains activePlayerKey (or key==="")
     function applyDimming() {
       const container = document.getElementById("bracketContainer");
       const matchEls = container.querySelectorAll(".match");
@@ -2081,11 +2391,9 @@
       });
     }
 
-    // ── Tabs ─────────────────────────────────────────────────────
     function setupTabs() {
       const tabsEl = document.getElementById("tabs");
       tabsEl.innerHTML = "";
-      // Only Full Draw tab now — sections handled by dropdown
       const btn = document.createElement("button");
       btn.className = "tab active";
       btn.id = "tab-all";
@@ -2093,11 +2401,9 @@
       btn.onclick = () => switchTab("all");
       tabsEl.appendChild(btn);
 
-      // Build player list and section dropdown
       playerList = buildPlayerList(window.drawData);
       initSectionSelect();
 
-      // Init window
       initRoundWindow(window.drawData);
       switchTab("all");
     }
@@ -2108,7 +2414,6 @@
       const el = document.getElementById("tab-all");
       if (el) el.classList.add("active");
 
-      // Show filter bar and round nav (only mode is "all" now)
       const filterBar = document.getElementById("filterBar");
       const roundNav = document.getElementById("roundNav");
       if (filterBar) filterBar.style.display = "flex";
@@ -2121,7 +2426,6 @@
     }
 
     function buildRoundsData(data, mode) {
-      // Only "all" mode remains (sections now done via dimming, not data slicing)
       const totalRounds = drawRoundOrder.length;
       const winEnd = Math.min(roundWindowStart + WINDOW_SIZE, totalRounds);
       const roundSlice = drawRoundOrder.slice(roundWindowStart, winEnd);
@@ -2141,7 +2445,6 @@
             const b = i < realBlocks.length
               ? realBlocks[i]
               : { placeholder: true, order: i + 1, finished: false, participants: [] };
-            // Attach section number for dimming/scrolling
             b._section = getSectionForBlock(totalInRound, b.order) || 0;
             blocks.push(b);
           }
@@ -2155,12 +2458,9 @@
         document.getElementById("bracket"),
         buildRoundsData(data, mode),
       );
-      // After render, stamp data-section and data-players onto each .match element
       stampMatchMetadata(data);
     }
 
-    // Stamp data-section and data-players on rendered .match elements
-    // so applyDimming() can work without re-reading the data
     function stampMatchMetadata(data) {
       const container = document.getElementById("bracketContainer");
       const cols = container.querySelectorAll(".round-col");
@@ -2252,12 +2552,12 @@
 
       const sets = [];
       for (const p of [
-        "period1",
-        "period2",
-        "period3",
-        "period4",
-        "period5",
-      ]) {
+          "period1",
+          "period2",
+          "period3",
+          "period4",
+          "period5",
+        ]) {
         if (hs[p] != null && as_[p] != null)
           sets.push({ h: hs[p], a: as_[p] });
       }
@@ -2286,9 +2586,9 @@
       const awayAvatarUrl = getModalAvatarUrl(away.id);
 
       const avatarTag = (src, won) =>
-        src
-          ? `<img class="vs-avatar ${won ? "winner-avatar" : ""}" src="${src}" alt="avatar" onerror="this.style.opacity='0'">`
-          : `<div class="vs-avatar ${won ? "winner-avatar" : ""}" style="display:flex;align-items:center;justify-content:center;font-size:1.5em;">🎾</div>`;
+        src ?
+        `<img class="vs-avatar ${won ? "winner-avatar" : ""}" src="${src}" alt="avatar" onerror="this.style.opacity='0'">` :
+        `<div class="vs-avatar ${won ? "winner-avatar" : ""}" style="display:flex;align-items:center;justify-content:center;font-size:1.5em;">🎾</div>`;
 
       return `
                <div class="vs-player home">
@@ -2331,17 +2631,13 @@
       const h = parseFraction(hRaw);
       const a = parseFraction(aRaw);
       const hNum =
-        h.total != null && h.total > 0
-          ? h.val / h.total
-          : typeof hRaw === "number"
-            ? hRaw
-            : parseFloat(hRaw) || 0;
+        h.total != null && h.total > 0 ?
+        h.val / h.total :
+        typeof hRaw === "number" ? hRaw : parseFloat(hRaw) || 0;
       const aNum =
-        a.total != null && a.total > 0
-          ? a.val / a.total
-          : typeof aRaw === "number"
-            ? aRaw
-            : parseFloat(aRaw) || 0;
+        a.total != null && a.total > 0 ?
+        a.val / a.total :
+        typeof aRaw === "number" ? aRaw : parseFloat(aRaw) || 0;
       let hCls = "neutral",
         aCls = "neutral";
       if (!isNaN(hNum) && !isNaN(aNum) && hNum !== aNum) {
@@ -2350,17 +2646,13 @@
         aCls = hBetter ? "worse" : "better";
       }
       const hDisp =
-        h.total != null
-          ? fmtFrac(h.val, h.total)
-          : hRaw == null || hRaw === "—"
-            ? "—"
-            : String(hRaw);
+        h.total != null ?
+        fmtFrac(h.val, h.total) :
+        hRaw == null || hRaw === "—" ? "—" : String(hRaw);
       const aDisp =
-        a.total != null
-          ? fmtFrac(a.val, a.total)
-          : aRaw == null || aRaw === "—"
-            ? "—"
-            : String(aRaw);
+        a.total != null ?
+        fmtFrac(a.val, a.total) :
+        aRaw == null || aRaw === "—" ? "—" : String(aRaw);
 
       let barsHtml = "";
       if (h.total != null && a.total != null) {
@@ -2476,12 +2768,12 @@
       const bpAwayValue = bpSavedItem ? bpSavedItem.awayValue : 0;
       const bpHomeTotal = bpSavedItem ? bpSavedItem.homeTotal : 0;
       const bpAwayTotal = bpSavedItem ? bpSavedItem.awayTotal : 0;
-      const homeBpConv = bpAwayTotal
-        ? bpAwayTotal - bpAwayValue + "/" + bpAwayTotal
-        : "—";
-      const awayBpConv = bpHomeTotal
-        ? bpHomeTotal - bpHomeValue + "/" + bpHomeTotal
-        : "—";
+      const homeBpConv = bpAwayTotal ?
+        bpAwayTotal - bpAwayValue + "/" + bpAwayTotal :
+        "—";
+      const awayBpConv = bpHomeTotal ?
+        bpHomeTotal - bpHomeValue + "/" + bpHomeTotal :
+        "—";
 
       const retCard = sectionCard(
         "🔄 " + t('stats_ret_title'),
@@ -2513,26 +2805,25 @@
 
       if (isGrandSlam) {
         const win = getGroup("Winners");
-        const fe = getGroup("Errors");          // Forced Errors
+        const fe = getGroup("Errors");
         const ufe = getGroup("Unforced errors");
 
-        // get raw numeric value from a group item
         const gvn = (grp, key, side) => {
           const item = getItem(grp, key);
           if (!item) return null;
           return item[side === "home" ? "homeValue" : "awayValue"] ?? null;
         };
 
-        // "FH/BH (Total)" display string, e.g. "11/7 (18)"
         const sqDisp = (fh, bh, tot) =>
-          (fh == null && bh == null && tot == null)
-            ? "\u2014"
-            : `${fh ?? "\u2014"}/${bh ?? "\u2014"} (${tot ?? "\u2014"})`;
+          (fh == null && bh == null && tot == null) ?
+          "\u2014" :
+          `${fh ?? "\u2014"}/${bh ?? "\u2014"} (${tot ?? "\u2014"})`;
 
-        // one row: display combined string, compare by total value
         const sqRow = (label, hFH, hBH, hTot, aFH, aBH, aTot, lowerBetter) => {
-          const hNum = hTot ?? 0, aNum = aTot ?? 0;
-          let hCls = "neutral", aCls = "neutral";
+          const hNum = hTot ?? 0,
+            aNum = aTot ?? 0;
+          let hCls = "neutral",
+            aCls = "neutral";
           if (hTot != null && aTot != null && hNum !== aNum) {
             const hBetter = lowerBetter ? hNum < aNum : hNum > aNum;
             hCls = hBetter ? "better" : "worse";
@@ -2548,11 +2839,11 @@
         const sqRows =
           sqRow(t('stats_winners'),
             gvn(win, "forehandWinners", "home"), gvn(win, "backhandWinners", "home"), gvn(win, "winnersTotal", "home"),
-            gvn(win, "forehandWinners", "away"), gvn(win, "backhandWinners", "away"), gvn(win, "winnersTotal", "away"))
-          + sqRow(t('stats_forced_errors'),
+            gvn(win, "forehandWinners", "away"), gvn(win, "backhandWinners", "away"), gvn(win, "winnersTotal", "away")) +
+          sqRow(t('stats_forced_errors'),
             gvn(fe, "forehandErrors", "home"), gvn(fe, "backhandErrors", "home"), gvn(fe, "errorsTotal", "home"),
-            gvn(fe, "forehandErrors", "away"), gvn(fe, "backhandErrors", "away"), gvn(fe, "errorsTotal", "away"), true)
-          + sqRow(t('stats_unforced_errors'),
+            gvn(fe, "forehandErrors", "away"), gvn(fe, "backhandErrors", "away"), gvn(fe, "errorsTotal", "away"), true) +
+          sqRow(t('stats_unforced_errors'),
             gvn(ufe, "forehandUnforcedErrors", "home"), gvn(ufe, "backhandUnforcedErrors", "home"), gvn(ufe, "unforcedErrorsTotal", "home"),
             gvn(ufe, "forehandUnforcedErrors", "away"), gvn(ufe, "backhandUnforcedErrors", "away"), gvn(ufe, "unforcedErrorsTotal", "away"), true);
 
@@ -2598,9 +2889,9 @@
         ]);
 
         const ev = detail.event;
-        const seeds = window.eventSeedMap
-          ? window.eventSeedMap[eventId] || { home: "", away: "" }
-          : { home: "", away: "" };
+        const seeds = window.eventSeedMap ?
+          window.eventSeedMap[eventId] || { home: "", away: "" } :
+          { home: "", away: "" };
         hero.innerHTML = buildVsHero(detail, seeds);
         const eventTime = formatTimestamp(ev.changes?.changeTimestamp);
         const venueName = ev.venue?.name || "";
@@ -2616,7 +2907,6 @@
 
         const line2 = [matchDuration, eventTime].filter(Boolean).join(" · ");
 
-        // 两行显示，中间用 <br> 换行
         strip.innerHTML = `
                 <div>${line1 || "&nbsp;"}</div>
                 <div style="margin-top:2px;">${line2 || "&nbsp;"}</div>
@@ -2630,23 +2920,77 @@
     }
 
     // ============================================================
-    // 9. INITIALIZATION
+    // 9. H2H MODAL (新增)
+    // ============================================================
+    function openH2HModal(eventId, p1Name, p2Name, h2hData) {
+  const overlay = document.getElementById('h2hModalOverlay');
+  const sub = document.getElementById('h2hSub');
+  const body = document.getElementById('h2hBody');
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  if (h2hData && typeof h2hData.player1_wins === 'number' && typeof h2hData.player2_wins === 'number') {
+    const p1W = h2hData.player1_wins;
+    const p2W = h2hData.player2_wins;
+    sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${p1W}–${p2W}`;
+    body.innerHTML = `
+      <div style="padding: 10px 0;">
+        <div style="display:flex; justify-content:space-around; padding: 10px 0; border-bottom:1px solid #eee;">
+          <div><strong>${p1Name}</strong><br>${p1W} wins</div>
+          <div style="font-size:1.2em; font-weight:700;">vs</div>
+          <div><strong>${p2Name}</strong><br>${p2W} wins</div>
+        </div>
+        <div style="margin-top:12px; font-size:0.85em; color:#555; text-align:center;">
+          ${(p1W + p2W) > 0 ? '（详细比赛记录加载中...）' : '此前从未交手'}
+        </div>
+      </div>
+    `;
+  } else {
+    sub.textContent = `${p1Name} vs ${p2Name}`;
+    body.innerHTML = `<div style="text-align:center; padding:30px 0; color:#666;">⏳ 暂无交手记录</div>`;
+  }
+
+  // 异步请求详细列表（如果有API）
+  if (h2hData && (h2hData.player1_wins + h2hData.player2_wins) > 0) {
+    fetch(`/api/player_h2h?player1=${encodeURIComponent(p1Name)}&player2=${encodeURIComponent(p2Name)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.matches && data.matches.length > 0) {
+          const recent = data.matches.slice(0, 5);
+          let listHtml = '<ul class="h2h-list" style="margin-top:10px;">';
+          recent.forEach(m => {
+            const winner = m.winner;
+            const loser = m.loser;
+            const score = m.score || '—';
+            const tourney = m.tourney_name || '';
+            const round = m.round || '';
+            const surface = m.surface || '';
+            listHtml += `<li>${tourney} · ${round} · ${surface} · <strong>${winner}</strong> def. ${loser} ${score}</li>`;
+          });
+          listHtml += '</ul>';
+          const detailDiv = document.createElement('div');
+          detailDiv.innerHTML = listHtml;
+          body.appendChild(detailDiv);
+          sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${data.wins_player1}–${data.wins_player2} (${data.total_matches} meetings)`;
+        }
+      })
+      .catch(() => { /* 静默失败 */ });
+  }
+}
+    function closeH2HModal(e) {
+      if (e && e.target !== document.getElementById('h2hModalOverlay')) return;
+      document.getElementById('h2hModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeH2HModal({ target: document.getElementById('h2hModalOverlay') });
+    });
+
+    // ============================================================
+    // 10. INITIALIZATION
     // ============================================================
 
-    // ── Read URL params ──────────────────────────────────────────
-    // Usage: draw.html?t=rome&y=2026
-    // t = tournament slug (must match JSON filename and api_folder dir)
-    // y = year
-    //
-    // TOURNAMENT REGISTRY
-    // Add new tournaments here. Each entry:
-    //   slug      : matches JSON filename segment & api_folder dir name ({slug}_{year})
-    //   label     : display name shown in header
-    //   detail    : subtitle (e.g. "WTA 1000")
-    //   years     : list of available years (newest first)
-    //   primary   : background gradient top color  (fallback if JSON has no color)
-    //   secondary : background gradient bottom color
-    // ────────────────────────────────────────────────────────────
     const GRAND_SLAM_NAMES = new Set([
       "Australian Open",
       "Roland Garros",
@@ -2686,14 +3030,6 @@
         years: [2026],
         isGrandSlam: true,
       },
-      // ── Add more tournaments below ──
-      // beijing: {
-      //   label:     "Beijing, China",
-      //   detail:    "WTA 1000",
-      //   years:     [2026],
-      //   primary:   "#8b0000",
-      //   secondary: "#c0392b",
-      // },
     };
 
     const urlParams = new URLSearchParams(location.search);
@@ -2701,11 +3037,8 @@
     const paramY = urlParams.get("y") || "2026";
     const tourneyInfo = TOURNAMENT_REGISTRY[paramT] || {};
 
-    // slug used for JSON filename and api_folder dir
     window.TOURNAMENT_SLUG = `${paramT}_${paramY}`;
 
-    // ── Apply background colors ──────────────────────────────────
-    // Will be overridden by JSON colors once loaded (if present)
     function applyColors(primary, secondary) {
       document.documentElement.style.setProperty("--color-primary", primary);
       document.documentElement.style.setProperty("--color-secondary", secondary);
@@ -2715,12 +3048,11 @@
       tourneyInfo.secondary || "#379460",
     );
 
-    // ── Render year navigation ───────────────────────────────────
     function renderYearNav() {
       const navEl = document.getElementById("yearNav");
       if (!navEl) return;
       const years = tourneyInfo.years || [paramY];
-      if (years.length <= 1) return; // hide nav if only one year
+      if (years.length <= 1) return;
       navEl.innerHTML =
         `<span class="year-nav-label">Year:</span>` +
         years.map(y => {
@@ -2731,13 +3063,11 @@
     }
     renderYearNav();
 
-    // ── Fetch JSON and render ────────────────────────────────────
     async function fetchAndRender() {
       const timestamp = Date.now();
       const random = Math.random().toString(36).slice(2);
       const jsonUrl = `../../output/draw/draw_${paramT}_${paramY}_with_history_stats.json?v=${timestamp}&r=${random}&nocache=1`;
 
-      // ---- 1. 加载时区映射表 ----
       let timezoneMap = {};
       try {
         const tzRes = await fetch('../../output/tournament_timezones.json', { cache: "no-store" });
@@ -2748,14 +3078,13 @@
       } catch (e) {
         console.warn("Failed to load timezone map, using default", e);
       }
-      // ---- 2. 请求 Draw JSON ----
+
       fetch(jsonUrl, { cache: "no-store" })
         .then((res) => {
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
         })
         .then((data) => {
-          // ---- 3. 根据 uniqueTournament.id 获取时区 ----
           const tourneyId = data.tournament?.tournament?.uniqueTournament?.id;
           let timezone = null;
           if (tourneyId && timezoneMap[tourneyId]) {
@@ -2766,18 +3095,12 @@
               timezone = entry.timezone_by_year[paramY].timezone;
             }
           }
-          // 最终回退时区（可按需修改）
           window.tournamentTimezone = timezone || 'Europe/Rome';
-          // ── Page title ───────────────────────────────────────
+
           const nameFromJson = data.tournament?.name || `${paramY} ${tourneyInfo.label || paramT}`;
           document.getElementById("tournamentName").textContent = nameFromJson;
           document.getElementById("pageTitle").textContent = `${nameFromJson} - Draw`;
 
-          // ── Subtitle ─────────────────────────────────────────
-          const detailEl = document.getElementById("tournamentDetail");
-          if (detailEl) detailEl.textContent = tourneyInfo.detail || "WTA 1000";
-
-          // ── Last updated ──────────────────────────────────────
           const updateEl = document.getElementById("lastUpdated");
           if (updateEl && data.last_updated) {
             const d = new Date(data.last_updated * 1000);
@@ -2790,15 +3113,8 @@
             updateEl.textContent = `📅 ${t('draw_last_updated')}: ${yy}-${mm}-${dd} ${hh}:${mi}`;
           }
 
-          // // ── Override colors from JSON if available ────────────
-          // const primary   = data.tournament?.tournament?.uniqueTournament?.primaryColorHex;
-          // const secondary = data.tournament?.tournament?.uniqueTournament?.secondaryColorHex;
-          // if (primary && secondary) applyColors(primary, secondary);
-
-          // ── Detect draw size (R128 vs R64 etc.) ──────────────
           initDrawSize(data);
 
-          // ── Build draw ────────────────────────────────────────
           window.drawData = data;
           window.eventSeedMap = {};
           data.rounds.forEach((round) => {
@@ -2828,7 +3144,7 @@
     }
 
     // ============================================================
-    // draw 页面语言响应（使用 i18n.js 的 t() 和 langchange 事件）
+    // draw 页面语言响应
     // ============================================================
     function applyDrawLang() {
       document.documentElement.style.setProperty("--tooltip-stats-text", `"${t('draw_view_match_stats')}"`);
@@ -2857,39 +3173,34 @@
     // ============================================================
     const SLUG_TO_TOURNEY = {
       australian_open: "Australian Open",
-      roland_garros:   "Roland Garros",
-      wimbledon:       "Wimbledon",
-      us_open:         "Us Open",
-      doha:            "Doha",
-      dubai:           "Dubai",
-      indian_wells:    "Indian Wells",
-      miami:           "Miami",
-      madrid:          "Madrid",
-      rome:            "Rome",
-      canada:          "Canada",
-      cincinnati:      "Cincinnati",
-      beijing:         "Beijing",
-      wuhan:           "Wuhan",
+      roland_garros: "Roland Garros",
+      wimbledon: "Wimbledon",
+      us_open: "Us Open",
+      doha: "Doha",
+      dubai: "Dubai",
+      indian_wells: "Indian Wells",
+      miami: "Miami",
+      madrid: "Madrid",
+      rome: "Rome",
+      canada: "Canada",
+      cincinnati: "Cincinnati",
+      beijing: "Beijing",
+      wuhan: "Wuhan",
     };
 
-    // ============================================================
-    // 变音符标准化
-    // ============================================================
     function normalizePlayerName(name) {
       return (name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
     }
 
-
     // ============================================================
-    // 历史成绩 Modal（含 tab：赛事历史 / 本赛季）
+    // 历史成绩 Modal
     // ============================================================
-    const HIST_ROUND_ORDER_D = ["F","SF","QF","R16","R32","R64","R128"];
+    const HIST_ROUND_ORDER_D = ["F", "SF", "QF", "R16", "R32", "R64", "R128"];
 
-    // 当前 modal 状态
-    window._currentModalPlayer     = null;
+    window._currentModalPlayer = null;
     window._currentModalTournament = null;
-    window._currentModalYear       = null;
-    window._currentModalTab        = "hist";
+    window._currentModalYear = null;
+    window._currentModalTab = "hist";
 
     function openHistModalByName(playerName) {
       const tournament = SLUG_TO_TOURNEY[paramT] || null;
@@ -2900,40 +3211,38 @@
     }
 
     function _openHistModal(player, tournament) {
-      window._currentModalPlayer     = player;
+      window._currentModalPlayer = player;
       window._currentModalTournament = tournament;
-      window._currentModalYear       = paramY ? parseInt(paramY) : new Date().getFullYear();
-      window._currentModalTab        = "hist";
-      window._histSubCache           = null;
-      window._seasonSubCache         = null;
+      window._currentModalYear = paramY ? parseInt(paramY) : new Date().getFullYear();
+      window._currentModalTab = "hist";
+      window._histSubCache = null;
+      window._seasonSubCache = null;
 
-      const overlay  = document.getElementById("histOverlay");
-      const titleEl  = document.getElementById("histTitle");
-      const subEl    = document.getElementById("histSub");
+      const overlay = document.getElementById("histOverlay");
+      const titleEl = document.getElementById("histTitle");
+      const subEl = document.getElementById("histSub");
       const histBody = document.getElementById("histContent");
       const seasBody = document.getElementById("seasonContent");
       const closeBtn = document.getElementById("histCloseBtn");
 
-      // 重置 tab 状态
       document.getElementById("tabBtnHist").classList.add("active");
       document.getElementById("tabBtnSeason").classList.remove("active");
       histBody.classList.add("active");
       seasBody.classList.remove("active");
       seasBody.innerHTML = "";
 
-      // tab 标签文字
-      document.getElementById("tabBtnHist").textContent   = t('draw_tab_hist');
+      document.getElementById("tabBtnHist").textContent = t('draw_tab_hist');
       document.getElementById("tabBtnSeason").textContent = t('draw_tab_season') + " " + window._currentModalYear;
 
-      titleEl.textContent  = player + " \u00b7 " + tournament + " " + t('draw_hist_suffix');
-      subEl.textContent    = t('draw_hist_loading');
-      histBody.innerHTML   = "";
+      titleEl.textContent = player + " \u00b7 " + tournament + " " + t('draw_hist_suffix');
+      subEl.textContent = t('draw_hist_loading');
+      histBody.innerHTML = "";
       closeBtn.textContent = t('draw_hist_close');
       overlay.classList.add("open");
       document.body.style.overflow = "hidden";
 
       fetch("/api/player_tournament_history?player=" + encodeURIComponent(player) +
-            "&tournament=" + encodeURIComponent(tournament))
+          "&tournament=" + encodeURIComponent(tournament))
         .then(r => r.json())
         .then(data => {
           if (data.error || !data.matches || data.matches.length === 0) {
@@ -2942,16 +3251,16 @@
             return;
           }
           const matches = data.matches;
-          const wins    = matches.filter(m => m.result === "W").length;
-          const losses  = matches.filter(m => m.result === "L").length;
-          const years   = [...new Set(matches.map(m => m.year))];
-          const yMin    = Math.min(...years);
-          const yMax    = Math.max(...years);
+          const wins = matches.filter(m => m.result === "W").length;
+          const losses = matches.filter(m => m.result === "L").length;
+          const years = [...new Set(matches.map(m => m.year))];
+          const yMin = Math.min(...years);
+          const yMax = Math.max(...years);
           const winRate = (wins + losses) > 0 ? (wins / (wins + losses) * 100).toFixed(1) : "0.0";
           const histSub = matches.length + " " + t('draw_hist_matches') +
-                              " · " + t('draw_hist_winrate') + " " + winRate + "%" +
-                              " (" + wins + t('draw_hist_win') + " " + losses + t('draw_hist_loss') + ")" +
-                              " · " + yMin + "\u2013" + yMax;
+            " · " + t('draw_hist_winrate') + " " + winRate + "%" +
+            " (" + wins + t('draw_hist_win') + " " + losses + t('draw_hist_loss') + ")" +
+            " · " + yMin + "\u2013" + yMax;
           subEl.textContent = histSub;
           window._histSubCache = histSub;
 
@@ -2971,22 +3280,22 @@
             '</tr></thead>';
 
           sortedYears.forEach(year => {
-            const group    = byYear[year];
+            const group = byYear[year];
             const rankEntry = group.find(m => m.winner_name === player || m.loser_name === player);
-            const playerRankThisYear = rankEntry
-              ? (rankEntry.winner_name === player ? rankEntry.winner_rank : rankEntry.loser_rank)
-              : null;
+            const playerRankThisYear = rankEntry ?
+              (rankEntry.winner_name === player ? rankEntry.winner_rank : rankEntry.loser_rank) :
+              null;
             const rankTag = playerRankThisYear ? '#' + playerRankThisYear + ' ' + player : player;
             html += '<tbody><tr><td colspan="4" style="padding:0;border:none">' +
-                    '<div class="hyr-hdr">' +
-                    '<span class="hyr-label">' + year + '</span>' +
-                    '<span class="hyr-meta" style="margin-left:auto">' + rankTag + '</span>' +
-                    '</div></td></tr>';
+              '<div class="hyr-hdr">' +
+              '<span class="hyr-label">' + year + '</span>' +
+              '<span class="hyr-meta" style="margin-left:auto">' + rankTag + '</span>' +
+              '</div></td></tr>';
             group.forEach(m => {
-              const isWin    = m.result === "W";
+              const isWin = m.result === "W";
               const opponent = m.winner_name === player ? m.loser_name : m.winner_name;
-              const oppRank  = m.winner_name === player ? m.loser_rank : m.winner_rank;
-              const oppStr   = oppRank ? '#' + oppRank + ' ' + opponent : opponent;
+              const oppRank = m.winner_name === player ? m.loser_rank : m.winner_rank;
+              const oppStr = oppRank ? '#' + oppRank + ' ' + opponent : opponent;
               html += '<tr>' +
                 '<td class="tleft"><span class="h-rd">' + m.round + '</span></td>' +
                 '<td style="text-align:center"><span class="' + (isWin ? "h-badge-w" : "h-badge-l") + '">' + m.result + '</span></td>' +
@@ -3000,13 +3309,11 @@
           histBody.innerHTML = html;
         })
         .catch(() => {
-          subEl.textContent  = "";
+          subEl.textContent = "";
           histBody.innerHTML = '<div class="h-no-data">' + t('draw_hist_no_data') + '</div>';
         });
     }
 
-    // ── 切换 tab ──────────────────────────────────────────────────
-    // ── 切换 tab ──────────────────────────────────────────────────
     function switchHistTab(which) {
       window._currentModalTab = which;
       document.getElementById("tabBtnHist").classList.toggle("active", which === "hist");
@@ -3015,13 +3322,12 @@
       document.getElementById("seasonContent").classList.toggle("active", which === "season");
 
       const titleEl = document.getElementById("histTitle");
-      const subEl   = document.getElementById("histSub");
-      const player  = window._currentModalPlayer;
-      const year    = window._currentModalYear;
+      const subEl = document.getElementById("histSub");
+      const player = window._currentModalPlayer;
+      const year = window._currentModalYear;
 
       if (which === "hist") {
         titleEl.textContent = player + " \u00b7 " + window._currentModalTournament + " " + t('draw_hist_suffix');
-        // 恢复 hist 的 sub 文字（由 fetch 写入后缓存）
         subEl.textContent = window._histSubCache || t('draw_hist_loading');
       } else {
         titleEl.textContent = player + " \u00b7 " + year + " " + t('draw_tab_season');
@@ -3029,53 +3335,51 @@
       }
     }
 
-    // ── 加载 season tab 数据 ──────────────────────────────────────
     function _loadSeasonTab(player, year, subEl) {
       const seasBody = document.getElementById("seasonContent");
-      // 避免重复加载
       if (seasBody.dataset.loaded === player + "_" + year) {
         subEl.textContent = window._seasonSubCache || "";
         return;
       }
       seasBody.dataset.loaded = "";
       seasBody.innerHTML = '<div class="h-no-data">' + t('draw_season_loading') + '</div>';
-      subEl.textContent  = t('draw_season_loading');
+      subEl.textContent = t('draw_season_loading');
 
       fetch("/api/player_season_matches?player=" + encodeURIComponent(player) +
-            "&year=" + encodeURIComponent(year))
+          "&year=" + encodeURIComponent(year))
         .then(r => r.json())
         .then(data => {
           if (data.error || !data.matches || data.matches.length === 0) {
-            subEl.textContent  = "";
+            subEl.textContent = "";
             window._seasonSubCache = "";
             seasBody.innerHTML = '<div class="h-no-data">' + t('draw_season_no_data') + '</div>';
             return;
           }
-          const matches  = data.matches;
-          const wins     = data.wins;
-          const losses   = data.losses;
-          const winRate  = (wins + losses) > 0 ? (wins / (wins + losses) * 100).toFixed(1) : "0.0";
+          const matches = data.matches;
+          const wins = data.wins;
+          const losses = data.losses;
+          const winRate = (wins + losses) > 0 ? (wins / (wins + losses) * 100).toFixed(1) : "0.0";
           const seasonSub = matches.length + " " + t('draw_hist_matches') +
-                              " · " + t('draw_hist_winrate') + " " + winRate + "%" +
-                              " (" + wins + t('draw_hist_win') + " " + losses + t('draw_hist_loss') + ")";
+            " · " + t('draw_hist_winrate') + " " + winRate + "%" +
+            " (" + wins + t('draw_hist_win') + " " + losses + t('draw_hist_loss') + ")";
           subEl.textContent = seasonSub;
           window._seasonSubCache = seasonSub;
 
-          // 按赛事分组（保留原始赛事出现顺序）
           const tourneyOrder = [];
-          const byTourney    = {};
+          const byTourney = {};
           matches.forEach(m => {
             const key = m.tourney_name || "Unknown";
-            if (!byTourney[key]) { byTourney[key] = []; tourneyOrder.push(key); }
+            if (!byTourney[key]) { byTourney[key] = [];
+              tourneyOrder.push(key); }
             byTourney[key].push(m);
           });
 
           const LEVEL_CLASS = {
             'Grand Slam': 'level-GrandSlam',
             'WTA Finals': 'level-Finals',
-            'WTA1000':    'level-WTA1000',
-            'WTA500':     'level-WTA500Premier',
-            'WTA250':     'level-WTA250International',
+            'WTA1000': 'level-WTA1000',
+            'WTA500': 'level-WTA500Premier',
+            'WTA250': 'level-WTA250International',
           };
 
           let html = '<table class="htbl"><colgroup><col style="width:48px"><col style="width:40px"><col><col style="width:100px"></colgroup>' +
@@ -3087,31 +3391,31 @@
             '</tr></thead>';
 
           tourneyOrder.forEach(tname => {
-            const group     = byTourney[tname];
-            const fm        = group[0];
+            const group = byTourney[tname];
+            const fm = group[0];
             const rankEntry = group.find(m => m.player_rank != null);
-            const pRank     = rankEntry ? rankEntry.player_rank : null;
-            const rankTag   = pRank ? '#' + pRank + ' ' + player : player;
-            const levelCls  = LEVEL_CLASS[fm.tourney_level] || 'level-other';
-            const levelBadge = fm.level_label
-              ? '<span class="badge-level ' + levelCls + '">' + fm.level_label + '</span>' : '';
-            const surfaceBadge = fm.surface
-              ? '<span class="surface-badge surface-' + fm.surface + '">' + fm.surface + '</span>' : '';
-            const badgeGroup = (levelBadge || surfaceBadge)
-              ? '<span class="hyr-badge-group">' + levelBadge + surfaceBadge + '</span>' : '';
+            const pRank = rankEntry ? rankEntry.player_rank : null;
+            const rankTag = pRank ? '#' + pRank + ' ' + player : player;
+            const levelCls = LEVEL_CLASS[fm.tourney_level] || 'level-other';
+            const levelBadge = fm.level_label ?
+              '<span class="badge-level ' + levelCls + '">' + fm.level_label + '</span>' : '';
+            const surfaceBadge = fm.surface ?
+              '<span class="surface-badge surface-' + fm.surface + '">' + fm.surface + '</span>' : '';
+            const badgeGroup = (levelBadge || surfaceBadge) ?
+              '<span class="hyr-badge-group">' + levelBadge + surfaceBadge + '</span>' : '';
 
             group.sort((a, b) => HIST_ROUND_ORDER_D.indexOf(a.round) - HIST_ROUND_ORDER_D.indexOf(b.round));
 
             html += '<tbody><tr><td colspan="4" style="padding:0;border:none">' +
-                    '<div class="hyr-hdr">' +
-                    '<span class="hyr-label">' + tname + '</span>' +
-                    badgeGroup +
-                    '<span class="hyr-meta" style="margin-left:auto">' + rankTag + '</span>' +
-                    '</div></td></tr>';
+              '<div class="hyr-hdr">' +
+              '<span class="hyr-label">' + tname + '</span>' +
+              badgeGroup +
+              '<span class="hyr-meta" style="margin-left:auto">' + rankTag + '</span>' +
+              '</div></td></tr>';
 
             group.forEach(m => {
-              const isWin   = m.result === "W";
-              const oppStr  = m.opponent_rank ? '#' + m.opponent_rank + ' ' + m.opponent : m.opponent;
+              const isWin = m.result === "W";
+              const oppStr = m.opponent_rank ? '#' + m.opponent_rank + ' ' + m.opponent : m.opponent;
               html += '<tr>' +
                 '<td class="tleft"><span class="h-rd">' + (m.round || '?') + '</span></td>' +
                 '<td style="text-align:center"><span class="' + (isWin ? "h-badge-w" : "h-badge-l") + '">' + m.result + '</span></td>' +
@@ -3122,11 +3426,11 @@
             html += '</tbody>';
           });
           html += '</table>';
-          seasBody.innerHTML      = html;
+          seasBody.innerHTML = html;
           seasBody.dataset.loaded = player + "_" + year;
         })
         .catch(() => {
-          subEl.textContent  = "";
+          subEl.textContent = "";
           window._seasonSubCache = "";
           seasBody.innerHTML = '<div class="h-no-data">' + t('draw_season_no_data') + '</div>';
         });

@@ -7,9 +7,6 @@ import pandas as pd
 from typing import Dict, List
 from get_draw_and_event import normalize_name
 
-
-
-
 # 轮次排序（用于判断最佳轮次）
 ROUND_ORDER = {
     "R128": 1,
@@ -26,14 +23,10 @@ def to_title_case(s: str) -> str:
     return s.strip().title()
 
 def load_historical_calendar(calendar_path: str) -> Dict[tuple, str]:
-    """
-    从 wta_calendar_champs_start_2009.json 加载每年每项赛事的级别映射。
-    返回 {(year, tourney_name_title_case): level}
-    """
+    """保留但不再使用（为了兼容性）"""
     with open(calendar_path, "r", encoding="utf-8") as f:
         total_json_data = json.load(f)
         data = total_json_data.get("data", [])
-
     mapping = {}
     for entry in data:
         year = entry.get("year")
@@ -48,61 +41,36 @@ def load_historical_calendar(calendar_path: str) -> Dict[tuple, str]:
     return mapping
 
 def load_stats_cache(stats_cache_path) -> Dict[str, Dict]:
-    """
-    加载罗马战绩缓存文件
-    """
     if os.path.exists(stats_cache_path):
         with open(stats_cache_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     return {}
 
-def save_stats_cache(cache: Dict[str, Dict]):
-    """
-    保存罗马战绩缓存文件
-    """
-    with open(STATS_CACHE_PATH, 'w', encoding='utf-8') as f:
+def save_stats_cache(cache: Dict[str, Dict], stats_cache_path: str):
+    with open(stats_cache_path, 'w', encoding='utf-8') as f:
         json.dump(cache, f, indent=2, ensure_ascii=False)
     print(f"已更新罗马战绩缓存，共 {len(cache)} 名球员")
 
 def get_match_score(data_dir: str, event_id: str) -> Dict:
-    """
-    从比赛详情文件中提取homeScore和awayScore的period信息
-    
-    Args:
-        data_dir: 数据目录路径
-        event_id: 事件ID
-    
-    Returns:
-        {homeScore: {period1, period2, ...}, awayScore: {period1, period2, ...}}
-    """
     if not event_id:
         return {}
-    
     event_detail_path = os.path.join(data_dir, f"event_detail_{event_id}.json")
-    
     if not os.path.exists(event_detail_path):
         return {}
-    
     try:
         with open(event_detail_path, 'r', encoding='utf-8') as f:
             event_data = json.load(f)
-        
         event = event_data.get('event', {})
         home_score = event.get('homeScore', {})
         away_score = event.get('awayScore', {})
-        
-        # 提取所有period*字段
         home_periods = {}
         away_periods = {}
-        
         for key, value in home_score.items():
             if key.startswith('period'):
                 home_periods[key] = value
-        
         for key, value in away_score.items():
             if key.startswith('period'):
                 away_periods[key] = value
-        
         return {
             'homeScore': home_periods,
             'awayScore': away_periods
@@ -112,10 +80,8 @@ def get_match_score(data_dir: str, event_id: str) -> Dict:
         return {}
 
 def find_tourney_stats(name: str, stats_map: Dict, not_found: List, ranking: str) -> Dict:
-    """查找球员的赛事历史统计数据"""
     if name in ['Bye', 'TBD']:
         return {'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''}
-
     if name in stats_map:
         tourney_data = stats_map[name]
         return {
@@ -129,105 +95,77 @@ def find_tourney_stats(name: str, stats_map: Dict, not_found: List, ranking: str
         not_found.append({'name': name, 'ranking': ranking})
         return {'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''}
 
+# ========== 加载所有比赛数据 ==========
+def load_tennis_dataframe(matches_dir: str = "tennis_wta", start_year: int = 2009) -> pd.DataFrame:
+    files = sorted(glob.glob(os.path.join(matches_dir, "wta_matches_*.csv")))
+    if not files:
+        print(f"警告：在 {matches_dir} 中未找到任何 CSV 文件")
+        return pd.DataFrame()
+    dfs = []
+    for f in files:
+        try:
+            year = int(os.path.basename(f).replace("wta_matches_", "").replace(".csv", ""))
+            if year < start_year:
+                continue
+            df = pd.read_csv(f, dtype=str)
+            dfs.append(df)
+        except Exception as e:
+            print(f"警告：无法读取 {f}，跳过 ({e})")
+            continue
+    if not dfs:
+        return pd.DataFrame()
+    return pd.concat(dfs, ignore_index=True)
+
+# ========== H2H 查询 ==========
+def get_h2h_from_df(df: pd.DataFrame, player1: str, player2: str) -> Dict[str, int]:
+    p1 = normalize_name(player1)
+    p2 = normalize_name(player2)
+    mask = ((df['winner_name'] == p1) & (df['loser_name'] == p2)) | \
+           ((df['winner_name'] == p2) & (df['loser_name'] == p1))
+    matches = df[mask]
+    wins_p1 = len(matches[matches['winner_name'] == p1])
+    wins_p2 = len(matches[matches['winner_name'] == p2])
+    return {"player1_wins": wins_p1, "player2_wins": wins_p2}
+
+# ========== 历史统计（无级别过滤） ==========
 def get_tourney_stats_for_players(
-    player_names,
-    season,
-    matches_dir,
-    historical_calendar_path,
-    target_tourney,
-    stats_cache_path
+    df: pd.DataFrame,
+    player_names: List[str],
+    target_tourney: str,
+    stats_cache_path: str
 ) -> Dict[str, Dict]:
-    """
-    从 tennis_wta 文件夹的历年 CSV 中提取指定球员在赛事的历史统计数据。
-    支持缓存：先从缓存读取，缺失的球员再从 CSV 中获取并更新缓存。
-
-    Args:
-        player_names: 需要查询的球员姓名列表
-        matches_dir: 存放 wta_matches_{year}.csv 的目录
-        historical_calendar_path: 历史赛历 JSON 路径
-        target_tourney: 目标赛事名称（Title Case），默认为 "Rome"
-
-    Returns:
-        {player_name: {best_round, W, L, winrate, titles}} 的字典
-    """
-    # 加载现有缓存
     cache = load_stats_cache(stats_cache_path)
-    
-    # 分离已缓存和未缓存的球员
     cached_players = {name: cache[name] for name in player_names if name in cache}
     missing_players = [name for name in player_names if name not in cache]
-    
     print(f"缓存命中: {len(cached_players)} 名球员")
-    print(f"需要获取: {len(missing_players)} 名球员")
-    
-    # 如果没有缺失的球员，直接返回缓存结果
+    print(f"需要计算: {len(missing_players)} 名球员")
     if not missing_players:
         return cached_players
-    
-    # 加载历史赛历
-    hist_cal = load_historical_calendar(historical_calendar_path)
-    
-    # 初始化缺失球员的统计结构
-    missing_stats: Dict[str, Dict] = {}
-    for name in missing_players:
-        missing_stats[name] = {
-            "rounds_seen": set(),
-            "wins": 0,
-            "losses": 0,
-            "has_won_final": 0
-        }
-    
-    # 创建缺失球员名集合用于快速查找
+    df_target = df[df['tourney_name'] == target_tourney].copy()
+    missing_stats = {name: {"rounds_seen": set(), "wins": 0, "losses": 0, "has_won_final": 0} 
+                     for name in missing_players}
     missing_set = set(missing_players)
-    
-    # 遍历历年 CSV，只处理缺失的球员
-    for year in range(2009, season):
-        file_path = os.path.join(matches_dir, f"wta_matches_{year}.csv")
-        if not os.path.exists(file_path):
-            print(f"警告：文件 {file_path} 不存在，跳过")
-            continue
-        
-        df = pd.read_csv(file_path)
-        
-        for _, row in df.iterrows():
-            raw_tourney = row["tourney_name"]
-            tourney_title = to_title_case(raw_tourney)
-            if to_title_case(tourney_title) in ['Montreal', 'Toronto']:
-                tourney_title = 'Canada'
-            
-            # 只处理目标赛事
-            if tourney_title != target_tourney:
-                continue
-            
-            # 验证该年此赛事确实是大赛级别
-            actual_level = hist_cal.get((year, tourney_title))
-            if actual_level not in {"Grand Slam", "WTA 1000", "WTA1000"}:
-                continue
-            
-            winner = row["winner_name"]
-            loser = row["loser_name"]
-            round_val = row["round"]
-            score = str(row.get("score", "")).strip()
-            
-            # 处理胜者（仅当在缺失球员集合中）
-            if winner in missing_set:
-                entry = missing_stats[winner]
-                if score.upper() != "W/O":
-                    entry["wins"] += 1
-                if round_val in ROUND_ORDER:
-                    entry["rounds_seen"].add(round_val)
-                if round_val == "F":
-                    entry["has_won_final"] += 1
-            
-            # 处理负者（仅当在缺失球员集合中）
-            if loser in missing_set:
-                entry = missing_stats[loser]
-                if score.upper() != "W/O":
-                    entry["losses"] += 1
-                if round_val in ROUND_ORDER:
-                    entry["rounds_seen"].add(round_val)
-    
-    # 转换缺失球员的统计为最终格式
+    for _, row in df_target.iterrows():
+        winner = row["winner_name"]
+        loser = row["loser_name"]
+        round_val = row["round"]
+        score = str(row.get("score", "")).strip()
+        if winner in missing_set:
+            entry = missing_stats[winner]
+            if score.upper() != "W/O":
+                entry["wins"] += 1
+            if round_val in ROUND_ORDER:
+                entry["rounds_seen"].add(round_val)
+            if round_val == "F":
+                entry["has_won_final"] += 1
+        if loser in missing_set:
+            entry = missing_stats[loser]
+            if score.upper() != "W/O":
+                entry["losses"] += 1
+            if round_val in ROUND_ORDER:
+                entry["rounds_seen"].add(round_val)
+            if round_val == "F":
+                entry["has_won_final"] += 1
     new_entries = {}
     for name, data in missing_stats.items():
         if data["has_won_final"] > 0:
@@ -239,12 +177,10 @@ def get_tourney_stats_for_players(
                 best_round = next(r for r, num in ROUND_ORDER.items() if num == max_num)
             else:
                 best_round = ""
-        
         wins = data["wins"]
         losses = data["losses"]
         total = wins + losses
         winrate = wins / total if total > 0 else 0.0
-        
         new_entries[name] = {
             "best_round": best_round,
             "W": wins,
@@ -252,69 +188,48 @@ def get_tourney_stats_for_players(
             "winrate": round(winrate, 3),
             "titles": data["has_won_final"]
         }
-    
-    # 更新缓存
     cache.update(new_entries)
-    save_stats_cache(cache)
-    
-    # 合并缓存结果和新获取的结果
-    result = {**cached_players, **new_entries}
-    return result
+    save_stats_cache(cache, stats_cache_path)
+    return {**cached_players, **new_entries}
 
+# ========== 核心函数 ==========
 def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_path):
-    """为 draw.json 添加赛事历史统计和排名数据，生成结构化的 JSON"""
-
     draw_json_path = f"{data_dir}/draw.json"
-
-    # 读取原始 draw.json
     with open(draw_json_path, 'r', encoding='utf-8') as f:
         draw_data = json.load(f)
-
-    # 获取正赛签表
     main_draw = draw_data['cupTrees'][0]
     
-    # ============ 优化：只遍历 Round of 128，同时收集球员名和种子信息 ============
     all_player_names = set()
-    player_seed_map = {}  # {player_name: seed_number}
-    
-    # 找到第一轮（Round of 128）
+    player_seed_map = {}
     round_1 = main_draw['rounds'][0] if main_draw['rounds'] else None
-    
     if round_1:
         for block in round_1['blocks']:
             for player in block.get('participants', []):
                 team = player.get('team', {})
                 name = normalize_name(team.get('name', ''))
-                
-                # 跳过无效球员
                 if not name or name in ['Bye', 'TBD', '']:
                     continue
-                
-                # 收集球员名
                 all_player_names.add(name)
-                
-                # 收集种子信息（如果有的话）
                 team_seed = player.get('teamSeed', '')
                 if team_seed:
                     player_seed_map[name] = team_seed
-    
     print(f"共找到 {len(all_player_names)} 名球员，其中 {len(player_seed_map)} 名有种子信息")
     
-    # 使用缓存机制获取历史统计
+    print("正在加载比赛数据框（用于历史统计和H2H）...")
+    matches_df = load_tennis_dataframe("tennis_wta", start_year=2009)
+    print(f"加载完成，共 {len(matches_df)} 场比赛记录")
+    
     stats_map = get_tourney_stats_for_players(
+        df=matches_df,
         player_names=list(all_player_names),
-        season=season,
-        matches_dir="tennis_wta",
-        historical_calendar_path="output/wta_calendar_champs_start_2009.json",
         target_tourney=tourney_name,
         stats_cache_path=stats_cache_path
     )
     print(f"成功获取 {len(stats_map)} 名球员的{tourney_name}历史数据")
-
+    
     current_round = main_draw.get('currentRound', 1)
-    not_found = []  # 未找到历史数据的球员
-
-    # 构建增强后的 rounds 结构
+    not_found = []
+    
     enhanced_rounds = []
     for round_data in main_draw['rounds']:
         round_info = {
@@ -323,7 +238,6 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
             'description': round_data['description'],
             'blocks': []
         }
-
         for block in round_data['blocks']:
             finished = block.get('finished', False)
             result = block.get('result', '')
@@ -332,9 +246,8 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
             event_id = events[0] if events else ''
             participants = block.get('participants', [])
             block_id = block.get('blockId', '')
-
             enhanced_participants = []
-
+            # ---------- 处理 participants ----------
             if len(participants) == 0:
                 for _ in range(2):
                     enhanced_participants.append({
@@ -352,10 +265,7 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                 team_id = team.get('id')
                 ranking = team.get('ranking', '')
                 stats = find_tourney_stats(name, stats_map, not_found, ranking)
-                
-                # 从映射表获取种子信息
                 team_seed = player_seed_map.get(name, player.get('teamSeed', ''))
-
                 enhanced_participants.append({
                     'name': name, 'shortname': shortname, 'ranking': ranking,
                     'winner': player.get('winner', ''),
@@ -373,7 +283,7 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                     'blockId': '',
                     'best_round': '', 'W': '', 'L': '', 'winrate': '', 'titles': ''
                 })
-            else:
+            else:  # len == 2
                 for player in participants:
                     team = player.get('team', {})
                     name = normalize_name(team.get('name', ''))
@@ -381,10 +291,7 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                     team_id = team.get('id')
                     ranking = team.get('ranking', '')
                     stats = find_tourney_stats(name, stats_map, not_found, ranking)
-                        
-                    # 从映射表获取种子信息
                     team_seed = player_seed_map.get(name, player.get('teamSeed', ''))
-
                     enhanced_participants.append({
                         'name': name, 'shortname': shortname, 'ranking': ranking,
                         'winner': player.get('winner', ''),
@@ -395,8 +302,7 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                         'block_id': block_id,
                         **stats
                     })
-
-            # 当finished=true且有2个participants时，获取比分数据
+            # ---------- 构建 block_info ----------
             block_info = {
                 'finished': finished,
                 'result': result,
@@ -404,18 +310,21 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
                 'event_id': event_id,
                 'participants': enhanced_participants
             }
-            
+            # ---------- H2H：不要求 finished ----------
+            if len(enhanced_participants) == 2:
+                p1 = enhanced_participants[0].get('name', '')
+                p2 = enhanced_participants[1].get('name', '')
+                if p1 and p2 and p1 not in ['Bye', 'TBD'] and p2 not in ['Bye', 'TBD']:
+                    h2h = get_h2h_from_df(matches_df, p1, p2)
+                    block_info['h2h'] = h2h
+            # ---------- 比分（仅 finished） ----------
             if finished and len(enhanced_participants) == 2 and event_id:
                 block_score = get_match_score(data_dir, event_id)
                 if block_score:
                     block_info['score'] = block_score
-            
             round_info['blocks'].append(block_info)
-
         enhanced_rounds.append(round_info)
-
-
-    # 构建最终输出
+    
     output = {
         'last_updated': int(time.time()),
         'currentRound': current_round,
@@ -425,21 +334,15 @@ def enhance_draw(tourney_name, season, data_dir, stats_cache_path, tourney_json_
         },
         'rounds': enhanced_rounds
     }
-
-    # 保存 JSON
     with open(tourney_json_path, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
-
-    # 打印未找到历史数据的球员（仅打印有排名的）
     if len(not_found) > 0:
         print(f"\n以下球员未找到{tourney_name}赛事历史数据：")
         for player in not_found:
             if player['ranking'] != '':
                 print(f"  - {player['name']} (Rank: {player['ranking']})")
-
     print(f"\n增强数据已保存：{tourney_json_path}")
     print(f"当前轮次: Round {current_round}")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='获取网球赛事数据')
@@ -447,30 +350,25 @@ if __name__ == "__main__":
                         help='赛事名称 (默认: Wimbledon)')
     parser.add_argument('--season', type=int, default=2026,
                         help='赛季年份 (默认: 2026)')
-    
     args = parser.parse_args()
-    
-    # 从参数生成所有需要的变量
     TOURNEY_NAME = args.tourney_name
     SEASON = args.season
-    
-    # 自动生成路径（组合 lowercase name 和 season）
     tourney_lower = TOURNEY_NAME.lower().replace(' ', '_')
-    # map Roland Garros into roland_garros
+    if TOURNEY_NAME.lower() == 'roland garros':
+        tourney_lower = 'roland_garros'
     DATA_DIR = f"api_folder/data/{tourney_lower}_{SEASON}"
     STATS_CACHE_PATH = f"{DATA_DIR}/tournament_stats_cache.json"
     TOURNEY_JSON_PATH = f"./output/draw/draw_{tourney_lower}_{SEASON}_with_history_stats.json"
-    
     print(f"配置信息:")
     print(f"  赛事名称: {TOURNEY_NAME}")
     print(f"  赛季: {SEASON}")
     print(f"  数据目录: {DATA_DIR}")
     print(f"  缓存路径: {STATS_CACHE_PATH}")
     print(f"  输出路径: {TOURNEY_JSON_PATH}")
-
     enhance_draw(
         tourney_name=TOURNEY_NAME, 
         season=SEASON, 
         data_dir=DATA_DIR,
         stats_cache_path=STATS_CACHE_PATH,
-        tourney_json_path=TOURNEY_JSON_PATH)
+        tourney_json_path=TOURNEY_JSON_PATH
+    )
