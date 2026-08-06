@@ -249,14 +249,14 @@
     }
 
     .match-meta {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      color: #666;
+      color: #19503b;
       letter-spacing: 0.03em;
     }
 
     .h2h-btn {
-      background: #f39c12;
+      background: #00695c;
       border: none;
       color: white;
       font-size: 10px;
@@ -269,7 +269,7 @@
     }
 
     .h2h-btn:hover:not(:disabled) {
-      background: #d68910;
+      background: #004d40;
     }
 
     .h2h-btn:disabled {
@@ -338,7 +338,7 @@
 
     .player-rank {
       font-size: 0.82em;
-      color: #aaa;
+      color: #666;
       font-weight: 600;
       flex-shrink: 0;
       min-width: 28px;
@@ -2028,7 +2028,8 @@
         }
 
         let headerHtml = `<div class="match-header">
-          <span class="match-meta">${roundName} · Match ${matchNumber}</span>
+          
+          <span class="match-meta">◈ ${roundName} · Match ${matchNumber}</span>
           ${btnHtml}
         </div>`;
 
