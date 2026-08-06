@@ -173,8 +173,8 @@ const i18n = {
     bigTournament_modal_opponent: "Opponent",
 
     /* ── no1Club · wta_no1_club ─────────────────────────────── */
-    no1Club_page_title: "WTA No.1 Club · Historical Leaderboard",
-    no1Club_title: "👑 WTA No.1 Club · Historical Leaderboard",
+    no1Club_title: "👑 WTA & ATP World No.1 Club · Historical Leaderboard",
+  no1Club_page_title: "WTA & ATP World No.1 Club · Historical Leaderboard",
     no1Club_player_count: (n) => `${n} players`,
     no1Club_th_group_no1: "NO.1",
     no1Club_th_group_titles: "TITLES",
@@ -183,7 +183,7 @@ const i18n = {
     no1Club_th_weeks: "WEEKS",
     no1Club_th_consec: "CONSEC.",
     no1Club_th_gs: "GS",
-    no1Club_th_1000: "WTA 1000",
+    no1Club_th_1000: "Master 1000",
     no1Club_th_overall: "OVERALL",
     no1Club_th_hard: "H",
     no1Club_th_clay: "C",
@@ -402,8 +402,8 @@ const i18n = {
     bigTournament_modal_opponent: "对手",
 
      /* ── no1Club · wta_no1_club ─────────────────────────────── */
-    no1Club_page_title: "WTA 世界第一俱乐部 · 历史排行榜",
-    no1Club_title: "👑 WTA 世界第一俱乐部 · 历史排行榜",
+    no1Club_title: "👑 WTA & ATP 世界第一俱乐部 · 历史排行榜",
+no1Club_page_title: "WTA & ATP 世界第一俱乐部 · 历史排行榜",
     no1Club_player_count: (n) => `${n} 位球员`,
     no1Club_th_group_no1: "世界第一",
     no1Club_th_group_titles: "冠军数",
@@ -412,7 +412,7 @@ const i18n = {
     no1Club_th_weeks: "总周数",
     no1Club_th_consec: "最长连续",
     no1Club_th_gs: "大满贯",
-    no1Club_th_1000: "WTA 1000",
+    no1Club_th_1000: "1000赛",
     no1Club_th_overall: "综合",
     no1Club_th_hard: "硬",
     no1Club_th_clay: "红",

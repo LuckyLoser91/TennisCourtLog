@@ -11,15 +11,15 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>WTA No.1 Club · Historical Leaderboard</title>
+  <title>WTA & ATP World No.1 Club · Historical Leaderboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../common/css/styles.css?v=202606290001" />
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="MyWebSite" />
-<link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <link rel="manifest" href="/site.webmanifest" />
   <script src="../common/js/i18n.js"></script>
 
   <style>
@@ -53,7 +53,6 @@
     col.c-clay     { width: 50px; }
     col.c-grass    { width: 50px; }
 
-    /* 双行表头：分组行 */
     .table thead tr:first-child th {
       border-bottom: none !important;
       padding-bottom: 3px;
@@ -68,7 +67,6 @@
       padding: 7px 6px;
     }
 
-    /* 球员列 */
     .td-player {
       text-align: left !important;
       padding-left: 10px !important;
@@ -83,7 +81,6 @@
       font-size: 11px;
     }
 
-    /* 在役绿点 */
     .active-dot {
       display: inline-block;
       width: 7px;
@@ -94,7 +91,6 @@
       vertical-align: middle;
     }
 
-    /* 胜率格 */
     .wr-cell {
       display: inline-block;
       border-radius: 5px;
@@ -105,7 +101,6 @@
       text-align: center;
     }
 
-    /* 脚注图例 */
     .legend-dot {
       display: inline-block;
       width: 10px;
@@ -114,7 +109,6 @@
       vertical-align: middle;
     }
 
-    /* 分隔线 */
     .surf-sep {
       border-left: 1px solid var(--border-main) !important;
     }
@@ -127,20 +121,29 @@
       <caption style="caption-side:top;padding:0 0 12px 0;text-align:left;color:inherit;">
         <!-- 标题行 -->
         <div class="d-flex align-items-center mb-2">
-          <h1 class="mb-0" data-i18n="no1Club_title">👑 WTA No.1 Club · Historical Leaderboard</h1>
+          <h1 class="mb-0" data-i18n="no1Club_title">👑 World No.1 Club · Historical Leaderboard</h1>
           <div class="ms-auto d-flex gap-2 align-items-center">
             <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
             <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
           </div>
         </div>
-        <!-- 统计栏 -->
+        <!-- 统计栏 + Tour 切换 -->
         <div class="d-flex align-items-center">
           <span class="top-meta">
-            <span id="player-count" class="count-label">29 players</span>
+            <span id="player-count" class="count-label">0 players</span>
             &nbsp;|&nbsp; <span data-i18n="click_to_sort">Click headers to sort</span>
             &nbsp;|&nbsp; <span data-i18n="last_updated">Last updated:</span>
             <span id="last-updated">—</span>
           </span>
+          <div class="ms-auto">
+            <div class="d-flex align-items-center gap-2">
+              <label for="tourSelect" class="form-label mb-0 text-nowrap" data-i18n="label_tour">TOUR:</label>
+              <select id="tourSelect" class="form-select form-select-sm" style="width:auto;">
+                <option value="wta" selected>WTA</option>
+                <option value="atp">ATP</option>
+              </select>
+            </div>
+          </div>
         </div>
       </caption>
 
@@ -162,7 +165,6 @@
       </colgroup>
 
       <thead>
-        <!-- 分组标签行 -->
         <tr>
           <th colspan="2"></th>
           <th colspan="6" style="text-align:center;border-left:1px solid var(--border-main);"
@@ -172,7 +174,6 @@
           <th colspan="4" style="text-align:center;border-left:1px solid var(--border-main);"
             data-i18n="no1Club_th_group_winrate">WIN RATE</th>
         </tr>
-        <!-- 字段行 -->
         <tr>
           <th class="sortable" data-col="idx" data-i18n="th_no">#</th>
           <th class="sortable" data-col="player" style="text-align:left;padding-left:10px;"
@@ -228,18 +229,21 @@
   <script type="module">
     import { getFlagImg } from "../common/js/utils.js";
 
+    let wtaData = [];
+    let atpData = [];
+    let currentTour = "wta";
     let allData = [];
-    let sortState = [{ col: "first_no1_date", order: "asc" }];
+    let sortState = [{ col: "weeks_total", order: "desc" }];
     let userSorted = false;
 
-    /* ---- 首次登顶年龄计算 ---- */
+    /* ---- 年龄计算 ---- */
     function calcAge(dob, date) {
       if (!dob || !date) return null;
       const diff = (new Date(date) - new Date(dob)) / (1000 * 60 * 60 * 24 * 365.25);
       return Math.round(diff * 100) / 100;
     }
 
-    /* ---- 胜率配色（沿用 gradientWr 绿色系） ---- */
+    /* ---- 胜率配色 ---- */
     function gradientWr(pct) {
       if (pct == null) return { bg: "transparent", fc: "var(--text-muted)" };
       if (pct >= 80) return { bg: "#14532d", fc: "#bbf7d0" };
@@ -272,7 +276,7 @@
         case "weeks_total":      return p.weeks_total ?? -1;
         case "weeks_consecutive":return p.weeks_consecutive ?? -1;
         case "gs":               return p.gs ?? -1;
-        case "wta1000":          return p.wta1000 ?? -1;
+        case "wta1000":          return p.master ?? -1;   // WTA用master，ATP暂为null
         case "win_rate_overall": return p.win_rate_overall ?? -1;
         case "hard_wr":          return p.hard?.win_rate ?? -1;
         case "clay_wr":          return p.clay?.win_rate ?? -1;
@@ -330,6 +334,8 @@
 
     /* ---- 渲染 ---- */
     function renderTable() {
+      const data = currentTour === "wta" ? wtaData : atpData;
+      allData = data.map((p, i) => ({ ...p, _idx: i }));
       const sorted = sortData(allData);
       document.getElementById("player-count").textContent =
         t("no1Club_player_count", sorted.length);
@@ -341,6 +347,9 @@
         const dot    = p.active
           ? `<span class="active-dot" title="${t("no1Club_footer_active")}"></span>`
           : "";
+
+        // 对于ATP，master字段可能为null，显示"—"
+        const masterVal = p.master != null ? p.master : null;
 
         html += `<tr>
           <td>${i + 1}</td>
@@ -355,7 +364,7 @@
           <td><strong>${p.weeks_total ?? "—"}</strong></td>
           <td>${p.weeks_consecutive ?? "—"}</td>
           <td class="surf-sep">${numCell(p.gs)}</td>
-          <td>${numCell(p.wta1000)}</td>
+          <td>${numCell(masterVal)}</td>
           <td class="surf-sep">${wrCell(p.win_rate_overall)}</td>
           <td class="surf-sep">${wrCell(p.hard?.win_rate)}</td>
           <td class="surf-sep">${wrCell(p.clay?.win_rate)}</td>
@@ -390,11 +399,13 @@
     /* ---- 加载数据 ---- */
     async function loadData() {
       try {
-        const res = await fetch("../output/wta_no1_players.json");
+        const res = await fetch("../output/world_no1_club.json");
         const json = await res.json();
-        allData = json.players.map((p, i) => ({ ...p, _idx: i }));
+        wtaData = json.wta || [];
+        atpData = json.atp || [];
         document.getElementById("last-updated").textContent =
           json.meta?.last_updated ?? "—";
+        // 从WTA取初始数据
         renderTable();
       } catch (err) {
         console.error("Load failed:", err);
@@ -402,6 +413,15 @@
           `<tr><td colspan="14" style="padding:40px;text-align:center;color:#b91c1c;">${t("load_fail")}</td></tr>`;
       }
     }
+
+    // 切换Tour
+    document.getElementById("tourSelect")?.addEventListener("change", (e) => {
+      currentTour = e.target.value;
+      // 重置排序到默认
+      sortState = [{ col: "weeks_total", order: "desc" }];
+      userSorted = false;
+      renderTable();
+    });
 
     loadData();
 
