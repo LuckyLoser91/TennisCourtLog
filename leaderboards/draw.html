@@ -2952,7 +2952,7 @@
       const linkB = `${baseUrl}${playerType}-classic.cgi?p=${p2Slug}&f=ACareerqq&q=${p1Slug}`;
 
       let html = `
-        <div style="padding: 6px 0;">
+        <div id="h2hStaticContent" style="padding: 6px 0;">
           <!-- 总比分 -->
           <div style="display:flex; align-items:center; justify-content:center; gap:16px; padding: 12px 0 18px; border-bottom: 1px solid #e8e8e8;">
             <div style="text-align:center; flex:1; min-width:0;">
@@ -2977,10 +2977,11 @@
           </div>
           <div style="font-size:0.72em; color:#999; text-align:center; margin-bottom:10px; letter-spacing:0.02em;">Tennis Abstract 详细数据</div>
 
-          <div style="text-align:center; padding: 6px 0 4px; color:#777; font-size:0.9em;">
+          <div id="h2hLoadingMsg" style="text-align:center; padding: 6px 0 4px; color:#777; font-size:0.9em;">
             ${total > 0 ? '⏳ 正在加载详细交手记录...' : '此前从未交手'}
           </div>
         </div>
+        <div id="h2hMatchesTable"></div>
       `;
 
       body.innerHTML = html;
@@ -2993,13 +2994,31 @@
             if (data.matches && data.matches.length > 0) {
               sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${data.wins_player1}–${data.wins_player2}（${data.total_matches} 次交手）`;
 
+              // 移除加载提示
+              const loadingEl = document.getElementById('h2hLoadingMsg');
+              if (loadingEl) loadingEl.style.display = 'none';
+
               const recent = data.matches.slice(0, 10);
-              let listHtml = `
+
+              // 表格形式展示交手记录
+              let tableHtml = `
                 <div style="margin-top:10px; border-top:1px solid #e8e8e8; padding-top:12px;">
                   <div style="font-size:0.75em; font-weight:700; color:#666; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px;">近期交手记录</div>
-                  <ul class="h2h-list" style="list-style:none; padding:0; margin:0;">
+                  <table style="width:100%; border-collapse:collapse; font-size:0.85em;">
+                    <thead>
+                      <tr style="background:#f4f6f8;">
+                        <th style="padding:8px 6px; text-align:left; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">年份</th>
+                        <th style="padding:8px 6px; text-align:left; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">赛事</th>
+                        <th style="padding:8px 6px; text-align:center; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">轮次</th>
+                        <th style="padding:8px 6px; text-align:center; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">场地</th>
+                        <th style="padding:8px 6px; text-align:left; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">胜者</th>
+                        <th style="padding:8px 6px; text-align:center; color:#888; font-size:0.75em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #e0e0e0;">比分</th>
+                      </tr>
+                    </thead>
+                    <tbody>
               `;
-              recent.forEach(m => {
+
+              recent.forEach((m, idx) => {
                 const winner = m.winner;
                 const loser = m.loser;
                 const score = m.score || '—';
@@ -3009,28 +3028,37 @@
                 const year = m.year || '';
                 const isP1Win = winner === p1Name;
                 const winColor = isP1Win ? '#1b5e20' : '#1565c0';
-                listHtml += `
-                  <li style="padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:0.88em;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:3px;">
-                      <span style="font-weight:800; color:#333; white-space:nowrap;">${year}</span>
-                      <span style="flex:1; text-align:right; font-size:0.85em; color:#666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${tourney} · ${round}${surface ? ' · ' + surface : ''}</span>
-                    </div>
-                    <div style="color:#444; line-height:1.4;">
-                      <span style="font-weight:700; color:${winColor};">${winner}</span>
-                      <span style="color:#999; font-size:0.9em;">def.</span> ${loser}
-                      <span style="color:#888; font-family:monospace; font-size:0.9em; margin-left:4px;">${score}</span>
-                    </div>
-                  </li>
+                const bgColor = idx % 2 === 0 ? '#fff' : '#fafcfa';
+
+                tableHtml += `
+                      <tr style="background:${bgColor}; transition:background 0.15s;" onmouseover="this.style.background='#e8f0ec'" onmouseout="this.style.background='${bgColor}'">
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; white-space:nowrap;">${year}</td>
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; color:#555;">${tourney}</td>
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; text-align:center;"><span style="display:inline-block; background:#eef2f0; border:1px solid #c8dcd0; border-radius:4px; padding:2px 7px; font-size:0.85em; font-weight:700; color:#19503b;">${round}</span></td>
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; text-align:center; color:#777; font-size:0.9em;">${surface}</td>
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:${winColor};">${winner}</td>
+                        <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; text-align:center; font-family:monospace; color:#666; font-size:0.9em; white-space:nowrap;">${score}</td>
+                      </tr>
                 `;
               });
-              listHtml += '</ul></div>';
 
-              const detailDiv = document.createElement('div');
-              detailDiv.innerHTML = listHtml;
-              body.appendChild(detailDiv);
+              tableHtml += `
+                    </tbody>
+                  </table>
+                </div>
+              `;
+
+              document.getElementById('h2hMatchesTable').innerHTML = tableHtml;
+            } else {
+              // 有总比分但没有详细记录
+              const loadingEl = document.getElementById('h2hLoadingMsg');
+              if (loadingEl) loadingEl.textContent = '暂无详细交手记录';
             }
           })
-          .catch(() => { /* 静默失败 */ });
+          .catch(() => {
+            const loadingEl = document.getElementById('h2hLoadingMsg');
+            if (loadingEl) loadingEl.textContent = '加载失败，请稍后重试';
+          });
       }
     }
     function closeH2HModal(e) {
