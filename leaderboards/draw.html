@@ -3380,26 +3380,26 @@
                   const bgColor = idx % 2 === 0 ? "#fff" : "#fafcfa";
 
                   tableHtml += `
-  <tr style="background:${bgColor}; transition:background 0.15s;" ...>
-    <!-- 年份列 - 保持不变 -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; white-space:nowrap;">${year}</td>
-    
-    <!-- 赛事列 - 改为与年份一致 -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; white-space:nowrap;">${tourney}</td>
-    
-    <!-- 轮次列 - 改为与年份一致（去掉圆角背景框） -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; text-align:center; white-space:nowrap;">${round}</td>
-    
-    <!-- 场地列 - 保持不变（或者你也可以改为相同风格） -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; text-align:center; color:#333; font-size:0.9em;">${surface}</td>
-    
-    <!-- 胜者列 - 保持不变 -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:${winColor};">${winner}</td>
-    
-    <!-- 比分列 - 改为与年份一致（去掉 monospace） -->
-    <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; text-align:center; white-space:nowrap;">${score}</td>
-  </tr>
-`;
+                    <tr style="background:${bgColor}; transition:background 0.15s;" onmouseover="this.style.background='#e8f0ec'" onmouseout="this.style.background='${bgColor}'">
+                      <!-- 年份列 - 保持不变 -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; white-space:nowrap;">${year}</td>
+                      
+                      <!-- 赛事列 - 改为与年份一致 -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; white-space:nowrap;">${tourney}</td>
+                      
+                      <!-- 轮次列 - 保持不变（带圆角背景框） -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; text-align:center;"><span style="display:inline-block; background:#eef2f0; border:1px solid #c8dcd0; border-radius:4px; padding:2px 7px; font-size:0.85em; font-weight:700; color:#19503b;">${round}</span></td>
+                      
+                      <!-- 场地列 - 改为与年份一致 -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; text-align:center; white-space:nowrap;">${surface}</td>
+                      
+                      <!-- 胜者列 - 保持不变 -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:${winColor};">${winner}</td>
+                      
+                      <!-- 比分列 - 改为与年份一致（去掉 monospace） -->
+                      <td style="padding:9px 6px; border-bottom:1px solid #f0f0f0; font-weight:700; color:#333; text-align:center; white-space:nowrap;">${score}</td>
+                    </tr>
+                  `;
                 });
 
                 tableHtml += `
