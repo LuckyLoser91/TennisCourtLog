@@ -1613,6 +1613,7 @@
       border-bottom: none;
     }
   </style>
+<base target="_blank">
 </head>
 
 <body>
@@ -1679,7 +1680,7 @@
   <div class="stats-modal-overlay" id="h2hModalOverlay" onclick="closeH2HModal(event)">
     <div class="stats-modal" id="h2hModal">
       <div class="stats-modal-header" style="background: linear-gradient(135deg, #0d3b2e 0%, #19503b 50%, #2d7a55 100%);">
-        <button class="stats-modal-close" onclick="closeH2HModal()">✕</button>
+        <button class="stats-modal-close" onclick="document.getElementById('h2hModalOverlay').classList.remove('open'); document.body.style.overflow='';">✕</button>
         <div style="padding: 20px 16px 16px; color: white; position: relative; z-index: 1;">
           <div style="font-size: 1.2em; font-weight: 700; letter-spacing: 0.02em;">⚔️ Head‑to‑Head</div>
           <div id="h2hSub" style="font-size: 0.85em; opacity: 0.8; margin-top: 4px;"></div>
@@ -2019,10 +2020,11 @@
         // -------- 按钮可用条件：只要有两位有效球员且有 h2h 数据（即使0-0也算有） ----------
         const h2hEnabled = hasTwoPlayers && block.h2h && (block.h2h.player1_wins !== undefined);
 
-        // -------- 构建按钮（仅当 h2hEnabled 为 true） ----------
+        // -------- 构建按钮（使用 data-* 属性避免引号转义问题） ----------
         let btnHtml = '';
         if (h2hEnabled) {
-          btnHtml = `<button class="h2h-btn" onclick="openH2HModal(${eventId || 'null'}, '${p1Name.replace(/'/g, "\\'")}', '${p2Name.replace(/'/g, "\\'")}', ${JSON.stringify(block.h2h || null)})">${btnText}</button>`;
+          const safeH2h = JSON.stringify(block.h2h || null).replace(/"/g, '&quot;');
+          btnHtml = `<button class="h2h-btn" data-p1="${encodeURIComponent(p1Name)}" data-p2="${encodeURIComponent(p2Name)}" data-h2h="${safeH2h}">${btnText}</button>`;
         }
 
         let headerHtml = `<div class="match-header">
@@ -2920,64 +2922,117 @@
     }
 
     // ============================================================
-    // 9. H2H MODAL (新增)
+    // 9. H2H MODAL（重写：修复点击 + 新增外链按钮 + 优化样式）
     // ============================================================
+    function formatName(raw) {
+      return (raw || '').replace(/\s+/g, '');
+    }
+
     function openH2HModal(eventId, p1Name, p2Name, h2hData) {
-  const overlay = document.getElementById('h2hModalOverlay');
-  const sub = document.getElementById('h2hSub');
-  const body = document.getElementById('h2hBody');
+      const overlay = document.getElementById('h2hModalOverlay');
+      const sub = document.getElementById('h2hSub');
+      const body = document.getElementById('h2hBody');
 
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
 
-  if (h2hData && typeof h2hData.player1_wins === 'number' && typeof h2hData.player2_wins === 'number') {
-    const p1W = h2hData.player1_wins;
-    const p2W = h2hData.player2_wins;
-    sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${p1W}–${p2W}`;
-    body.innerHTML = `
-      <div style="padding: 10px 0;">
-        <div style="display:flex; justify-content:space-around; padding: 10px 0; border-bottom:1px solid #eee;">
-          <div><strong>${p1Name}</strong><br>${p1W} wins</div>
-          <div style="font-size:1.2em; font-weight:700;">vs</div>
-          <div><strong>${p2Name}</strong><br>${p2W} wins</div>
+      const p1W = h2hData?.player1_wins ?? 0;
+      const p2W = h2hData?.player2_wins ?? 0;
+      const total = p1W + p2W;
+
+      sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${p1W}–${p2W}`;
+
+      // Tennis Abstract 外链（参照 prematch_info.html 格式）
+      const p1Slug = formatName(p1Name);
+      const p2Slug = formatName(p2Name);
+      const baseUrl = 'https://www.tennisabstract.com/cgi-bin/';
+      const playerType = 'wplayer'; // 本页面为 WTA 数据
+
+      const linkA = `${baseUrl}${playerType}-classic.cgi?p=${p1Slug}&f=ACareerqq&q=${p2Slug}`;
+      const linkB = `${baseUrl}${playerType}-classic.cgi?p=${p2Slug}&f=ACareerqq&q=${p1Slug}`;
+
+      let html = `
+        <div style="padding: 6px 0;">
+          <!-- 总比分 -->
+          <div style="display:flex; align-items:center; justify-content:center; gap:16px; padding: 12px 0 18px; border-bottom: 1px solid #e8e8e8;">
+            <div style="text-align:center; flex:1; min-width:0;">
+              <div style="font-size:2.4em; font-weight:800; color:#19503b; line-height:1;">${p1W}</div>
+              <div style="font-size:0.85em; color:#555; margin-top:6px; word-break:break-word; font-weight:600;">${p1Name}</div>
+            </div>
+            <div style="font-size:1.1em; font-weight:700; color:#bbb;">VS</div>
+            <div style="text-align:center; flex:1; min-width:0;">
+              <div style="font-size:2.4em; font-weight:800; color:#19503b; line-height:1;">${p2W}</div>
+              <div style="font-size:0.85em; color:#555; margin-top:6px; word-break:break-word; font-weight:600;">${p2Name}</div>
+            </div>
+          </div>
+
+          <!-- 外链按钮 -->
+          <div style="display:flex; gap:10px; justify-content:center; padding: 16px 0 4px;">
+            <a href="${linkA}" target="_blank" rel="noopener" style="flex:1; text-align:center; background:linear-gradient(135deg, #19503b, #2d7a55); color:#fff; text-decoration:none; padding:11px 10px; border-radius:10px; font-size:0.82em; font-weight:700; transition:opacity 0.15s; box-shadow:0 2px 6px rgba(0,0,0,0.12);">
+              📊 ${p1Name} 视角
+            </a>
+            <a href="${linkB}" target="_blank" rel="noopener" style="flex:1; text-align:center; background:linear-gradient(135deg, #1565c0, #42a5f5); color:#fff; text-decoration:none; padding:11px 10px; border-radius:10px; font-size:0.82em; font-weight:700; transition:opacity 0.15s; box-shadow:0 2px 6px rgba(0,0,0,0.12);">
+              📊 ${p2Name} 视角
+            </a>
+          </div>
+          <div style="font-size:0.72em; color:#999; text-align:center; margin-bottom:10px; letter-spacing:0.02em;">Tennis Abstract 详细数据</div>
+
+          <div style="text-align:center; padding: 6px 0 4px; color:#777; font-size:0.9em;">
+            ${total > 0 ? '⏳ 正在加载详细交手记录...' : '此前从未交手'}
+          </div>
         </div>
-        <div style="margin-top:12px; font-size:0.85em; color:#555; text-align:center;">
-          ${(p1W + p2W) > 0 ? '（详细比赛记录加载中...）' : '此前从未交手'}
-        </div>
-      </div>
-    `;
-  } else {
-    sub.textContent = `${p1Name} vs ${p2Name}`;
-    body.innerHTML = `<div style="text-align:center; padding:30px 0; color:#666;">⏳ 暂无交手记录</div>`;
-  }
+      `;
 
-  // 异步请求详细列表（如果有API）
-  if (h2hData && (h2hData.player1_wins + h2hData.player2_wins) > 0) {
-    fetch(`/api/player_h2h?player1=${encodeURIComponent(p1Name)}&player2=${encodeURIComponent(p2Name)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.matches && data.matches.length > 0) {
-          const recent = data.matches.slice(0, 5);
-          let listHtml = '<ul class="h2h-list" style="margin-top:10px;">';
-          recent.forEach(m => {
-            const winner = m.winner;
-            const loser = m.loser;
-            const score = m.score || '—';
-            const tourney = m.tourney_name || '';
-            const round = m.round || '';
-            const surface = m.surface || '';
-            listHtml += `<li>${tourney} · ${round} · ${surface} · <strong>${winner}</strong> def. ${loser} ${score}</li>`;
-          });
-          listHtml += '</ul>';
-          const detailDiv = document.createElement('div');
-          detailDiv.innerHTML = listHtml;
-          body.appendChild(detailDiv);
-          sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${data.wins_player1}–${data.wins_player2} (${data.total_matches} meetings)`;
-        }
-      })
-      .catch(() => { /* 静默失败 */ });
-  }
-}
+      body.innerHTML = html;
+
+      // 异步加载详细列表
+      if (total > 0) {
+        fetch(`/api/player_h2h?player1=${encodeURIComponent(p1Name)}&player2=${encodeURIComponent(p2Name)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.matches && data.matches.length > 0) {
+              sub.textContent = `${p1Name} vs ${p2Name} · H2H: ${data.wins_player1}–${data.wins_player2}（${data.total_matches} 次交手）`;
+
+              const recent = data.matches.slice(0, 10);
+              let listHtml = `
+                <div style="margin-top:10px; border-top:1px solid #e8e8e8; padding-top:12px;">
+                  <div style="font-size:0.75em; font-weight:700; color:#666; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px;">近期交手记录</div>
+                  <ul class="h2h-list" style="list-style:none; padding:0; margin:0;">
+              `;
+              recent.forEach(m => {
+                const winner = m.winner;
+                const loser = m.loser;
+                const score = m.score || '—';
+                const tourney = m.tourney_name || '';
+                const round = m.round || '';
+                const surface = m.surface || '';
+                const year = m.year || '';
+                const isP1Win = winner === p1Name;
+                const winColor = isP1Win ? '#1b5e20' : '#1565c0';
+                listHtml += `
+                  <li style="padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:0.88em;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:3px;">
+                      <span style="font-weight:800; color:#333; white-space:nowrap;">${year}</span>
+                      <span style="flex:1; text-align:right; font-size:0.85em; color:#666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${tourney} · ${round}${surface ? ' · ' + surface : ''}</span>
+                    </div>
+                    <div style="color:#444; line-height:1.4;">
+                      <span style="font-weight:700; color:${winColor};">${winner}</span>
+                      <span style="color:#999; font-size:0.9em;">def.</span> ${loser}
+                      <span style="color:#888; font-family:monospace; font-size:0.9em; margin-left:4px;">${score}</span>
+                    </div>
+                  </li>
+                `;
+              });
+              listHtml += '</ul></div>';
+
+              const detailDiv = document.createElement('div');
+              detailDiv.innerHTML = listHtml;
+              body.appendChild(detailDiv);
+            }
+          })
+          .catch(() => { /* 静默失败 */ });
+      }
+    }
     function closeH2HModal(e) {
       if (e && e.target !== document.getElementById('h2hModalOverlay')) return;
       document.getElementById('h2hModalOverlay').classList.remove('open');
@@ -3442,6 +3497,19 @@
     }
 
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeHistModal(); });
+
+    // H2H 按钮事件委托（修复内联 onclick 引号转义导致的点击失效）
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('bracket').addEventListener('click', function(e) {
+        const btn = e.target.closest('.h2h-btn');
+        if (!btn) return;
+        e.stopPropagation();
+        const p1 = decodeURIComponent(btn.dataset.p1);
+        const p2 = decodeURIComponent(btn.dataset.p2);
+        const h2h = JSON.parse(btn.dataset.h2h || 'null');
+        openH2HModal(null, p1, p2, h2h);
+      });
+    });
 
     fetchAndRender();
   </script>
