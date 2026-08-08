@@ -1,6 +1,6 @@
 {
-  "last_updated": 1786141129,
-  "currentRound": 3,
+  "last_updated": 1786164330,
+  "currentRound": 4,
   "tournament": {
     "name": "2026 Toronto, Canada",
     "tournament": {
@@ -5324,8 +5324,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 9,
           "event_id": 16662065,
           "participants": [
@@ -5349,7 +5349,7 @@
               "name": "Alexandra Eala",
               "shortname": "A. Eala",
               "ranking": 20,
-              "winner": false,
+              "winner": true,
               "teamSeed": "25",
               "team_id": 327924,
               "event_id": 16662065,
@@ -5365,11 +5365,23 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 7,
+              "period3": 4
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 5,
+              "period3": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 10,
           "event_id": 16662066,
           "participants": [
@@ -5393,7 +5405,7 @@
               "name": "Belinda Bencic",
               "shortname": "B. Bencic",
               "ranking": 14,
-              "winner": false,
+              "winner": true,
               "teamSeed": "12",
               "team_id": 63957,
               "event_id": 16662066,
@@ -5409,6 +5421,22 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 1
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 6,
+              "period3": 4,
+              "period1TieBreak": 7,
+              "period2TieBreak": 4
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 7,
+              "period3": 6,
+              "period1TieBreak": 5,
+              "period2TieBreak": 7
+            }
           }
         },
         {
@@ -5466,8 +5494,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 12,
           "event_id": 16662067,
           "participants": [
@@ -5491,7 +5519,7 @@
               "name": "Coco Gauff",
               "shortname": "C. Gauff",
               "ranking": 4,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 264983,
               "event_id": 16662067,
@@ -5507,6 +5535,16 @@
           "h2h": {
             "player1_wins": 5,
             "player2_wins": 5
+          },
+          "score": {
+            "homeScore": {
+              "period1": 1,
+              "period2": 4
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
@@ -5564,8 +5602,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 14,
           "event_id": 16662068,
           "participants": [
@@ -5589,7 +5627,7 @@
               "name": "Naomi Osaka",
               "shortname": "N. Osaka",
               "ranking": 13,
-              "winner": false,
+              "winner": true,
               "teamSeed": "11",
               "team_id": 66476,
               "event_id": 16662068,
@@ -5605,6 +5643,16 @@
           "h2h": {
             "player1_wins": 4,
             "player2_wins": 5
+          },
+          "score": {
+            "homeScore": {
+              "period1": 1,
+              "period2": 2
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
@@ -5909,36 +5957,36 @@
           "event_id": 16662007,
           "participants": [
             {
-              "name": "R16P9",
-              "shortname": "R16P9",
-              "ranking": "",
+              "name": "Alexandra Eala",
+              "shortname": "A. Eala",
+              "ranking": 20,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393284,
+              "teamSeed": "25",
+              "team_id": 327924,
               "event_id": 16662007,
               "sourceBlockId": 2624720,
               "block_id": 2624744,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "R128",
+              "W": 0,
+              "L": 1,
+              "winrate": 0.0,
+              "titles": 0
             },
             {
-              "name": "R16P10",
-              "shortname": "R16P10",
-              "ranking": "",
+              "name": "Belinda Bencic",
+              "shortname": "B. Bencic",
+              "ranking": 14,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393285,
+              "teamSeed": "12",
+              "team_id": 63957,
               "event_id": 16662007,
               "sourceBlockId": 2624722,
               "block_id": 2624744,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 15,
+              "L": 4,
+              "winrate": 0.789,
+              "titles": 1
             }
           ],
           "h2h": {
@@ -5969,20 +6017,20 @@
               "titles": 0
             },
             {
-              "name": "R16P12",
-              "shortname": "R16P12",
-              "ranking": "",
+              "name": "Coco Gauff",
+              "shortname": "C. Gauff",
+              "ranking": 4,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393287,
+              "teamSeed": "4",
+              "team_id": 264983,
               "event_id": 16662005,
               "sourceBlockId": 2624726,
               "block_id": 2624746,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "QF",
+              "W": 10,
+              "L": 5,
+              "winrate": 0.667,
+              "titles": 0
             }
           ],
           "h2h": {
@@ -6013,25 +6061,25 @@
               "titles": 0
             },
             {
-              "name": "R16P14",
-              "shortname": "R16P14",
-              "ranking": "",
+              "name": "Naomi Osaka",
+              "shortname": "N. Osaka",
+              "ranking": 13,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393289,
+              "teamSeed": "11",
+              "team_id": 66476,
               "event_id": 16662024,
               "sourceBlockId": 2624730,
               "block_id": 2624748,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "F",
+              "W": 11,
+              "L": 6,
+              "winrate": 0.647,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 1,
+            "player2_wins": 1
           }
         },
         {
