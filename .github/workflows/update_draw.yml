@@ -42,19 +42,12 @@ jobs:
           fi
 
       # 4. 运行第一个脚本：获取签表数据
-      - name: 运行 get_draw_and_event.py
-        run: python api_folder/get_draw_and_event.py --data-dir api_folder/data/canada_2026 --tournament-id 2615 --season-id 85616
+      - name: 运行 fetch_and_enhance_draw.py
+        run: python api_folder/fetch_and_enhance_draw.py --tourney-name Canada --season 2026 --tournament-id 2615 --season-id 85616
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
-      # 5. 运行第二个脚本：更新签表
-      
-      - name: 运行 update_draw.py
-        run: python api_folder/update_draw.py --tourney-name Canada --season 2026
-        env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-
-       # 6. 屏蔽时间戳字段后，检查业务数据是否有变化
+       # 5. 屏蔽时间戳字段后，检查业务数据是否有变化
       - name: 检查业务数据是否有变化
         id: check_changes
         run: |
@@ -83,7 +76,7 @@ jobs:
           
           echo "changed=$CHANGED" >> $GITHUB_OUTPUT
 
-      # 7. 只有业务数据真正变化时才提交
+      # 6. 只有业务数据真正变化时才提交
       - name: 提交并推送（如有真实变化）
         if: steps.check_changes.outputs.changed == 'true'
         run: |
@@ -96,7 +89,7 @@ jobs:
           git commit -m "🎾 Auto-update draw data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push --force origin HEAD:main
           echo "✅ 签表数据已更新并推送"
-      # 8. 无变化 → 仅输出提示
+      # 7. 无变化 → 仅输出提示
       - name: 签表数据无变化
         if: steps.check_changes.outputs.changed == 'false'
         run: echo "⏭️ 签表数据无变化，跳过提交"
