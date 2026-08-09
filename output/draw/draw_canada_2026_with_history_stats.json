@@ -1,5 +1,5 @@
 {
-  "last_updated": 1786164330,
+  "last_updated": 1786251272,
   "currentRound": 4,
   "tournament": {
     "name": "2026 Toronto, Canada",
@@ -51,7 +51,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 1743,
+        "userCount": 1825,
         "tennisPoints": 1000,
         "id": 2615,
         "displayInverseHomeAwayTeams": false,
@@ -5775,8 +5775,8 @@
       "description": "Round of 16",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 1,
           "event_id": 16662015,
           "participants": [
@@ -5800,7 +5800,7 @@
               "name": "Ekaterina Alexandrova",
               "shortname": "E. Alexandrova",
               "ranking": 19,
-              "winner": false,
+              "winner": true,
               "teamSeed": "16",
               "team_id": 67759,
               "event_id": 16662015,
@@ -5816,11 +5816,25 @@
           "h2h": {
             "player1_wins": 5,
             "player2_wins": 3
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6,
+              "period3": 4,
+              "period1TieBreak": 3
+            },
+            "awayScore": {
+              "period1": 7,
+              "period2": 4,
+              "period3": 6,
+              "period1TieBreak": 7
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 2,
           "event_id": 16662019,
           "participants": [
@@ -5828,7 +5842,7 @@
               "name": "Elina Svitolina",
               "shortname": "E. Svitolina",
               "ranking": 9,
-              "winner": false,
+              "winner": true,
               "teamSeed": "9",
               "team_id": 51293,
               "event_id": 16662019,
@@ -5860,11 +5874,21 @@
           "h2h": {
             "player1_wins": 4,
             "player2_wins": 1
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 2,
+              "period2": 4
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 3,
           "event_id": 16662022,
           "participants": [
@@ -5888,7 +5912,7 @@
               "name": "Diana Shnaider",
               "shortname": "D. Shnaider",
               "ranking": 17,
-              "winner": false,
+              "winner": true,
               "teamSeed": "15",
               "team_id": 318575,
               "event_id": 16662022,
@@ -5904,11 +5928,21 @@
           "h2h": {
             "player1_wins": 4,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 3
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 4,
           "event_id": 16662023,
           "participants": [
@@ -5932,7 +5966,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Swiatek",
               "ranking": 8,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 16662023,
@@ -5948,6 +5982,18 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 4
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 1,
+              "period3": 2
+            },
+            "awayScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 6
+            }
           }
         },
         {
@@ -6140,41 +6186,41 @@
           "event_id": 16662012,
           "participants": [
             {
-              "name": "Qf1",
-              "shortname": "Qf1",
-              "ranking": "",
+              "name": "Ekaterina Alexandrova",
+              "shortname": "E. Alexandrova",
+              "ranking": 19,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393292,
+              "teamSeed": "16",
+              "team_id": 67759,
               "event_id": 16662012,
               "sourceBlockId": 2624736,
               "block_id": 2624752,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "R16",
+              "W": 3,
+              "L": 3,
+              "winrate": 0.5,
+              "titles": 0
             },
             {
-              "name": "Qf2",
-              "shortname": "Qf2",
-              "ranking": "",
+              "name": "Elina Svitolina",
+              "shortname": "E. Svitolina",
+              "ranking": 9,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393293,
+              "teamSeed": "9",
+              "team_id": 51293,
               "event_id": 16662012,
               "sourceBlockId": 2624738,
               "block_id": 2624752,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 16,
+              "L": 8,
+              "winrate": 0.667,
+              "titles": 1
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 1,
+            "player2_wins": 3
           }
         },
         {
@@ -6184,41 +6230,41 @@
           "event_id": 16662004,
           "participants": [
             {
-              "name": "Qf3",
-              "shortname": "Qf3",
-              "ranking": "",
+              "name": "Diana Shnaider",
+              "shortname": "D. Shnaider",
+              "ranking": 17,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393294,
+              "teamSeed": "15",
+              "team_id": 318575,
               "event_id": 16662004,
               "sourceBlockId": 2624740,
               "block_id": 2624754,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 4,
+              "L": 2,
+              "winrate": 0.667,
+              "titles": 0
             },
             {
-              "name": "Qf4",
-              "shortname": "Qf4",
-              "ranking": "",
+              "name": "Iga Swiatek",
+              "shortname": "I. Swiatek",
+              "ranking": 8,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393295,
+              "teamSeed": "7",
+              "team_id": 228272,
               "event_id": 16662004,
               "sourceBlockId": 2624742,
               "block_id": 2624754,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 8,
+              "L": 4,
+              "winrate": 0.667,
+              "titles": 0
             }
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           }
         },
         {
