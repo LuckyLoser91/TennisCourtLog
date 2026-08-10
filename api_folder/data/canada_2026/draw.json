@@ -66,7 +66,7 @@
         "priority": 0,
         "id": 194018
       },
-      "currentRound": 4,
+      "currentRound": 5,
       "rounds": [
         {
           "order": 1,
@@ -10034,9 +10034,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 5,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -10113,7 +10116,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2624722,
                   "order": 2,
                   "teamSeed": "12",
@@ -10127,13 +10130,16 @@
                 16662007
               ],
               "blockId": 2624744,
-              "seriesStartDateTimestamp": 1786320600,
+              "seriesStartDateTimestamp": 1786323000,
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 6,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -10209,7 +10215,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2624726,
                   "order": 2,
                   "teamSeed": "4",
@@ -10223,13 +10229,16 @@
                 16662005
               ],
               "blockId": 2624746,
-              "seriesStartDateTimestamp": 1786297200,
+              "seriesStartDateTimestamp": 1786304700,
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 7,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -10307,7 +10316,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2624730,
                   "order": 2,
                   "teamSeed": "11",
@@ -10325,9 +10334,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 8,
+              "result": "1:2",
+              "homeTeamScore": "1",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -10404,7 +10416,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2624734,
                   "order": 2,
                   "teamSeed": "2",
@@ -10524,7 +10536,7 @@
                 16662012
               ],
               "blockId": 2624752,
-              "seriesStartDateTimestamp": 1786381200,
+              "seriesStartDateTimestamp": 1786407000,
               "automaticProgression": false
             },
             {
@@ -10622,7 +10634,7 @@
                 16662004
               ],
               "blockId": 2624754,
-              "seriesStartDateTimestamp": 1786381200,
+              "seriesStartDateTimestamp": 1786402800,
               "automaticProgression": false
             },
             {
@@ -10632,58 +10644,84 @@
               "participants": [
                 {
                   "team": {
-                    "name": "Qf5",
-                    "slug": "qf5",
-                    "shortName": "Qf5",
+                    "name": "Belinda Bencic",
+                    "slug": "bencic-belinda",
+                    "shortName": "B. Bencic",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 9,
-                    "nameCode": "QF5",
-                    "disabled": true,
+                    "userCount": 12945,
+                    "nameCode": "BEN",
+                    "ranking": 14,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393296,
+                    "id": 63957,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "بليندا بينتش",
+                        "ru": "Бенчич, Белинда"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ب. بينتش",
+                        "bn": "বি. বেনসিক",
+                        "hi": "बी. बेनसिक"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2624744,
                   "order": 1,
+                  "teamSeed": "12",
                   "id": 5774264
                 },
                 {
                   "team": {
-                    "name": "Qf6",
-                    "slug": "qf6",
-                    "shortName": "Qf6",
+                    "name": "Coco Gauff",
+                    "slug": "gauff-cori",
+                    "shortName": "C. Gauff",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 5,
-                    "nameCode": "QF6",
-                    "disabled": true,
+                    "userCount": 49537,
+                    "nameCode": "GAU",
+                    "ranking": 4,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393297,
+                    "id": 264983,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "كوكو غوف",
+                        "ru": "Гауфф, Кори"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ك. غوف",
+                        "bn": "সি. গফ",
+                        "hi": "सी. गॉफ़"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2624746,
                   "order": 2,
+                  "teamSeed": "4",
                   "id": 5774265
                 }
               ],
@@ -10694,7 +10732,7 @@
                 16662013
               ],
               "blockId": 2624756,
-              "seriesStartDateTimestamp": 1786381200,
+              "seriesStartDateTimestamp": 1786467600,
               "automaticProgression": false
             },
             {
@@ -10704,58 +10742,84 @@
               "participants": [
                 {
                   "team": {
-                    "name": "Qf7",
-                    "slug": "qf7",
-                    "shortName": "Qf7",
+                    "name": "Naomi Osaka",
+                    "slug": "osaka-naomi",
+                    "shortName": "N. Osaka",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 11,
-                    "nameCode": "QF7",
-                    "disabled": true,
+                    "userCount": 30179,
+                    "nameCode": "OSA",
+                    "ranking": 13,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393298,
+                    "id": 66476,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "ناومي أوساكا",
+                        "bn": "নাওমি ওসাকা",
+                        "hi": "नाओमी ओसाका",
+                        "ru": "Наоми Осака"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ن. أوساكا"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2624748,
                   "order": 1,
+                  "teamSeed": "11",
                   "id": 5774318
                 },
                 {
                   "team": {
-                    "name": "Qf8",
-                    "slug": "qf8",
-                    "shortName": "Qf8",
+                    "name": "Elena Rybakina",
+                    "slug": "rybakina-elena",
+                    "shortName": "E. Rybakina",
                     "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 11,
-                    "nameCode": "QF8",
-                    "disabled": true,
+                    "userCount": 39009,
+                    "nameCode": "RYB",
+                    "ranking": 2,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393299,
+                    "id": 186312,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "إلينا ريباكينا",
+                        "ru": "Рыбакина, Елена"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "إ. ريباكينا",
+                        "bn": "ই. রাইবাকিনা",
+                        "hi": "ई. रयबाकिना"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2624750,
                   "order": 2,
+                  "teamSeed": "2",
                   "id": 5774319
                 }
               ],
@@ -10766,7 +10830,7 @@
                 16662016
               ],
               "blockId": 2624758,
-              "seriesStartDateTimestamp": 1786381200,
+              "seriesStartDateTimestamp": 1786467600,
               "automaticProgression": false
             }
           ],
