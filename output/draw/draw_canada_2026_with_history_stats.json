@@ -1,5 +1,5 @@
 {
-  "last_updated": 1786338898,
+  "last_updated": 1786424233,
   "currentRound": 5,
   "tournament": {
     "name": "2026 Toronto, Canada",
@@ -51,7 +51,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 1919,
+        "userCount": 1984,
         "tennisPoints": 1000,
         "id": 2615,
         "displayInverseHomeAwayTeams": false,
@@ -6222,8 +6222,8 @@
       "description": "Quarterfinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 1,
           "event_id": 16662012,
           "participants": [
@@ -6247,7 +6247,7 @@
               "name": "Elina Svitolina",
               "shortname": "E. Svitolina",
               "ranking": 9,
-              "winner": false,
+              "winner": true,
               "teamSeed": "9",
               "team_id": 51293,
               "event_id": 16662012,
@@ -6263,11 +6263,23 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 3
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 0,
+              "period3": 3
+            },
+            "awayScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 2,
           "event_id": 16662004,
           "participants": [
@@ -6291,7 +6303,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Swiatek",
               "ranking": 8,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 16662004,
@@ -6307,6 +6319,16 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 1
+          },
+          "score": {
+            "homeScore": {
+              "period1": 2,
+              "period2": 1
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
@@ -6411,41 +6433,41 @@
           "event_id": 16662011,
           "participants": [
             {
-              "name": "Wqf1",
-              "shortname": "WQF1",
-              "ranking": "",
+              "name": "Elina Svitolina",
+              "shortname": "E. Svitolina",
+              "ranking": 9,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393300,
+              "teamSeed": "9",
+              "team_id": 51293,
               "event_id": 16662011,
               "sourceBlockId": 2624752,
               "blockId": 2624760,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 16,
+              "L": 8,
+              "winrate": 0.667,
+              "titles": 1
             },
             {
-              "name": "Wqf2",
-              "shortname": "WQF2",
-              "ranking": "",
+              "name": "Iga Swiatek",
+              "shortname": "I. Swiatek",
+              "ranking": 8,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393301,
+              "teamSeed": "7",
+              "team_id": 228272,
               "event_id": 16662011,
               "sourceBlockId": 2624754,
               "blockId": 2624760,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 8,
+              "L": 4,
+              "winrate": 0.667,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 3,
+            "player2_wins": 4
           }
         },
         {
