@@ -16,6 +16,7 @@ import json
 import os
 import re
 from collections import defaultdict
+from datetime import datetime
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -93,11 +94,12 @@ def load_top100(rank_file):
 
 # ─── Titles ───────────────────────────────────────────────────────────────────
 
-def load_titles(champs_file, player_set):
+def load_titles(champs_file, player_set, year=None):
     """
     Returns two dicts, both keyed by canonicalName:
       overall_titles[name]  → {grandSlam, wta1000, wta500, wta250, finals, yearEndFinals, total}
       surface_titles[name][surface] → {grandSlam, wta1000, wta500, wta250, finals, yearEndFinals}
+    If year is provided, only entries matching that year are included.
     """
     with open(champs_file, encoding="utf-8") as f:
         data = json.load(f)["data"]
@@ -106,6 +108,11 @@ def load_titles(champs_file, player_set):
     by_surface = defaultdict(lambda: defaultdict(empty_title_counts))
 
     for entry in data:
+        # Filter by year if specified
+        entry_year = entry.get("year")
+        if year is not None and entry_year != year:
+            continue
+
         winner = entry.get("winner", "").strip()
         if not winner or winner not in player_set:
             continue
@@ -141,14 +148,22 @@ def load_titles(champs_file, player_set):
 
 # ─── Win / Loss by surface ────────────────────────────────────────────────────
 
-def load_surface_records(matches_dir, player_set):
-    """Returns {canonicalName: {surface: {"w": int, "l": int}}}"""
+def load_surface_records(matches_dir, player_set, year=None):
+    """Returns {canonicalName: {surface: {"w": int, "l": int}}}.
+    If year is provided, only matches from that year are included.
+    """
     records = defaultdict(lambda: defaultdict(lambda: {"w": 0, "l": 0}))
 
     for fpath in sorted(glob.glob(os.path.join(matches_dir, "wta_matches_*.csv"))):
         m = re.search(r"(\d{4})", os.path.basename(fpath))
-        if not m or int(m.group(1)) < START_YEAR:
+        if not m:
             continue
+        file_year = int(m.group(1))
+        if year is not None and file_year != year:
+            continue
+        if file_year < START_YEAR:
+            continue
+
         with open(fpath, encoding="utf-8", newline="") as f:
             for row in csv.DictReader(f):
                 if "W/O" in row.get("score", ""):
@@ -169,11 +184,12 @@ def load_surface_records(matches_dir, player_set):
 
 TOP8_RANK_THRESHOLD = 8
 
-def load_vs_top8_records(matches_dir, player_set):
+def load_vs_top8_records(matches_dir, player_set, year=None):
     """
     Returns {canonicalName: {"w": int, "l": int}} counting only matches where
     the OPPONENT's ranking at the time of the match was <= TOP8_RANK_THRESHOLD.
     Rows with missing/unparseable rank values are skipped (can't be verified).
+    If year is provided, only matches from that year are included.
     """
     records = defaultdict(lambda: {"w": 0, "l": 0})
 
@@ -185,8 +201,14 @@ def load_vs_top8_records(matches_dir, player_set):
 
     for fpath in sorted(glob.glob(os.path.join(matches_dir, "wta_matches_*.csv"))):
         m = re.search(r"(\d{4})", os.path.basename(fpath))
-        if not m or int(m.group(1)) < START_YEAR:
+        if not m:
             continue
+        file_year = int(m.group(1))
+        if year is not None and file_year != year:
+            continue
+        if file_year < START_YEAR:
+            continue
+
         with open(fpath, encoding="utf-8", newline="") as f:
             for row in csv.DictReader(f):
                 if "W/O" in row.get("score", ""):
@@ -204,6 +226,63 @@ def load_vs_top8_records(matches_dir, player_set):
 
     return records
 
+# ─── Player statistic builder ──────────────────────────────────────────────
+
+def build_player_stat(player, overall_titles, surface_titles, records, vs_top8_records):
+    """
+    Build a complete statistic object for a single player from given data sources.
+    Returns dict with keys: titles, surface, overall, vsTop8
+    """
+    cname = player["canonicalName"]
+    ot = overall_titles.get(cname, {**empty_title_counts(), "total": 0})
+
+    surface_stats = {}
+    for surf in OUTPUT_SURFACES:
+        rec = records.get(cname, {}).get(surf, {"w": 0, "l": 0})
+        w, l = rec["w"], rec["l"]
+        total = w + l
+        st = surface_titles.get(cname, {}).get(surf, empty_title_counts())
+        surface_stats[surf] = {
+            "w":     w,
+            "l":     l,
+            "total": total,
+            "pct":   round(w / total * 100, 1) if total > 0 else None,
+            "titles": {k: st.get(k, 0) for k in TITLE_KEYS},
+        }
+
+    all_w = sum(surface_stats[s]["w"] for s in surface_stats)
+    all_l = sum(surface_stats[s]["l"] for s in surface_stats)
+    all_t = all_w + all_l
+
+    vt8 = vs_top8_records.get(cname, {"w": 0, "l": 0})
+    vt8_w, vt8_l = vt8["w"], vt8["l"]
+    vt8_total = vt8_w + vt8_l
+
+    return {
+        "titles": {
+            "total":        ot.get("total", 0),
+            "grandSlam":    ot.get("grandSlam", 0),
+            "wta1000":      ot.get("wta1000", 0),
+            "wta500":       ot.get("wta500", 0),
+            "wta250":       ot.get("wta250", 0),
+            "finals":       ot.get("finals", 0),        # small year-end
+            "yearEndFinals": ot.get("yearEndFinals", 0), # Wta Finals
+        },
+        "surface": surface_stats,
+        "overall": {
+            "w":    all_w,
+            "l":    all_l,
+            "total": all_t,
+            "pct":  round(all_w / all_t * 100, 1) if all_t > 0 else None,
+        },
+        "vsTop8": {
+            "w":     vt8_w,
+            "l":     vt8_l,
+            "total": vt8_total,
+            "pct":   round(vt8_w / vt8_total * 100, 1) if vt8_total > 0 else None,
+        },
+    }
+
 # ─── Assemble ─────────────────────────────────────────────────────────────────
 
 def build_stats():
@@ -216,36 +295,32 @@ def build_stats():
     players    = load_top100(rank_file)
     player_set = {p["canonicalName"] for p in players}
 
-    overall_titles, surface_titles = load_titles(champs_file, player_set)
-    records = load_surface_records(MATCHES_DIR, player_set)
-    vs_top8_records = load_vs_top8_records(MATCHES_DIR, player_set)
+    # Determine current season
+    current_year = datetime.now().year
+    print(f"Current season year: {current_year}")
+
+    # --- Career data ---
+    overall_titles_career, surface_titles_career = load_titles(champs_file, player_set, year=None)
+    records_career = load_surface_records(MATCHES_DIR, player_set, year=None)
+    vs_top8_career = load_vs_top8_records(MATCHES_DIR, player_set, year=None)
+
+    # --- Season data ---
+    overall_titles_season, surface_titles_season = load_titles(champs_file, player_set, year=current_year)
+    records_season = load_surface_records(MATCHES_DIR, player_set, year=current_year)
+    vs_top8_season = load_vs_top8_records(MATCHES_DIR, player_set, year=current_year)
 
     output = []
     for p in players:
-        cname = p["canonicalName"]
-        ot = overall_titles.get(cname, {**empty_title_counts(), "total": 0})
-
-        surface_stats = {}
-        for surf in OUTPUT_SURFACES:
-            rec = records.get(cname, {}).get(surf, {"w": 0, "l": 0})
-            w, l = rec["w"], rec["l"]
-            total = w + l
-            st = surface_titles.get(cname, {}).get(surf, empty_title_counts())
-            surface_stats[surf] = {
-                "w":     w,
-                "l":     l,
-                "total": total,
-                "pct":   round(w / total * 100, 1) if total > 0 else None,
-                "titles": {k: st.get(k, 0) for k in TITLE_KEYS},
-            }
-
-        all_w = sum(surface_stats[s]["w"] for s in surface_stats)
-        all_l = sum(surface_stats[s]["l"] for s in surface_stats)
-        all_t = all_w + all_l
-
-        vt8 = vs_top8_records.get(cname, {"w": 0, "l": 0})
-        vt8_w, vt8_l = vt8["w"], vt8["l"]
-        vt8_total = vt8_w + vt8_l
+        career = build_player_stat(p,
+                                   overall_titles_career,
+                                   surface_titles_career,
+                                   records_career,
+                                   vs_top8_career)
+        season = build_player_stat(p,
+                                   overall_titles_season,
+                                   surface_titles_season,
+                                   records_season,
+                                   vs_top8_season)
 
         output.append({
             "rank":        p["rank"],
@@ -253,28 +328,8 @@ def build_stats():
             "countryCode": p["countryCode"],
             "dateOfBirth": p["dateOfBirth"],
             "points":      p["points"],
-            "titles": {
-                "total":        ot.get("total", 0),
-                "grandSlam":    ot.get("grandSlam", 0),
-                "wta1000":      ot.get("wta1000", 0),
-                "wta500":       ot.get("wta500", 0),
-                "wta250":       ot.get("wta250", 0),
-                "finals":       ot.get("finals", 0),        # small year-end
-                "yearEndFinals": ot.get("yearEndFinals", 0), # Wta Finals
-            },
-            "surface":  surface_stats,
-            "overall": {
-                "w":    all_w,
-                "l":    all_l,
-                "total": all_t,
-                "pct":  round(all_w / all_t * 100, 1) if all_t > 0 else None,
-            },
-            "vsTop8": {
-                "w":     vt8_w,
-                "l":     vt8_l,
-                "total": vt8_total,
-                "pct":   round(vt8_w / vt8_total * 100, 1) if vt8_total > 0 else None,
-            },
+            "career":      career,
+            "season":      season,
         })
 
     return output
@@ -291,17 +346,3 @@ if __name__ == "__main__":
                   f, ensure_ascii=False, indent=2)
 
     print(f"\nOutput → {out_path}  ({len(stats)} records)")
-
-    # Sanity checks
-    # for name in ("Sabalenka", "Rybakina", "Swiatek"):
-    #     p = next((x for x in stats if name in x["fullName"]), None)
-    #     if not p:
-    #         continue
-    #     print(f"\n{p['fullName']}:")
-    #     print(f"  Overall titles : {p['titles']}")
-    #     print(f"  Hard  W/L/pct  : {p['surface']['Hard']['w']}/{p['surface']['Hard']['l']}  {p['surface']['Hard']['pct']}%")
-    #     print(f"  Hard  titles   : {p['surface']['Hard']['titles']}")
-    #     print(f"  Clay  W/L/pct  : {p['surface']['Clay']['w']}/{p['surface']['Clay']['l']}  {p['surface']['Clay']['pct']}%")
-    #     print(f"  Clay  titles   : {p['surface']['Clay']['titles']}")
-    #     print(f"  Grass W/L/pct  : {p['surface']['Grass']['w']}/{p['surface']['Grass']['l']}  {p['surface']['Grass']['pct']}%")
-    #     print(f"  Grass titles   : {p['surface']['Grass']['titles']}")

@@ -258,7 +258,7 @@
             <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
           </div>
         </div>
-        <!-- 统计栏 -->
+        <!-- 统计栏 + 模式选择 -->
         <div class="d-flex align-items-center">
           <span class="top-meta">
             <span id="player-count" class="count-label">100 players</span>
@@ -266,6 +266,13 @@
             &nbsp;|&nbsp; <span data-i18n="last_updated">Last updated:</span>
             <span id="last-updated"></span>
           </span>
+          <div class="ms-auto d-flex align-items-center gap-2">
+            <label for="modeSelect" class="form-label mb-0 text-nowrap" style="font-size:12px;" data-i18n="top100Surface_label_data">DATA:</label>
+            <select id="modeSelect" class="form-select form-select-sm" style="width:auto;">
+              <option value="career" selected data-i18n-opt="top100Surface_opt_career">Career</option>
+              <option value="season" data-i18n-opt="top100Surface_opt_season">Season</option>
+            </select>
+          </div>
         </div>
       </caption>
 
@@ -339,6 +346,7 @@
 
     let allData = [];
     let refDate = null; // 最近更新日期，用作年龄计算基准
+    let currentMode = 'career'; // 'career' or 'season'
 
     /* ---- 年龄计算 ---- */
     function calcAge(dob) {
@@ -392,16 +400,18 @@
     let userSorted = false;
 
     function getSortVal(p, col) {
+      const modeData = p[currentMode];
+      if (!modeData) return null;
       switch (col) {
         case "rank": return p.rank;
         case "name": return p.rank;   // player列点击按rank排序
         case "dob": return p.dateOfBirth ?? "";
-        case "titles": return p.titles.total;
-        case "agg": return p.overall.pct ?? -1;
-        case "vs8": return p.vsTop8?.pct ?? -1;
-        case "hard_pct": return p.surface.Hard.pct ?? -1;
-        case "clay_pct": return p.surface.Clay.pct ?? -1;
-        case "grass_pct": return p.surface.Grass.pct ?? -1;
+        case "titles": return modeData.titles.total;
+        case "agg": return modeData.overall.pct ?? -1;
+        case "vs8": return modeData.vsTop8?.pct ?? -1;
+        case "hard_pct": return modeData.surface.Hard.pct ?? -1;
+        case "clay_pct": return modeData.surface.Clay.pct ?? -1;
+        case "grass_pct": return modeData.surface.Grass.pct ?? -1;
         default: return null;
       }
     }
@@ -459,9 +469,16 @@
 
       let html = "";
       sorted.forEach((p, idx) => {
-        const hard = p.surface.Hard;
-        const clay = p.surface.Clay;
-        const grass = p.surface.Grass;
+        const modeData = p[currentMode];
+        if (!modeData) return;
+        const titles = modeData.titles;
+        const overall = modeData.overall;
+        const surface = modeData.surface;
+        const vsTop8 = modeData.vsTop8;
+        const hard = surface.Hard;
+        const clay = surface.Clay;
+        const grass = surface.Grass;
+
         html += `<tr>
             <td class="col-no">${idx + 1}</td>
             <td class="td-player">
@@ -470,11 +487,11 @@
             <td style="color:var(--text-primary);font-size:12.5px;white-space:nowrap;">
               ${p.dateOfBirth ?? "—"}${calcAge(p.dateOfBirth) !== null ? ` (${calcAge(p.dateOfBirth)})` : ""}
             </td>
-            <td style="font-weight:600; text-align:center;">${p.titles.total || 0}</td>
+            <td style="font-weight:600; text-align:center;">${titles.total || 0}</td>
 
-            <td class="surf-sep">${wrCell({ pct: p.overall.pct, w: p.overall.w, l: p.overall.l, total: p.overall.total })}</td>
+            <td class="surf-sep">${wrCell({ pct: overall.pct, w: overall.w, l: overall.l, total: overall.total })}</td>
 
-            <td>${p.vsTop8 && p.vsTop8.total > 0 ? wrCell(p.vsTop8) : `<span style="color:var(--text-muted);">—</span>`}</td>
+            <td>${vsTop8 && vsTop8.total > 0 ? wrCell(vsTop8) : `<span style="color:var(--text-muted);">—</span>`}</td>
 
             <td class="surf-sep">${wrCell(hard)}</td>
             <td class="td-breakdown">${buildBreakdown(hard.titles)}</td>
@@ -528,6 +545,12 @@
           `<tr><td colspan="12" style="padding:40px;text-align:center;color:#b91c1c;">${t("load_fail")}</td></tr>`;
       }
     }
+
+    // 模式切换监听
+    document.getElementById("modeSelect")?.addEventListener("change", (e) => {
+      currentMode = e.target.value;
+      renderTable();
+    });
 
     loadData();
 

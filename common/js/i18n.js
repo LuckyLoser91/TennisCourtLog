@@ -143,6 +143,9 @@ const i18n = {
     top100Surface_footer_titles_lbl: "Titles:",
     top100Surface_no_data: "No data",
     top100Surface_th_vstop8: "VS Top8",
+    top100Surface_label_data: "DATA:",
+    top100Surface_opt_career: "Career",
+    top100Surface_opt_season: "Season",
 
 
     /* ── bigTournament · big_tournament_result_topn ─────────── */
@@ -373,6 +376,9 @@ const i18n = {
     top100Surface_footer_titles_lbl: "冠军数：",
     top100Surface_no_data: "暂无数据",
     top100Surface_th_vstop8: "对阵Top8",
+    top100Surface_label_data: "数据：",
+    top100Surface_opt_career: "生涯",
+    top100Surface_opt_season: "赛季",
 
     /* ── bigTournament · big_tournament_result_topn ─────────── */
     bigTournament_page_title: "WTA Top 100 · 大赛统计",
@@ -502,6 +508,13 @@ function applyLang(lang) {
 
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
+    const val = i18n[lang][key];
+    if (val !== undefined && typeof val !== "function") el.textContent = val;
+  });
+
+  // 处理 data-i18n-opt（<option> 的文本）
+  document.querySelectorAll("[data-i18n-opt]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-opt");
     const val = i18n[lang][key];
     if (val !== undefined && typeof val !== "function") el.textContent = val;
   });
