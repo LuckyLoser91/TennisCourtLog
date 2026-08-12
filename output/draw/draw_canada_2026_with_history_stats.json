@@ -1,6 +1,6 @@
 {
-  "last_updated": 1786424233,
-  "currentRound": 5,
+  "last_updated": 1786512152,
+  "currentRound": 6,
   "tournament": {
     "name": "2026 Toronto, Canada",
     "tournament": {
@@ -51,7 +51,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 1984,
+        "userCount": 2040,
         "tennisPoints": 1000,
         "id": 2615,
         "displayInverseHomeAwayTeams": false,
@@ -6332,8 +6332,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "Walkover",
           "order": 3,
           "event_id": 16662013,
           "participants": [
@@ -6357,7 +6357,7 @@
               "name": "Coco Gauff",
               "shortname": "C. Gauff",
               "ranking": 4,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 264983,
               "event_id": 16662013,
@@ -6373,11 +6373,15 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 6
+          },
+          "score": {
+            "homeScore": {},
+            "awayScore": {}
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 4,
           "event_id": 16662016,
           "participants": [
@@ -6401,7 +6405,7 @@
               "name": "Elena Rybakina",
               "shortname": "E. Rybakina",
               "ranking": 2,
-              "winner": false,
+              "winner": true,
               "teamSeed": "2",
               "team_id": 186312,
               "event_id": 16662016,
@@ -6417,6 +6421,20 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6,
+              "period3": 4,
+              "period2TieBreak": 5
+            },
+            "awayScore": {
+              "period1": 4,
+              "period2": 7,
+              "period3": 6,
+              "period2TieBreak": 7
+            }
           }
         }
       ]
@@ -6477,40 +6495,40 @@
           "event_id": 16662009,
           "participants": [
             {
-              "name": "Wqf3",
-              "shortname": "WQF3",
-              "ranking": "",
+              "name": "Coco Gauff",
+              "shortname": "C. Gauff",
+              "ranking": 4,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393302,
+              "teamSeed": "4",
+              "team_id": 264983,
               "event_id": 16662009,
               "sourceBlockId": 2624756,
               "blockId": 2624762,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "QF",
+              "W": 10,
+              "L": 5,
+              "winrate": 0.667,
+              "titles": 0
             },
             {
-              "name": "Wqf4",
-              "shortname": "WQF4",
-              "ranking": "",
+              "name": "Elena Rybakina",
+              "shortname": "E. Rybakina",
+              "ranking": 2,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393303,
+              "teamSeed": "2",
+              "team_id": 186312,
               "event_id": 16662009,
               "sourceBlockId": 2624758,
               "blockId": 2624762,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 8,
+              "L": 4,
+              "winrate": 0.667,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 2,
             "player2_wins": 0
           }
         }
