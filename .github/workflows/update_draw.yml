@@ -43,7 +43,7 @@ jobs:
 
       # 4. 运行第一个脚本：获取签表数据
       - name: 运行 fetch_and_enhance_draw.py
-        run: python api_folder/fetch_and_enhance_draw.py --tourney-name Canada --season 2026 --tournament-id 2615 --season-id 85616
+        run: python api_folder/fetch_and_enhance_draw.py --tourney-name Cincinnati --season 2026 --tournament-id 2548 --season-id 85618 
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
 
@@ -53,7 +53,7 @@ jobs:
         run: |
           # 列出需要检查的 JSON 文件（可根据实际情况增减）
           FILES=(
-            "output/draw/draw_canada_2026_with_history_stats.json"
+            "output/draw/draw_cincinnati_2026_with_history_stats.json"
             # 如果有其他需要忽略 last_updated 的 JSON，在这里添加
           )
           

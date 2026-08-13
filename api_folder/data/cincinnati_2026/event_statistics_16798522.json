@@ -1,0 +1,784 @@
+{
+  "statistics": [
+    {
+      "period": "ALL",
+      "groups": [
+        {
+          "groupName": "Service",
+          "statisticsItems": [
+            {
+              "name": "Aces",
+              "home": "2",
+              "away": "0",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 2,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "aces"
+            },
+            {
+              "name": "Double faults",
+              "home": "1",
+              "away": "4",
+              "compareCode": 2,
+              "statisticsType": "negative",
+              "valueType": "event",
+              "homeValue": 1,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "doubleFaults"
+            },
+            {
+              "name": "First serve",
+              "home": "26/45 (58%)",
+              "away": "32/54 (59%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 26,
+              "awayValue": 32,
+              "homeTotal": 45,
+              "awayTotal": 54,
+              "renderType": 1,
+              "key": "firstServeAccuracy"
+            },
+            {
+              "name": "Second serve",
+              "home": "18/19 (95%)",
+              "away": "19/23 (83%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 18,
+              "awayValue": 19,
+              "homeTotal": 19,
+              "awayTotal": 23,
+              "renderType": 1,
+              "key": "secondServeAccuracy"
+            },
+            {
+              "name": "First serve points",
+              "home": "20/26 (77%)",
+              "away": "16/32 (50%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 20,
+              "awayValue": 16,
+              "homeTotal": 26,
+              "awayTotal": 32,
+              "renderType": 1,
+              "key": "firstServePointsAccuracy"
+            },
+            {
+              "name": "Second serve points",
+              "home": "12/19 (63%)",
+              "away": "6/22 (27%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 12,
+              "awayValue": 6,
+              "homeTotal": 19,
+              "awayTotal": 22,
+              "renderType": 1,
+              "key": "secondServePointsAccuracy"
+            },
+            {
+              "name": "Service games played",
+              "home": "8",
+              "away": "7",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 8,
+              "awayValue": 7,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points saved",
+              "home": "3/4 (75%)",
+              "away": "7/12 (58%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 3,
+              "awayValue": 7,
+              "homeTotal": 4,
+              "awayTotal": 12,
+              "renderType": 1,
+              "key": "breakPointsSaved"
+            }
+          ]
+        },
+        {
+          "groupName": "Points",
+          "statisticsItems": [
+            {
+              "name": "Total",
+              "home": "64",
+              "away": "35",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 64,
+              "awayValue": 35,
+              "renderType": 1,
+              "key": "pointsTotal"
+            },
+            {
+              "name": "Service points won",
+              "home": "32",
+              "away": "22",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 32,
+              "awayValue": 22,
+              "renderType": 1,
+              "key": "servicePointsScored"
+            },
+            {
+              "name": "Receiver points won",
+              "home": "32",
+              "away": "13",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 32,
+              "awayValue": 13,
+              "renderType": 1,
+              "key": "receiverPointsScored"
+            },
+            {
+              "name": "Max points in a row",
+              "home": "6",
+              "away": "3",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 6,
+              "awayValue": 3,
+              "renderType": 1,
+              "key": "maxPointsInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Games",
+          "statisticsItems": [
+            {
+              "name": "Total won",
+              "home": "12",
+              "away": "3",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 12,
+              "awayValue": 3,
+              "renderType": 1,
+              "key": "gamesWon"
+            },
+            {
+              "name": "Service games won",
+              "home": "7",
+              "away": "2",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 7,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "serviceGamesWon"
+            },
+            {
+              "name": "Max games in a row",
+              "home": "4",
+              "away": "1",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "maxGamesInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Return",
+          "statisticsItems": [
+            {
+              "name": "First serve return points",
+              "home": "16/32 (50%)",
+              "away": "6/26 (23%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 16,
+              "awayValue": 6,
+              "homeTotal": 32,
+              "awayTotal": 26,
+              "renderType": 1,
+              "key": "firstReturnPoints"
+            },
+            {
+              "name": "Second serve return points",
+              "home": "16/22 (72%)",
+              "away": "7/19 (36%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 16,
+              "awayValue": 7,
+              "homeTotal": 22,
+              "awayTotal": 19,
+              "renderType": 1,
+              "key": "secondReturnPoints"
+            },
+            {
+              "name": "Return games played",
+              "home": "7",
+              "away": "8",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 7,
+              "awayValue": 8,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points converted",
+              "home": "5",
+              "away": "1",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 5,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "breakPointsScored"
+            }
+          ]
+        },
+        {
+          "groupName": "Miscellaneous",
+          "statisticsItems": [
+            {
+              "name": "Tiebreaks",
+              "home": "0",
+              "away": "0",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 0,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "tiebreaks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "period": "1ST",
+      "groups": [
+        {
+          "groupName": "Service",
+          "statisticsItems": [
+            {
+              "name": "Aces",
+              "home": "1",
+              "away": "0",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 1,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "aces"
+            },
+            {
+              "name": "Double faults",
+              "home": "1",
+              "away": "1",
+              "compareCode": 3,
+              "statisticsType": "negative",
+              "valueType": "event",
+              "homeValue": 1,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "doubleFaults"
+            },
+            {
+              "name": "First serve",
+              "home": "11/23 (48%)",
+              "away": "10/16 (63%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 11,
+              "awayValue": 10,
+              "homeTotal": 23,
+              "awayTotal": 16,
+              "renderType": 1,
+              "key": "firstServeAccuracy"
+            },
+            {
+              "name": "Second serve",
+              "home": "11/12 (92%)",
+              "away": "5/6 (83%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 11,
+              "awayValue": 5,
+              "homeTotal": 12,
+              "awayTotal": 6,
+              "renderType": 1,
+              "key": "secondServeAccuracy"
+            },
+            {
+              "name": "First serve points",
+              "home": "8/11 (73%)",
+              "away": "2/10 (20%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 8,
+              "awayValue": 2,
+              "homeTotal": 11,
+              "awayTotal": 10,
+              "renderType": 1,
+              "key": "firstServePointsAccuracy"
+            },
+            {
+              "name": "Second serve points",
+              "home": "7/12 (58%)",
+              "away": "2/6 (33%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 7,
+              "awayValue": 2,
+              "homeTotal": 12,
+              "awayTotal": 6,
+              "renderType": 1,
+              "key": "secondServePointsAccuracy"
+            },
+            {
+              "name": "Service games played",
+              "home": "4",
+              "away": "3",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 3,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points saved",
+              "home": "1/2 (50%)",
+              "away": "1/4 (25%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 1,
+              "awayValue": 1,
+              "homeTotal": 2,
+              "awayTotal": 4,
+              "renderType": 1,
+              "key": "breakPointsSaved"
+            }
+          ]
+        },
+        {
+          "groupName": "Points",
+          "statisticsItems": [
+            {
+              "name": "Service points won",
+              "home": "15",
+              "away": "4",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 15,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "servicePointsScored"
+            },
+            {
+              "name": "Receiver points won",
+              "home": "12",
+              "away": "8",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 12,
+              "awayValue": 8,
+              "renderType": 1,
+              "key": "receiverPointsScored"
+            },
+            {
+              "name": "Max points in a row",
+              "home": "6",
+              "away": "2",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 6,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "maxPointsInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Games",
+          "statisticsItems": [
+            {
+              "name": "Max games in a row",
+              "home": "4",
+              "away": "1",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "maxGamesInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Return",
+          "statisticsItems": [
+            {
+              "name": "First serve return points",
+              "home": "8/10 (80%)",
+              "away": "3/11 (27%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 8,
+              "awayValue": 3,
+              "homeTotal": 10,
+              "awayTotal": 11,
+              "renderType": 1,
+              "key": "firstReturnPoints"
+            },
+            {
+              "name": "Second serve return points",
+              "home": "4/6 (66%)",
+              "away": "5/12 (41%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 4,
+              "awayValue": 5,
+              "homeTotal": 6,
+              "awayTotal": 12,
+              "renderType": 1,
+              "key": "secondReturnPoints"
+            },
+            {
+              "name": "Return games played",
+              "home": "3",
+              "away": "4",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 3,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points converted",
+              "home": "3",
+              "away": "1",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 3,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "breakPointsScored"
+            }
+          ]
+        },
+        {
+          "groupName": "Miscellaneous",
+          "statisticsItems": [
+            {
+              "name": "Tiebreaks",
+              "home": "0",
+              "away": "0",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 0,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "tiebreaks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "period": "2ND",
+      "groups": [
+        {
+          "groupName": "Service",
+          "statisticsItems": [
+            {
+              "name": "Aces",
+              "home": "1",
+              "away": "0",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 1,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "aces"
+            },
+            {
+              "name": "Double faults",
+              "home": "0",
+              "away": "3",
+              "compareCode": 2,
+              "statisticsType": "negative",
+              "valueType": "event",
+              "homeValue": 0,
+              "awayValue": 3,
+              "renderType": 1,
+              "key": "doubleFaults"
+            },
+            {
+              "name": "First serve",
+              "home": "15/22 (68%)",
+              "away": "22/38 (58%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 15,
+              "awayValue": 22,
+              "homeTotal": 22,
+              "awayTotal": 38,
+              "renderType": 1,
+              "key": "firstServeAccuracy"
+            },
+            {
+              "name": "Second serve",
+              "home": "7/7 (100%)",
+              "away": "14/17 (82%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 7,
+              "awayValue": 14,
+              "homeTotal": 7,
+              "awayTotal": 17,
+              "renderType": 1,
+              "key": "secondServeAccuracy"
+            },
+            {
+              "name": "First serve points",
+              "home": "12/15 (80%)",
+              "away": "14/22 (64%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 12,
+              "awayValue": 14,
+              "homeTotal": 15,
+              "awayTotal": 22,
+              "renderType": 1,
+              "key": "firstServePointsAccuracy"
+            },
+            {
+              "name": "Second serve points",
+              "home": "5/7 (71%)",
+              "away": "4/16 (25%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 5,
+              "awayValue": 4,
+              "homeTotal": 7,
+              "awayTotal": 16,
+              "renderType": 1,
+              "key": "secondServePointsAccuracy"
+            },
+            {
+              "name": "Service games played",
+              "home": "4",
+              "away": "4",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points saved",
+              "home": "2/2 (100%)",
+              "away": "6/8 (75%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 2,
+              "awayValue": 6,
+              "homeTotal": 2,
+              "awayTotal": 8,
+              "renderType": 1,
+              "key": "breakPointsSaved"
+            }
+          ]
+        },
+        {
+          "groupName": "Points",
+          "statisticsItems": [
+            {
+              "name": "Service points won",
+              "home": "17",
+              "away": "18",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 17,
+              "awayValue": 18,
+              "renderType": 1,
+              "key": "servicePointsScored"
+            },
+            {
+              "name": "Receiver points won",
+              "home": "20",
+              "away": "5",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 20,
+              "awayValue": 5,
+              "renderType": 1,
+              "key": "receiverPointsScored"
+            },
+            {
+              "name": "Max points in a row",
+              "home": "5",
+              "away": "3",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 5,
+              "awayValue": 3,
+              "renderType": 1,
+              "key": "maxPointsInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Games",
+          "statisticsItems": [
+            {
+              "name": "Max games in a row",
+              "home": "3",
+              "away": "1",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 3,
+              "awayValue": 1,
+              "renderType": 1,
+              "key": "maxGamesInRow"
+            }
+          ]
+        },
+        {
+          "groupName": "Return",
+          "statisticsItems": [
+            {
+              "name": "First serve return points",
+              "home": "8/22 (36%)",
+              "away": "3/15 (20%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 8,
+              "awayValue": 3,
+              "homeTotal": 22,
+              "awayTotal": 15,
+              "renderType": 1,
+              "key": "firstReturnPoints"
+            },
+            {
+              "name": "Second serve return points",
+              "home": "12/16 (75%)",
+              "away": "2/7 (28%)",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 12,
+              "awayValue": 2,
+              "homeTotal": 16,
+              "awayTotal": 7,
+              "renderType": 1,
+              "key": "secondReturnPoints"
+            },
+            {
+              "name": "Return games played",
+              "home": "4",
+              "away": "4",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "serviceGamesTotal"
+            },
+            {
+              "name": "Break points converted",
+              "home": "2",
+              "away": "0",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 2,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "breakPointsScored"
+            }
+          ]
+        },
+        {
+          "groupName": "Miscellaneous",
+          "statisticsItems": [
+            {
+              "name": "Tiebreaks",
+              "home": "0",
+              "away": "0",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 0,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "tiebreaks"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

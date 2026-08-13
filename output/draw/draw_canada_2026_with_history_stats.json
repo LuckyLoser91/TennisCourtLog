@@ -1,5 +1,5 @@
 {
-  "last_updated": 1786598814,
+  "last_updated": 1786664559,
   "currentRound": 7,
   "tournament": {
     "name": "2026 Toronto, Canada",
@@ -51,7 +51,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 2074,
+        "userCount": 2103,
         "tennisPoints": 1000,
         "id": 2615,
         "displayInverseHomeAwayTeams": false,
@@ -6564,8 +6564,8 @@
       "description": "Final",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 1,
           "event_id": 16662017,
           "participants": [
@@ -6573,7 +6573,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Swiatek",
               "ranking": 8,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 16662017,
@@ -6605,6 +6605,16 @@
           "h2h": {
             "player1_wins": 5,
             "player2_wins": 6
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 2,
+              "period2": 3
+            }
           }
         }
       ]
