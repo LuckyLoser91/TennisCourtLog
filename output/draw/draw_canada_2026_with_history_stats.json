@@ -1,6 +1,6 @@
 {
-  "last_updated": 1786512152,
-  "currentRound": 6,
+  "last_updated": 1786598814,
+  "currentRound": 7,
   "tournament": {
     "name": "2026 Toronto, Canada",
     "tournament": {
@@ -51,7 +51,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 2040,
+        "userCount": 2074,
         "tennisPoints": 1000,
         "id": 2615,
         "displayInverseHomeAwayTeams": false,
@@ -6445,8 +6445,8 @@
       "description": "Semifinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 1,
           "event_id": 16662011,
           "participants": [
@@ -6470,7 +6470,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Swiatek",
               "ranking": 8,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 16662011,
@@ -6486,11 +6486,23 @@
           "h2h": {
             "player1_wins": 3,
             "player2_wins": 4
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 3
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 1,
+              "period3": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 2,
           "event_id": 16662009,
           "participants": [
@@ -6514,7 +6526,7 @@
               "name": "Elena Rybakina",
               "shortname": "E. Rybakina",
               "ranking": 2,
-              "winner": false,
+              "winner": true,
               "teamSeed": "2",
               "team_id": 186312,
               "event_id": 16662009,
@@ -6530,6 +6542,18 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 2,
+              "period3": 2
+            },
+            "awayScore": {
+              "period1": 5,
+              "period2": 6,
+              "period3": 6
+            }
           }
         }
       ]
@@ -6546,41 +6570,41 @@
           "event_id": 16662017,
           "participants": [
             {
-              "name": "Wsf1",
-              "shortname": "WSF1",
-              "ranking": "",
+              "name": "Iga Swiatek",
+              "shortname": "I. Swiatek",
+              "ranking": 8,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393304,
+              "teamSeed": "7",
+              "team_id": 228272,
               "event_id": 16662017,
               "sourceBlockId": 2624760,
               "blockId": 2624764,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 8,
+              "L": 4,
+              "winrate": 0.667,
+              "titles": 0
             },
             {
-              "name": "Wsf2",
-              "shortname": "WSF2",
-              "ranking": "",
+              "name": "Elena Rybakina",
+              "shortname": "E. Rybakina",
+              "ranking": 2,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393305,
+              "teamSeed": "2",
+              "team_id": 186312,
               "event_id": 16662017,
               "sourceBlockId": 2624762,
               "blockId": 2624764,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 8,
+              "L": 4,
+              "winrate": 0.667,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 5,
+            "player2_wins": 6
           }
         }
       ]
