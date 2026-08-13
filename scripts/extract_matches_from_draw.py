@@ -3,21 +3,31 @@ import csv
 import os
 import argparse
 
+# 轮次优先级映射（越小越优）
+ROUND_ORDER = ['W', 'F', 'SF', 'QF', 'R16', 'R32', 'R64', 'R128']
+
+def get_rank(round_str):
+    """返回轮次优先级索引，空白或未知轮次返回999（最低优先级）"""
+    if not round_str:
+        return 999
+    if round_str in ROUND_ORDER:
+        return ROUND_ORDER.index(round_str)
+    return 999
+
 def extract_draw_data(input_file, output_file):
     with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
     rounds = data.get('rounds', [])
     rows = []
-    round_stats = {}          # 胜率统计（仅双方胜率有效）
-    round_three_stats = {}    # 三盘统计（所有完赛比赛）
-    round_over_stats = {}     # 总局数>21.5统计（所有完赛比赛）
+    round_stats = {}
+    round_three_stats = {}
+    round_over_stats = {}
     
     for round_info in rounds:
         round_desc = round_info.get('description', '')
         blocks = round_info.get('blocks', [])
         
-        # 初始化统计字典
         if round_desc not in round_stats:
             round_stats[round_desc] = {'total': 0, 'higher_wins': 0}
         if round_desc not in round_three_stats:
@@ -37,13 +47,12 @@ def extract_draw_data(input_file, output_file):
             if p1.get('name') == 'Bye' or p2.get('name') == 'Bye':
                 continue
             
-            # ---------- 1. 胜率统计（原有逻辑） ----------
             if p1.get('winner') == True:
                 winner, loser = p1, p2
             elif p2.get('winner') == True:
                 winner, loser = p2, p1
             else:
-                continue   # 无胜者，跳过
+                continue
             
             def parse_winrate(p):
                 wr = p.get('winrate', '')
@@ -59,8 +68,17 @@ def extract_draw_data(input_file, output_file):
             
             higher_wins = False
             if wr_w is not None and wr_l is not None:
-                higher_wins = wr_w > wr_l
                 round_stats[round_desc]['total'] += 1
+                if wr_w > wr_l:
+                    higher_wins = True
+                elif wr_w < wr_l:
+                    higher_wins = False
+                else:
+                    best_w = winner.get('best_round', '')
+                    best_l = loser.get('best_round', '')
+                    rank_w = get_rank(best_w)
+                    rank_l = get_rank(best_l)
+                    higher_wins = rank_w < rank_l
                 if higher_wins:
                     round_stats[round_desc]['higher_wins'] += 1
             
@@ -69,7 +87,6 @@ def extract_draw_data(input_file, output_file):
             best_w = winner.get('best_round', '')
             best_l = loser.get('best_round', '')
             
-            # ---------- 2. 比分解析 ----------
             score = block.get('score', {})
             home = score.get('homeScore', {})
             away = score.get('awayScore', {})
@@ -91,28 +108,22 @@ def extract_draw_data(input_file, output_file):
                     score_parts.append(f"{h}-{a}")
             score_str = ' '.join(score_parts) if score_parts else ''
             
-            # 只有完整比分（至少两盘）才计入三盘和总局数统计
             if len(score_parts) >= 2:
-                # 盘数
                 num_sets = len(score_parts)
-                # 总局数（所有盘的小分相加）
                 total_games = 0
                 for sp in score_parts:
                     parts = sp.split('-')
                     if len(parts) == 2:
                         total_games += int(parts[0]) + int(parts[1])
                 
-                # 更新三盘统计
                 round_three_stats[round_desc]['total'] += 1
                 if num_sets == 3:
                     round_three_stats[round_desc]['three'] += 1
                 
-                # 更新总局数>21.5统计
                 round_over_stats[round_desc]['total'] += 1
                 if total_games > 21.5:
                     round_over_stats[round_desc]['over'] += 1
             
-            # 写入行（无论胜率是否有效都记录）
             rows.append([
                 round_desc,
                 name_w,
@@ -125,9 +136,9 @@ def extract_draw_data(input_file, output_file):
                 score_str
             ])
     
-    # ---------- 写入 CSV ----------
     os.makedirs(os.path.dirname(output_file) or '.', exist_ok=True)
-    with open(output_file, 'w', newline='', encoding='utf-8') as f:
+    # 🔽 关键改动：编码改为 'utf-8-sig' 以便 Excel 正确显示中文
+    with open(output_file, 'w', newline='', encoding='utf-8-sig') as f:
         writer = csv.writer(f)
         writer.writerow([
             '轮次', '胜者', '负者', '胜者胜率', '负者胜率',
@@ -137,8 +148,6 @@ def extract_draw_data(input_file, output_file):
     
     print(f"提取完成，共 {len(rows)} 场比赛，保存至 {output_file}")
     
-    # ---------- 打印统计信息 ----------
-    # 1. 胜率统计
     print("\n=== 每轮胜率统计（仅计入双方胜率均有效场次） ===")
     total_matches = 0
     total_higher_wins = 0
@@ -159,7 +168,6 @@ def extract_draw_data(input_file, output_file):
     else:
         print("\n总体胜率统计: 无有效数据")
     
-    # 2. 三盘概率与总局数>21.5概率（所有完赛比赛）
     print("\n=== 每轮三盘概率与总局数>21.5概率（所有完赛比赛） ===")
     total_three = 0
     total_over = 0
@@ -190,7 +198,6 @@ if __name__ == '__main__':
     parser.add_argument('--output', help='输出 CSV 路径，默认 temp/draw/{input}_matches.csv')
     args = parser.parse_args()
 
-    # 处理输入路径
     if '/' in args.input or '\\' in args.input:
         input_file = args.input
         base = os.path.splitext(os.path.basename(input_file))[0]
