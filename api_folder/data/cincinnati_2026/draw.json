@@ -1902,9 +1902,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 26,
+              "result": "2:1",
+              "homeTeamScore": "2",
+              "awayTeamScore": "1",
               "participants": [
                 {
                   "team": {
@@ -1941,7 +1944,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "order": 1,
                   "teamSeed": "WC",
                   "id": 5788046
@@ -1994,13 +1997,16 @@
                 16823095
               ],
               "blockId": 2627788,
-              "seriesStartDateTimestamp": 1786753500,
+              "seriesStartDateTimestamp": 1786754400,
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 27,
+              "result": "2:0",
+              "homeTeamScore": "2",
+              "awayTeamScore": "0",
               "participants": [
                 {
                   "team": {
@@ -2037,7 +2043,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "order": 1,
                   "teamSeed": "WC",
                   "id": 5788048
@@ -2083,7 +2089,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3444385,
               "events": [
                 16823089
@@ -5652,25 +5658,37 @@
                 },
                 {
                   "team": {
-                    "name": "R64P18",
-                    "slug": "r64p18",
-                    "shortName": "R64P18",
-                    "gender": "M",
+                    "name": "Liudmila Samsonova",
+                    "slug": "samsonova-liudmila",
+                    "shortName": "L. Samsonova",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 7,
-                    "nameCode": "R64",
-                    "disabled": true,
+                    "userCount": 7512,
+                    "nameCode": "SAM",
+                    "ranking": 55,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409595,
+                    "id": 128584,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "ليودميلا سامسونوفا",
+                        "ru": "Самсонова, Людмила"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ل. سامسونوفا",
+                        "bn": "এল. স্যামসোনোভা",
+                        "hi": "एल. सामसोनोवा"
+                      }
                     }
                   },
                   "winner": false,
@@ -6014,30 +6032,43 @@
                 },
                 {
                   "team": {
-                    "name": "R64P26",
-                    "slug": "r64p26",
-                    "shortName": "R64P26",
-                    "gender": "M",
+                    "name": "Sofia Kenin",
+                    "slug": "kenin-sofia",
+                    "shortName": "S. Kenin",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R64",
-                    "disabled": true,
+                    "userCount": 6409,
+                    "nameCode": "KEN",
+                    "ranking": 118,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409603,
+                    "id": 91960,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "صوفيا كينين",
+                        "bn": "সোফিয়া কেনিন",
+                        "hi": "सोफिया केनिन",
+                        "ru": "Кенин, Софиа"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ص. كينين"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627788,
                   "order": 2,
+                  "teamSeed": "WC",
                   "id": 5778413
                 }
               ],
@@ -6058,30 +6089,43 @@
               "participants": [
                 {
                   "team": {
-                    "name": "R64P27",
-                    "slug": "r64p27",
-                    "shortName": "R64P27",
-                    "gender": "M",
+                    "name": "Sloane Stephens",
+                    "slug": "stephens-sloane",
+                    "shortName": "S. Stephens",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R64",
-                    "disabled": true,
+                    "userCount": 4322,
+                    "nameCode": "STE",
+                    "ranking": 286,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409604,
+                    "id": 23158,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "سلوان ستيفنز",
+                        "bn": "স্লোয়েন স্টিফেনস",
+                        "hi": "स्लोएन स्टीफंस",
+                        "ru": "Стивенс, Слоан"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "س. ستيفنز"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627790,
                   "order": 1,
+                  "teamSeed": "WC",
                   "id": 5778414
                 },
                 {
