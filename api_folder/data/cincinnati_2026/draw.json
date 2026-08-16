@@ -6485,9 +6485,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 18,
+              "result": "1:2",
+              "homeTeamScore": "1",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -6565,7 +6568,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627808,
                   "order": 2,
                   "teamSeed": "27",
@@ -6579,7 +6582,7 @@
                 16737916
               ],
               "blockId": 2627900,
-              "seriesStartDateTimestamp": 1786834800,
+              "seriesStartDateTimestamp": 1786839900,
               "automaticProgression": false
             },
             {
@@ -6979,9 +6982,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 23,
+              "result": "2:1",
+              "homeTeamScore": "2",
+              "awayTeamScore": "1",
               "participants": [
                 {
                   "team": {
@@ -7018,7 +7024,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627826,
                   "order": 1,
                   "teamSeed": "25",
@@ -7066,7 +7072,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3444423,
               "events": [
                 16737865
@@ -7076,9 +7082,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 24,
+              "result": "0:2",
+              "homeTeamScore": "0",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -7155,7 +7164,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627832,
                   "order": 2,
                   "teamSeed": "3",
@@ -7163,7 +7172,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3444426,
               "events": [
                 16737880
@@ -7271,9 +7280,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 26,
+              "result": "1:2",
+              "homeTeamScore": "1",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -7350,7 +7362,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627840,
                   "order": 2,
                   "teamSeed": "29",
@@ -7358,7 +7370,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3444435,
               "events": [
                 16737876
@@ -7368,9 +7380,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 27,
+              "result": "1:2",
+              "homeTeamScore": "1",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -7447,7 +7462,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627844,
                   "order": 2,
                   "id": 5778479
@@ -7460,13 +7475,14 @@
                 16737873
               ],
               "blockId": 2627918,
-              "seriesStartDateTimestamp": 1786836600,
+              "seriesStartDateTimestamp": 1786834500,
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 28,
+              "result": "Retired",
               "participants": [
                 {
                   "team": {
@@ -7502,7 +7518,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627846,
                   "order": 1,
                   "teamSeed": "WC",
@@ -7557,7 +7573,7 @@
                 16737864
               ],
               "blockId": 2627920,
-              "seriesStartDateTimestamp": 1786840200,
+              "seriesStartDateTimestamp": 1786846800,
               "automaticProgression": false
             },
             {
@@ -8588,30 +8604,43 @@
                 },
                 {
                   "team": {
-                    "name": "R32P18",
-                    "slug": "r32p18",
-                    "shortName": "R32P18",
-                    "gender": "M",
+                    "name": "Clara Tauson",
+                    "slug": "tauson-clara",
+                    "shortName": "C. Tauson",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R32",
-                    "disabled": true,
+                    "userCount": 11142,
+                    "nameCode": "TAU",
+                    "ranking": 30,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409659,
+                    "id": 252168,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "كلارا تاؤسون",
+                        "bn": "ক্লারা টাসন",
+                        "hi": "क्लारा टॉसोन",
+                        "ru": "Таусон, Клара"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ك. تاؤسون"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627900,
                   "order": 2,
+                  "teamSeed": "27",
                   "id": 5778435
                 }
               ],
@@ -8827,58 +8856,84 @@
               "participants": [
                 {
                   "team": {
-                    "name": "R32P23",
-                    "slug": "r32p23",
-                    "shortName": "R32P23",
-                    "gender": "M",
+                    "name": "Emma Navarro",
+                    "slug": "navarro-emma",
+                    "shortName": "E. Navarro",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 3,
-                    "nameCode": "R32",
-                    "disabled": true,
+                    "userCount": 10928,
+                    "nameCode": "NAV",
+                    "ranking": 28,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409664,
+                    "id": 207979,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "إيما نافارو",
+                        "bn": "এমা নাভারো",
+                        "hi": "एम्मा नवारो",
+                        "ru": "Наварро, Эмма"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "إ. نافارو"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627910,
                   "order": 1,
+                  "teamSeed": "25",
                   "id": 5778466
                 },
                 {
                   "team": {
-                    "name": "R32P24",
-                    "slug": "r32p24",
-                    "shortName": "R32P24",
-                    "gender": "M",
+                    "name": "Jessica Pegula",
+                    "slug": "pegula-jessica",
+                    "shortName": "J. Pegula",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R32",
-                    "disabled": true,
+                    "userCount": 25472,
+                    "nameCode": "PEG",
+                    "ranking": 3,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409665,
+                    "id": 44834,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "جيسيكا بيغولا",
+                        "ru": "Пегула, Джессика"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "ج. بيغولا",
+                        "bn": "জে. পেগুলা",
+                        "hi": "जे. पेगुला"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627912,
                   "order": 2,
+                  "teamSeed": "3",
                   "id": 5778467
                 }
               ],
@@ -8927,30 +8982,43 @@
                 },
                 {
                   "team": {
-                    "name": "R32P26",
-                    "slug": "r32p26",
-                    "shortName": "R32P26",
-                    "gender": "M",
+                    "name": "Maria Sakkari",
+                    "slug": "sakkari-maria",
+                    "shortName": "M. Sakkari",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R32",
-                    "disabled": true,
+                    "userCount": 18435,
+                    "nameCode": "SAK",
+                    "ranking": 33,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 409667,
+                    "id": 65950,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "ماريا ساكاري",
+                        "bn": "মারিয়া সাচারি",
+                        "hi": "मारिया सकारी",
+                        "ru": "Саккари, Мария"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "م. ساكاري"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627916,
                   "order": 2,
+                  "teamSeed": "29",
                   "id": 5778477
                 }
               ],
@@ -8966,30 +9034,41 @@
             },
             {
               "finished": false,
-              "matchesInRound": 1,
+              "matchesInRound": 0,
               "order": 14,
               "participants": [
                 {
                   "team": {
-                    "name": "R32P27",
-                    "slug": "r32p27",
-                    "shortName": "R32P27",
-                    "gender": "M",
+                    "name": "Diane Parry",
+                    "slug": "parry-diane",
+                    "shortName": "D. Parry",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 1,
-                    "nameCode": "R32",
-                    "disabled": true,
+                    "userCount": 5029,
+                    "nameCode": "PAR",
+                    "ranking": 64,
                     "national": false,
                     "type": 1,
-                    "id": 409668,
+                    "id": 247791,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "ديان باري",
+                        "bn": "ডায়ান প্যারি",
+                        "hi": "डायन पेरी",
+                        "ru": "Парри, Диан"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "د. باري"
+                      }
                     }
                   },
                   "winner": false,
