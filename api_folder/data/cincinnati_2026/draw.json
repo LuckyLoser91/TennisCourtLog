@@ -8226,7 +8226,7 @@
                 16737871
               ],
               "blockId": 2627932,
-              "seriesStartDateTimestamp": 1787080200,
+              "seriesStartDateTimestamp": 1787083800,
               "automaticProgression": false
             },
             {
@@ -8715,7 +8715,7 @@
                 16737889
               ],
               "blockId": 2627942,
-              "seriesStartDateTimestamp": 1787076000,
+              "seriesStartDateTimestamp": 1787079600,
               "automaticProgression": false
             },
             {
@@ -8917,9 +8917,12 @@
               "automaticProgression": false
             },
             {
-              "finished": false,
+              "finished": true,
               "matchesInRound": 1,
               "order": 10,
+              "result": "1:2",
+              "homeTeamScore": "1",
+              "awayTeamScore": "2",
               "participants": [
                 {
                   "team": {
@@ -8996,7 +8999,7 @@
                       }
                     }
                   },
-                  "winner": false,
+                  "winner": true,
                   "sourceBlockId": 2627904,
                   "order": 2,
                   "teamSeed": "9",
@@ -9004,7 +9007,7 @@
                 }
               ],
               "hasNextRoundLink": true,
-              "eventInProgress": true,
+              "eventInProgress": false,
               "id": 3444412,
               "events": [
                 16737893
@@ -9956,30 +9959,43 @@
                 },
                 {
                   "team": {
-                    "name": "R16P10",
-                    "slug": "r16p10",
-                    "shortName": "R16P10",
-                    "gender": "M",
+                    "name": "Amanda Anisimova",
+                    "slug": "anisimova-amanda",
+                    "shortName": "A. Anisimova",
+                    "gender": "F",
                     "sport": {
                       "name": "Tennis",
                       "slug": "tennis",
                       "id": 5
                     },
-                    "userCount": 6,
-                    "nameCode": "R16",
-                    "disabled": true,
+                    "userCount": 19865,
+                    "nameCode": "ANI",
+                    "ranking": 10,
+                    "disabled": false,
                     "national": false,
                     "type": 1,
-                    "id": 393285,
+                    "id": 230628,
                     "teamColors": {
                       "primary": "#374df5",
                       "secondary": "#374df5",
                       "text": "#ffffff"
+                    },
+                    "fieldTranslations": {
+                      "nameTranslation": {
+                        "ar": "أماندا أنيسيموفا",
+                        "bn": "আমান্ডা আনিসিমোভা",
+                        "hi": "अमांडा अनीसिमोवा",
+                        "ru": "Анисимова, Аманда"
+                      },
+                      "shortNameTranslation": {
+                        "ar": "أ. أنيسيموفا"
+                      }
                     }
                   },
                   "winner": false,
                   "sourceBlockId": 2627948,
                   "order": 2,
+                  "teamSeed": "9",
                   "id": 5778455
                 }
               ],
