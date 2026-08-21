@@ -1,5 +1,5 @@
 {
-  "last_updated": 1787199913,
+  "last_updated": 1787286435,
   "currentRound": 5,
   "tournament": {
     "name": "2026 Cincinnati, USA",
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 3504,
+        "userCount": 3571,
         "tennisPoints": 1000,
         "id": 2548,
         "displayInverseHomeAwayTeams": false,
@@ -6330,8 +6330,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 3,
           "event_id": 16737905,
           "participants": [
@@ -6355,7 +6355,7 @@
               "name": "Jessica Pegula",
               "shortname": "J. Pegula",
               "ranking": 3,
-              "winner": false,
+              "winner": true,
               "teamSeed": "3",
               "team_id": 44834,
               "event_id": 16737905,
@@ -6371,11 +6371,25 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 5
+          },
+          "score": {
+            "homeScore": {
+              "period1": 4,
+              "period2": 6,
+              "period3": 6,
+              "period3TieBreak": 4
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 2,
+              "period3": 7,
+              "period3TieBreak": 7
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "Retired",
           "order": 4,
           "event_id": 16737896,
           "participants": [
@@ -6383,7 +6397,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Swiatek",
               "ranking": 5,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 16737896,
@@ -6415,6 +6429,14 @@
           "h2h": {
             "player1_wins": 6,
             "player2_wins": 6
+          },
+          "score": {
+            "homeScore": {
+              "period1": 4
+            },
+            "awayScore": {
+              "period1": 1
+            }
           }
         }
       ]
@@ -6475,41 +6497,41 @@
           "event_id": 16737860,
           "participants": [
             {
-              "name": "Wqf3",
-              "shortname": "WQF3",
-              "ranking": "",
+              "name": "Jessica Pegula",
+              "shortname": "J. Pegula",
+              "ranking": 3,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393302,
+              "teamSeed": "3",
+              "team_id": 44834,
               "event_id": 16737860,
               "sourceBlockId": 2627982,
               "blockId": 2627988,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "F",
+              "W": 12,
+              "L": 7,
+              "winrate": 0.632,
+              "titles": 0
             },
             {
-              "name": "Wqf4",
-              "shortname": "WQF4",
-              "ranking": "",
+              "name": "Iga Swiatek",
+              "shortname": "I. Swiatek",
+              "ranking": 5,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393303,
+              "teamSeed": "7",
+              "team_id": 228272,
               "event_id": 16737860,
               "sourceBlockId": 2627984,
               "blockId": 2627988,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 13,
+              "L": 6,
+              "winrate": 0.684,
+              "titles": 1
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 5,
+            "player2_wins": 7
           }
         }
       ]
