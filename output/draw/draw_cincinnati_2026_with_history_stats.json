@@ -1,6 +1,6 @@
 {
-  "last_updated": 1787286435,
-  "currentRound": 5,
+  "last_updated": 1787372463,
+  "currentRound": 6,
   "tournament": {
     "name": "2026 Cincinnati, USA",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 3571,
+        "userCount": 3634,
         "tennisPoints": 1000,
         "id": 2548,
         "displayInverseHomeAwayTeams": false,
@@ -2371,7 +2371,7 @@
           "participants": [
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": true,
               "teamSeed": "7",
@@ -4470,7 +4470,7 @@
           "participants": [
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": true,
               "teamSeed": "7",
@@ -5571,7 +5571,7 @@
           "participants": [
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": true,
               "teamSeed": "7",
@@ -6134,7 +6134,7 @@
           "participants": [
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": true,
               "teamSeed": "7",
@@ -6242,8 +6242,8 @@
       "description": "Quarterfinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:1",
           "order": 1,
           "event_id": 16737907,
           "participants": [
@@ -6251,7 +6251,7 @@
               "name": "Sara Bejlek",
               "shortname": "S. Bejlek",
               "ranking": 35,
-              "winner": false,
+              "winner": true,
               "teamSeed": "",
               "team_id": 360184,
               "event_id": 16737907,
@@ -6283,11 +6283,25 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 7,
+              "period3TieBreak": 7
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 4,
+              "period3": 6,
+              "period3TieBreak": 5
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 2,
           "event_id": 16737904,
           "participants": [
@@ -6295,7 +6309,7 @@
               "name": "Coco Gauff",
               "shortname": "C. Gauff",
               "ranking": 4,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 264983,
               "event_id": 16737904,
@@ -6327,6 +6341,16 @@
           "h2h": {
             "player1_wins": 3,
             "player2_wins": 2
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 2,
+              "period2": 2
+            }
           }
         },
         {
@@ -6395,7 +6419,7 @@
           "participants": [
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": true,
               "teamSeed": "7",
@@ -6453,36 +6477,36 @@
           "event_id": 16737859,
           "participants": [
             {
-              "name": "Wqf1",
-              "shortname": "WQF1",
-              "ranking": "",
+              "name": "Sara Bejlek",
+              "shortname": "S. Bejlek",
+              "ranking": 35,
               "winner": false,
               "teamSeed": "",
-              "team_id": 393300,
+              "team_id": 360184,
               "event_id": 16737859,
               "sourceBlockId": 2627978,
               "blockId": 2627986,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             },
             {
-              "name": "Wqf2",
-              "shortname": "WQF2",
-              "ranking": "",
+              "name": "Coco Gauff",
+              "shortname": "C. Gauff",
+              "ranking": 4,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393301,
+              "teamSeed": "4",
+              "team_id": 264983,
               "event_id": 16737859,
               "sourceBlockId": 2627980,
               "blockId": 2627986,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 8,
+              "L": 5,
+              "winrate": 0.615,
+              "titles": 1
             }
           ],
           "h2h": {
@@ -6514,7 +6538,7 @@
             },
             {
               "name": "Iga Swiatek",
-              "shortname": "I. Swiatek",
+              "shortname": "I. Świątek",
               "ranking": 5,
               "winner": false,
               "teamSeed": "7",
