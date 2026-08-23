@@ -1,6 +1,6 @@
 {
-  "last_updated": 1787372463,
-  "currentRound": 6,
+  "last_updated": 1787459143,
+  "currentRound": 7,
   "tournament": {
     "name": "2026 Cincinnati, USA",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 3634,
+        "userCount": 3676,
         "tennisPoints": 1000,
         "id": 2548,
         "displayInverseHomeAwayTeams": false,
@@ -6471,8 +6471,8 @@
       "description": "Semifinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 1,
           "event_id": 16737859,
           "participants": [
@@ -6496,7 +6496,7 @@
               "name": "Coco Gauff",
               "shortname": "C. Gauff",
               "ranking": 4,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 264983,
               "event_id": 16737859,
@@ -6512,11 +6512,21 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 4,
+              "period2": 1
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:1",
           "order": 2,
           "event_id": 16737860,
           "participants": [
@@ -6524,7 +6534,7 @@
               "name": "Jessica Pegula",
               "shortname": "J. Pegula",
               "ranking": 3,
-              "winner": false,
+              "winner": true,
               "teamSeed": "3",
               "team_id": 44834,
               "event_id": 16737860,
@@ -6556,6 +6566,18 @@
           "h2h": {
             "player1_wins": 5,
             "player2_wins": 7
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 4,
+              "period3": 6
+            },
+            "awayScore": {
+              "period1": 5,
+              "period2": 6,
+              "period3": 4
+            }
           }
         }
       ]
@@ -6572,41 +6594,41 @@
           "event_id": 16737858,
           "participants": [
             {
-              "name": "Wsf1",
-              "shortname": "WSF1",
-              "ranking": "",
+              "name": "Coco Gauff",
+              "shortname": "C. Gauff",
+              "ranking": 4,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393304,
+              "teamSeed": "4",
+              "team_id": 264983,
               "event_id": 16737858,
               "sourceBlockId": 2627986,
               "blockId": 2627990,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 8,
+              "L": 5,
+              "winrate": 0.615,
+              "titles": 1
             },
             {
-              "name": "Wsf2",
-              "shortname": "WSF2",
-              "ranking": "",
+              "name": "Jessica Pegula",
+              "shortname": "J. Pegula",
+              "ranking": 3,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393305,
+              "teamSeed": "3",
+              "team_id": 44834,
               "event_id": 16737858,
               "sourceBlockId": 2627988,
               "blockId": 2627990,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "F",
+              "W": 12,
+              "L": 7,
+              "winrate": 0.632,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 4,
+            "player2_wins": 5
           }
         }
       ]
