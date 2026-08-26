@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C15B9S69WR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-C15B9S69WR");
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Calendar Current Season</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751">
+  <style>
+    body {
+      min-width: 1000px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .text-muted {
+      color: var(--text-muted) !important;
+    }
+
+    .text-warning {
+      color: var(--accent) !important;
+      font-weight: 600;
+    }
+
+    .btn-outline-warning {
+      color: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .btn-outline-warning:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-outline-warning:focus {
+      box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .form-control::-webkit-input-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .form-control::-moz-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .form-control:-ms-input-placeholder {
+      color: var(--text-hint) !important;
+      opacity: 0.7 !important;
+    }
+
+    .table-responsive {
+      border-radius: 8px;
+      border: 1px solid var(--border-main);
+    }
+
+    .table {
+      background: var(--bg-card) !important;
+      border-collapse: collapse;
+      font-size: 13px;
+      width: 100%;
+      min-width: 950px;
+      table-layout: fixed;
+      margin-bottom: 0;
+    }
+
+    .table thead th {
+      background: var(--bg-header) !important;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .table td {
+      padding: 8px 8px;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 13px;
+      background: transparent;
+    }
+
+    .table tbody tr:nth-child(odd) td {
+      background: var(--bg-card);
+    }
+
+    .table tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt);
+    }
+
+    .table-hover tbody tr:hover td {
+      background: var(--bg-hover) !important;
+    }
+
+    .champion-col {
+      text-align: left !important;
+      padding-left: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .winner-cell {
+      display: inline-flex;
+      align-items: center;
+      padding-left: 4px;
+      max-width: 100%;
+    }
+
+    .loading,
+    .no-data {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .seed-suffix {
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-main);
+    }
+
+    .footer-note small {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .footer-note a {
+      color: var(--text-hint);
+      text-decoration: underline;
+    }
+
+    /* 赛事名两行展示样式 */
+    .tournament-name-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      line-height: 1.3;
+      padding: 2px 0;
+    }
+    .tournament-name-main {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+    .tournament-name-sub {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.2;
+      margin-top: 1px;
+      opacity: 0.8;
+    }
+
+    /* 统一级别/场地徽章宽度，避免不同样式宽度不一致 */
+    .badge-level,
+    .surface-badge {
+      display: inline-block;
+      min-width: 86px;
+      width: 86px;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      box-sizing: border-box;
+      line-height: 1.2;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+  </style>
+  <script src="../common/js/i18n.js"></script>
+</head>
+
+<body>
+  <div class="row align-items-center mb-3">
+    <div class="col">
+      <h1 class="mb-0" data-i18n="calendarPage_title">🎾 Calendar · ATP & WTA Current Season</h1>
+    </div>
+    <div class="col-auto d-flex gap-2 align-items-center">
+      <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
+      <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+    </div>
+  </div>
+
+  <div class="row align-items-center mb-2">
+    <div class="col">
+      <small class="text-muted">
+        <span id="recordCount" class="fw text-warning">0 tournaments</span>
+        &nbsp;|&nbsp;
+        <span id="championCount" class="fw text-warning">— champions</span>
+      </small>
+    </div>
+    <div class="col-auto">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex align-items-center gap-1">
+          <label for="tourSelect" class="form-label mb-0 text-nowrap" data-i18n="calendar_label_tour">🏟️ Tour</label>
+          <select id="tourSelect" class="form-select form-select-sm" style="width: 120px;">
+            <option value="atp">ATP</option>
+            <option value="wta">WTA</option>
+          </select>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <label for="yearSelect" class="form-label mb-0 text-nowrap" data-i18n="calendar_label_season">📅 Season</label>
+          <select id="yearSelect" class="form-select form-select-sm" style="width: 120px;"></select>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <label for="levelSelect" class="form-label mb-0 text-nowrap" data-i18n="calendar_label_level">🏆 Level</label>
+          <select id="levelSelect" class="form-select form-select-sm" style="width: 160px;">
+            <option value="">All Levels</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="input-group input-group-sm" style="width: 280px;">
+          <span class="input-group-text" data-i18n="calendar_label_champion">🔍 CHAMPION</span>
+          <input type="text" id="searchInput" class="form-control" placeholder="e.g. Iga Swiatek..." />
+        </div>
+
+        <div class="input-group input-group-sm" style="width: 320px;">
+          <span class="input-group-text" data-i18n="calendar_label_tournament">🏟️ EVENT</span>
+          <input type="text" id="eventSearchInput" class="form-control" placeholder="e.g. Australian Open..." />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm mb-0">
+          <colgroup>
+            <col style="width: 40px;">
+            <col style="width: 60px;">
+            <col style="width: 110px;">
+            <col style="width: 120px;">
+            <col style="width: 80px;">
+            <col style="width: 80px;">
+            <col style="width: 180px;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th data-i18n="calendar_th_season">Season</th>
+              <th class="sortable" data-sort="startDate" data-i18n="calendar_th_start_date">Start Date<span class="sort-indicator"></span></th>
+              <th data-i18n="calendar_th_tournament">Tournament</th>
+              <th data-i18n="calendar_th_level">Level</th>
+              <th data-i18n="calendar_th_court">Court</th>
+              <th data-i18n="calendar_th_champion">Champion</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7" class="loading">Loading calendar data…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="footer-note">
+        <small>
+          * Data sourced from
+          <a href="https://www.atptour.com/en/tournaments" target="_blank">ATP</a>
+          /
+          <a href="https://www.wtatennis.com/tournaments" target="_blank">WTA</a>
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getFlagImg } from "../common/js/utils.js?v=202606170751";
+
+    (function () {
+      const FILES = {
+        atp: (year) => `../output/calendar/calendar_atp_${year}.json`,
+        wta: (year) => `../output/calendar/calendar_wta_${year}.json`
+      };
+
+      let allData = {
+        atp: {},
+        wta: {}
+      };
+      let availableYears = {
+        atp: [],
+        wta: []
+      };
+      let currentTour = "atp";
+      let currentYear = "2026";
+      let currentLevel = "";
+      let championSearchTerm = "";
+      let eventSearchTerm = "";
+
+      let currentSort = {
+        column: "startDate",
+        direction: "asc"
+      };
+
+      const tourSelect = document.getElementById("tourSelect");
+      const yearSelect = document.getElementById("yearSelect");
+      const levelSelect = document.getElementById("levelSelect");
+      const searchInput = document.getElementById("searchInput");
+      const eventSearchInput = document.getElementById("eventSearchInput");
+      const tableBody = document.getElementById("tableBody");
+      const recordCountSpan = document.getElementById("recordCount");
+      const championCountSpan = document.getElementById("championCount");
+      const sortableHeaders = document.querySelectorAll("th.sortable");
+
+      function fillYearSelect(years = []) {
+        yearSelect.innerHTML = "";
+        const yearLookup = [...new Set(years.length ? years : [currentYear])].sort((a, b) => b - a);
+
+        yearLookup.forEach((year) => {
+          const option = document.createElement("option");
+          option.value = String(year);
+          option.textContent = String(year);
+          yearSelect.appendChild(option);
+        });
+
+        if (!yearLookup.includes(Number(currentYear))) {
+          currentYear = String(yearLookup[0]);
+        }
+        yearSelect.value = currentYear;
+      }
+
+      function initLevelSelect(levels) {
+        const ordered = ["Grand Slam", "Masters", "Main tour", "Tour finals", "Elite"];
+        const existing = [...new Set(levels.map(normalizeLevelName))].filter(Boolean);
+        levelSelect.innerHTML = `<option value="">${t('calendar_opt_all_levels')}</option>`;
+
+        ordered.forEach((lv) => {
+          if (existing.includes(lv) || lv === "Elite") {
+            const opt = document.createElement("option");
+            opt.value = lv;
+            opt.textContent = lv;
+            levelSelect.appendChild(opt);
+          }
+        });
+
+        existing.forEach((lv) => {
+          if (!ordered.includes(lv)) {
+            const opt = document.createElement("option");
+            opt.value = lv;
+            opt.textContent = lv;
+            levelSelect.appendChild(opt);
+          }
+        });
+
+        levelSelect.value = "";
+        currentLevel = "";
+      }
+
+      function updateSortIndicator() {
+        sortableHeaders.forEach((th) => {
+          const indicator = th.querySelector(".sort-indicator");
+          if (indicator) indicator.textContent = "";
+        });
+
+        const activeHeader = Array.from(sortableHeaders).find((th) => th.dataset.sort === currentSort.column);
+        if (activeHeader) {
+          const indicator = activeHeader.querySelector(".sort-indicator");
+          if (indicator) {
+            indicator.textContent = currentSort.direction === "asc" ? " ▲" : " ▼";
+          }
+        }
+      }
+
+      function normalizeLevelName(level) {
+        if (!level) return '';
+        if (level === 'Masters series') return 'Masters';
+        return level;
+      }
+
+      function getLevelClass(level) {
+        if (!level) return 'level-other';
+        const levelName = normalizeLevelName(level);
+        if (levelName === 'Grand Slam') return 'level-GrandSlam';
+        if (levelName === 'ATP 1000' || levelName === 'WTA 1000' || levelName === 'Masters') return 'level-WTA1000';
+        if (levelName === 'ATP 500' || levelName === 'WTA 500' || levelName === 'Premier') return 'level-WTA500Premier';
+        if (levelName === 'ATP 250' || levelName === 'WTA 250' || levelName === 'International') return 'level-WTA250International';
+        if (levelName === 'Tour finals') return 'level-Finals';
+        if (levelName === 'Main tour') return 'level-WTA500Premier';
+        return 'level-other';
+      }
+
+      function getSurfaceClass(court) {
+        if (!court) return '';
+        const surface = court.trim().toLowerCase();
+        if (surface.includes('hard') || surface.includes('i.hard')) return 'surface-Hard';
+        if (surface.includes('clay')) return 'surface-Clay';
+        if (surface.includes('grass')) return 'surface-Grass';
+        if (surface.includes('carpet')) return 'surface-Carpet';
+        return '';
+      }
+
+      function filterData() {
+        const dataset = allData[currentTour][currentYear] || [];
+        return dataset.filter((item) => {
+          const levelName = normalizeLevelName(item.rank?.name || "");
+          if (currentLevel === 'Elite') {
+            if (!["Grand Slam", "Masters", "Tour finals", "ATP 1000", "WTA 1000"].includes(levelName)) return false;
+          } else if (currentLevel && levelName !== currentLevel) {
+            return false;
+          }
+          if (championSearchTerm) {
+            const winner = (item.winner && item.winner.name) || "";
+            if (!winner.toLowerCase().includes(championSearchTerm.toLowerCase())) return false;
+          }
+          if (eventSearchTerm) {
+            const ev = (item.name || "").toLowerCase();
+            if (!ev.includes(eventSearchTerm.toLowerCase())) return false;
+          }
+          return true;
+        });
+      }
+
+      function sortData(data) {
+        if (!data.length || currentSort.column !== "startDate") return data;
+        return [...data].sort((a, b) => {
+          const av = (a.date || "").slice(0, 10);
+          const bv = (b.date || "").slice(0, 10);
+          return currentSort.direction === "asc"
+            ? av.localeCompare(bv)
+            : bv.localeCompare(av);
+        });
+      }
+
+      /**
+       * 处理赛事名：分离 "-" 之前（赞助商/冠名）和之后（真正赛事名）的内容
+       * @param {string} name 原始赛事名
+       * @returns {{ main: string, sub: string }} main: 真正赛事名, sub: 赞助商/冠名
+       */
+      function splitTournamentName(name) {
+        if (!name) return { main: '', sub: '' };
+        // 如果包含 "-"，取第一个 "-" 分割
+        if (name.includes(' - ')) {
+          const idx = name.indexOf(' - ');
+          const before = name.substring(0, idx).trim();
+          const after = name.substring(idx + 2).trim();
+          // 前后都有内容：after 作为主名，before 作为副名
+          if (before && after) {
+            return { main: after, sub: before };
+          }
+          // 只有 after 有内容：直接显示 after
+          if (after) {
+            return { main: after, sub: '' };
+          }
+          // 只有 before 有内容：直接显示 before
+          if (before) {
+            return { main: before, sub: '' };
+          }
+        }
+        // 没有 "-" 或分割后无效，直接返回原名
+        return { main: name, sub: '' };
+      }
+
+      function renderData() {
+        const filtered = filterData();
+        if (!filtered.length) {
+          tableBody.innerHTML = `<tr><td colspan="7" class="no-data">${t('calendar_no_data')}</td></tr>`;
+          recordCountSpan.textContent = t('calendar_record_count', 0);
+          championCountSpan.textContent = t('wtaCalendar_champ_count', 0);
+          return;
+        }
+
+        const sorted = sortData(filtered);
+        const uniqueChampions = new Set();
+        let html = "";
+        sorted.forEach((item, idx) => {
+          const date = (item.date || "").slice(0, 10);
+          const rawName = item.name || "";
+          const level = item.rank?.name || "";
+          const levelClass = getLevelClass(level);
+          const levelDisplay = normalizeLevelName(level);
+          const court = item.court?.name || "";
+          const courtClass = getSurfaceClass(court);
+          const winner = item.winner || {};
+          const winnerName = winner.name || "";
+          const seed = winner.seed;
+          const spanSeed = seed ? ` <span class="seed-suffix">(${seed})</span>` : "";
+          const flag = getFlagImg(winner.countryAcr || "");
+          const winnerDisplay = `${flag}${winnerName}${spanSeed}`;
+
+          if (winnerName) uniqueChampions.add(winnerName.trim().toLowerCase());
+
+          const { main: mainName, sub: subName } = splitTournamentName(rawName);
+          const displayMain = mainName || rawName;
+          const displaySub = (subName && subName !== displayMain) ? subName : '';
+
+          html += `<tr>
+              <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
+              <td>${currentYear}</td>
+              <td>${date}</td>
+              <td>
+                <div class="tournament-name-wrap">
+                  <span class="tournament-name-main">${displayMain}</span>
+                  ${displaySub ? `<span class="tournament-name-sub">${displaySub}</span>` : ''}
+                </div>
+              </td>
+              <td><span class="badge-level ${levelClass}">${levelDisplay}</span></td>
+              <td><span class="surface-badge ${courtClass}">${court || "Unknown"}</span></td>
+              <td class="champion-col"><span class="winner-cell">${winnerDisplay}</span></td>
+            </tr>`;
+        });
+
+        tableBody.innerHTML = html;
+        recordCountSpan.textContent = t('calendar_record_count', sorted.length);
+        championCountSpan.textContent = t('wtaCalendar_champ_count', uniqueChampions.size);
+        updateSortIndicator();
+      }
+
+      async function loadTourData(tour, year) {
+        if (!allData[tour][year]) {
+          const resp = await fetch(FILES[tour](year));
+          const json = await resp.json();
+          allData[tour][year] = json;
+        }
+
+        const levels = (allData[tour][year] || []).map((item) => item.rank?.name || "").filter(Boolean);
+        initLevelSelect(levels);
+        renderData();
+      }
+
+      async function loadAll() {
+        try {
+          const metaResp = await fetch("../output/calendar/calendar_years.json");
+          const meta = await metaResp.json();
+          availableYears = meta;
+          fillYearSelect(availableYears[currentTour]);
+          currentYear = yearSelect.value || "2026";
+        } catch (error) {
+          availableYears = {
+            atp: [2026],
+            wta: [2026]
+          };
+          fillYearSelect(availableYears[currentTour]);
+          currentYear = "2026";
+        }
+
+        await loadTourData(currentTour, currentYear);
+      }
+
+      tourSelect.addEventListener("change", async (e) => {
+        currentTour = e.target.value;
+
+        if (!availableYears[currentTour] || !availableYears[currentTour].length) {
+          availableYears[currentTour] = [2026];
+        }
+
+        fillYearSelect(availableYears[currentTour]);
+        currentYear = yearSelect.value || String(availableYears[currentTour][0]);
+        await loadTourData(currentTour, currentYear);
+      });
+
+      yearSelect.addEventListener("change", async (e) => {
+        currentYear = e.target.value;
+        await loadTourData(currentTour, currentYear);
+      });
+
+      levelSelect.addEventListener("change", (e) => {
+        currentLevel = e.target.value;
+        renderData();
+      });
+
+      sortableHeaders.forEach((th) => {
+        th.addEventListener("click", () => {
+          const column = th.dataset.sort;
+          if (!column) return;
+          if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
+          } else {
+            currentSort.column = column;
+            currentSort.direction = "desc";
+          }
+          renderData();
+        });
+      });
+
+      searchInput.addEventListener("input", (e) => {
+        championSearchTerm = e.target.value.trim();
+        renderData();
+      });
+
+      eventSearchInput.addEventListener("input", (e) => {
+        eventSearchTerm = e.target.value.trim();
+        renderData();
+      });
+
+      loadAll();
+
+      document.addEventListener('langchange', () => {
+        const ySel = document.getElementById('yearSelect');
+        if (ySel && ySel.options[0]) ySel.options[0].textContent = '2026';
+        const lSel = document.getElementById('levelSelect');
+        if (lSel && lSel.options[0]) lSel.options[0].textContent = t('calendar_opt_all_levels');
+        renderData();
+      });
+    })();
+  </script>
+</body>
+
+</html>
