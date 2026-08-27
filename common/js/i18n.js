@@ -139,6 +139,9 @@ const i18n = {
     calendar_record_count: (n) => `${n} tournaments`,
     calendar_no_data: "🎯 No calendar records match the filters",
     calendar_last_updated: "Last updated:",
+    calendar_th_birthday: "Birthday",
+    calendar_th_age: "Age",
+    calendar_th_height: "Height",
 
     /* ── top100Surface · wta_top100_surface ─────────────────── */
     top100Surface_page_title: "WTA Top 100 · Surface Win Rate & Titles",
@@ -390,6 +393,9 @@ const i18n = {
     calendar_record_count: (n) => `${n} 个赛事`,
     calendar_no_data: "🎯 没有符合条件的赛程记录",
     calendar_last_updated: "更新时间:",
+    calendar_th_birthday: "生日",
+    calendar_th_age: "夺冠年龄",
+    calendar_th_height: "身高",
     /* ── top100Surface · wta_top100_surface ─────────────────── */
     top100Surface_page_title: "WTA Top 100 · 场地胜率与冠军数",
     top100Surface_title: "🎾 WTA Top 100 · 场地胜率与冠军数",

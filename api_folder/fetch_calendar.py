@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import csv
 import json
 import time
 from datetime import datetime
@@ -27,7 +28,7 @@ PLAYER_INFO_API = "tennisapi2"
 API_BASE_URL = API_CONFIG[CALENDAR_API]["base_url"]
 API_HOST = API_CONFIG[CALENDAR_API]["api_host"]
 
-DEFAULT_YEAR = 2025
+DEFAULT_YEAR = 2026
 DEFAULT_PAGE_SIZE = 200
 ALLOWED_RANK_IDS = {2, 3, 4, 7}
 
@@ -35,8 +36,8 @@ ALLOWED_RANK_IDS = {2, 3, 4, 7}
 MIN_REQUEST_INTERVAL = 0.25
 _last_request_time: Optional[float] = None
 
-# In-memory cache for player info to avoid duplicate API calls
-_player_info_cache: Dict[str, Dict[str, Any]] = {}
+# In-memory cache for player profiles per tour: {tour: {player_id_str: profile_dict}}
+_player_profiles_cache: Dict[str, Dict[str, Dict[str, Any]]] = {}
 
 
 def _wait_for_rate_limit() -> None:
@@ -47,6 +48,88 @@ def _wait_for_rate_limit() -> None:
         if elapsed < MIN_REQUEST_INTERVAL:
             time.sleep(MIN_REQUEST_INTERVAL - elapsed)
     _last_request_time = time.time()
+
+
+def get_profile_path(tour: str) -> Path:
+    """Return the path to player_profile.csv for the given tour."""
+    return Path(f"tennis_{tour}") / "player_profile.csv"
+
+
+def get_calendar_path(tour: str, year: int) -> Path:
+    """Return the path to calendar_{tour}_{year}.json."""
+    return Path("output") / "calendar" / f"calendar_{tour}_{year}.json"
+
+
+def load_profiles(tour: str) -> Dict[str, Dict[str, Any]]:
+    """Load player profiles from CSV into a dict keyed by player_id (str)."""
+    path = get_profile_path(tour)
+    profiles: Dict[str, Dict[str, Any]] = {}
+    if not path.exists():
+        return profiles
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            pid = row.get("id", "").strip()
+            if pid:
+                profiles[pid] = {
+                    "name": row.get("name", ""),
+                    "id": pid,
+                    "birthday": row.get("birthday", "").strip() or None,
+                    "height": row.get("height", "").strip() or None,
+                }
+    return profiles
+
+
+def save_profiles(tour: str, profiles: Dict[str, Dict[str, Any]]) -> None:
+    """Save player profiles back to CSV."""
+    path = get_profile_path(tour)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["name", "id", "birthday", "height"])
+        writer.writeheader()
+        for pid in sorted(profiles.keys(), key=lambda x: int(x) if x.isdigit() else float("inf")):
+            p = profiles[pid]
+            writer.writerow({
+                "name": p.get("name", ""),
+                "id": pid,
+                "birthday": p.get("birthday") or "",
+                "height": str(p.get("height")) if p.get("height") is not None else "",
+            })
+
+
+def get_player_profile(tour: str, player_id: int, player_name: str) -> Dict[str, Any]:
+    """
+    Get player profile from CSV cache first; if not present, fetch from API.
+    API is only called when the player_id does not exist in the CSV.
+    """
+    global _player_profiles_cache
+
+    pid_str = str(player_id)
+
+    # Load profiles for this tour if not already cached
+    if tour not in _player_profiles_cache:
+        _player_profiles_cache[tour] = load_profiles(tour)
+
+    profiles = _player_profiles_cache[tour]
+
+    # If already in CSV, return directly without calling API
+    if pid_str in profiles:
+        return profiles[pid_str]
+
+    # Not in CSV — fetch from API
+    api_data = fetch_player_info(tour, player_id)
+
+    profile = {
+        "name": player_name or api_data.get("name", ""),
+        "id": pid_str,
+        "birthday": api_data.get("birthday"),
+        "height": api_data.get("height"),
+    }
+
+    profiles[pid_str] = profile
+    _player_profiles_cache[tour] = profiles
+    save_profiles(tour, profiles)
+    return profile
 
 
 def normalize_date(value: Any) -> str:
@@ -199,10 +282,6 @@ def fetch_player_info(tour: str, player_id: int) -> Dict[str, Any]:
     根据 tour 和 player_id 请求球员详细信息。
     返回包含 birthday 和 height 的字典；若请求失败则返回空字典。
     """
-    cache_key = f"{tour}:{player_id}"
-    if cache_key in _player_info_cache:
-        return _player_info_cache[cache_key]
-
     api = TennisApi()
     headers = {
         "Content-Type": "application/json",
@@ -222,12 +301,10 @@ def fetch_player_info(tour: str, player_id: int) -> Dict[str, Any]:
         payload = response.json()
     except requests.RequestException as e:
         print(f"获取球员 {player_id} 信息失败: {e}")
-        _player_info_cache[cache_key] = {}
         return {}
 
     data = payload.get("data") if isinstance(payload, dict) else None
     if not isinstance(data, dict):
-        _player_info_cache[cache_key] = {}
         return {}
 
     # Extract birthday and height
@@ -243,12 +320,10 @@ def fetch_player_info(tour: str, player_id: int) -> Dict[str, Any]:
         except (ValueError, TypeError):
             pass
 
-    result = {
+    return {
         "birthday": birthday,
         "height": height,
     }
-    _player_info_cache[cache_key] = result
-    return result
 
 
 def calculate_age(event_date_str: str, birthday_str: str) -> Optional[float]:
@@ -272,16 +347,44 @@ def calculate_age(event_date_str: str, birthday_str: str) -> Optional[float]:
 def enrich_calendar_with_player_info(records: List[Dict[str, Any]], tour: str) -> List[Dict[str, Any]]:
     """
     为每条已完赛记录的 winner 补充 birthday、height 和 age 字段。
+    优先从 player_profile.csv 读取；CSV 中不存在的 id 才会调用 API。
+    如果 winner 已经有 birthday 或 height，且 CSV 中没有该 id，
+    则把已有信息写入 CSV，避免重复调用 API。
     """
+    # Ensure profiles are loaded
+    if tour not in _player_profiles_cache:
+        _player_profiles_cache[tour] = load_profiles(tour)
+    profiles = _player_profiles_cache[tour]
+
     enriched = []
+    updated_profiles = False
+
     for item in records:
         winner = item.get("winner") or {}
         player_id = winner.get("id")
+        player_name = winner.get("name", "")
+        pid_str = str(player_id) if player_id else None
 
         if item.get("completed") and player_id:
-            player_info = fetch_player_info(tour, player_id)
-            birthday = player_info.get("birthday")
-            height = player_info.get("height")
+            # Check if winner already has birthday/height in the JSON itself
+            existing_birthday = winner.get("birthday")
+            existing_height = winner.get("height")
+
+            # If this player is NOT in CSV but HAS info in JSON, save to CSV first
+            if pid_str and pid_str not in profiles:
+                if existing_birthday or existing_height:
+                    profiles[pid_str] = {
+                        "name": player_name,
+                        "id": pid_str,
+                        "birthday": existing_birthday if existing_birthday else None,
+                        "height": existing_height if existing_height else None,
+                    }
+                    updated_profiles = True
+
+            # Now get profile (from CSV or API)
+            profile = get_player_profile(tour, player_id, player_name)
+            birthday = profile.get("birthday")
+            height = profile.get("height")
             age = calculate_age(item.get("date"), birthday) if birthday else None
 
             winner["birthday"] = birthday
@@ -295,15 +398,18 @@ def enrich_calendar_with_player_info(records: List[Dict[str, Any]], tour: str) -
         item["winner"] = winner
         enriched.append(item)
 
+    # Save profiles if we added any from JSON
+    if updated_profiles:
+        _player_profiles_cache[tour] = profiles
+        save_profiles(tour, profiles)
+
     return enriched
 
 
 def save_calendar_file(tour: str, data: List[Dict[str, Any]], year: int) -> str:
     """
-    将 atp / wta 的 calendar list 分别保存到 output/calendar/
-    目录下，文件名使用 calendar_{tour}_{year}.json。
-    同时会整理每条记录：date 切成 YYYY-MM-DD，删除 games，补上 winner 与 completed 字段。
-    最后为已完赛记录的 winner 补充 birthday、height 和 age。
+    将 calendar list 保存到 output/calendar/calendar_{tour}_{year}.json。
+    同时会整理每条记录并 enrich winner 信息。
     """
     output_dir = Path("output") / "calendar"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -319,11 +425,46 @@ def save_calendar_file(tour: str, data: List[Dict[str, Any]], year: int) -> str:
     return str(output_path)
 
 
+def load_and_enrich_existing_calendar(tour: str, year: int) -> str:
+    """
+    如果本地已存在 calendar_{tour}_{year}.json，直接读取并 enrich winner 信息，
+    不再重新调用 calendar API。返回写入路径。
+    """
+    path = get_calendar_path(tour, year)
+    print(f"发现本地已有文件: {path}，直接读取并 enrich player profiles...")
+
+    with open(path, "r", encoding="utf-8") as f:
+        records = json.load(f)
+
+    enriched = enrich_calendar_with_player_info(records, tour)
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(enriched, f, indent=2, ensure_ascii=False)
+
+    print(f"已更新 enrich: {path}")
+    return str(path)
+
+
+def process_calendar(tour: str, year: int = DEFAULT_YEAR, page_size: int = DEFAULT_PAGE_SIZE) -> str:
+    """
+    处理指定 tour 和 year 的 calendar：
+    1. 先检查 output/calendar/calendar_{tour}_{year}.json 是否存在
+       - 存在：直接读取并 enrich player profiles
+       - 不存在：从 API 抓取，然后保存并 enrich
+    2. 返回最终文件路径。
+    """
+    path = get_calendar_path(tour, year)
+    if path.exists():
+        return load_and_enrich_existing_calendar(tour, year)
+    else:
+        calendar_data = fetch_calendar(tour=tour, year=year, page_size=page_size)
+        return save_calendar_file(tour=tour, data=calendar_data, year=year)
+
+
 def main() -> None:
     year = DEFAULT_YEAR
     for tour in ("atp", "wta"):
-        calendar_data = fetch_calendar(tour=tour, year=year)
-        save_calendar_file(tour=tour, data=calendar_data, year=year)
+        process_calendar(tour=tour, year=year)
 
 
 if __name__ == "__main__":

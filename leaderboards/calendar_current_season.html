@@ -221,6 +221,7 @@
     }
   </style>
   <script src="../common/js/i18n.js"></script>
+<base target="_blank">
 </head>
 
 <body>
@@ -287,26 +288,30 @@
         <table class="table table-hover table-sm mb-0">
           <colgroup>
             <col style="width: 40px;">
-            <col style="width: 60px;">
             <col style="width: 110px;">
             <col style="width: 120px;">
             <col style="width: 80px;">
             <col style="width: 80px;">
-            <col style="width: 180px;">
+            <col style="width: 160px;">
+            <col style="width: 100px;">
+            <col style="width: 80px;">
+            <col style="width: 80px;">
           </colgroup>
           <thead>
             <tr>
               <th>#</th>
-              <th data-i18n="calendar_th_season">Season</th>
               <th class="sortable" data-sort="startDate" data-i18n="calendar_th_start_date">Start Date<span class="sort-indicator"></span></th>
               <th data-i18n="calendar_th_tournament">Tournament</th>
               <th data-i18n="calendar_th_level">Level</th>
               <th data-i18n="calendar_th_court">Court</th>
               <th data-i18n="calendar_th_champion">Champion</th>
+              <th class="sortable" data-sort="birthday" data-i18n="calendar_th_birthday">Birthday<span class="sort-indicator"></span></th>
+              <th class="sortable" data-sort="age" data-i18n="calendar_th_age">Age<span class="sort-indicator"></span></th>
+              <th class="sortable" data-sort="height" data-i18n="calendar_th_height">Height<span class="sort-indicator"></span></th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr><td colspan="7" class="loading">Loading calendar data…</td></tr>
+            <tr><td colspan="9" class="loading">Loading calendar data…</td></tr>
           </tbody>
         </table>
       </div>
@@ -473,13 +478,29 @@
       }
 
       function sortData(data) {
-        if (!data.length || currentSort.column !== "startDate") return data;
+        if (!data.length) return data;
         return [...data].sort((a, b) => {
-          const av = (a.date || "").slice(0, 10);
-          const bv = (b.date || "").slice(0, 10);
-          return currentSort.direction === "asc"
-            ? av.localeCompare(bv)
-            : bv.localeCompare(av);
+          let av, bv;
+          switch (currentSort.column) {
+            case "startDate":
+              av = (a.date || "").slice(0, 10);
+              bv = (b.date || "").slice(0, 10);
+              return currentSort.direction === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+            case "birthday":
+              av = (a.winner?.birthday || "");
+              bv = (b.winner?.birthday || "");
+              return currentSort.direction === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+            case "age":
+              av = a.winner?.age != null ? a.winner.age : -Infinity;
+              bv = b.winner?.age != null ? b.winner.age : -Infinity;
+              return currentSort.direction === "asc" ? av - bv : bv - av;
+            case "height":
+              av = parseInt(a.winner?.height) || 0;
+              bv = parseInt(b.winner?.height) || 0;
+              return currentSort.direction === "asc" ? av - bv : bv - av;
+            default:
+              return 0;
+          }
         });
       }
 
@@ -515,7 +536,7 @@
       function renderData() {
         const filtered = filterData();
         if (!filtered.length) {
-          tableBody.innerHTML = `<tr><td colspan="7" class="no-data">${t('calendar_no_data')}</td></tr>`;
+          tableBody.innerHTML = `<tr><td colspan="9" class="no-data">${t('calendar_no_data')}</td></tr>`;
           recordCountSpan.textContent = t('calendar_record_count', 0);
           championCountSpan.textContent = t('wtaCalendar_champ_count', 0);
           return;
@@ -547,7 +568,6 @@
 
           html += `<tr>
               <td style="color:var(--text-hint);font-size:11px;">${idx + 1}</td>
-              <td>${currentYear}</td>
               <td>${date}</td>
               <td>
                 <div class="tournament-name-wrap">
@@ -558,6 +578,9 @@
               <td><span class="badge-level ${levelClass}">${levelDisplay}</span></td>
               <td><span class="surface-badge ${courtClass}">${court || "Unknown"}</span></td>
               <td class="champion-col"><span class="winner-cell">${winnerDisplay}</span></td>
+              <td>${winner.birthday || '-'}</td>
+              <td>${winner.age != null ? winner.age : '-'}</td>
+              <td>${winner.height || '-'}</td>
             </tr>`;
         });
 
