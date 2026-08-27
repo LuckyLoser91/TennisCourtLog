@@ -228,8 +228,7 @@ def get_tourney_stats_for_players(
                 entry["losses"] += 1
             if round_val in ROUND_ORDER:
                 entry["rounds_seen"].add(round_val)
-            if round_val == "F":
-                entry["has_won_final"] += 1
+            
 
     new_entries = {}
     for name, data in missing_stats.items():
@@ -465,6 +464,9 @@ def enhance_draw(tourney_name: str, season: int, data_dir: str,
     if not_found:
         print(f"\n以下球员未找到 {tourney_name} 赛事历史数据：")
         for player in not_found:
+            # player['name'] not 包含R64，R32，R16，Qf，Wqf，Wsf等信息
+            if any(round_str in player['name'] for round_str in ['R64', 'R32', 'R16', 'Qf', 'Wqf', 'Wsf']):
+                continue
             ranking_info = f" (Rank: {player['ranking']})" if player['ranking'] else ""
             print(f"  - {player['name']}{ranking_info}")
 
