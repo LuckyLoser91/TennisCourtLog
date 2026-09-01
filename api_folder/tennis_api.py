@@ -12,7 +12,7 @@ project_root = Path(__file__).parent.parent
 
 # 指定 .vscode 文件夹下的 .env
 env_path = project_root / '.vscode' / '.env'
-load_dotenv(env_path)
+load_dotenv(env_path, override=True)
 
 
 class TennisApi:

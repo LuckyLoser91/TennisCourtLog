@@ -123,7 +123,7 @@ const i18n = {
     wtaCalendar_no_data: "🎯 No champion records match the filters",
 
     /* ── calendarCurrentSeason · calendar_current_season ───────── */
-    calendarPage_title: "Calendar · ATP & WTA",
+    calendarPage_title: "Calendar · WTA & ATP",
     calendar_label_tour: "🏟️ Tour",
     calendar_label_season: "📅 Season",
     calendar_label_level: "🏆 Level",
@@ -377,7 +377,7 @@ const i18n = {
     wtaCalendar_champ_count: (n) => `${n} 位冠军`,
     wtaCalendar_no_data: "🎯 没有符合筛选条件的冠军记录",
     /* ── calendarCurrentSeason · calendar_current_season ───────── */
-    calendarPage_title: "赛程表 · ATP & WTA",
+    calendarPage_title: "赛程日历 · WTA & ATP",
     calendar_label_tour: "🏟️ 巡回赛",
     calendar_label_season: "📅 赛季",
     calendar_label_level: "🏆 级别",
