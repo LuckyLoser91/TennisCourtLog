@@ -149,6 +149,11 @@
       max-width: 100%;
     }
 
+    .winner-cell .no-winner {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
     .loading,
     .no-data {
       text-align: center;
@@ -180,7 +185,6 @@
       text-decoration: underline;
     }
 
-    /* 赛事名两行展示样式 */
     .tournament-name-wrap {
       display: flex;
       flex-direction: column;
@@ -203,7 +207,6 @@
       opacity: 0.8;
     }
 
-    /* 统一级别/场地徽章宽度，避免不同样式宽度不一致 */
     .badge-level,
     .surface-badge {
       display: inline-block;
@@ -219,6 +222,11 @@
       white-space: nowrap;
       letter-spacing: 0.03em;
     }
+
+    .form-check-input:checked {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
   </style>
   <script src="../common/js/i18n.js"></script>
 <base target="_blank">
@@ -227,7 +235,7 @@
 <body>
   <div class="row align-items-center mb-3">
     <div class="col">
-      <h1 class="mb-0" data-i18n="calendarPage_title">🎾 Calendar · ATP & WTA Current Season</h1>
+      <h1 class="mb-0" data-i18n="calendarPage_title">🎾 Calendar · ATP & WTA (Since 2009)</h1>
     </div>
     <div class="col-auto d-flex gap-2 align-items-center">
       <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
@@ -241,15 +249,18 @@
         <span id="recordCount" class="fw text-warning">0 tournaments</span>
         &nbsp;|&nbsp;
         <span id="championCount" class="fw text-warning">— champions</span>
+        &nbsp;|&nbsp;
+      <span data-i18n="click_to_sort">💡 Click column headers to sort</span>
       </small>
     </div>
     <div class="col-auto">
-      <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex gap-2 align-items-center flex-wrap">
         <div class="d-flex align-items-center gap-1">
           <label for="tourSelect" class="form-label mb-0 text-nowrap" data-i18n="calendar_label_tour">🏟️ Tour</label>
           <select id="tourSelect" class="form-select form-select-sm" style="width: 120px;">
+            
+            <option value="wta" selected>WTA</option>
             <option value="atp">ATP</option>
-            <option value="wta">WTA</option>
           </select>
         </div>
         <div class="d-flex align-items-center gap-1">
@@ -268,7 +279,7 @@
 
   <div class="row mb-3">
     <div class="col-12">
-      <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex gap-2 align-items-center flex-wrap">
         <div class="input-group input-group-sm" style="width: 280px;">
           <span class="input-group-text" data-i18n="calendar_label_champion">🔍 CHAMPION</span>
           <input type="text" id="searchInput" class="form-control" placeholder="e.g. Iga Swiatek..." />
@@ -278,9 +289,15 @@
           <span class="input-group-text" data-i18n="calendar_label_tournament">🏟️ EVENT</span>
           <input type="text" id="eventSearchInput" class="form-control" placeholder="e.g. Australian Open..." />
         </div>
+
+        <div class="form-check form-switch mb-0 ms-auto">
+          <input class="form-check-input" type="checkbox" id="showUncompleted" checked>
+          <label class="form-check-label text-muted small" for="showUncompleted" data-i18n="calendar_label_show_uncompleted">Show uncompleted</label>
+        </div>
       </div>
     </div>
   </div>
+
 
   <div class="row">
     <div class="col-12">
@@ -336,23 +353,20 @@
 
     (function () {
       const FILES = {
-        atp: (year) => `../output/calendar/calendar_atp_${year}.json`,
-        wta: (year) => `../output/calendar/calendar_wta_${year}.json`
+        atp: "../output/calendar_atp_since_2009.json",
+        wta: "../output/calendar_wta_since_2009.json"
       };
 
       let allData = {
-        atp: {},
-        wta: {}
-      };
-      let availableYears = {
         atp: [],
         wta: []
       };
-      let currentTour = "atp";
-      let currentYear = "2026";
+      let currentTour = "wta";
+      let currentYear = "";
       let currentLevel = "";
       let championSearchTerm = "";
       let eventSearchTerm = "";
+      let showUncompleted = true;
 
       let currentSort = {
         column: "startDate",
@@ -364,26 +378,46 @@
       const levelSelect = document.getElementById("levelSelect");
       const searchInput = document.getElementById("searchInput");
       const eventSearchInput = document.getElementById("eventSearchInput");
+      const showUncompletedCheckbox = document.getElementById("showUncompleted");
       const tableBody = document.getElementById("tableBody");
       const recordCountSpan = document.getElementById("recordCount");
       const championCountSpan = document.getElementById("championCount");
       const sortableHeaders = document.querySelectorAll("th.sortable");
 
-      function fillYearSelect(years = []) {
-        yearSelect.innerHTML = "";
-        const yearLookup = [...new Set(years.length ? years : [currentYear])].sort((a, b) => b - a);
+      const t = window.t || ((key) => key);
 
-        yearLookup.forEach((year) => {
+      function getLatestYear(data) {
+        const years = data.map(item => (item.date || "").slice(0, 4)).filter(Boolean);
+        if (years.length === 0) return "all";
+        const max = Math.max(...years.map(Number));
+        return String(max);
+      }
+
+      function fillYearSelect(years = [], defaultYear = null) {
+        yearSelect.innerHTML = "";
+        const allOption = document.createElement("option");
+        allOption.value = "all";
+        allOption.textContent = t('calendar_opt_all_years') || "All Years";
+        yearSelect.appendChild(allOption);
+
+        const sortedYears = [...new Set(years)].sort((a, b) => b - a);
+        sortedYears.forEach((year) => {
           const option = document.createElement("option");
           option.value = String(year);
           option.textContent = String(year);
           yearSelect.appendChild(option);
         });
 
-        if (!yearLookup.includes(Number(currentYear))) {
-          currentYear = String(yearLookup[0]);
+        let selectedValue = defaultYear;
+        if (!selectedValue || selectedValue === "all") {
+          selectedValue = sortedYears.length > 0 ? sortedYears[0] : "all";
+        } else {
+          if (!sortedYears.includes(Number(selectedValue)) && selectedValue !== "all") {
+            selectedValue = sortedYears.length > 0 ? sortedYears[0] : "all";
+          }
         }
-        yearSelect.value = currentYear;
+        yearSelect.value = selectedValue;
+        currentYear = selectedValue;
       }
 
       function initLevelSelect(levels) {
@@ -457,22 +491,34 @@
       }
 
       function filterData() {
-        const dataset = allData[currentTour][currentYear] || [];
+        const dataset = allData[currentTour] || [];
         return dataset.filter((item) => {
+          if (currentYear !== "all") {
+            const itemYear = (item.date || "").slice(0, 4);
+            if (itemYear !== currentYear) return false;
+          }
+
+          if (!showUncompleted && item.completed === false) {
+            return false;
+          }
+
           const levelName = normalizeLevelName(item.rank?.name || "");
           if (currentLevel === 'Elite') {
             if (!["Grand Slam", "Masters", "Tour finals", "ATP 1000", "WTA 1000"].includes(levelName)) return false;
           } else if (currentLevel && levelName !== currentLevel) {
             return false;
           }
+
           if (championSearchTerm) {
             const winner = (item.winner && item.winner.name) || "";
             if (!winner.toLowerCase().includes(championSearchTerm.toLowerCase())) return false;
           }
+
           if (eventSearchTerm) {
             const ev = (item.name || "").toLowerCase();
             if (!ev.includes(eventSearchTerm.toLowerCase())) return false;
           }
+
           return true;
         });
       }
@@ -504,32 +550,22 @@
         });
       }
 
-      /**
-       * 处理赛事名：分离 "-" 之前（赞助商/冠名）和之后（真正赛事名）的内容
-       * @param {string} name 原始赛事名
-       * @returns {{ main: string, sub: string }} main: 真正赛事名, sub: 赞助商/冠名
-       */
       function splitTournamentName(name) {
         if (!name) return { main: '', sub: '' };
-        // 如果包含 "-"，取第一个 "-" 分割
         if (name.includes(' - ')) {
           const idx = name.indexOf(' - ');
           const before = name.substring(0, idx).trim();
           const after = name.substring(idx + 2).trim();
-          // 前后都有内容：after 作为主名，before 作为副名
           if (before && after) {
             return { main: after, sub: before };
           }
-          // 只有 after 有内容：直接显示 after
           if (after) {
             return { main: after, sub: '' };
           }
-          // 只有 before 有内容：直接显示 before
           if (before) {
             return { main: before, sub: '' };
           }
         }
-        // 没有 "-" 或分割后无效，直接返回原名
         return { main: name, sub: '' };
       }
 
@@ -558,9 +594,14 @@
           const seed = winner.seed;
           const spanSeed = seed ? ` <span class="seed-suffix">(${seed})</span>` : "";
           const flag = getFlagImg(winner.countryAcr || "");
-          const winnerDisplay = `${flag}${winnerName}${spanSeed}`;
 
-          if (winnerName) uniqueChampions.add(winnerName.trim().toLowerCase());
+          let winnerDisplay;
+          if (winnerName) {
+            winnerDisplay = `${flag}${winnerName}${spanSeed}`;
+            uniqueChampions.add(winnerName.trim().toLowerCase());
+          } else {
+            winnerDisplay = `<span class="no-winner">—</span>`;
+          }
 
           const { main: mainName, sub: subName } = splitTournamentName(rawName);
           const displayMain = mainName || rawName;
@@ -590,52 +631,44 @@
         updateSortIndicator();
       }
 
-      async function loadTourData(tour, year) {
-        if (!allData[tour][year]) {
-          const resp = await fetch(FILES[tour](year));
-          const json = await resp.json();
-          allData[tour][year] = json;
-        }
+      async function loadAllData() {
+        try {
+          const [atpResp, wtaResp] = await Promise.all([
+            fetch(FILES.atp),
+            fetch(FILES.wta)
+          ]);
+          const atpData = await atpResp.json();
+          const wtaData = await wtaResp.json();
+          allData.atp = atpData;
+          allData.wta = wtaData;
 
-        const levels = (allData[tour][year] || []).map((item) => item.rank?.name || "").filter(Boolean);
+          const latestYear = getLatestYear(allData[currentTour]);
+          const years = allData[currentTour].map(item => (item.date || "").slice(0, 4)).filter(Boolean);
+          fillYearSelect(years, latestYear);
+
+          const levels = allData[currentTour].map(item => item.rank?.name || "").filter(Boolean);
+          initLevelSelect(levels);
+
+          renderData();
+        } catch (error) {
+          console.error("Failed to load data:", error);
+          tableBody.innerHTML = `<tr><td colspan="9" class="no-data">Error loading data. Please try again later.</td></tr>`;
+        }
+      }
+
+      tourSelect.addEventListener("change", (e) => {
+        currentTour = e.target.value;
+        const latestYear = getLatestYear(allData[currentTour]);
+        const years = allData[currentTour].map(item => (item.date || "").slice(0, 4)).filter(Boolean);
+        fillYearSelect(years, latestYear);
+        const levels = allData[currentTour].map(item => item.rank?.name || "").filter(Boolean);
         initLevelSelect(levels);
         renderData();
-      }
-
-      async function loadAll() {
-        try {
-          const metaResp = await fetch("../output/calendar/calendar_years.json");
-          const meta = await metaResp.json();
-          availableYears = meta;
-          fillYearSelect(availableYears[currentTour]);
-          currentYear = yearSelect.value || "2026";
-        } catch (error) {
-          availableYears = {
-            atp: [2026],
-            wta: [2026]
-          };
-          fillYearSelect(availableYears[currentTour]);
-          currentYear = "2026";
-        }
-
-        await loadTourData(currentTour, currentYear);
-      }
-
-      tourSelect.addEventListener("change", async (e) => {
-        currentTour = e.target.value;
-
-        if (!availableYears[currentTour] || !availableYears[currentTour].length) {
-          availableYears[currentTour] = [2026];
-        }
-
-        fillYearSelect(availableYears[currentTour]);
-        currentYear = yearSelect.value || String(availableYears[currentTour][0]);
-        await loadTourData(currentTour, currentYear);
       });
 
-      yearSelect.addEventListener("change", async (e) => {
+      yearSelect.addEventListener("change", (e) => {
         currentYear = e.target.value;
-        await loadTourData(currentTour, currentYear);
+        renderData();
       });
 
       levelSelect.addEventListener("change", (e) => {
@@ -643,18 +676,9 @@
         renderData();
       });
 
-      sortableHeaders.forEach((th) => {
-        th.addEventListener("click", () => {
-          const column = th.dataset.sort;
-          if (!column) return;
-          if (currentSort.column === column) {
-            currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
-          } else {
-            currentSort.column = column;
-            currentSort.direction = "desc";
-          }
-          renderData();
-        });
+      showUncompletedCheckbox.addEventListener("change", (e) => {
+        showUncompleted = e.target.checked;
+        renderData();
       });
 
       searchInput.addEventListener("input", (e) => {
@@ -667,13 +691,29 @@
         renderData();
       });
 
-      loadAll();
+      sortableHeaders.forEach((th) => {
+        th.addEventListener("click", () => {
+          const column = th.dataset.sort;
+          if (!column) return;
+          if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
+          } else {
+            currentSort.column = column;
+            currentSort.direction = "asc";
+          }
+          renderData();
+        });
+      });
+
+      loadAllData();
 
       document.addEventListener('langchange', () => {
-        const ySel = document.getElementById('yearSelect');
-        if (ySel && ySel.options[0]) ySel.options[0].textContent = '2026';
-        const lSel = document.getElementById('levelSelect');
-        if (lSel && lSel.options[0]) lSel.options[0].textContent = t('calendar_opt_all_levels');
+        const allOpt = yearSelect.querySelector('option[value="all"]');
+        if (allOpt) allOpt.textContent = t('calendar_opt_all_years') || "All Years";
+        const levelOpt = levelSelect.querySelector('option[value=""]');
+        if (levelOpt) levelOpt.textContent = t('calendar_opt_all_levels');
+        const label = document.querySelector('label[for="showUncompleted"]');
+        if (label) label.textContent = t('calendar_label_show_uncompleted') || "Show uncompleted";
         renderData();
       });
     })();

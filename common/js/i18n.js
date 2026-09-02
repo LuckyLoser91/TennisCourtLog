@@ -123,7 +123,7 @@ const i18n = {
     wtaCalendar_no_data: "🎯 No champion records match the filters",
 
     /* ── calendarCurrentSeason · calendar_current_season ───────── */
-    calendarPage_title: "Calendar · WTA & ATP",
+    calendarPage_title: "Calendar · WTA & ATP (Since 2009)",
     calendar_label_tour: "🏟️ Tour",
     calendar_label_season: "📅 Season",
     calendar_label_level: "🏆 Level",
@@ -142,6 +142,11 @@ const i18n = {
     calendar_th_birthday: "Birthday",
     calendar_th_age: "Age",
     calendar_th_height: "Height",
+    calendar_opt_all_years: "All Years",
+    calendar_label_show_uncompleted: "Show uncompleted",
+    calendar_no_data: "🎯 No calendar records match the filters",
+    calendar_opt_all_levels: "All Levels",
+    
 
     /* ── top100Surface · wta_top100_surface ─────────────────── */
     top100Surface_page_title: "WTA Top 100 · Surface Win Rate & Titles",
@@ -377,7 +382,7 @@ const i18n = {
     wtaCalendar_champ_count: (n) => `${n} 位冠军`,
     wtaCalendar_no_data: "🎯 没有符合筛选条件的冠军记录",
     /* ── calendarCurrentSeason · calendar_current_season ───────── */
-    calendarPage_title: "赛程日历 · WTA & ATP",
+    calendarPage_title: "赛程日历 · WTA & ATP (自2009年起)",
     calendar_label_tour: "🏟️ 巡回赛",
     calendar_label_season: "📅 赛季",
     calendar_label_level: "🏆 级别",
@@ -396,6 +401,10 @@ const i18n = {
     calendar_th_birthday: "生日",
     calendar_th_age: "夺冠年龄",
     calendar_th_height: "身高",
+    calendar_opt_all_years: "全部赛季",
+    calendar_label_show_uncompleted: "显示未完成赛事",
+    calendar_no_data: "🎯 没有符合条件的赛事记录",
+    calendar_opt_all_levels: "所有级别",
     /* ── top100Surface · wta_top100_surface ─────────────────── */
     top100Surface_page_title: "WTA Top 100 · 场地胜率与冠军数",
     top100Surface_title: "🎾 WTA Top 100 · 场地胜率与冠军数",

@@ -2,7 +2,7 @@ name: 自动更新签表数据
 
 on:
   schedule:
-    - cron: '0 4 * * *' 
+    - cron: '0 2 * * *' 
 
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
