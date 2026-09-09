@@ -23,8 +23,8 @@ from datetime import date, timedelta
 # ================================================================
 
 # 当前 WTA 世界第一（换人时手动修改）
-CURRENT_WTA = "Aryna Sabalenka"
-CURRENT_WTA_START_DATE = "2024-10-21"   # 本次登顶起始周日（格式 YYYY-MM-DD）
+CURRENT_WTA = "Elena Rybakina"
+CURRENT_WTA_START_DATE = "2026-09-14"   # 本次登顶起始周日（格式 YYYY-MM-DD）
 
 # 当前 ATP 世界第一（换人时手动修改）
 CURRENT_ATP = "Jannik Sinner"
@@ -41,6 +41,7 @@ ACTIVE_PLAYERS = {
     "Aryna Sabalenka",
     "Serena Williams",
     "Venus Williams",
+    "Elena Rybakina",
     # ATP（现役世界第一及相关球员）
     "Novak Djokovic",
     "Daniil Medvedev",
