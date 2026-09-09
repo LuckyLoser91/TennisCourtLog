@@ -1,5 +1,5 @@
 {
-  "last_updated": 1788850652,
+  "last_updated": 1788937589,
   "currentRound": 5,
   "tournament": {
     "name": "2026 US Open, New York, USA",
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 11832,
+        "userCount": 11982,
         "tennisPoints": 2000,
         "id": 2601,
         "displayInverseHomeAwayTeams": false,
@@ -6749,8 +6749,8 @@
       "description": "Quarterfinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:1",
           "order": 1,
           "event_id": 16931170,
           "participants": [
@@ -6758,7 +6758,7 @@
               "name": "Aryna Sabalenka",
               "shortname": "A. Sabalenka",
               "ranking": 1,
-              "winner": false,
+              "winner": true,
               "teamSeed": "1",
               "team_id": 157754,
               "event_id": 16931170,
@@ -6790,11 +6790,27 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 3,
+              "period3": 7,
+              "period1TieBreak": 7,
+              "period3TieBreak": 10
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6,
+              "period3": 6,
+              "period1TieBreak": 1,
+              "period3TieBreak": 7
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:1",
           "order": 2,
           "event_id": 16931196,
           "participants": [
@@ -6802,7 +6818,7 @@
               "name": "Jessica Pegula",
               "shortname": "J. Pegula",
               "ranking": 3,
-              "winner": false,
+              "winner": true,
               "teamSeed": "3",
               "team_id": 44834,
               "event_id": 16931196,
@@ -6834,6 +6850,18 @@
           "h2h": {
             "player1_wins": 4,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 6
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 4,
+              "period3": 3
+            }
           }
         },
         {
@@ -6938,41 +6966,41 @@
           "event_id": 16931224,
           "participants": [
             {
-              "name": "Wqf1",
-              "shortname": "WQF1",
-              "ranking": "",
+              "name": "Aryna Sabalenka",
+              "shortname": "A. Sabalenka",
+              "ranking": 1,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393300,
+              "teamSeed": "1",
+              "team_id": 157754,
               "event_id": 16931224,
               "sourceBlockId": 2635108,
               "blockId": 2635116,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 34,
+              "L": 6,
+              "winrate": 0.85,
+              "titles": 2
             },
             {
-              "name": "Wqf2",
-              "shortname": "WQF2",
-              "ranking": "",
+              "name": "Jessica Pegula",
+              "shortname": "J. Pegula",
+              "ranking": 3,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393301,
+              "teamSeed": "3",
+              "team_id": 44834,
               "event_id": 16931224,
               "sourceBlockId": 2635110,
               "blockId": 2635116,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "F",
+              "W": 23,
+              "L": 9,
+              "winrate": 0.719,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 9,
+            "player2_wins": 4
           }
         },
         {
