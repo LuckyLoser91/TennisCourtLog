@@ -1,6 +1,6 @@
 {
-  "last_updated": 1788937589,
-  "currentRound": 5,
+  "last_updated": 1788996132,
+  "currentRound": 6,
   "tournament": {
     "name": "2026 US Open, New York, USA",
     "tournament": {
@@ -6865,8 +6865,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 3,
           "event_id": 16931195,
           "participants": [
@@ -6890,7 +6890,7 @@
               "name": "Coco Gauff",
               "shortname": "C. Gauff",
               "ranking": 4,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 264983,
               "event_id": 16931195,
@@ -6906,11 +6906,25 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 5
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6,
+              "period3": 2,
+              "period2TieBreak": 7
+            },
+            "awayScore": {
+              "period1": 2,
+              "period2": 7,
+              "period3": 6,
+              "period2TieBreak": 9
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 4,
           "event_id": 16931213,
           "participants": [
@@ -6934,7 +6948,7 @@
               "name": "Elena Rybakina",
               "shortname": "E. Rybakina",
               "ranking": 2,
-              "winner": false,
+              "winner": true,
               "teamSeed": "2",
               "team_id": 186312,
               "event_id": 16931213,
@@ -6950,6 +6964,18 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 4
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 1,
+              "period3": 4
+            },
+            "awayScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 6
+            }
           }
         }
       ]
@@ -7010,41 +7036,41 @@
           "event_id": 16931225,
           "participants": [
             {
-              "name": "Wqf3",
-              "shortname": "WQF3",
-              "ranking": "",
+              "name": "Coco Gauff",
+              "shortname": "C. Gauff",
+              "ranking": 4,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393302,
+              "teamSeed": "4",
+              "team_id": 264983,
               "event_id": 16931225,
               "sourceBlockId": 2635112,
               "blockId": 2635118,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 20,
+              "L": 6,
+              "winrate": 0.769,
+              "titles": 1
             },
             {
-              "name": "Wqf4",
-              "shortname": "WQF4",
-              "ranking": "",
+              "name": "Elena Rybakina",
+              "shortname": "E. Rybakina",
+              "ranking": 2,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393303,
+              "teamSeed": "2",
+              "team_id": 186312,
               "event_id": 16931225,
               "sourceBlockId": 2635114,
               "blockId": 2635118,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "R16",
+              "W": 8,
+              "L": 6,
+              "winrate": 0.571,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 2,
+            "player2_wins": 1
           }
         }
       ]
