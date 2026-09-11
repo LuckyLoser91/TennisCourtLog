@@ -1,6 +1,6 @@
 {
-  "last_updated": 1788996132,
-  "currentRound": 6,
+  "last_updated": 1789108583,
+  "currentRound": 7,
   "tournament": {
     "name": "2026 US Open, New York, USA",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 11982,
+        "userCount": 12266,
         "tennisPoints": 2000,
         "id": 2601,
         "displayInverseHomeAwayTeams": false,
@@ -6986,8 +6986,8 @@
       "description": "Semifinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 1,
           "event_id": 16931224,
           "participants": [
@@ -6995,7 +6995,7 @@
               "name": "Aryna Sabalenka",
               "shortname": "A. Sabalenka",
               "ranking": 1,
-              "winner": false,
+              "winner": true,
               "teamSeed": "1",
               "team_id": 157754,
               "event_id": 16931224,
@@ -7027,11 +7027,21 @@
           "h2h": {
             "player1_wins": 9,
             "player2_wins": 4
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 5,
+              "period2": 2
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 2,
           "event_id": 16931225,
           "participants": [
@@ -7055,7 +7065,7 @@
               "name": "Elena Rybakina",
               "shortname": "E. Rybakina",
               "ranking": 2,
-              "winner": false,
+              "winner": true,
               "teamSeed": "2",
               "team_id": 186312,
               "event_id": 16931225,
@@ -7071,6 +7081,18 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 1
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 4,
+              "period3": 4
+            },
+            "awayScore": {
+              "period1": 3,
+              "period2": 6,
+              "period3": 6
+            }
           }
         }
       ]
@@ -7087,41 +7109,41 @@
           "event_id": 16931233,
           "participants": [
             {
-              "name": "Wsf1",
-              "shortname": "WSF1",
-              "ranking": "",
+              "name": "Aryna Sabalenka",
+              "shortname": "A. Sabalenka",
+              "ranking": 1,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393304,
+              "teamSeed": "1",
+              "team_id": 157754,
               "event_id": 16931233,
               "sourceBlockId": 2635116,
               "blockId": 2635120,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "W",
+              "W": 34,
+              "L": 6,
+              "winrate": 0.85,
+              "titles": 2
             },
             {
-              "name": "Wsf2",
-              "shortname": "WSF2",
-              "ranking": "",
+              "name": "Elena Rybakina",
+              "shortname": "E. Rybakina",
+              "ranking": 2,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393305,
+              "teamSeed": "2",
+              "team_id": 186312,
               "event_id": 16931233,
               "sourceBlockId": 2635118,
               "blockId": 2635120,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "R16",
+              "W": 8,
+              "L": 6,
+              "winrate": 0.571,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 10,
+            "player2_wins": 7
           }
         }
       ]
