@@ -54,6 +54,10 @@ jobs:
       # 8. 运行 update_no1_weekly.py 更新 WTA 世界第一球员数据
       - name: 运行 update_no1_weekly.py
         run: python updates/update_no1_weekly.py
+      
+      # 9. 运行 update_calendar.py 更新 WTA & ATP 日历数据
+      - name: 运行 update_calendar.py
+        run: python api_folder/update_calendar.py
 
       # 9. 检查文件变化并提交
       - name: 检查文件变化并提交
