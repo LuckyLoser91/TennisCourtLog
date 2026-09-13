@@ -1,5 +1,5 @@
 {
-  "last_updated": 1789108583,
+  "last_updated": 1789259027,
   "currentRound": 7,
   "tournament": {
     "name": "2026 US Open, New York, USA",
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 12266,
+        "userCount": 12294,
         "tennisPoints": 2000,
         "id": 2601,
         "displayInverseHomeAwayTeams": false,
@@ -7103,8 +7103,8 @@
       "description": "Final",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 1,
           "event_id": 16931233,
           "participants": [
@@ -7128,7 +7128,7 @@
               "name": "Elena Rybakina",
               "shortname": "E. Rybakina",
               "ranking": 2,
-              "winner": false,
+              "winner": true,
               "teamSeed": "2",
               "team_id": 186312,
               "event_id": 16931233,
@@ -7144,6 +7144,18 @@
           "h2h": {
             "player1_wins": 10,
             "player2_wins": 7
+          },
+          "score": {
+            "homeScore": {
+              "period1": 4,
+              "period2": 7,
+              "period3": 2
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 5,
+              "period3": 6
+            }
           }
         }
       ]
