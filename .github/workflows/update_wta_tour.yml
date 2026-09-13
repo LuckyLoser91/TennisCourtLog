@@ -58,6 +58,12 @@ jobs:
       # 9. 运行 update_calendar.py 更新 WTA & ATP 日历数据
       - name: 运行 update_calendar.py
         run: python api_folder/update_calendar.py
+      # 10. 运行request_ranking.py
+      - name: 运行 request_ranking.py
+        run: python api_folder/request_ranking.py
+      # 11. 运行 update_tour_top100_surface.py 更新 WTA&ATP Top 100 场地表现数据
+      - name: 运行 update_tour_top100_surface.py
+        run: python update/update_tour_top100_surface.py
 
       # 9. 检查文件变化并提交
       - name: 检查文件变化并提交

@@ -14,11 +14,6 @@
       "event_id"
     ]
   },
-  "rankings_wta": {
-    "api": "allsports",
-    "endpoint_template": "rankings/wta",
-    "required_params": []
-  },
   "event_detail": {
     "api": "allsports",
     "endpoint_template": "event/{event_id}",
@@ -48,6 +43,13 @@
     "required_params": [
       "tour",
       "player_id"
+    ]
+  },
+  "rankings": {
+    "api": "tennisapi2",
+    "endpoint_template": "{tour}/ranking/singles",
+    "required_params": [
+      "tour"
     ]
   }
 }
