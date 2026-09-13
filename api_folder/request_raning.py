@@ -12,6 +12,13 @@ from tennis_api import TennisApi
 # 之后新增修正只需再加一行即可。
 NAME_CORRECTIONS = {
     "Cori Gauff": "Coco Gauff",
+    "Jan-Lennard Struff": "Jan Lennard Struff",
+    "Jaume Antoni Munar Clar": "Jaume Munar",
+    "Pablo Carreno-Busta": "Pablo Carreno Busta",
+    "Leylah Annie Fernandez": "Leylah Fernandez",
+    "Caty McNally": "Caty Mcnally",
+    "Paula Badosa Gibert": "Paula Badosa",
+    "Maria Camila Osorio Serrano": "Camila Osorio",
     # 示例：后续可继续添加，例如
     # "Some Wrong Name": "Correct Name",
     # "Alexander Zverev Jr.": "Alexander Zverev",

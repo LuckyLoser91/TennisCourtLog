@@ -39,6 +39,31 @@ _last_request_time: Optional[float] = None
 _player_profiles_cache: Dict[str, Dict[str, Dict[str, Any]]] = {}
 
 
+# ==================== 姓名手动修正表 ====================
+# 当 API 返回的球员名与实际想要显示的名字不一致时，在这里登记。
+# 后续新增修正只需再加一行即可。
+NAME_CORRECTIONS = {
+    "Cori Gauff": "Coco Gauff",
+    "Jan-Lennard Struff": "Jan Lennard Struff",
+    "Jaume Antoni Munar Clar": "Jaume Munar",
+    "Pablo Carreno-Busta": "Pablo Carreno Busta",
+    "Leylah Annie Fernandez": "Leylah Fernandez",
+    "Caty McNally": "Caty Mcnally",
+    "Paula Badosa Gibert": "Paula Badosa",
+    "Maria Camila Osorio Serrano": "Camila Osorio",
+    # 示例：后续可继续添加，例如
+    # "Some Wrong Name": "Correct Name",
+    # "Alexander Zverev Jr.": "Alexander Zverev",
+}
+
+
+def apply_name_correction(name: Optional[str]) -> Optional[str]:
+    """对球员姓名应用手动修正。"""
+    if not name:
+        return name
+    return NAME_CORRECTIONS.get(name, name)
+
+
 # ==================== 从 fetch_calendar.py 复制的函数 ====================
 def _wait_for_rate_limit() -> None:
     global _last_request_time
@@ -120,9 +145,12 @@ def normalize_date(value: Any) -> str:
 def normalize_winner(player: Any) -> Dict[str, Any]:
     if not isinstance(player, dict):
         return {"id": None, "name": "", "seed": None, "countryAcr": ""}
+    raw_name = player.get("name", "")
+    # 应用姓名修正
+    corrected_name = apply_name_correction(raw_name)
     return {
         "id": player.get("id"),
-        "name": player.get("name", ""),
+        "name": corrected_name,
         "seed": player.get("seed"),
         "countryAcr": player.get("countryAcr", player.get("countryArc", "")),
     }
@@ -303,6 +331,27 @@ def process_latest_records(records: List[Dict[str, Any]], tour: str) -> List[Dic
     return enriched
 
 
+def clean_existing_records(records: List[Dict[str, Any]]) -> int:
+    """
+    对已存在的历史记录应用姓名修正（若 winner 名称在 NAME_CORRECTIONS 中）。
+    返回修正条数。
+    """
+    changed = 0
+    for item in records:
+        winner = item.get("winner")
+        if not isinstance(winner, dict):
+            continue
+        raw_name = winner.get("name")
+        if not raw_name:
+            continue
+        corrected = apply_name_correction(raw_name)
+        if corrected != raw_name:
+            print(f"  历史记录姓名修正: '{raw_name}' -> '{corrected}'")
+            winner["name"] = corrected
+            changed += 1
+    return changed
+
+
 def update_calendar_summary(tour: str, year: int):
     summary_path = OUTPUT_DIR / f"calendar_{tour}_since_2009.json"
     if not summary_path.exists():
@@ -315,6 +364,11 @@ def update_calendar_summary(tour: str, year: int):
     with open(summary_path, "r", encoding="utf-8") as f:
         all_records = json.load(f)
 
+    # 对已有数据一次性应用姓名修正
+    cleaned = clean_existing_records(all_records)
+    if cleaned:
+        print(f"本地已有记录共修正 {cleaned} 条姓名")
+
     current_year_prefix = str(year)
     local_current = [item for item in all_records if item.get("date", "").startswith(current_year_prefix)]
     other_years = [item for item in all_records if not item.get("date", "").startswith(current_year_prefix)]
@@ -326,10 +380,19 @@ def update_calendar_summary(tour: str, year: int):
         raw_records = fetch_calendar(tour=tour, year=year, page_size=DEFAULT_PAGE_SIZE)
     except Exception as e:
         print(f"抓取失败: {e}")
+        # 即使抓取失败，也要保存已清理后的数据
+        if cleaned:
+            with open(summary_path, "w", encoding="utf-8") as f:
+                json.dump(all_records, f, indent=2, ensure_ascii=False)
+            print("已保存历史记录姓名修正结果")
         return
 
     if not raw_records:
         print("未抓取到任何记录，跳过更新")
+        if cleaned:
+            with open(summary_path, "w", encoding="utf-8") as f:
+                json.dump(all_records, f, indent=2, ensure_ascii=False)
+            print("已保存历史记录姓名修正结果")
         return
 
     latest_records = process_latest_records(raw_records, tour)
