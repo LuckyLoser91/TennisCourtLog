@@ -177,7 +177,9 @@ const i18n = {
 
     /* ── bigTournament · big_tournament_result_topn ─────────── */
     bigTournament_page_title: "WTA Top 100 · Big Tournament Stats",
+    bigTournamentATP_page_title: "ATP Top 100 · Big Tournament Stats",
     bigTournament_title: "📊 WTA Top 100 · Elite Event History",
+    bigTournamentATP_title: "📊 ATP Top 100 · Elite Event History",
     bigTournament_label_view: "View mode",
     bigTournament_opt_by_tourney: "🏟️ By Tournament",
     bigTournament_opt_by_player: "🎾 By Player",
@@ -433,7 +435,9 @@ const i18n = {
 
     /* ── bigTournament · big_tournament_result_topn ─────────── */
     bigTournament_page_title: "WTA Top 100 · 大赛统计",
+    bigTournamentATP_page_title: "ATP Top 100 · 大赛统计",
     bigTournament_title: "📊 WTA Top 100 · 精英赛历史成绩",
+    bigTournamentATP_title: "📊 ATP Top 100 · 精英赛历史成绩",
     bigTournament_label_view: "视图",
     bigTournament_opt_by_tourney: "🏟️ 按赛事",
     bigTournament_opt_by_player: "🎾 按球员",
