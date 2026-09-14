@@ -1123,7 +1123,7 @@
     closeBtnEl.textContent = window.t('bigTournament_modal_close');
     backdrop.classList.add('open');
 
-    fetch(`/api/player_tournament_history?player=${encodeURIComponent(player)}&tournament=${encodeURIComponent(tournament)}`)
+    fetch(`/api/player_tournament_history_wta?player=${encodeURIComponent(player)}&tournament=${encodeURIComponent(tournament)}`)
       .then(r => r.json())
       .then(data => {
         if (data.error || !data.matches || data.matches.length === 0) {
