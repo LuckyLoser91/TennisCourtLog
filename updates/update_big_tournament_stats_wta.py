@@ -456,7 +456,7 @@ def main():
         matches_dir="tennis_wta",
         rank_calendar_dir="output/",
         historical_calendar_path="output/wta_calendar_champs_start_2009.json", # matches里的level可能存在错误和混乱，所以用calendar_champ文件
-        output_json_path=f"output/top{topn}_big_tournament_stats.json"
+        output_json_path=f"output/top{topn}_big_tournament_stats_wta.json"
     )
 
 if __name__ == "__main__":

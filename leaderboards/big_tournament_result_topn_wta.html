@@ -662,7 +662,7 @@
   async function loadData() {
     try {
       const [statsRes, calendarRes] = await Promise.all([
-        fetch('../output/top100_big_tournament_stats.json'),
+        fetch('../output/top100_big_tournament_stats_wta.json'),
         fetch('../output/calendar-2026.json')
       ]);
       const statsJson = await statsRes.json();

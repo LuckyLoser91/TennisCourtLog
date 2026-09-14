@@ -440,7 +440,7 @@ def process_tour(tour: str):
         return
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    out_path = os.path.join(OUTPUT_DIR, f"{tour}_top100_surface_stats.json")
+    out_path = os.path.join(OUTPUT_DIR, f"top100_surface_stats_{tour}.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(
             {
