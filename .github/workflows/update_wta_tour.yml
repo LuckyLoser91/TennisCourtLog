@@ -50,24 +50,27 @@ jobs:
         run: python updates/update_matches_from_tennislife.py
       # - name: 运行 update_tour_matches_uk.py
       #   run: python updates/update_tour_matches_uk.py
+
+      # 6. 运行 update_calendar.py 更新 WTA & ATP 日历数据，来源tennisapi2
+      - name: 运行 update_calendar.py
+        run: python api_folder/update_calendar.py
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
       
       ##################################################
       # 运行脚本得到四个巡回赛相关网页json数据
       ##################################################
 
-      # 6. 统计 Top N 球员大赛数据
+      # 7. 统计 Top N 球员大赛数据
       - name: 运行 update_big_tournament_stats_wta.py
         run: python updates/update_big_tournament_stats_wta.py
       - name: 运行 update_big_tournament_stats_atp.py
         run: python updates/update_big_tournament_stats_atp.py
          
-      # 7. 运行 update_no1_weekly.py 更新 WTA 世界第一球员数据
+      # 8. 运行 update_no1_weekly.py 更新 WTA 世界第一球员数据
       - name: 运行 update_no1_weekly.py
         run: python updates/update_no1_weekly.py
       
-      # 8. 运行 update_calendar.py 更新 WTA & ATP 日历数据，来源tennisapi2
-      - name: 运行 update_calendar.py
-        run: python api_folder/update_calendar.py
       
       # 9. 运行 update_tour_top100_surface.py 更新 WTA&ATP Top 100 场地表现数据
       - name: 运行 update_tour_top100_surface.py
