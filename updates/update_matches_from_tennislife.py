@@ -65,6 +65,20 @@ def convert_date(value: str) -> str:
     if len(value) == 8 and value.isdigit():
         return datetime.strptime(value, "%Y%m%d").strftime("%Y/%m/%d")
     return value
+def normalize_player_name(name: str) -> str:
+    """球员姓名规范化：
+    - 把 '-' 替换为空格（'Elena-Gabriela Ruse' -> 'Elena Gabriela Ruse'）
+    - 每个单词首字母大写、其余小写（保持 Title Case）
+    - 修正撇号后误大写（O'Sullivan -> O'sullivan，一般球员名不会出现，稳妥处理）
+    - 压缩多余空格
+    """
+    if not name:
+        return ""
+    name = name.replace("-", " ")
+    name = " ".join(name.split()).strip()
+    name = name.title()
+    name = re.sub(r"'([A-Z])", lambda m: "'" + m.group(1).lower(), name)
+    return name
 
 
 def title_case_tourney_name(name: str) -> str:
@@ -139,8 +153,8 @@ def process_and_save(records, output_path: str, level_map: dict):
                 "surface": row.get("surface", ""),
                 "round": row.get("round", ""),
                 "best_of": row.get("best_of", ""),
-                "winner_name": row.get("winner_name", ""),
-                "loser_name": row.get("loser_name", ""),
+                "winner_name": normalize_player_name(row.get("winner_name", "")),   # ← 新增
+                "loser_name":  normalize_player_name(row.get("loser_name", "")),    # ← 新增
                 "score": row.get("score", ""),
                 "winner_rank": row.get("winner_rank", ""),
                 "loser_rank": row.get("loser_rank", ""),

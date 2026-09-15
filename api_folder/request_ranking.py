@@ -19,6 +19,7 @@ NAME_CORRECTIONS = {
     "Caty McNally": "Caty Mcnally",
     "Paula Badosa Gibert": "Paula Badosa",
     "Maria Camila Osorio Serrano": "Camila Osorio",
+    "Daniel Merida Aguilar": "Daniel Merida",
     # 示例：后续可继续添加，例如
     # "Some Wrong Name": "Correct Name",
     # "Alexander Zverev Jr.": "Alexander Zverev",
