@@ -25,19 +25,43 @@ NAME_CORRECTIONS = {
 }
 
 # 排名 JSON 文件的存放目录（根据你的项目结构调整）。
-# 常见情况：脚本所在目录 or output 子目录。
-# 如果文件实际保存在别处，把下面的路径改成对应目录即可。
 RANKINGS_DIR = "./output"
 
 
-def find_latest_rankings_file(tour):
-    """根据巡回赛代码，在 RANKINGS_DIR 里找到最新的 rankings_<tour>_*.json。"""
+def find_all_rankings_files(tour):
+    """根据巡回赛代码，返回 RANKINGS_DIR 里所有 rankings_<tour>_*.json 路径。"""
     pattern = os.path.join(RANKINGS_DIR, f"rankings_{tour}_*.json")
-    files = glob.glob(pattern)
+    return glob.glob(pattern)
+
+
+def find_latest_rankings_file(tour):
+    """在 RANKINGS_DIR 里找到最新的 rankings_<tour>_*.json。"""
+    files = find_all_rankings_files(tour)
     if not files:
         return None
     # 按修改时间取最新
     return max(files, key=os.path.getmtime)
+
+
+def cleanup_old_rankings(tour, keep_file):
+    """删除 rankings_<tour>_*.json 中除 keep_file 以外的旧文件。"""
+    files = find_all_rankings_files(tour)
+    deleted = 0
+    for f in files:
+        # 用 realpath 比较，避免相对/绝对路径不一致导致误删 keep_file
+        if os.path.realpath(f) == os.path.realpath(keep_file):
+            continue
+        try:
+            os.remove(f)
+            deleted += 1
+            print(f"  已删除旧文件：{f}")
+        except OSError as e:
+            print(f"  [警告] 删除失败 {f}: {e}")
+
+    if deleted:
+        print(f"[清理] 已删除 {tour.upper()} 旧排名文件 {deleted} 个，保留：{keep_file}")
+    else:
+        print(f"[清理] {tour.upper()} 无旧排名文件需要删除。")
 
 
 def apply_name_corrections(filepath, corrections):
@@ -81,15 +105,20 @@ def apply_name_corrections(filepath, corrections):
 def main():
     api = TennisApi()
 
-    # 原逻辑：抓取并保存 WTA / ATP 排名
+    # 1. 抓取并保存 WTA / ATP 排名
     rank_data = api.request_rank(tour="wta", enrich=True)
     rank_data_atp = api.request_rank(tour="atp", enrich=True)
 
-    # 保存完成后，对最新的排名文件应用手动姓名修正
+    # 2. 对最新排名文件应用手动姓名修正，并清理旧文件
     for tour in ("wta", "atp"):
         filepath = find_latest_rankings_file(tour)
         print(f"[info] 最新 {tour.upper()} 排名文件：{filepath}")
+        if not filepath:
+            print(f"[skip] 未找到 {tour.upper()} 排名文件，跳过修正与清理。")
+            continue
+
         apply_name_corrections(filepath, NAME_CORRECTIONS)
+        cleanup_old_rankings(tour, keep_file=filepath)
 
 
 if __name__ == "__main__":

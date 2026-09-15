@@ -2,8 +2,8 @@ name: 自动更新 WTA 赛事日历
 
 on:
   schedule:
-    # 每周一 UTC 时间 20:00（北京时间 4:00）执行一次
-    - cron: '0 20 * * 1'
+    # 每周一 UTC 时间 10:00（北京时间 18:00）执行一次
+    - cron: '0 10 * * 1'
 
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
@@ -42,9 +42,12 @@ jobs:
       - name: 运行 request_ranking.py
         run: python api_folder/request_ranking.py
       
+      
       # 5. 运行 WTA & ATP 最新matches更新脚本
-      - name: 运行 update_tour_matches_uk.py
-        run: python updates/update_tour_matches_uk.py
+      - name: 运行 update_matches_from_tennislife.py
+        run: python updates/update_matches_from_tennislife.py
+      # - name: 运行 update_tour_matches_uk.py
+      #   run: python updates/update_tour_matches_uk.py
       
       ##################################################
       # 运行脚本得到四个巡回赛相关网页json数据
