@@ -41,6 +41,8 @@ jobs:
       # 4. 运行request_ranking.py 从 tennisapi2 获取wta & atp排名
       - name: 运行 request_ranking.py
         run: python api_folder/request_ranking.py
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
       
       
       # 5. 运行 WTA & ATP 最新matches更新脚本
