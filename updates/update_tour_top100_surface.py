@@ -42,6 +42,7 @@ CHAMPS_LEVEL_MAP = {
     "WTA 250":            "wta250",
     "Tour finals":        "yearEndFinals",
     "Finals":             "yearEndFinals",
+    "Olympics":           "olympics",
     # WTA 旧级别（老数据里可能出现）
     "Premier Mandatory":  "wta1000",
     "Premier 5":          "wta1000",
@@ -68,8 +69,8 @@ NAME_ALIASES = {
 
 # 各 tour 的 titles 键
 TITLE_KEYS_BY_TOUR = {
-    "wta": ["grandSlam", "wta1000", "wta500", "wta250", "yearEndFinals"],
-    "atp": ["grandSlam", "atp1000", "atp500", "atp250", "yearEndFinals"],
+    "wta": ["grandSlam", "wta1000", "wta500", "wta250", "yearEndFinals", "olympics"],
+    "atp": ["grandSlam", "atp1000", "atp500", "atp250", "yearEndFinals", "olympics"],
 }
 
 
