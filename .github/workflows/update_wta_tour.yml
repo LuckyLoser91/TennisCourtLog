@@ -71,7 +71,7 @@ jobs:
       
       # 9. 运行 update_tour_top100_surface.py 更新 WTA&ATP Top 100 场地表现数据
       - name: 运行 update_tour_top100_surface.py
-        run: python update/update_tour_top100_surface.py
+        run: python updates/update_tour_top100_surface.py
       
 
       # # 10. 运行 WTA 日历更新脚本，来源wta官网
