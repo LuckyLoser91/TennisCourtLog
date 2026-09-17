@@ -48,10 +48,10 @@
     col.c-cons     { width: 42px; }
     col.c-gs       { width: 42px; }
     col.c-1000     { width: 42px; }
-    col.c-overall  { width: 50px; }
-    col.c-hard     { width: 50px; }
-    col.c-clay     { width: 50px; }
-    col.c-grass    { width: 50px; }
+    col.c-overall  { width: 58px; }
+    col.c-hard     { width: 58px; }
+    col.c-clay     { width: 58px; }
+    col.c-grass    { width: 58px; }
 
     .table thead tr:first-child th {
       border-bottom: none !important;
@@ -96,9 +96,18 @@
       border-radius: 5px;
       padding: 3px 6px;
       font-weight: 600;
-      font-size: 12px;
-      min-width: 46px;
+      font-size: 13px;
+      min-width: 62px;
       text-align: center;
+      line-height: 1.4;
+    }
+
+    .wr-sub {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      opacity: 0.82;
+      line-height: 1.15;
     }
 
     .legend-dot {
@@ -253,10 +262,15 @@
       return { bg: "#fecaca", fc: "#991b1b" };
     }
 
-    function wrCell(pct) {
+    /* ---- 胜率单元格（百分比 + 胜-负） ---- */
+    function wrCell(pct, w, l) {
       const { bg, fc } = gradientWr(pct);
       const txt = pct != null ? pct + "%" : "—";
-      return `<span class="wr-cell" style="background:${bg};color:${fc};">${txt}</span>`;
+      const total = (w ?? 0) + (l ?? 0);
+      const wlTxt = total > 0 ? `${w}-${l}` : "";
+      return `<span class="wr-cell" style="background:${bg};color:${fc};">` +
+             `${txt}${wlTxt ? `<span class="wr-sub">${wlTxt}</span>` : ""}` +
+             `</span>`;
     }
 
     function numCell(v) {
@@ -351,6 +365,16 @@
         // 对于ATP，master字段可能为null，显示"—"
         const masterVal = p.master != null ? p.master : null;
 
+        // 胜率 + 胜-负
+        const overallW = p.wins_overall;
+        const overallL = p.losses_overall;
+        const hardW = p.hard?.wins;
+        const hardL = p.hard?.losses;
+        const clayW = p.clay?.wins;
+        const clayL = p.clay?.losses;
+        const grassW = p.grass?.wins;
+        const grassL = p.grass?.losses;
+
         html += `<tr>
           <td>${i + 1}</td>
           <td class="td-player">
@@ -365,10 +389,10 @@
           <td>${p.weeks_consecutive ?? "—"}</td>
           <td class="surf-sep">${numCell(p.gs)}</td>
           <td>${numCell(masterVal)}</td>
-          <td class="surf-sep">${wrCell(p.win_rate_overall)}</td>
-          <td class="surf-sep">${wrCell(p.hard?.win_rate)}</td>
-          <td class="surf-sep">${wrCell(p.clay?.win_rate)}</td>
-          <td class="surf-sep">${wrCell(p.grass?.win_rate)}</td>
+          <td class="surf-sep">${wrCell(p.win_rate_overall, overallW, overallL)}</td>
+          <td class="surf-sep">${wrCell(p.hard?.win_rate, hardW, hardL)}</td>
+          <td class="surf-sep">${wrCell(p.clay?.win_rate, clayW, clayL)}</td>
+          <td class="surf-sep">${wrCell(p.grass?.win_rate, grassW, grassL)}</td>
         </tr>`;
       });
 
