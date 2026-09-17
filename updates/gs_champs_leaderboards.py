@@ -6,7 +6,7 @@
       tennis_atp/atp_players.csv
       tennis_wta/wta_gs_matches.csv
       tennis_wta/wta_players.csv
-输出：./output/tour_gs_champions.json
+输出：./output/gs-related/tour_gs_champions.json
 
 用法：python grandslam_champions_leaderboard.py
 """
@@ -432,5 +432,5 @@ if __name__ == "__main__":
     atp_data = process_tour('atp')
     print("处理 WTA 数据...")
     wta_data = process_tour('wta')
-    output_path = os.path.join(PROJECT_ROOT, './output/tour_gs_champions.json')
+    output_path = os.path.join(PROJECT_ROOT, './output/gs-related/tour_gs_champions.json')
     export_to_json(atp_data, wta_data, output_path)

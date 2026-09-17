@@ -13,14 +13,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>WTA & ATP World No.1 Club · Historical Leaderboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../common/css/styles.css?v=202606290001" />
+  <link rel="stylesheet" href="../../common/css/styles.css?v=202606290001" />
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="MyWebSite" />
   <link rel="manifest" href="/site.webmanifest" />
-  <script src="../common/js/i18n.js"></script>
+  <script src="../../common/js/i18n.js"></script>
 
   <style>
     body {
@@ -133,7 +133,7 @@
           <h1 class="mb-0" data-i18n="no1Club_title">👑 World No.1 Club · Historical Leaderboard</h1>
           <div class="ms-auto d-flex gap-2 align-items-center">
             <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
-            <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+            <a href="../../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
           </div>
         </div>
         <!-- 统计栏 + Tour 切换 -->
@@ -236,7 +236,7 @@
   </div>
 
   <script type="module">
-    import { getFlagImg } from "../common/js/utils.js";
+    import { getFlagImg } from "../../common/js/utils.js";
 
     let wtaData = [];
     let atpData = [];
@@ -423,7 +423,7 @@
     /* ---- 加载数据 ---- */
     async function loadData() {
       try {
-        const res = await fetch("../output/world_no1_club.json");
+        const res = await fetch("../../output/world_no1_club.json");
         const json = await res.json();
         wtaData = json.wta || [];
         atpData = json.atp || [];

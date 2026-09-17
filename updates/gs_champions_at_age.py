@@ -4,7 +4,7 @@
 需要表单：gs_matches，total_player
 
 根据球员出生年份 + 年龄 = 目标年份，提取该年四大满贯成绩。
-输出：./output/gs_champions_by_age_year.json
+输出：./output/gs-related/gs_champions_by_age_year.json
 """
 
 import sys
@@ -165,7 +165,7 @@ def main():
         "wta": wta_data
     }
 
-    out_path = os.path.join(PROJECT_ROOT, "output", "gs_champions_by_age_year.json")
+    out_path = os.path.join(PROJECT_ROOT, "output", "gs-related", "gs_champions_by_age_year.json")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)

@@ -5,7 +5,7 @@
 统计所有未曾赢得大满贯冠军的球员在大满贯赛事中的战绩，
 按总胜率降序展示前100名（总胜场 > 5）。
 
-输出：./output/tour_non_gs_champions.json
+输出：./output/gs-related/tour_non_gs_champions.json
 
 新增：vs_top8 字段，统计对阵世界排名前8球员的胜负场次
       数据来源：CSV 中的 winner_rank / loser_rank 字段（如存在）
@@ -327,5 +327,5 @@ def export_to_json(rows_atp, rows_wta, max_year_atp, max_year_wta, output_path):
 if __name__ == "__main__":
     rows_atp, max_year_atp = get_non_champions_data(tour='atp')
     rows_wta, max_year_wta = get_non_champions_data(tour='wta')
-    output_path = os.path.join(PROJECT_ROOT, './output/tour_non_gs_champions.json')
+    output_path = os.path.join(PROJECT_ROOT, './output/gs-related/tour_non_gs_champions.json')
     export_to_json(rows_atp, rows_wta, max_year_atp, max_year_wta, output_path)

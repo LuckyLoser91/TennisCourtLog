@@ -24,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Grand Slam · At Age (by Birth Year)</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../common/css/styles.css?v=202606170751">
+  <link rel="stylesheet" href="../../common/css/styles.css?v=202606170751">
   <style>
     body {
       padding: 28px 24px 64px;
@@ -126,7 +126,7 @@
       width: 85px;
     }
   </style>
-  <script src="../common/js/i18n.js"></script>
+  <script src="../../common/js/i18n.js"></script>
 </head>
 
 <body>
@@ -137,7 +137,7 @@
     </div>
     <div class="col-auto d-flex gap-2 align-items-center">
       <button class="lang-btn" onclick="applyLang(currentLang === 'en' ? 'zh' : 'en')">中文</button>
-      <a href="../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
+      <a href="../../index.html" class="btn btn-outline-warning btn-sm" data-i18n="nav_home">HOME</a>
     </div>
   </div>
 
@@ -207,7 +207,7 @@
   </table>
 
   <script type="module">
-    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "../common/js/utils.js?v=202606170751";
+    import { getFlagImg, fmtRound, titlesBg, titlesFc, titlesBg_cur, titlesFc_cur } from "../../common/js/utils.js?v=202606170751";
 
     (function () {
       let fullData = { atp: [], wta: [], meta: {} };
@@ -327,7 +327,7 @@
 
       async function loadData() {
         try {
-          const res = await fetch('../output/gs_champions_by_age_year.json');
+          const res = await fetch('../../output/gs-related/gs_champions_by_age_year.json');
           fullData = await res.json();
           initAgeSelect();
           bindSort();
