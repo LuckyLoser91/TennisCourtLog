@@ -423,6 +423,7 @@ def update_calendar_summary(tour: str, year: int):
             latest_item = latest_dict[key]
             if latest_item.get("completed") is True:
                 print(f"更新赛事: {item.get('name')} ({item.get('date')}) -> 已完成")
+                latest_item["rank"] = item.get("rank")
                 updated_current.append(latest_item)
             else:
                 updated_current.append(item)
