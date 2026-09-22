@@ -22,6 +22,7 @@ const i18n = {
     /* ── 公共 ────────────────────────────────────────────────── */
     nav_home: "HOME",
     click_to_sort: "Click headers to sort",
+    dblclick_hint: "Double-click row for history",
     last_updated: "Last updated:",
     load_fail: "Failed to load data.",
     lang_toggle: "中文",
@@ -287,6 +288,7 @@ const i18n = {
     /* ── 公共 ────────────────────────────────────────────────── */
     nav_home: "首页",
     click_to_sort: "点击列标题排序",
+    dblclick_hint: "双击行查看历史",
     last_updated: "最近更新：",
     load_fail: "数据加载失败。",
     lang_toggle: "English",
