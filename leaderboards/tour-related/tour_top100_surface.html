@@ -259,6 +259,371 @@
       font-weight: 600;
       font-size: 12px;
     }
+
+    /* ============ Player Matches Modal ============ */
+    #pm-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 25, 23, 0.45);
+      z-index: 1050;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #pm-backdrop.open {
+      display: flex;
+    }
+
+    #pm-modal {
+      background: var(--bg-card, #fff);
+      border: 1px solid var(--border-main, #e5e5e5);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    #pm-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-main, #e5e5e5);
+      background: var(--bg-header, #fafafa);
+      flex-shrink: 0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    #pm-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    #pm-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    #pm-close {
+      background: none;
+      border: 1px solid var(--border-input, #ddd);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    #pm-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    #pm-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border-light, #eee);
+      background: var(--bg-page, #fff);
+      flex-shrink: 0;
+    }
+
+    .pm-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+
+    .pm-select {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border: 1px solid var(--border-input, #ddd);
+      border-radius: 6px;
+      background: var(--bg-input, #fff);
+      color: var(--text-primary);
+      cursor: pointer;
+      min-width: 110px;
+    }
+
+    .pm-select:focus {
+      outline: none;
+      border-color: var(--accent, #b45309);
+      box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1);
+    }
+
+    #pm-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    #pm-footer {
+      padding: 11px 20px;
+      border-top: 1px solid var(--border-main, #e5e5e5);
+      text-align: right;
+      background: var(--bg-page, #fafafa);
+      flex-shrink: 0;
+      border-radius: 0 0 8px 8px;
+    }
+
+    #pm-footer button {
+      background: transparent;
+      border: 1px solid var(--accent, #b45309);
+      border-radius: 6px;
+      color: var(--accent, #b45309);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    #pm-footer button:hover {
+      background: var(--accent, #b45309);
+      color: #fff;
+    }
+
+    /* 年份组头 */
+    .pm-year-hdr {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0 8px;
+      padding-bottom: 7px;
+      border-bottom: 2px solid var(--accent, #b45309);
+    }
+
+    .pm-year-hdr:first-child {
+      margin-top: 0;
+    }
+
+    .pm-year-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent, #b45309);
+      letter-spacing: 0.02em;
+    }
+
+    .pm-year-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-header, #f5f5f5);
+      border: 1px solid var(--border-light, #eee);
+      border-radius: 20px;
+      padding: 2px 9px;
+    }
+
+        /* 赛事组头 */
+    .pm-tourney-hdr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0 6px;
+      margin-top: 4px;
+      border-bottom: 1px solid var(--border-main, #e0e0e0);
+      flex-wrap: wrap;
+    }
+
+    .pm-tourney-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .pm-tourney-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+        .pm-tourney-surface {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 12px;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .pm-surface-Hard {
+      background: var(--surface-hard-bg);
+      color: var(--surface-hard-text);
+    }
+
+    .pm-surface-Clay {
+      background: var(--surface-clay-bg);
+      color: var(--surface-clay-text);
+    }
+
+    .pm-surface-Grass {
+      background: var(--surface-grass-bg);
+      color: var(--surface-grass-text);
+    }
+
+    .pm-surface-Carpet {
+      background: var(--surface-carpet-bg);
+      color: var(--surface-carpet-text);
+    }
+
+    .pm-surface-other {
+      background: var(--bg-header, #f5f5f5);
+      color: var(--text-muted, #888);
+      border: 1px solid var(--border-light, #eee);
+    }
+    /* 级别徽章 */
+    .pm-lvl-GrandSlam {
+      background: #b45309;
+      color: #fff;
+    }
+
+    .pm-lvl-Finals {
+      background: #92400e;
+      color: #fef3c7;
+    }
+
+    .pm-lvl-1000 {
+      background: #d97706;
+      color: #fff;
+    }
+
+    .pm-lvl-500 {
+      background: #2d6a4f;
+      color: #d1fae5;
+    }
+
+    .pm-lvl-250 {
+      background: #3b5998;
+      color: #dbeafe;
+    }
+
+    .pm-lvl-other {
+      background: #a8a29e;
+      color: #fff;
+    }
+
+    /* 比赛表 */
+    .pm-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      table-layout: fixed;
+      margin-bottom: 4px;
+    }
+    .pm-tbl td.pm-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.01em;
+    }
+
+    .pm-tbl tbody tr {
+      border-top: 1px solid var(--border-light, #eee);
+    }
+
+    .pm-tbl tbody tr:nth-child(even) td {
+      background: var(--bg-row-alt, #fafafa);
+    }
+
+    .pm-tbl tbody tr:hover td {
+      background: var(--bg-hover, #f0f0f0) !important;
+    }
+
+    .pm-tbl td {
+      padding: 7px 6px;
+      color: var(--text-primary);
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: var(--bg-card, #fff);
+    }
+
+    .pm-tbl td.tleft {
+      text-align: left;
+    }
+
+    .pm-tbl td.bold {
+      font-weight: 600;
+    }
+
+    .pm-rd {
+      display: inline-block;
+      background: var(--bg-header, #f5f5f5);
+      border: 1px solid var(--border-main, #ddd);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary, #555);
+      letter-spacing: 0.03em;
+    }
+
+    .pm-score {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: var(--text-secondary, #555);
+    }
+
+    .pm-badge-w {
+      background: #d4a017;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .pm-badge-l {
+      background: var(--bg-header, #f5f5f5);
+      color: var(--text-muted, #888);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
+      border: 1px solid var(--border-main, #ddd);
+    }
+
+    #pm-no-data {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* 行提示：双击可点 */
+    #table-body tr[data-player] {
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -362,6 +727,30 @@
         </tr>
       </tfoot>
     </table>
+  </div>
+
+  <!-- Player Matches Modal -->
+  <div id="pm-backdrop">
+    <div id="pm-modal">
+      <div id="pm-header">
+        <div>
+          <div id="pm-title"></div>
+          <div id="pm-sub"></div>
+        </div>
+        <button id="pm-close">✕</button>
+      </div>
+      <div id="pm-controls">
+        <label for="pm-mode-select" class="pm-label" id="pm-mode-label">MODE</label>
+        <select id="pm-mode-select" class="pm-select"></select>
+      </div>
+      <div id="pm-body">
+        <div id="pm-no-data" style="display:none"></div>
+        <div id="pm-content"></div>
+      </div>
+      <div id="pm-footer">
+        <button id="pm-close-btn">Close</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -511,6 +900,14 @@
       });
     });
 
+    /* ---- HTML 转义 ---- */
+    function pmEsc(s) {
+      if (s == null) return "";
+      return String(s).replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      }[c]));
+    }
+
     /* ---- 渲染 ---- */
     function renderTable() {
       const sorted = sortData(allData);
@@ -531,7 +928,7 @@
           ? `${p.height}`
           : "—";
 
-        html += `<tr>
+        html += `<tr data-player="${pmEsc(p.fullName)}">
             <td class="col-no">${idx + 1}</td>
             <td class="td-player">
               ${getFlagImg(p.countryCode)}<span class="col-rank">#${p.rank}</span> ${p.fullName}
@@ -615,6 +1012,8 @@
     // 巡回赛切换监听
     document.getElementById("tourSelect")?.addEventListener("change", (e) => {
       currentTour = e.target.value;
+      pmCache = {};
+      closePMModal();
       updateTitle();
       loadData();
     });
@@ -624,8 +1023,284 @@
     document.addEventListener("langchange", () => {
       updateTitle();
       renderTable();
+      const backdrop = document.getElementById("pm-backdrop");
+      if (backdrop && backdrop.classList.contains("open") && pmCurrentPlayer) {
+        pmRefreshLabels();
+        loadAndRenderPMModal();
+      }
     });
     applyLang(currentLang);
+
+    /* ============================================================
+       Player Matches Modal
+       ============================================================ */
+    let pmCurrentPlayer = null;
+    let pmCache = {};
+
+    function pmT(key, fallback) {
+      try {
+        if (typeof t === "function") {
+          const v = t(key);
+          if (v && v !== key) return v;
+        }
+      } catch (e) { }
+      return fallback;
+    }
+
+    const PM_ROUND_ORDER = {
+      RR: 0, R128: 1, R64: 2, R32: 3, R16: 4, QF: 5, SF: 6, F: 7,
+    };
+
+    function pmLevelBadgeClass(label) {
+      if (!label) return "pm-lvl-other";
+      const l = label.toLowerCase();
+      if (l.includes("grand slam")) return "pm-lvl-GrandSlam";
+      if (l.includes("finals")) return "pm-lvl-Finals";
+      if (l.includes("1000") || l.includes("masters")) return "pm-lvl-1000";
+      if (l.includes("500")) return "pm-lvl-500";
+      if (l.includes("250")) return "pm-lvl-250";
+      return "pm-lvl-other";
+    }
+    function pmSurfaceBadgeClass(surface) {
+      if (!surface) return "pm-surface-other";
+      const s = surface.toLowerCase();
+      if (s.includes("hard")) return "pm-surface-Hard";
+      if (s.includes("clay")) return "pm-surface-Clay";
+      if (s.includes("grass")) return "pm-surface-Grass";
+      if (s.includes("carpet")) return "pm-surface-Carpet";
+      return "pm-surface-other";
+    }
+
+    function pmBuildModeOptions() {
+      const currentYear = new Date().getFullYear();
+      const careerLabel = pmT("surface_modal_career", "Career");
+      const opts = [`<option value="career">${careerLabel}</option>`];
+      for (let y = currentYear; y >= 2009; y--) {
+        opts.push(`<option value="${y}">${y}</option>`);
+      }
+      return opts.join("");
+    }
+
+    function pmRefreshLabels() {
+      const titleEl = document.getElementById("pm-title");
+      if (titleEl) titleEl.textContent = pmCurrentPlayer || "";
+      const modeLabel = document.getElementById("pm-mode-label");
+      if (modeLabel) modeLabel.textContent = pmT("surface_modal_mode", "MODE");
+      const closeBtn = document.getElementById("pm-close-btn");
+      if (closeBtn) closeBtn.textContent = pmT("surface_modal_close", "Close");
+    }
+
+    function openPlayerMatchesModal(playerName) {
+      if (!playerName) return;
+      pmCurrentPlayer = playerName;
+
+      const backdrop = document.getElementById("pm-backdrop");
+      const modeSelect = document.getElementById("pm-mode-select");
+      const contentEl = document.getElementById("pm-content");
+      const noDataEl = document.getElementById("pm-no-data");
+      const subEl = document.getElementById("pm-sub");
+      if (!backdrop || !modeSelect) return;
+
+      pmRefreshLabels();
+      modeSelect.innerHTML = pmBuildModeOptions();
+
+      // 主页面 Career / Season 决定 Modal 默认值
+      if (currentMode === "career") {
+        modeSelect.value = "career";
+      } else {
+        modeSelect.value = String(new Date().getFullYear());
+      }
+
+      contentEl.innerHTML = "";
+      noDataEl.style.display = "none";
+      subEl.textContent = "";
+      backdrop.classList.add("open");
+
+      modeSelect.onchange = loadAndRenderPMModal;
+      loadAndRenderPMModal();
+    }
+
+    function closePMModal() {
+      const backdrop = document.getElementById("pm-backdrop");
+      if (backdrop) backdrop.classList.remove("open");
+    }
+
+    async function loadAndRenderPMModal() {
+      const select = document.getElementById("pm-mode-select");
+      const contentEl = document.getElementById("pm-content");
+      const noDataEl = document.getElementById("pm-no-data");
+      const subEl = document.getElementById("pm-sub");
+      if (!select || !contentEl) return;
+
+      const val = select.value;
+      let mode, year;
+      if (val === "career") {
+        mode = "career";
+        year = null;
+      } else {
+        mode = "season";
+        year = parseInt(val, 10);
+      }
+
+      contentEl.innerHTML =
+        `<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:13px;">` +
+        `${pmT("loading", "Loading…")}</div>`;
+      noDataEl.style.display = "none";
+
+      const cacheKey = `${currentTour}|${pmCurrentPlayer}|${mode}|${year || ""}`;
+      let data = pmCache[cacheKey];
+
+      if (!data) {
+        try {
+          const params = new URLSearchParams();
+          params.set("player", pmCurrentPlayer);
+          params.set("tour", currentTour);
+          params.set("mode", mode);
+          if (mode === "season") params.set("year", String(year));
+          const res = await fetch("/api/player_matches?" + params.toString());
+          data = await res.json();
+          pmCache[cacheKey] = data;
+        } catch (err) {
+          contentEl.innerHTML = "";
+          noDataEl.textContent = pmT("load_fail", "Failed to load data");
+          noDataEl.style.display = "block";
+          subEl.textContent = "";
+          return;
+        }
+      }
+
+      if (!data || data.error || !data.matches || data.matches.length === 0) {
+        contentEl.innerHTML = "";
+        noDataEl.textContent = pmT("surface_modal_no_data", "No match data available");
+        noDataEl.style.display = "block";
+        subEl.textContent = "";
+        return;
+      }
+
+      const wins = data.wins || 0;
+      const losses = data.losses || 0;
+      const total = data.total_matches || 0;
+      const wr = wins + losses > 0 ? ((wins / (wins + losses)) * 100).toFixed(1) : "0.0";
+      subEl.textContent =
+        `${total} ${pmT("surface_modal_matches", "matches")} · ${wr}% (${wins}W ${losses}L)`;
+
+      contentEl.innerHTML = pmRenderContent(data, mode);
+    }
+
+    function pmRenderContent(data, mode) {
+      const matches = data.matches;
+
+      if (mode === "career") {
+        const byYear = new Map();
+        for (const m of matches) {
+          if (!byYear.has(m.year)) byYear.set(m.year, []);
+          byYear.get(m.year).push(m);
+        }
+        const years = [...byYear.keys()].sort((a, b) => b - a);
+        let html = "";
+        for (const y of years) {
+          const group = byYear.get(y);
+          const yWins = group.filter(m => m.result === "W").length;
+          const yLosses = group.filter(m => m.result === "L").length;
+          const yWr =
+            yWins + yLosses > 0 ? ((yWins / (yWins + yLosses)) * 100).toFixed(1) : "0.0";
+          html += `<div class="pm-year-hdr">
+        <span class="pm-year-label">${y}</span>
+        <span class="pm-year-meta">${yWins}W-${yLosses}L · ${yWr}%</span>
+      </div>`;
+          html += pmRenderTourneyGroups(group);
+        }
+        return html;
+      }
+      return pmRenderTourneyGroups(matches);
+    }
+
+    function pmRenderTourneyGroups(matches) {
+      const groups = new Map();
+      for (const m of matches) {
+        const key = m.tourney_name || "Unknown";
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(m);
+      }
+
+      let html = "";
+      for (const [name, group] of groups) {
+        const sorted = [...group].sort((a, b) => {
+          const d = (a.tourney_date || "").localeCompare(b.tourney_date || "");
+          if (d !== 0) return d;
+          return (PM_ROUND_ORDER[a.round] || 0) - (PM_ROUND_ORDER[b.round] || 0);
+        });
+               const first = sorted[0];
+        const levelLabel = first.level_label || "";
+        const surface = first.surface || "";
+        const badgeCls = pmLevelBadgeClass(levelLabel);
+        const surfaceCls = pmSurfaceBadgeClass(surface);
+
+        html += `<div class="pm-tourney-hdr">
+      <span class="pm-tourney-name">${pmEsc(name)}</span>
+      ${levelLabel ? `<span class="pm-tourney-badge ${badgeCls}">${pmEsc(levelLabel)}</span>` : ""}
+      ${surface ? `<span class="pm-tourney-surface ${surfaceCls}">${pmEsc(surface)}</span>` : ""}
+    </div>`;
+
+               html += `<table class="pm-tbl">
+      <colgroup>
+        <col style="width:108px">
+        <col style="width:62px">
+        <col style="width:44px">
+        <col>
+        <col style="width:140px">
+      </colgroup>
+      <tbody>`;
+
+        for (const m of sorted) {
+          const isWin = m.result === "W";
+          const opp = m.opponent_rank
+            ? `#${m.opponent_rank} ${m.opponent}`
+            : (m.opponent || "—");
+          const date = (m.tourney_date || "").slice(0, 10);
+          html += `<tr>
+        <td class="tleft pm-date">${pmEsc(date || "—")}</td>
+        <td class="tleft"><span class="pm-rd">${pmEsc(m.round || "—")}</span></td>
+        <td style="text-align:center"><span class="${isWin ? "pm-badge-w" : "pm-badge-l"}">${m.result}</span></td>
+        <td class="tleft bold">${pmEsc(opp)}</td>
+        <td class="pm-score" style="text-align:center">${pmEsc(m.score || "—")}</td>
+      </tr>`;
+        }
+
+        html += `</tbody></table>`;
+      }
+      return html;
+    }
+
+    /* ---- Modal 事件绑定 ---- */
+    document.getElementById("pm-close")?.addEventListener("click", closePMModal);
+    document.getElementById("pm-close-btn")?.addEventListener("click", closePMModal);
+    document.getElementById("pm-backdrop")?.addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) closePMModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closePMModal();
+    });
+
+    /* ---- 双击行打开 Modal ---- */
+    document.getElementById("table-body")?.addEventListener("dblclick", (e) => {
+      const tr = e.target.closest("tr[data-player]");
+      if (!tr) return;
+      const name = tr.dataset.player;
+      if (name) openPlayerMatchesModal(name);
+    });
+
+    /* ---- 移动端：单击球员单元格打开 Modal ---- */
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      document.getElementById("table-body")?.addEventListener("click", (e) => {
+        const td = e.target.closest("td.td-player");
+        if (!td) return;
+        const tr = td.closest("tr[data-player]");
+        if (!tr) return;
+        const name = tr.dataset.player;
+        if (name) openPlayerMatchesModal(name);
+      });
+    }
   </script>
 </body>
 
