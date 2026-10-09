@@ -1,5 +1,5 @@
 {
-  "last_updated": 1791423436,
+  "last_updated": 1791510560,
   "currentRound": 5,
   "tournament": {
     "name": "2026 Beijing, China",
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 2441,
+        "userCount": 2473,
         "tennisPoints": 1000,
         "liveActivityEnabled": true,
         "id": 2557,
@@ -6321,8 +6321,8 @@
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 3,
           "event_id": 17250877,
           "participants": [
@@ -6346,7 +6346,7 @@
               "name": "Mirra Andreeva",
               "shortname": "M. Andreeva",
               "ranking": 5,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 406776,
               "event_id": 17250877,
@@ -6362,11 +6362,25 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6,
+              "period1TieBreak": 4,
+              "period2TieBreak": 3
+            },
+            "awayScore": {
+              "period1": 7,
+              "period2": 7,
+              "period1TieBreak": 7,
+              "period2TieBreak": 7
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 4,
           "event_id": 17250872,
           "participants": [
@@ -6390,7 +6404,7 @@
               "name": "Nikola Bartunkova",
               "shortname": "N. Bartůňková",
               "ranking": 34,
-              "winner": false,
+              "winner": true,
               "teamSeed": "26",
               "team_id": 348987,
               "event_id": 17250872,
@@ -6406,6 +6420,16 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 3,
+              "period2": 0
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         }
       ]
@@ -6466,40 +6490,40 @@
           "event_id": 17250876,
           "participants": [
             {
-              "name": "Wqf3",
-              "shortname": "WQF3",
-              "ranking": "",
+              "name": "Mirra Andreeva",
+              "shortname": "M. Andreeva",
+              "ranking": 5,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393302,
+              "teamSeed": "4",
+              "team_id": 406776,
               "event_id": 17250876,
               "sourceBlockId": 2653148,
               "blockId": 2653154,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "QF",
+              "W": 7,
+              "L": 3,
+              "winrate": 0.7,
+              "titles": 0
             },
             {
-              "name": "Wqf4",
-              "shortname": "WQF4",
-              "ranking": "",
+              "name": "Nikola Bartunkova",
+              "shortname": "N. Bartůňková",
+              "ranking": 34,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393303,
+              "teamSeed": "26",
+              "team_id": 348987,
               "event_id": 17250876,
               "sourceBlockId": 2653150,
               "blockId": 2653154,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 1,
             "player2_wins": 0
           }
         }
