@@ -1,6 +1,6 @@
 {
-  "last_updated": 1791510560,
-  "currentRound": 5,
+  "last_updated": 1791596057,
+  "currentRound": 6,
   "tournament": {
     "name": "2026 Beijing, China",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 2473,
+        "userCount": 2488,
         "tennisPoints": 1000,
         "liveActivityEnabled": true,
         "id": 2557,
@@ -6233,8 +6233,8 @@
       "description": "Quarterfinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 1,
           "event_id": 17250871,
           "participants": [
@@ -6242,7 +6242,7 @@
               "name": "Qinwen Zheng",
               "shortname": "Q. Zheng",
               "ranking": 54,
-              "winner": false,
+              "winner": true,
               "teamSeed": "WC",
               "team_id": 257784,
               "event_id": 17250871,
@@ -6274,11 +6274,23 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 7,
+              "period2TieBreak": 8
+            },
+            "awayScore": {
+              "period1": 3,
+              "period2": 6,
+              "period2TieBreak": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 2,
           "event_id": 17250865,
           "participants": [
@@ -6286,7 +6298,7 @@
               "name": "Elise Mertens",
               "shortname": "E. Mertens",
               "ranking": 19,
-              "winner": false,
+              "winner": true,
               "teamSeed": "13",
               "team_id": 78551,
               "event_id": 17250865,
@@ -6318,6 +6330,18 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 2
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 6,
+              "period1TieBreak": 7
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 3,
+              "period1TieBreak": 0
+            }
           }
         },
         {
@@ -6446,40 +6470,40 @@
           "event_id": 17250866,
           "participants": [
             {
-              "name": "Wqf1",
-              "shortname": "WQF1",
-              "ranking": "",
+              "name": "Qinwen Zheng",
+              "shortname": "Q. Zheng",
+              "ranking": 54,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393300,
+              "teamSeed": "WC",
+              "team_id": 257784,
               "event_id": 17250866,
               "sourceBlockId": 2653144,
               "blockId": 2653152,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 5,
+              "L": 3,
+              "winrate": 0.625,
+              "titles": 0
             },
             {
-              "name": "Wqf2",
-              "shortname": "WQF2",
-              "ranking": "",
+              "name": "Elise Mertens",
+              "shortname": "E. Mertens",
+              "ranking": 19,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393301,
+              "teamSeed": "13",
+              "team_id": 78551,
               "event_id": 17250866,
               "sourceBlockId": 2653146,
               "blockId": 2653152,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "R32",
+              "W": 3,
+              "L": 6,
+              "winrate": 0.333,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 1,
             "player2_wins": 0
           }
         },
