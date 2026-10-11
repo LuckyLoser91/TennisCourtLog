@@ -81,6 +81,15 @@ TennisCourtLog/
 
 1. 做一些关于得分率的数据 leaderboard
 
+> 关于第 1 条：得分率需要的发球统计列（`w_ace`、`w_svpt`、`w_1stIn`、`w_1stWon`、
+> `w_2ndWon`、`w_bpSaved`、`w_bpFaced` 及 `l_` 对应列）不在本项目的 13 列统一格式中，
+> 也无法从 `score` 推导（`score` 只有每盘局分，没有分数）。
+> 可选脚本 `updates/update_serve_stats_ltapi.py` 可以把 **1991–2022** 这段的这批列取回来，
+> 写成 `output/{tour}_serve_stats_{year}.csv` sidecar 文件，用
+> `tourney_name / tourney_date / round / winner_name / loser_name` 五列与现有数据关联。
+> 该脚本需自备 Live Tennis API 的 key（环境变量 `LTAPI_KEY`），不设置时不做任何事，
+> 也不修改 `tennis_atp/`、`tennis_wta/` 下的任何现有文件。用法见脚本开头的说明。
+
 ## 📄 许可证 (License)
 
 本项目（包括所有数据文件、脚本及相关文档）采用 [知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
