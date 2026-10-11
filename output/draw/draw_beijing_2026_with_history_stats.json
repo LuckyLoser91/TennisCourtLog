@@ -1,6 +1,6 @@
 {
-  "last_updated": 1791596057,
-  "currentRound": 6,
+  "last_updated": 1791679430,
+  "currentRound": 7,
   "tournament": {
     "name": "2026 Beijing, China",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 2488,
+        "userCount": 2505,
         "tennisPoints": 1000,
         "liveActivityEnabled": true,
         "id": 2557,
@@ -6464,8 +6464,8 @@
       "description": "Semifinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 1,
           "event_id": 17250866,
           "participants": [
@@ -6473,7 +6473,7 @@
               "name": "Qinwen Zheng",
               "shortname": "Q. Zheng",
               "ranking": 54,
-              "winner": false,
+              "winner": true,
               "teamSeed": "WC",
               "team_id": 257784,
               "event_id": 17250866,
@@ -6505,11 +6505,21 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 5,
+              "period2": 2
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 2,
           "event_id": 17250876,
           "participants": [
@@ -6517,7 +6527,7 @@
               "name": "Mirra Andreeva",
               "shortname": "M. Andreeva",
               "ranking": 5,
-              "winner": false,
+              "winner": true,
               "teamSeed": "4",
               "team_id": 406776,
               "event_id": 17250876,
@@ -6549,6 +6559,16 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 6
+            },
+            "awayScore": {
+              "period1": 2,
+              "period2": 2
+            }
           }
         }
       ]
@@ -6565,40 +6585,40 @@
           "event_id": 17250864,
           "participants": [
             {
-              "name": "Wsf1",
-              "shortname": "WSF1",
-              "ranking": "",
+              "name": "Qinwen Zheng",
+              "shortname": "Q. Zheng",
+              "ranking": 54,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393304,
+              "teamSeed": "WC",
+              "team_id": 257784,
               "event_id": 17250864,
               "sourceBlockId": 2653152,
               "blockId": 2653156,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 5,
+              "L": 3,
+              "winrate": 0.625,
+              "titles": 0
             },
             {
-              "name": "Wsf2",
-              "shortname": "WSF2",
-              "ranking": "",
+              "name": "Mirra Andreeva",
+              "shortname": "M. Andreeva",
+              "ranking": 5,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393305,
+              "teamSeed": "4",
+              "team_id": 406776,
               "event_id": 17250864,
               "sourceBlockId": 2653154,
               "blockId": 2653156,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "QF",
+              "W": 7,
+              "L": 3,
+              "winrate": 0.7,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 1,
             "player2_wins": 0
           }
         }
