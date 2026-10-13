@@ -1,9 +1,9 @@
 name: 自动更新签表数据
 
 on:
-  # 定时触发：每天22:00 UTC（北京时间06:00）
+  # 定时触发：每天16:00 UTC（北京时间00:00）
   schedule:
-    - cron: '0 22 * * *' 
+    - cron: '0 16 * * *' 
 
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
@@ -43,9 +43,12 @@ jobs:
 
       # 4. 运行第一个脚本：获取签表数据
       - name: 运行 fetch_and_enhance_draw.py
-        run: python api_folder/fetch_and_enhance_draw.py --tourney-name "Beijing" --season 2026 --tournament-id 2557 --season-id 85620
+        run: python api_folder/fetch_and_enhance_draw.py --tourney-name "Wuhan" --season 2026 --tournament-id 2666 --season-id 85624
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+      # 5. 运行 WTA & ATP 最新matches更新脚本方便查看晋级路径
+      - name: 运行 update_matches_from_tennislife.py
+        run: python updates/update_matches_from_tennislife.py
 
        # 5. 屏蔽时间戳字段后，检查业务数据是否有变化
       - name: 检查业务数据是否有变化
@@ -53,7 +56,7 @@ jobs:
         run: |
           # 列出需要检查的 JSON 文件（可根据实际情况增减）
           FILES=(
-            "output/draw/draw_beijing_2026_with_history_stats.json" 
+            "output/draw/draw_wuhan_2026_with_history_stats.json" 
             # 如果有其他需要忽略 last_updated 的 JSON，在这里添加
             # ! 记得需要更改json文件名
           )
@@ -85,7 +88,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           
-          git add output/ api_folder/data/
+          git add output/ api_folder/data/ tennis_wta/ tennis_atp/
           
           git commit -m "🎾 Auto-update draw data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push --force origin HEAD:main
