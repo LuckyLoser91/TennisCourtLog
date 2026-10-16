@@ -1,6 +1,6 @@
 {
-  "last_updated": 1792092898,
-  "currentRound": 4,
+  "last_updated": 1792177726,
+  "currentRound": 5,
   "tournament": {
     "name": "2026 Wuhan, China",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 1591,
+        "userCount": 1636,
         "tennisPoints": 1000,
         "liveActivityEnabled": true,
         "id": 2666,
@@ -2676,7 +2676,7 @@
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 1,
             "player2_wins": 0
           },
           "score": {
@@ -2733,7 +2733,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -2787,7 +2787,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -2841,7 +2841,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -2894,7 +2894,7 @@
             }
           ],
           "h2h": {
-            "player1_wins": 0,
+            "player1_wins": 1,
             "player2_wins": 0
           },
           "score": {
@@ -2949,7 +2949,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -3003,7 +3003,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 1
+            "player2_wins": 2
           },
           "score": {
             "homeScore": {
@@ -3057,7 +3057,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 1
+            "player2_wins": 2
           },
           "score": {
             "homeScore": {
@@ -3080,8 +3080,8 @@
       "description": "Quarterfinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 1,
           "event_id": 17275012,
           "participants": [
@@ -3105,7 +3105,7 @@
               "name": "Iga Swiatek",
               "shortname": "I. Świątek",
               "ranking": 9,
-              "winner": false,
+              "winner": true,
               "teamSeed": "7",
               "team_id": 228272,
               "event_id": 17275012,
@@ -3121,11 +3121,21 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 4,
+              "period2": 1
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:1",
           "order": 2,
           "event_id": 17274991,
           "participants": [
@@ -3133,7 +3143,7 @@
               "name": "Maja Chwalinska",
               "shortname": "M. Chwalinska",
               "ranking": 22,
-              "winner": false,
+              "winner": true,
               "teamSeed": "16",
               "team_id": 211014,
               "event_id": 17274991,
@@ -3165,11 +3175,23 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 3,
+              "period3": 7
+            },
+            "awayScore": {
+              "period1": 0,
+              "period2": 6,
+              "period3": 5
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "1:2",
           "order": 3,
           "event_id": 17275008,
           "participants": [
@@ -3193,7 +3215,7 @@
               "name": "Sonay Kartal",
               "shortname": "S. Kartal",
               "ranking": 170,
-              "winner": false,
+              "winner": true,
               "teamSeed": "",
               "team_id": 291152,
               "event_id": 17275008,
@@ -3209,11 +3231,23 @@
           "h2h": {
             "player1_wins": 2,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 2,
+              "period2": 6,
+              "period3": 4
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 2,
+              "period3": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 4,
           "event_id": 17275006,
           "participants": [
@@ -3237,7 +3271,7 @@
               "name": "Jelena Ostapenko",
               "shortname": "J. Ostapenko",
               "ranking": 34,
-              "winner": false,
+              "winner": true,
               "teamSeed": "",
               "team_id": 64496,
               "event_id": 17275006,
@@ -3253,6 +3287,18 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 6,
+              "period2": 1,
+              "period1TieBreak": 6
+            },
+            "awayScore": {
+              "period1": 7,
+              "period2": 6,
+              "period1TieBreak": 8
+            }
           }
         }
       ]
@@ -3269,36 +3315,36 @@
           "event_id": 17274990,
           "participants": [
             {
-              "name": "Wqf1",
-              "shortname": "WQF1",
-              "ranking": "",
+              "name": "Iga Swiatek",
+              "shortname": "I. Świątek",
+              "ranking": 9,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393300,
+              "teamSeed": "7",
+              "team_id": 228272,
               "event_id": 17274990,
               "sourceBlockId": 2659386,
               "blockId": 2659394,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "QF",
+              "W": 2,
+              "L": 1,
+              "winrate": 0.667,
+              "titles": 0
             },
             {
-              "name": "Wqf2",
-              "shortname": "WQF2",
-              "ranking": "",
+              "name": "Maja Chwalinska",
+              "shortname": "M. Chwalinska",
+              "ranking": 22,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393301,
+              "teamSeed": "16",
+              "team_id": 211014,
               "event_id": 17274990,
               "sourceBlockId": 2659388,
               "blockId": 2659394,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             }
           ],
           "h2h": {
@@ -3313,41 +3359,41 @@
           "event_id": 17275001,
           "participants": [
             {
-              "name": "Wqf3",
-              "shortname": "WQF3",
-              "ranking": "",
+              "name": "Sonay Kartal",
+              "shortname": "S. Kartal",
+              "ranking": 170,
               "winner": false,
               "teamSeed": "",
-              "team_id": 393302,
+              "team_id": 291152,
               "event_id": 17275001,
               "sourceBlockId": 2659390,
               "blockId": 2659396,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             },
             {
-              "name": "Wqf4",
-              "shortname": "WQF4",
-              "ranking": "",
+              "name": "Jelena Ostapenko",
+              "shortname": "J. Ostapenko",
+              "ranking": 34,
               "winner": false,
               "teamSeed": "",
-              "team_id": 393303,
+              "team_id": 64496,
               "event_id": 17275001,
               "sourceBlockId": 2659392,
               "blockId": 2659396,
-              "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "best_round": "SF",
+              "W": 3,
+              "L": 4,
+              "winrate": 0.429,
+              "titles": 0
             }
           ],
           "h2h": {
-            "player1_wins": 0,
-            "player2_wins": 0
+            "player1_wins": 1,
+            "player2_wins": 1
           }
         }
       ]
