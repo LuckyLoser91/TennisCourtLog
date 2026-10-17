@@ -1,6 +1,6 @@
 {
-  "last_updated": 1792177726,
-  "currentRound": 5,
+  "last_updated": 1792260207,
+  "currentRound": 6,
   "tournament": {
     "name": "2026 Wuhan, China",
     "tournament": {
@@ -53,7 +53,7 @@
             "shortNameTranslation": {}
           }
         },
-        "userCount": 1636,
+        "userCount": 1650,
         "tennisPoints": 1000,
         "liveActivityEnabled": true,
         "id": 2666,
@@ -3120,7 +3120,7 @@
           ],
           "h2h": {
             "player1_wins": 1,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -3173,7 +3173,7 @@
             }
           ],
           "h2h": {
-            "player1_wins": 1,
+            "player1_wins": 2,
             "player2_wins": 0
           },
           "score": {
@@ -3230,7 +3230,7 @@
           ],
           "h2h": {
             "player1_wins": 2,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -3286,7 +3286,7 @@
           ],
           "h2h": {
             "player1_wins": 0,
-            "player2_wins": 0
+            "player2_wins": 1
           },
           "score": {
             "homeScore": {
@@ -3309,8 +3309,8 @@
       "description": "Semifinal",
       "blocks": [
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "0:2",
           "order": 1,
           "event_id": 17274990,
           "participants": [
@@ -3334,7 +3334,7 @@
               "name": "Maja Chwalinska",
               "shortname": "M. Chwalinska",
               "ranking": 22,
-              "winner": false,
+              "winner": true,
               "teamSeed": "16",
               "team_id": 211014,
               "event_id": 17274990,
@@ -3350,11 +3350,21 @@
           "h2h": {
             "player1_wins": 0,
             "player2_wins": 0
+          },
+          "score": {
+            "homeScore": {
+              "period1": 5,
+              "period2": 1
+            },
+            "awayScore": {
+              "period1": 7,
+              "period2": 6
+            }
           }
         },
         {
-          "finished": false,
-          "result": "",
+          "finished": true,
+          "result": "2:0",
           "order": 2,
           "event_id": 17275001,
           "participants": [
@@ -3362,7 +3372,7 @@
               "name": "Sonay Kartal",
               "shortname": "S. Kartal",
               "ranking": 170,
-              "winner": false,
+              "winner": true,
               "teamSeed": "",
               "team_id": 291152,
               "event_id": 17275001,
@@ -3394,6 +3404,20 @@
           "h2h": {
             "player1_wins": 1,
             "player2_wins": 1
+          },
+          "score": {
+            "homeScore": {
+              "period1": 7,
+              "period2": 7,
+              "period1TieBreak": 11,
+              "period2TieBreak": 7
+            },
+            "awayScore": {
+              "period1": 6,
+              "period2": 6,
+              "period1TieBreak": 9,
+              "period2TieBreak": 5
+            }
           }
         }
       ]
@@ -3410,36 +3434,36 @@
           "event_id": 17274994,
           "participants": [
             {
-              "name": "Wsf1",
-              "shortname": "WSF1",
-              "ranking": "",
+              "name": "Maja Chwalinska",
+              "shortname": "M. Chwalinska",
+              "ranking": 22,
               "winner": false,
-              "teamSeed": "",
-              "team_id": 393304,
+              "teamSeed": "16",
+              "team_id": 211014,
               "event_id": 17274994,
               "sourceBlockId": 2659394,
               "blockId": 2659398,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             },
             {
-              "name": "Wsf2",
-              "shortname": "WSF2",
-              "ranking": "",
+              "name": "Sonay Kartal",
+              "shortname": "S. Kartal",
+              "ranking": 170,
               "winner": false,
               "teamSeed": "",
-              "team_id": 393305,
+              "team_id": 291152,
               "event_id": 17274994,
               "sourceBlockId": 2659396,
               "blockId": 2659398,
               "best_round": "",
-              "W": "",
-              "L": "",
-              "winrate": "",
-              "titles": ""
+              "W": 0,
+              "L": 0,
+              "winrate": 0.0,
+              "titles": 0
             }
           ],
           "h2h": {
