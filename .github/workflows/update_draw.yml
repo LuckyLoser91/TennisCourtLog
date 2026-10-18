@@ -2,8 +2,8 @@ name: 自动更新签表数据
 
 on:
   # 定时触发：每天16:00 UTC（北京时间00:00）
-  schedule:
-    - cron: '0 16 * * *' 
+  # schedule:
+    # - cron: '0 16 * * *' 
 
   # 允许手动在 Actions 页面点击触发
   workflow_dispatch:
